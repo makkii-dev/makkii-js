@@ -54,7 +54,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void creatByMnemonic(String mnemonic,  String passphrase){
+    public void createByMnemonic(String mnemonic,  String passphrase){
         try{
             wallet = new HDWallet(mnemonic,passphrase);
         }catch (Exception e){
