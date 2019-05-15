@@ -279,37 +279,6 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }catch (Exception e){
                 promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
             }
-        }else if(coinType == CoinType.TRON.value()){
-            try {
-                Tron.Transaction.Builder tx = Tron.Transaction.newBuilder();
-                Tron.SigningInput.Builder builder = Tron.SigningInput.newBuilder();
-                Tron.TransferContract.Builder transfer = Tron.TransferContract.newBuilder();
-                String private_key = transaction.getString("private_key");
-                String from = transaction.getString("from");
-                String to = transaction.getString("to");
-                String amount = transaction.getString("amount");
-                long timestamp = System.currentTimeMillis() / 1000*1000;
-                transfer.setAmount(Long.parseLong(amount));
-                transfer.setOwnerAddress(from);
-                transfer.setToAddress(to);
-                tx.setTransfer(transfer.build());
-                tx.setTimestamp(timestamp);
-                tx.setExpiration(timestamp + 10 * 60 * 60 * 1000);
-                builder.setTransaction(tx.build());
-                builder.setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(private_key)));
-                Tron.SigningOutput output = TronSigner.sign(builder.build());
-
-                String Hash = Hex.toHexString(output.getId().toByteArray());
-                String signature = Hex.toHexString(output.getSignature().toByteArray());
-                WritableMap map = Arguments.createMap();
-                map.putString("Hash", Hash);
-                map.putString("signature", signature);
-                promise.resolve(map);
-
-            }catch (Exception e){
-                promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
-
-            }
         } else {
             promise.reject(E_NOT_SUPPORT_ERROR,"not support this coin");
         }
@@ -317,7 +286,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void recoveKeyPairByPrivateKey(String private_key, int coinType, Promise promise){
+    public void recoverKeyPairByPrivateKey(String private_key, int coinType, Promise promise){
         try{
             byte[] pkData = StringUtils.StringHexToByteArray(private_key);
             CoinType coin = CoinType.createFromValue(coinType);

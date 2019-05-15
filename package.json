@@ -23,17 +23,16 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    
     "react": "16.2.0",
     "react-native": "^0.52.0",
     "react-native-windows": "0.52.0"
-
   },
   "devDependencies": {
-    
     "react": "16.2.0",
     "react-native": "^0.52.0",
     "react-native-windows": "0.52.0"
-
+  },
+  "dependencies": {
+    "@tronscan/client": "^0.2.48"
   }
 }
