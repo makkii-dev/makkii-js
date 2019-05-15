@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.protobuf:protobuf-java:+',
     implementation(name:'trustwalletcore-release', ext:'aar')
+
 }
 
 def configureReactNativePom(def pom) {

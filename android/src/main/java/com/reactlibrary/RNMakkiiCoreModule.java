@@ -5,6 +5,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.reactlibrary.utils.*;
@@ -24,6 +25,9 @@ import wallet.core.jni.EOSSigner;
 import wallet.core.jni.TronSigner;
 
 import wallet.core.jni.proto.*;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
 
@@ -144,13 +148,89 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }catch (Exception e){
                 promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
             }
-        }else if(coinType == CoinType.BITCOIN.value()){
-            // TODO: not implementation
-            promise.reject(E_NOT_SUPPORT_ERROR," not implementation");
+        }else if(coinType == CoinType.BITCOIN.value()||coinType == CoinType.LITECOIN.value()){
+            try {
+                String amount = transaction.getString("amount");
+                String to_address = transaction.getString("to_address");
+                String change_address = transaction.getString("change_address");
+                Bitcoin.SigningInput.Builder signerBuilder = Bitcoin.SigningInput.newBuilder()
+                        .setAmount(Long.parseLong(amount))
+                        .setHashType(transaction.getInt("hash_type"))
+                        .setToAddress(to_address)
+                        .setChangeAddress(change_address)
+                        .setByteFee(transaction.getInt("byte_fee"));
+                ReadableArray utxos = transaction.getArray("utxos");
+                for (int i = 0; i < utxos.size(); i++) {
+                    ReadableMap utxo = utxos.getMap(i);
+                    signerBuilder.addPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("private_key"))));
+                    signerBuilder.addUtxo(Bitcoin.UnspentTransaction.newBuilder()
+                            .setAmount(Long.parseLong(utxo.getString("amount")))
+                            .setScript(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("script"))))
+                            .setOutPoint(Bitcoin.OutPoint.newBuilder()
+                                    .setHash(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("hash"))))
+                                    .setIndex(i)
+                                    .setSequence(Integer.MAX_VALUE)
+                                    .build())
+                            .build());
+                }
+                BitcoinTransactionSigner singer = new BitcoinTransactionSigner(signerBuilder.build());
+                Common.Result result = singer.sign();
+                if (!result.getSuccess()) {
+                    promise.reject(E_INVALID_PARAM_ERROR, result.getError());
+                } else {
+                    Bitcoin.SigningOutput output = result.getObjects(0).unpack(Bitcoin.SigningOutput.class);
+                    WritableMap map = Arguments.createMap();
+                    String encoded = Hex.toHexString(output.getEncoded().toByteArray());
+                    map.putString("encoded", encoded);
+                    promise.resolve(map);
+                }
+            }catch (Exception e){
+                promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
+            }
         }else if(coinType == CoinType.EOS.value()){
-            // TODO: not implementation
+            try {
+                String chainId = transaction.getString("chaionID");
+                String referenceBlockId = transaction.getString("referenceBlockId");
+                String referenceBlockTime = transaction.getString("referenceBlockTime");
+                String currency = transaction.getString("currency");
+                String sender = transaction.getString("from");
+                String recipient = transaction.getString("to");
+                String memo = transaction.getString("memo");
+                ReadableMap asset = transaction.getMap("asset");
+                String private_key = transaction.getString("private_key");
+                String private_key_type = transaction.getString("private_key_type");
+                EOS.Asset.Builder assetBuilder = EOS.Asset.newBuilder()
+                        .setAmount(Long.parseLong(asset.getString("amount")))
+                        .setDecimals(asset.getInt("decimals"))
+                        .setSymbol(asset.getString("symbol"));
+                EOS.SigningInput.Builder builder = EOS.SigningInput.newBuilder()
+                        .setChainId(ByteString.copyFrom(StringUtils.StringHexToByteArray(chainId)))
+                        .setReferenceBlockId(ByteString.copyFrom(StringUtils.StringHexToByteArray(referenceBlockId)))
+                        .setReferenceBlockTime(Integer.parseInt(referenceBlockTime))
+                        .setCurrency(currency)
+                        .setSender(sender)
+                        .setRecipient(recipient)
+                        .setMemo(memo)
+                        .setAsset(assetBuilder)
+                        .setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(private_key)))
+                        .setPrivateKeyType(EOS.KeyType.valueOf(Integer.parseInt(private_key_type)));
+                Common.Result result = EOSSigner.sign(builder.build());
+                if(!result.getSuccess()){
+                    promise.reject(E_INVALID_PARAM_ERROR,result.getError());
+                }else{
+                    EOS.SigningOutput output = result.getObjects(0).unpack(EOS.SigningOutput.class);
+                    JSONObject jsonObject = new JSONObject(output.getJsonEncoded());
+                    JSONArray signatures = jsonObject.getJSONArray("signatures");
+                    String signature = signatures.getString(0);
+                    WritableMap map = Arguments.createMap();
+                    map.putString("jsonEncoded",output.getJsonEncoded());
+                    map.putString("signature",signature);
+                    promise.resolve(map);
+                }
+            } catch (Exception e){
+                promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
+            }
             promise.reject(E_NOT_SUPPORT_ERROR," not implementation");
-        }else if(coinType == CoinType.ETHEREUM.value()){
             try {
                 Ethereum.SigningInput.Builder builder = Ethereum.SigningInput.newBuilder();
                 String chainID = transaction.getString("chainID");
@@ -199,12 +279,37 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }catch (Exception e){
                 promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
             }
-        }else if(coinType == CoinType.LITECOIN.value()){
-            // TODO: not implementation
-            promise.reject(E_NOT_SUPPORT_ERROR," not implementation");
         }else if(coinType == CoinType.TRON.value()){
-            // TODO: not implementation
-            promise.reject(E_NOT_SUPPORT_ERROR," not implementation");
+            try {
+                Tron.Transaction.Builder tx = Tron.Transaction.newBuilder();
+                Tron.SigningInput.Builder builder = Tron.SigningInput.newBuilder();
+                Tron.TransferContract.Builder transfer = Tron.TransferContract.newBuilder();
+                String private_key = transaction.getString("private_key");
+                String from = transaction.getString("from");
+                String to = transaction.getString("to");
+                String amount = transaction.getString("amount");
+                long timestamp = System.currentTimeMillis() / 1000*1000;
+                transfer.setAmount(Long.parseLong(amount));
+                transfer.setOwnerAddress(from);
+                transfer.setToAddress(to);
+                tx.setTransfer(transfer.build());
+                tx.setTimestamp(timestamp);
+                tx.setExpiration(timestamp + 10 * 60 * 60 * 1000);
+                builder.setTransaction(tx.build());
+                builder.setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(private_key)));
+                Tron.SigningOutput output = TronSigner.sign(builder.build());
+
+                String Hash = Hex.toHexString(output.getId().toByteArray());
+                String signature = Hex.toHexString(output.getSignature().toByteArray());
+                WritableMap map = Arguments.createMap();
+                map.putString("Hash", Hash);
+                map.putString("signature", signature);
+                promise.resolve(map);
+
+            }catch (Exception e){
+                promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
+
+            }
         } else {
             promise.reject(E_NOT_SUPPORT_ERROR,"not support this coin");
         }
