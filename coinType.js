@@ -5,4 +5,21 @@ export const CoinType = {
     ETHEREUM: 60,
     LITECOIN: 2,
     TRON: 195,
+    fromCoinSymbol: (symbol) => {
+        switch (symbol) {
+        case 'AION':
+            return 425;
+        case 'BTC':
+        case 'BITCOIN': 
+            return 0;
+        case 'EOS': 
+            return 60;
+        case 'LITECOIN':
+        case 'LTC': 
+            return 2;
+        case 'TRON': 
+        case 'TRX': 
+            return 195;
+        }
+    }
 };
