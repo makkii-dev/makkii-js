@@ -13,9 +13,13 @@ export const CoinType = {
         case 'BITCOIN': 
             return 0;
         case 'EOS': 
+            return 194;
+		case 'ETH':
+        case 'ETHEREUM':
             return 60;
         case 'LITECOIN':
-        case 'LTC': 
+        case 'LTC':
+        case 'LITECOIN':
             return 2;
         case 'TRON': 
         case 'TRX': 
