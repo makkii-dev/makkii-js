@@ -230,7 +230,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             } catch (Exception e){
                 promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
             }
-            promise.reject(E_NOT_SUPPORT_ERROR," not implementation");
+        } else if (coinType == CoinType.ETHEREUM.value()) {
             try {
                 Ethereum.SigningInput.Builder builder = Ethereum.SigningInput.newBuilder();
                 String chainID = transaction.getString("chainID");
