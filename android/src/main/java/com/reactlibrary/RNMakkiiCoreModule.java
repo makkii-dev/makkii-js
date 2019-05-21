@@ -114,6 +114,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
                 String gasPrice = transaction.getString("gasPrice");
                 String to = transaction.getString("to");
                 String private_key = transaction.getString("private_key");
+                String timestamp = transaction.getString("timestamp");
                 if(private_key.startsWith("0x")){
                     private_key = private_key.substring(2);
                 }
@@ -125,6 +126,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
                 builder.setGasLimit(ByteString.copyFrom(StringUtils.StringHexToByteArray(gasLimit)));
                 builder.setGasPrice(ByteString.copyFrom(StringUtils.StringHexToByteArray(gasPrice)));
                 builder.setToAddress(to);
+                builder.setTimestamp(ByteString.copyFrom(StringUtils.StringHexToByteArray(timestamp));
                 builder.setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(private_key)));
 
                 if (transaction.hasKey("data")) {
@@ -316,60 +318,19 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
         PublicKey pk = null;
         switch (coin){
             case AION:
-            case IOST:
-            case KIN:
-            case NIMIQ:
-            case STELLAR:
-            case TEZOS:
                 pk = sk.getPublicKeyEd25519();
                 break;
-            case BINANCE:
             case BITCOIN:
-            case BITCOINCASH:
-            case BRAVOCOIN:
-            case COSMOS:
-            case DASH:
-            case DECRED:
-            case DOGECOIN:
             case EOS:
-            case GROESTLCOIN:
-            case IOCOIN:
             case LITECOIN:
-            case LUX:
-            case NULS:
-            case QTUM:
-            case STEEM:
-            case VIACOIN:
-            case XRP:
-            case ZCASH:
-            case ZCOIN:
-            case ZILLIQA:
                 pk = sk.getPublicKeySecp256k1(true);
                 break;
-            case CALLISTO:
             case ETHEREUM:
-            case ETHEREUMCLASSIC:
-            case ETHERSOCIAL:
-            case GOCHAIN:
-            case ICON:
-            case IOTEX:
-            case POANETWORK:
-            case THETA:
-            case THUNDERTOKEN:
-            case TOMOCHAIN:
             case TRON:
-            case VECHAIN:
-            case WANCHAIN:
-            case XDAI:
                 pk = sk.getPublicKeySecp256k1(false);
                 break;
-            case NEO:
-            case ONTOLOGY:
-                pk = sk.getPublicKeyNist256p1();
-                break;
-            case NANO:
-                pk = sk.getPublicKeyEd25519Blake2b();
-                break;
+                default:
+                    throw new Error("unsppourt cointype");
         }
         return pk;
     }
