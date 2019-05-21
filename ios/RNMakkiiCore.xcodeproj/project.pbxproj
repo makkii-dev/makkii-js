@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1C7AE2132293DE47003193C0 /* RNMakkiiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7AE2122293DE47003193C0 /* RNMakkiiCore.swift */; };
-		1CF35E6322940637001F9387 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CF35E322294060E001F9387 /* libReact.a */; };
-		1CF35E672294063D001F9387 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CF35E19229405F6001F9387 /* SwiftProtobuf.framework */; };
-		1CF35E682294063D001F9387 /* TrustWalletCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CF35E1B229405F6001F9387 /* TrustWalletCore.framework */; };
-		AA71A401A80F1CB724627312 /* Pods_RNMakkiiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6D8D88A0102147C38B5A98 /* Pods_RNMakkiiCore.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* RNMakkiiCore.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNMakkiiCore.m */; };
 /* End PBXBuildFile section */
 
@@ -180,10 +176,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CF35E672294063D001F9387 /* SwiftProtobuf.framework in Frameworks */,
-				1CF35E682294063D001F9387 /* TrustWalletCore.framework in Frameworks */,
-				1CF35E6322940637001F9387 /* libReact.a in Frameworks */,
-				AA71A401A80F1CB724627312 /* Pods_RNMakkiiCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
