@@ -126,7 +126,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
                 builder.setGasLimit(ByteString.copyFrom(StringUtils.StringHexToByteArray(gasLimit)));
                 builder.setGasPrice(ByteString.copyFrom(StringUtils.StringHexToByteArray(gasPrice)));
                 builder.setToAddress(to);
-                builder.setTimestamp(ByteString.copyFrom(StringUtils.StringHexToByteArray(timestamp));
+                builder.setTimestamp(ByteString.copyFrom(StringUtils.StringHexToByteArray(timestamp)));
                 builder.setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(private_key)));
 
                 if (transaction.hasKey("data")) {
