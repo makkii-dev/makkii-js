@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
 
   s.source = {
-    :git=>"https://github.com/chaion/lib-ios-makkii-core.git",
+    :git=>"https://github.com/chaion/lib-ios-makkii-core.git", :tag=>'0.10.1'
   }
   s.preserve_paths = 'build/ios/*.a'
   s.vendored_libraries =
