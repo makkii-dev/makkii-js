@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.reactlibrary.utils.*;
 
@@ -281,6 +282,77 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }catch (Exception e){
                 promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
             }
+        } else if (coinType == CoinType.TRON.value()) {
+            /**
+             *  transaction param
+             *  {
+             *      "timestamp" : 1558600764000,
+             *      "expiration" : 155860090000,
+             *      "to_address": "THTR75o8xXAgCTQqpiot2AFRAjvW1tSbVV",
+             *      "owner_address": "TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC",
+             *      "private_key" : "2d8f68944bdbfbc0769542fba8fc2d2a3de67393334471624364c7006da2aa54",
+             *      "block_header": {
+             * 	        "raw_data": {
+             * 		        "number": 4250147,
+             * 		        "txTrieRoot": "2d87f97cdd3bb7fd3211a2802e6b3642daaa945616a6eba86869a09c9b1747d8",
+             * 		        "witness_address": "41928c9af0651632157ef27a2cf17ca72c575a4d21",
+             * 		        "parentHash": "000000000040da221fdfca1d52f8bc935161f7a4525d3bc2bffdc6cc8aa4824b",
+             * 		        "version": 7,
+             * 		        "timestamp": 1558600764000
+             *          },
+             * 	        "witness_signature": "15dcd1da5576affbc282898321aa291340472c8c662c5cc4a6278afef8ab135659a32f5a59f5c08b488f8aa8a8262cf42f05d8aa95e0cc42dcdda13de24bd31700"
+             *      }
+             *  }
+             *
+             *  return
+             *  {
+             *      "signature" : ["97c825b41c77de2a8bd65b3df55cd4c0df59c307c0187e42321dcc1cc455ddba583dd9502e17cfec5945b34cad0511985a6165999092a6dec84c2bdd97e649fc01"]
+             *      "txID": "454f156bf1256587ff6ccdbc56e64ad0c51e4f8efea5490dcbc720ee606bc7b8"
+             *      "ref_block_bytes": "267e"
+             *      "ref_block_hash": "9a447d222e8de9f2"
+             *
+             *  }
+             */
+            try {
+                ReadableMap block_header = transaction.getMap("block_header");
+                ReadableMap raw_data = block_header.getMap("raw_data");
+
+                Tron.BlockHeader.Builder header = Tron.BlockHeader.newBuilder()
+                        .setNumber(Long.parseLong(raw_data.getString("number")))
+                        .setParentHash(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("parentHash"))))
+                        .setTimestamp(Long.parseLong(raw_data.getString("timestamp")))
+                        .setVersion(raw_data.getInt("version"))
+                        .setTxTrieRoot(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("txTrieRoot"))))
+                        .setWitnessAddress(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("witness_address"))));
+
+
+                Tron.TransferContract.Builder contract = Tron.TransferContract.newBuilder()
+                        .setAmount(Long.parseLong(transaction.getString("amount")))
+                        .setOwnerAddress(transaction.getString("owner_address"))
+                        .setToAddress(transaction.getString("to_address"));
+
+                Tron.Transaction.Builder tx = Tron.Transaction.newBuilder()
+                        .setBlockHeader(header.build())
+                        .setTimestamp(Long.parseLong(transaction.getString("timestamp")))
+                        .setExpiration(Long.parseLong(transaction.getString("expiration")))
+                        .setTransfer(contract.build());
+
+                Tron.SigningInput.Builder builder = Tron.SigningInput.newBuilder()
+                        .setTransaction(tx.build())
+                        .setPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(transaction.getString("private_key"))));
+                Tron.SigningOutput output = TronSigner.sign(builder.build());
+                WritableArray signature = Arguments.createArray();
+                signature.pushString(Hex.toHexString(output.getSignature().toByteArray()));
+                WritableMap map = Arguments.createMap();
+                map.putArray("signature", signature);
+                map.putString("txID", Hex.toHexString(output.getId().toByteArray()));
+                map.putString("ref_block_bytes", Hex.toHexString(output.getRefBlockBytes().toByteArray()));
+                map.putString("ref_block_hash", Hex.toHexString(output.getRefBlockHash().toByteArray()));
+                promise.resolve(map);
+            }catch (Exception e){
+                promise.reject(E_INVALID_PARAM_ERROR,e.getMessage());
+            }
+
         } else {
             promise.reject(E_NOT_SUPPORT_ERROR,"not support this coin");
         }
