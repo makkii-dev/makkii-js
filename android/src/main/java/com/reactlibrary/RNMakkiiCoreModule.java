@@ -25,6 +25,13 @@ import wallet.core.jni.EthereumSigner;
 import wallet.core.jni.EOSSigner;
 import wallet.core.jni.TronSigner;
 
+import wallet.core.jni.AionAddress;
+import wallet.core.jni.BitcoinAddress;
+import wallet.core.jni.EthereumAddress;
+import wallet.core.jni.EOSAddress;
+import wallet.core.jni.TronAddress;
+
+
 import wallet.core.jni.proto.*;
 
 import org.json.JSONArray;
@@ -384,6 +391,23 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void validateAddress(String address, int coinType, Promise promise){
+        if(coinType == CoinType.AION.value()){
+            promise.resolve(AionAddress.isValidString(address));
+        }else if(coinType == CoinType.BITCOIN.value() || coinType == CoinType.LITECOIN.value()) {
+            promise.resolve(BitcoinAddress.isValidString(address));
+        }else if(coinType == CoinType.EOS.value()){
+            promise.resolve(EOSAddress.isValidString(address));
+        }else if(coinType == CoinType.ETHEREUM.value()){
+            promise.resolve(EthereumAddress.isValidString(address));
+        }else if(coinType == CoinType.TRON.value()){
+            promise.resolve(TronAddress.isValidString(address));
+        }else {
+            promise.reject(E_NOT_SUPPORT_ERROR, "not support this cointype");
+        }
+
+    }
 
 
     private PublicKey getPublicKeyByCoin(PrivateKey sk, CoinType coin){
