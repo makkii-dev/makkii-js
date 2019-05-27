@@ -74,7 +74,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getKey(int coinType, int account, int change, int address, Promise promise){
+    public void getKey(int coinType, int account, int change, int address, boolean testnet, Promise promise){
         try {
             CoinType coin = CoinType.createFromValue(coinType);
             PrivateKey sk = wallet.getKeyBIP44(coin, account, change, address);
@@ -86,9 +86,17 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }
             String addr = coin.deriveAddress(sk);
             if(coinType == CoinType.BITCOIN.value()){
-                addr = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                if(!testnet){
+                    addr = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                }else {
+                    addr = new BitcoinAddress(pk,(byte)111).description();
+                }
             }else if(coinType == CoinType.LITECOIN.value()){
-                addr = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                if(!testnet){
+                    addr = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                }else {
+                    addr = new BitcoinAddress(pk,(byte)111).description();
+                }
             }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
@@ -373,7 +381,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void recoverKeyPairByPrivateKey(String private_key, int coinType, Promise promise){
+    public void recoverKeyPairByPrivateKey(String private_key, int coinType, boolean testnet, Promise promise){
         try{
             byte[] pkData = StringUtils.StringHexToByteArray(private_key);
             CoinType coin = CoinType.createFromValue(coinType);
@@ -389,9 +397,17 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }
             String address = coin.deriveAddress(sk);
             if(coinType == CoinType.BITCOIN.value()){
-                address = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                if(!testnet){
+                    address = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                }else {
+                    address = new BitcoinAddress(pk,(byte)111).description();
+                }
             }else if(coinType == CoinType.LITECOIN.value()){
-                address = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                if(!testnet){
+                    address = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                }else {
+                    address = new BitcoinAddress(pk,(byte)111).description();
+                }
             }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
