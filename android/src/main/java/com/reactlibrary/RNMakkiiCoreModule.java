@@ -24,7 +24,7 @@ import wallet.core.jni.BitcoinTransactionSigner;
 import wallet.core.jni.EthereumSigner;
 import wallet.core.jni.EOSSigner;
 import wallet.core.jni.TronSigner;
-
+import wallet.core.jni.P2PKHPrefix;
 import wallet.core.jni.AionAddress;
 import wallet.core.jni.BitcoinAddress;
 import wallet.core.jni.EthereumAddress;
@@ -84,9 +84,15 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             if (coin == CoinType.AION){
                 pkstr += Hex.toHexString(pk.data());
             }
+            String addr = coin.deriveAddress(sk);
+            if(coinType == CoinType.BITCOIN.value()){
+                addr = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+            }else if(coinType == CoinType.LITECOIN.value()){
+                addr = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+            }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
-            map.putString("address", coin.deriveAddress(sk));
+            map.putString("address", addr);
             map.putInt("index", address);
             promise.resolve(map);
         }catch (Exception e){
@@ -381,9 +387,15 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             if (coin == CoinType.AION){
                 pkstr += Hex.toHexString(pk.data());
             }
+            String address = coin.deriveAddress(sk);
+            if(coinType == CoinType.BITCOIN.value()){
+                address = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+            }else if(coinType == CoinType.LITECOIN.value()){
+                address = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+            }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
-            map.putString("address", coin.deriveAddress(sk));
+            map.putString("address", address);
             promise.resolve(map);
 
         }catch (Exception e){
