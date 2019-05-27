@@ -24,7 +24,7 @@ import wallet.core.jni.BitcoinTransactionSigner;
 import wallet.core.jni.EthereumSigner;
 import wallet.core.jni.EOSSigner;
 import wallet.core.jni.TronSigner;
-
+import wallet.core.jni.P2PKHPrefix;
 import wallet.core.jni.AionAddress;
 import wallet.core.jni.BitcoinAddress;
 import wallet.core.jni.EthereumAddress;
@@ -74,7 +74,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getKey(int coinType, int account, int change, int address, Promise promise){
+    public void getKey(int coinType, int account, int change, int address, boolean testnet, Promise promise){
         try {
             CoinType coin = CoinType.createFromValue(coinType);
             PrivateKey sk = wallet.getKeyBIP44(coin, account, change, address);
@@ -84,9 +84,23 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             if (coin == CoinType.AION){
                 pkstr += Hex.toHexString(pk.data());
             }
+            String addr = coin.deriveAddress(sk);
+            if(coinType == CoinType.BITCOIN.value()){
+                if(!testnet){
+                    addr = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                }else {
+                    addr = new BitcoinAddress(pk,(byte)111).description();
+                }
+            }else if(coinType == CoinType.LITECOIN.value()){
+                if(!testnet){
+                    addr = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                }else {
+                    addr = new BitcoinAddress(pk,(byte)111).description();
+                }
+            }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
-            map.putString("address", coin.deriveAddress(sk));
+            map.putString("address", addr);
             map.putInt("index", address);
             promise.resolve(map);
         }catch (Exception e){
@@ -371,7 +385,7 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void recoverKeyPairByPrivateKey(String private_key, int coinType, Promise promise){
+    public void recoverKeyPairByPrivateKey(String private_key, int coinType, boolean testnet, Promise promise){
         try{
             byte[] pkData = StringUtils.StringHexToByteArray(private_key);
             CoinType coin = CoinType.createFromValue(coinType);
@@ -385,9 +399,23 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             if (coin == CoinType.AION){
                 pkstr += Hex.toHexString(pk.data());
             }
+            String address = coin.deriveAddress(sk);
+            if(coinType == CoinType.BITCOIN.value()){
+                if(!testnet){
+                    address = new BitcoinAddress(pk,P2PKHPrefix.BITCOIN.value()).description();
+                }else {
+                    address = new BitcoinAddress(pk,(byte)111).description();
+                }
+            }else if(coinType == CoinType.LITECOIN.value()){
+                if(!testnet){
+                    address = new BitcoinAddress(pk,P2PKHPrefix.LITECOIN.value()).description();
+                }else {
+                    address = new BitcoinAddress(pk,(byte)111).description();
+                }
+            }
             map.putString("private_key", pkstr);
             map.putString("public_key", Hex.toHexString(pk.data()));
-            map.putString("address", coin.deriveAddress(sk));
+            map.putString("address", address);
             promise.resolve(map);
 
         }catch (Exception e){
