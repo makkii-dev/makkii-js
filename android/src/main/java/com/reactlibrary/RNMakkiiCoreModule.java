@@ -323,25 +323,29 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             try {
                 ReadableMap block_header = transaction.getMap("block_header");
                 ReadableMap raw_data = block_header.getMap("raw_data");
-
+                System.out.println("number:" + new Double(raw_data.getDouble("number")).longValue());
+                System.out.println("timestmap: " + new Double(raw_data.getDouble("timestamp")).longValue());
                 Tron.BlockHeader.Builder header = Tron.BlockHeader.newBuilder()
-                        .setNumber(Long.parseLong(raw_data.getString("number")))
+                        .setNumber(new Double(raw_data.getDouble("number")).longValue())
                         .setParentHash(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("parentHash"))))
-                        .setTimestamp(Long.parseLong(raw_data.getString("timestamp")))
+                        .setTimestamp(new Double(raw_data.getDouble("timestamp")).longValue())
                         .setVersion(raw_data.getInt("version"))
                         .setTxTrieRoot(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("txTrieRoot"))))
                         .setWitnessAddress(ByteString.copyFrom(StringUtils.StringHexToByteArray(raw_data.getString("witness_address"))));
 
 
+                System.out.println("amount: " + new Double(transaction.getDouble("amount")).longValue());
                 Tron.TransferContract.Builder contract = Tron.TransferContract.newBuilder()
-                        .setAmount(Long.parseLong(transaction.getString("amount")))
+                        .setAmount(new Double(transaction.getDouble("amount")).longValue())
                         .setOwnerAddress(transaction.getString("owner_address"))
                         .setToAddress(transaction.getString("to_address"));
 
+                System.out.println("timestamp: " + new Double(transaction.getDouble("timestamp")).longValue());
+                System.out.println("expiration: " + new Double(transaction.getDouble("expiration")).longValue());
                 Tron.Transaction.Builder tx = Tron.Transaction.newBuilder()
                         .setBlockHeader(header.build())
-                        .setTimestamp(Long.parseLong(transaction.getString("timestamp")))
-                        .setExpiration(Long.parseLong(transaction.getString("expiration")))
+                        .setTimestamp(new Double(transaction.getDouble("timestamp")).longValue())
+                        .setExpiration(new Double(transaction.getDouble("expiration")).longValue())
                         .setTransfer(contract.build());
 
                 Tron.SigningInput.Builder builder = Tron.SigningInput.newBuilder()
