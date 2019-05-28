@@ -174,25 +174,25 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
             }
         }else if(coinType == CoinType.BITCOIN.value()||coinType == CoinType.LITECOIN.value()){
             try {
-                String amount = transaction.getString("amount");
                 String to_address = transaction.getString("to_address");
                 String change_address = transaction.getString("change_address");
                 Bitcoin.SigningInput.Builder signerBuilder = Bitcoin.SigningInput.newBuilder()
-                        .setAmount(Long.parseLong(amount))
-                        .setHashType(transaction.getInt("hash_type"))
+                        .setAmount((long)transaction.getDouble("amount"))
+                        .setHashType(0x01)
                         .setToAddress(to_address)
                         .setChangeAddress(change_address)
-                        .setByteFee(transaction.getInt("byte_fee"));
+                        .setByteFee(transaction.getInt("byte_fee"))
+                        .addPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(transaction.getString("private_key"))));
+
                 ReadableArray utxos = transaction.getArray("utxos");
                 for (int i = 0; i < utxos.size(); i++) {
                     ReadableMap utxo = utxos.getMap(i);
-                    signerBuilder.addPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("private_key"))));
                     signerBuilder.addUtxo(Bitcoin.UnspentTransaction.newBuilder()
-                            .setAmount(Long.parseLong(utxo.getString("amount")))
+                            .setAmount((long)utxo.getDouble("amount"))
                             .setScript(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("script"))))
                             .setOutPoint(Bitcoin.OutPoint.newBuilder()
                                     .setHash(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("hash"))))
-                                    .setIndex(i)
+                                    .setIndex(utxo.getInt("index"))
                                     .setSequence(Integer.MAX_VALUE)
                                     .build())
                             .build());
