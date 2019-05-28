@@ -181,19 +181,20 @@ public class RNMakkiiCoreModule extends ReactContextBaseJavaModule {
                         .setHashType(0x01)
                         .setToAddress(to_address)
                         .setChangeAddress(change_address)
-                        .setByteFee(transaction.getInt("byte_fee"))
-                        .addPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(transaction.getString("private_key"))));
+                        .setByteFee(transaction.getInt("byte_fee"));
+
 
                 ReadableArray utxos = transaction.getArray("utxos");
                 for (int i = 0; i < utxos.size(); i++) {
                     ReadableMap utxo = utxos.getMap(i);
+                    signerBuilder.addPrivateKey(ByteString.copyFrom(StringUtils.StringHexToByteArray(transaction.getString("private_key"))));
                     signerBuilder.addUtxo(Bitcoin.UnspentTransaction.newBuilder()
                             .setAmount((long)utxo.getDouble("amount"))
                             .setScript(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("script"))))
                             .setOutPoint(Bitcoin.OutPoint.newBuilder()
                                     .setHash(ByteString.copyFrom(StringUtils.StringHexToByteArray(utxo.getString("hash"))))
                                     .setIndex(utxo.getInt("index"))
-                                    .setSequence(Integer.MAX_VALUE)
+                                    .setSequence((int)Long.MAX_VALUE)
                                     .build())
                             .build());
                 }
