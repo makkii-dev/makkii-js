@@ -29,5 +29,9 @@
   "devDependencies": {
     "react": "16.6.3",
     "react-native": "^0.58.4"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.0",
+    "bitcoinjs-lib": "^5.0.5"
   }
 }
