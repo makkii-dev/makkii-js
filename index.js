@@ -4,26 +4,7 @@ import BigNumber from 'bignumber.js';
 import {CoinType} from './coinType';
 const { RNMakkiiCore } = NativeModules;
 
-/***
- *
- * @param tx = {
- *    private_key: hex String
- *    to_address: hex String
- *    change_address: hex String
- *    amount: number (satoshi)
- *    utxos: [
- *        {
- *            amount: number (satoshi)
- *            script: hex String
- *            hash: hex String
- *            index: number
- *        }
- *        ...
- *    ]
- * }
- * @param network: one of [BTC, BTCTEST, LTC, LTCTEST]
- * @returns {Promise<any>} {encoded: hex String}
- */
+
 const networks = {
     BTC: {
         messagePrefix: '\x18Bitcoin Signed Message:\n',
@@ -70,42 +51,68 @@ const networks = {
 };
 const estimateFeeBTC = (m,n)=>148 * m + 34 * n + 10;
 
-const signTransactionBTCOrLTC = (tx, network)=> new Promise((resolve, reject) => {
-    const {private_key, utxos, amount: amount_, to_address, change_address} = tx;
-    const mainnet = networks[network];
-    const keyPair = new ECPair(Buffer.from(private_key, 'hex'), undefined, {network: mainnet});
-    const p2wpkh = payments.p2wpkh({pubkey:keyPair.publicKey, network: mainnet});
-    const p2sh = payments.p2sh({redeem:p2wpkh,network:mainnet});
-    const txb = new TransactionBuilder(mainnet);
-    const amount = new BigNumber(amount_);
-
-    const fee   = estimateFeeBTC(utxos.length, 2);
-
-    let balance = new BigNumber(0);
-    for (let ip = 0; ip < utxos.length; ip++) {
-        balance.plus(new BigNumber(utxos[ip].amount));
-        txb.addInput(utxos[ip].hash, utxos[ip].index);
-    }
-    if (balance.toNumber() < amount.toNumber() + fee){
-        reject("error_insufficient_amount")
-    }
-    const needChange = balance.toNumber() > amount.toNumber() + fee;
-    txb.addOutput(to_address, amount.toNumber());
-    needChange&&txb.addOutput(change_address, balance.toNumber()-amount.toNumber()-fee);
-    for (let ip = 0; ip < utxos.length; ip++) {
-        txb.sign(ip, keyPair, p2sh.redeem.output, null, utxos[ip].amount)
-    }
-    const tx = txb.build();
-    resolve({encoded:tx.toHex()});
-});
 
 const signTransaction = (tx, coinType)  => {
     if(coinType === CoinType.BITCOIN || coinType === CoinType.LITECOIN) {
-        return signTransactionBTCOrLTC(tx, tx.network);
+        const {network} = tx;
+        let tranasction = Object.assign({},tx);
+        return signTransactionBTCOrLTC(tranasction, network);
     }else {
         return RNMakkiiCore.signTransaction(tx, coinType);
     }
 };
+
+/***
+ *
+ * @param transaction: {
+ *    private_key: hex String
+ *    to_address: hex String
+ *    change_address: hex String
+ *    amount: number (satoshi)
+ *    utxos: [
+ *        {
+ *            amount: number (satoshi)
+ *            script: hex String
+ *            hash: hex String
+ *            index: number
+ *        }
+ *        ...
+ *    ]
+ * }
+ * @param network: one of [BTC, BTCTEST, LTC, LTCTEST]
+ * @returns {Promise<any>} {encoded: hex String}
+ */
+const signTransactionBTCOrLTC = (transaction, network)=> new Promise((resolve, reject) => {
+    const {private_key, utxos, amount: amount_, to_address, change_address} = transaction;
+    const mainnet = networks[network];
+    try {
+        const keyPair = ECPair.fromPrivateKey(Buffer.from(private_key, 'hex'), {network: mainnet});
+
+        const txb = new TransactionBuilder(mainnet);
+        const amount = new BigNumber(amount_);
+
+        const fee = estimateFeeBTC(utxos.length, 2);
+
+        let balance = new BigNumber(0);
+        for (let ip = 0; ip < utxos.length; ip++) {
+            balance = balance.plus(new BigNumber(utxos[ip].amount));
+            txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
+        }
+        if (balance.toNumber() < amount.toNumber() + fee) {
+            reject("error_insufficient_amount")
+        }
+        const needChange = balance.toNumber() > amount.toNumber() + fee;
+        txb.addOutput(to_address, amount.toNumber());
+        needChange && txb.addOutput(change_address, balance.toNumber() - amount.toNumber() - fee);
+        for (let ip = 0; ip < utxos.length; ip++) {
+            txb.sign(ip, keyPair);
+        }
+        const tx = txb.build();
+        resolve({encoded: tx.toHex()});
+    }catch (e) {
+        reject(e)
+    }
+});
 
 export default {
     ...RNMakkiiCore,
