@@ -2,6 +2,8 @@ import { NativeModules } from 'react-native';
 import {ECPair, TransactionBuilder, payments} from 'bitcoinjs-lib';
 import BigNumber from 'bignumber.js';
 import {CoinType} from './coinType';
+import {hdWallet} from "./hd-wallet";
+
 const { RNMakkiiCore } = NativeModules;
 
 
@@ -55,8 +57,8 @@ const estimateFeeBTC = (m,n)=>148 * m + 34 * n + 10;
 const signTransaction = (tx, coinType)  => {
     if(coinType === CoinType.BITCOIN || coinType === CoinType.LITECOIN) {
         const {network} = tx;
-        let tranasction = Object.assign({},tx);
-        return signTransactionBTCOrLTC(tranasction, network);
+        let transaction = Object.assign({},tx);
+        return signTransactionBTCOrLTC(transaction, network);
     }else {
         return RNMakkiiCore.signTransaction(tx, coinType);
     }
@@ -114,8 +116,20 @@ const signTransactionBTCOrLTC = (transaction, network)=> new Promise((resolve, r
     }
 });
 
+
+const getKey = (coinType, account, change, address_index , isTestNet) => {
+    return hdWallet.derivePath(coinType,account,change,address_index,isTestNet);
+};
+
+const createByMnemonic = (mnemonic, passphrase) => {
+    hdWallet.setMnemonic(mnemonic)
+};
+
+
 export default {
     ...RNMakkiiCore,
     signTransaction,
+    getKey,
+    createByMnemonic,
     CoinType
 };

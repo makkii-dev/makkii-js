@@ -19,7 +19,6 @@ export const CoinType = {
             return 60;
         case 'LITECOIN':
         case 'LTC':
-        case 'LITECOIN':
             return 2;
         case 'TRON': 
         case 'TRX': 
