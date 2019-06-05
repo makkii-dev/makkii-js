@@ -43,10 +43,12 @@ class HDWallet {
                     case CoinType.TRON:
                         keyPair = coin.tron.keyPair(keyPairBIP44.privateKey,{isTestNet: isTestNet});
                         break;
-                    default:
-                        reject("not support coin:", coinType);
                 }
-                resolve({privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, address:keyPair.address, index: address_index});
+                if(keyPair) {
+                    resolve({privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, address:keyPair.address, index: address_index});
+                }else {
+                    reject("not support coin:", coinType);
+                }
             }
         }).catch(e=>{
             reject('not set mnemonic')
