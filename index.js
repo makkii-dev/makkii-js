@@ -78,6 +78,9 @@ const recoverKeyPairByPrivateKey = (priKey, coinType, isTestNet) => {
                     let options2 = isTestNet ? {network: 'BTCTEST'} : {network: 'BTC'};
                     keyPair = coins.aion.keyPair(priKey, options2);
                     break;
+                case CoinType.TRON:
+                    keyPair = coins.tron.keyPair(priKey);
+                    break;
                 default:
             }
             if (keyPair !== undefined) {
