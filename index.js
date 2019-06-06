@@ -25,7 +25,7 @@ const signTransaction = (tx, coinType)  => {
         case CoinType.ETHEREUM:
             return coins.eth.signTransaction(tx);
         case CoinType.TRON:
-            return coins.tron.signTransction(tx);
+            return coins.tron.signTransaction(tx);
         default:
             return Promise.reject('not support coin:', coinType);
     }

@@ -1,5 +1,5 @@
 import {ECPair, TransactionBuilder} from "bitcoinjs-lib";
-import BigNumber from "../../index";
+import BigNumber from "bignumber.js";
 import {networks} from './network';
 /***
  *

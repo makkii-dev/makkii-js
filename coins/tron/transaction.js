@@ -27,7 +27,7 @@ import {sha256} from "ethereumjs-util";
  *
  *  }
  */
-export const signTransction = (transaction) => new Promise((resolve, reject) => {
+export const signTransaction = (transaction) => new Promise((resolve, reject) => {
     try {
         const {private_key, expiration, timestamp, to_address, owner_address, amount, latest_block} = transaction;
         let tx = buildTransferTransaction('TRX', owner_address, to_address, amount);
