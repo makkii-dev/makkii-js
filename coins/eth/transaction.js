@@ -8,8 +8,6 @@ const KEY_MAP = [
     'gasPrice',
     'to',
     'private_key',
-    'timestamp',
-    'data'
 ];
 
 
@@ -36,19 +34,21 @@ export const signTransaction = (transaction)=> new Promise((resolve, reject) => 
     // check key;
     KEY_MAP.forEach(k=>{
         if(!transaction.hasOwnProperty(k)){
-            reject(k + 'not found');
+            reject(k + ' not found');
         }
     });
 
-    const txParams = {
+    let txParams = {
         nonce: toHex(nonce),
         gasPrice: toHex(gasPrice),
         gasLimit: toHex(gasLimit),
         to: toHex(to),
         value: toHex(amount),
-        data: toHex(data),
         chainId: getChainId(network),
     };
+    if (data) {
+        txParams = {...txParams, data:data};
+    }
     const tx = new EthereumTx(txParams);
     try{
         tx.sign(privateKey);
