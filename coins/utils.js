@@ -30,7 +30,36 @@ function toHex(value) {
     }
 }
 
-module.exports = {
+const hexString2Array=(str)=>{
+    if (str.startsWith('0x')) {
+        str = str.substring(2);
+    }
+
+    let result = [];
+    while (str.length >= 2) {
+        result.push(parseInt(str.substring(0, 2), 16));
+        str = str.substring(2, str.length);
+    }
+
+    return result;
+};
+
+const longToByteArray =  (long) => {
+    // we want to represent the input as a 8-bytes array
+    let byteArray = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    for (let index = 0; index < byteArray.length; index++) {
+        let byte = long & 0xff;
+        byteArray[ index ] = byte;
+        long = (long - byte) / 256
+    }
+
+    return byteArray
+};
+
+export {
     toHex,
     hmacSha512,
+    hexString2Array,
+    longToByteArray
 };

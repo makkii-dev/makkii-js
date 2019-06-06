@@ -1,122 +1,46 @@
 import { NativeModules } from 'react-native';
-import {ECPair, TransactionBuilder, payments} from 'bitcoinjs-lib';
-import BigNumber from 'bignumber.js';
 import {CoinType} from './coinType';
 import {hdWallet} from "./hd-wallet";
+import coins from './coins';
+
+
 
 const { RNMakkiiCore } = NativeModules;
 
 
-const networks = {
-    BTC: {
-        messagePrefix: '\x18Bitcoin Signed Message:\n',
-        bech32: 'bc',
-        bip32: {
-            public: 0x0488b21e,
-            private: 0x0488ade4
-        },
-        pubKeyHash: 0x00,
-        scriptHash: 0x05,
-        wif: 0x80
-    },
-    BTCTEST: {
-        messagePrefix: '\x18Bitcoin Signed Message:\n',
-        bech32: 'tb',
-        bip32: {
-            public: 0x043587cf,
-            private: 0x04358394
-        },
-        pubKeyHash: 0x6f,
-        scriptHash: 0xc4,
-        wif: 0xef
-    },
-    LTC: {
-        messagePrefix: '\x19Litecoin Signed Message:\n',
-        bip32: {
-            public: 0x019da462,
-            private: 0x019d9cfe
-        },
-        pubKeyHash: 0x30,
-        scriptHash: 0x32,
-        wif: 0xb0
-    },
-    LTCTEST:{
-        messagePrefix: '\x19Litecoin Signed Message:\n',
-        bip32: {
-            public: 0x043587cf,
-            private: 0x04358394
-        },
-        pubKeyHash: 0x6f,
-        scriptHash: 0xc4, //  for segwit (start with 2)
-        wif: 0xef
-    }
-};
-const estimateFeeBTC = (m,n)=>148 * m + 34 * n + 10;
-
-
+/***
+ *
+ * @param tx
+ * @param coinType
+ * @returns {Promise<never>|Promise<any>|Promise<*>|Promise<any>}
+ */
 const signTransaction = (tx, coinType)  => {
-    if(coinType === CoinType.BITCOIN || coinType === CoinType.LITECOIN) {
-        const {network} = tx;
-        let transaction = Object.assign({},tx);
-        return signTransactionBTCOrLTC(transaction, network);
-    }else {
-        return RNMakkiiCore.signTransaction(tx, coinType);
+    switch (coinType) {
+        case CoinType.AION:
+            return coins.aion.signTransaction(tx);
+        case CoinType.BITCOIN || CoinType.LITECOIN:
+            const {network} = tx;
+            let transaction = Object.assign({},tx);
+            return coins.btc.signTransaction(transaction, network);
+        case CoinType.ETHEREUM:
+            return coins.eth.signTransaction(tx);
+        case CoinType.TRON:
+            return coins.tron.signTransction(tx);
+        default:
+            return Promise.reject('not support coin:', coinType);
     }
 };
+
 
 /***
  *
- * @param transaction: {
- *    private_key: hex String
- *    to_address: hex String
- *    change_address: hex String
- *    amount: number (satoshi)
- *    utxos: [
- *        {
- *            amount: number (satoshi)
- *            script: hex String
- *            hash: hex String
- *            index: number
- *        }
- *        ...
- *    ]
- * }
- * @param network: one of [BTC, BTCTEST, LTC, LTCTEST]
- * @returns {Promise<any>} {encoded: hex String}
+ * @param coinType
+ * @param account
+ * @param change
+ * @param address_index
+ * @param isTestNet
+ * @returns {*|Promise|Promise<any>|Promise<*>}
  */
-const signTransactionBTCOrLTC = (transaction, network)=> new Promise((resolve, reject) => {
-    const {private_key, utxos, amount: amount_, to_address, change_address} = transaction;
-    const mainnet = networks[network];
-    try {
-        const keyPair = ECPair.fromPrivateKey(Buffer.from(private_key, 'hex'), {network: mainnet});
-
-        const txb = new TransactionBuilder(mainnet);
-        const amount = new BigNumber(amount_);
-
-        const fee = estimateFeeBTC(utxos.length, 2);
-
-        let balance = new BigNumber(0);
-        for (let ip = 0; ip < utxos.length; ip++) {
-            balance = balance.plus(new BigNumber(utxos[ip].amount));
-            txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
-        }
-        if (balance.toNumber() < amount.toNumber() + fee) {
-            reject("error_insufficient_amount")
-        }
-        const needChange = balance.toNumber() > amount.toNumber() + fee;
-        txb.addOutput(to_address, amount.toNumber());
-        needChange && txb.addOutput(change_address, balance.toNumber() - amount.toNumber() - fee);
-        for (let ip = 0; ip < utxos.length; ip++) {
-            txb.sign(ip, keyPair);
-        }
-        const tx = txb.build();
-        resolve({encoded: tx.toHex()});
-    }catch (e) {
-        reject(e)
-    }
-});
-
-
 const getKey = (coinType, account, change, address_index , isTestNet) => {
     return hdWallet.derivePath(coinType,account,change,address_index,isTestNet);
 };
@@ -125,11 +49,78 @@ const createByMnemonic = (mnemonic, passphrase) => {
     hdWallet.setMnemonic(mnemonic)
 };
 
+const generateMnemonic = () => {
+    return hdWallet.genMnemonic();
+};
+
+/***
+ * @param priKey
+ * @param coinType
+ * @param isTestNet
+ * @returns {Promise<any> | Promise<*>}
+ */
+const recoverKeyPairByPrivateKey = (priKey, coinType, isTestNet) => {
+    return new Promise(((resolve, reject) => {
+        try {
+            let keyPair;
+            switch (coinType) {
+                case CoinType.AION:
+                    keyPair = coins.aion.keyPair(priKey);
+                    break;
+                case CoinType.BITCOIN:
+                    let options1 = isTestNet ? {network: 'BTCTEST'} : {network: 'BTC'};
+                    keyPair = coins.aion.keyPair(priKey, options1);
+                    break;
+                case CoinType.ETHEREUM:
+                    keyPair = coins.eth.keyPair(priKey);
+                    break;
+                case CoinType.LITECOIN:
+                    let options2 = isTestNet ? {network: 'BTCTEST'} : {network: 'BTC'};
+                    keyPair = coins.aion.keyPair(priKey, options2);
+                    break;
+                default:
+            }
+            if (keyPair !== undefined) {
+                resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address: keyPair.address})
+            } else {
+                reject('recover privKey failed: not support this coinType ',coinType);
+            }
+        } catch (e) {
+            reject('recover privKey failed:', e);
+        }
+
+    }));
+};
+
+/***
+ *
+ * @param address
+ * @param coinType
+ * @returns {Promise<never>|*|Promise|Promise<any>|Promise<*>}
+ */
+const validateAddress = (address, coinType) => {
+    switch (coinType) {
+        case CoinType.AION:
+            return coins.aion.validateAddress(address);
+        case CoinType.BITCOIN:
+        case CoinType.LITECOIN:
+            return coins.btc.validateAddress(address);
+        case CoinType.ETHEREUM:
+            return coins.eth.validateAddress(address);
+        case CoinType.TRON:
+            return coins.tron.validateAddress(address);
+        default:
+            return Promise.reject('not support this coinType ',coinType);
+    }
+};
 
 export default {
     ...RNMakkiiCore,
     signTransaction,
     getKey,
     createByMnemonic,
+    generateMnemonic,
+    recoverKeyPairByPrivateKey,
+    validateAddress,
     CoinType
 };

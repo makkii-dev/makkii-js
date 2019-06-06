@@ -1,4 +1,4 @@
-import { pubToAddress } from 'ethereumjs-util';
+import { pubToAddress ,toChecksumAddress} from 'ethereumjs-util';
 import {toHex} from '../utils';
 const ec = require('elliptic').ec('secp256k1');
 
@@ -21,10 +21,12 @@ export const keyPair = function(priKey:Buffer|String, options?:any) {
         priKey = Buffer.from(priKey, 'hex');
     }
     const key = ec.keyFromPrivate(priKey);
-    const privateKey = key.getPrivate();
     const bip32pubKey = key.getPublic().toJSON();
-    const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(key[1].toArray()))]);
-    const address = pubToAddress(publicKey);
-    return {privateKey: toHex(privateKey), publicKey: toHex(publicKey), address, sign: key.sign}
+    const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(bip32pubKey[1].toArray()))]);
+    console.log('get eth public');
+    let address = '0x'+pubToAddress(publicKey).toString('hex');
+    address = toChecksumAddress(address);
+    console.log('get eth address');
+    return {privateKey: key.getPrivate('hex'), publicKey: toHex(publicKey), address, sign: key.sign}
 
 };

@@ -7,12 +7,17 @@ class HDWallet {
     mnemonic;
 
     constructor() {
-        this.mnemonic = bip39.generateMnemonic(128);
     }
 
-    setMnemonic(mnemonic) {
+    setMnemonic =(mnemonic)=>{
         this.mnemonic = mnemonic;
-    }
+    };
+
+    genMnemonic = () => {
+        this.mnemonic = bip39.generateMnemonic(128);
+        return Promise.resolve(this.mnemonic);
+    };
+
 
     derivePath = (coinType, account, change, address_index, isTestNet = false) => new Promise(((resolve, reject) => {
         let path = `m/44'/${coinType}'/${account}'/${change}/${address_index}`;
@@ -45,13 +50,13 @@ class HDWallet {
                         break;
                 }
                 if(keyPair) {
-                    resolve({privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, address:keyPair.address, index: address_index});
+                    resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: address_index});
                 }else {
                     reject("not support coin:", coinType);
                 }
             }
         }).catch(e=>{
-            reject('not set mnemonic')
+            reject('not set mnemonic' + e);
         })
 
     }))

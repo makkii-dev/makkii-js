@@ -1,8 +1,8 @@
 import {toHex} from '../utils';
-import {keccak256} from 'ethereumjs-util';
+import {keccak256,sha256} from 'ethereumjs-util';
+import bs58 from 'bs58'
 const ec = require('elliptic').ec('secp256k1');
 
-const prefixTestNet = 'a0';
 const prefix = '41';
 
 
@@ -16,14 +16,22 @@ const padTo32 = function(msg){
     return msg;
 };
 
-const computeAddress =function (publicKey, isTestNet = false) {
+const computeAddress =function (publicKey) {
     if (publicKey.length === 65) {
         publicKey = publicKey.slice(1);
     }
     let hash = keccak256(publicKey).toString('hex');
     let addressHex = hash.substring(24);
-    addressHex = (isTestNet ? prefixTestNet : prefix) + addressHex;
+    addressHex = prefix + addressHex;
     return addressHex
+};
+
+const getBase58checkAddress = function(address){
+    let hash0 = sha256(new Buffer(address,'hex'));
+    let hash1 = sha256(hash0);
+    let checkSum = hash1.slice(0,4);
+    let addressBytes = new Buffer(address,'hex');
+    return bs58.encode(Buffer.concat([addressBytes, checkSum]));
 };
 
 export const keyPair = function(priKey:Buffer|String, options?:any) {
@@ -34,10 +42,10 @@ export const keyPair = function(priKey:Buffer|String, options?:any) {
         priKey = Buffer.from(priKey, 'hex');
     }
     const key = ec.keyFromPrivate(priKey);
-    const privateKey = key.getPrivate();
     const bip32pubKey = key.getPublic().toJSON();
-    const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(key[1].toArray()))]);
-    const address = computeAddress(publicKey, options.isTestNet || false);
-    return {privateKey: toHex(privateKey), publicKey: toHex(publicKey), address, sign: key.sign}
+    const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(bip32pubKey[1].toArray()))]);
+    let address = computeAddress(publicKey);
+    address = getBase58checkAddress(address);
+    return {privateKey: key.getPrivate('hex'), publicKey: toHex(publicKey), address, sign: key.sign}
 
 };

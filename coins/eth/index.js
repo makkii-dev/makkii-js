@@ -1,5 +1,9 @@
 import {keyPair} from "./keypair";
+import {validateAddress} from "./address";
+import {signTransaction} from "./transaction";
 
-module.exports = {
-    keyPair
+export {
+    keyPair,
+    validateAddress,
+    signTransaction
 };

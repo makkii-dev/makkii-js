@@ -38,7 +38,7 @@ const CKDPriv = (key, index) => {
 };
 
 const replaceDerive = (val) => val.replace("'", '');
-const pathRegex = new RegExp("^m(\\/[0-9]+')+$");
+const pathRegex = new RegExp("^m(/\\d+'?){3}/[0,1]/\\d+'?$");
 const isValidPath = (path) => {
     if (!pathRegex.test(path)) {
         return false;
