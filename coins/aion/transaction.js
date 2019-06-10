@@ -4,7 +4,7 @@ import {inputAddressFormatter} from './address';
 import blake2b from 'blake2b';
 import sodium from 'sodium-javascript';
 import rlp from 'aion-rlp';
-import BigNumber from 'bignumber.js';
+import {BN} from "ethereumjs-util";
 
 /***
  *
@@ -40,34 +40,38 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         reject(e)
     }
     const unsignedTransaction = {
+        nonce: tx.nonce,
         to: tx.to || '0x',
         data: tx.data || '0x',
-        value: tx.value || '0x',
-        timestamp: tx.timestamp || Math.floor(new Date().getTime() * 1000),
-        type: toHex(tx.type||1)
+        amount: tx.amount || '0x',
+        timestamp: tx.timestamp || Math.floor(new Date().getTime()*1000),
+        type: new BN(tx.type||1),
+        gasLimit: tx.gasLimit,
+        gasPrice: tx.gasPrice,
     };
+    console.log('unsigned ++++=>', unsignedTransaction);
+
 
     const rlpEncoded = rlp.encode([
         unsignedTransaction.nonce,
         unsignedTransaction.to.toLowerCase(),
-        unsignedTransaction.value,
+        unsignedTransaction.amount,
         unsignedTransaction.data,
-        unsignedTransaction.timestamp,
-        toAionLong(tx.gasLimit),
-        toAionLong(tx.gasPrice),
+        toAionLong(unsignedTransaction.timestamp),
+        toAionLong(unsignedTransaction.gasLimit),
+        toAionLong(unsignedTransaction.gasPrice),
         unsignedTransaction.type
     ]);
     // hash encoded message
     let rawHash = blake2b(32).update(rlpEncoded).digest();
     // sign
     let signature = ecKey.sign(rawHash);
-
     // verify signature
-    if (sodium.crypto_sign_verify_detached(signature, rawHash, Buffer.from(ecKey.publicKey,'hex')) === false) {
+    if (sodium.crypto_sign_verify_detached(signature, rawHash, Buffer.from(hexString2Array(ecKey.publicKey))) === false) {
         throw new Error('Could not verify signature.');
     }
 
-    let fullSignature = Buffer.concat([signature,Buffer.from(hexString2Array(ecKey.publicKey))]);
+    let fullSignature = Buffer.concat([Buffer.from(hexString2Array(ecKey.publicKey)),signature]);
     // add the aion fullSignature
     const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
 
@@ -102,7 +106,7 @@ const txInputFormatter = (options) => {
         options.gasLimit = options.gas || options.gasLimit;
     }
 
-    ['gasPrice', 'gasLimit', 'value', 'nonce'].filter(function (key) {
+    ['gasPrice', 'gasLimit', 'nonce'].filter(function (key) {
         return options[key] !== undefined;
     }).forEach(function(key){
         options[key] = toHex(options[key]);
@@ -125,14 +129,14 @@ const toAionLong = (val) => {
 
     if (typeof val === 'string') {
         if(isHex(val.toLowerCase())){
-            num = new BigNumber(val, 16);
+            num = new BN(removeLeadingZeroX(val.toLowerCase()), 16);
         }else{
-            num = new BigNumber(val, 10);
+            num = new BN(val, 10);
         }
     }
 
     if (typeof val === 'number') {
-        num = new BigNumber(val);
+        num = new BN(val);
     }
 
     return new rlp.AionLong(num);
