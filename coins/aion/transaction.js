@@ -1,8 +1,9 @@
-import {toHex,hexString2Array} from '../utils'
-import {AionRlp} from "./rlp";
+import {toHex,hexString2Array,isHex} from '../utils'
 import {keyPair} from "./keyPair";
+import {inputAddressFormatter} from './address';
 import blake2b from 'blake2b';
-
+import sodium from 'sodium-javascript';
+import rlp from 'aion-rlp';
 const KEY_MAP = [
     'amount',
     'nonce',
@@ -11,7 +12,6 @@ const KEY_MAP = [
     'to',
     'private_key',
     'timestamp',
-    'data'
 ];
 
 /***
@@ -32,12 +32,12 @@ const KEY_MAP = [
 export const signTransaction = (transaction) => new Promise((resolve, reject) => {
     // check key;
     KEY_MAP.forEach(k=>{
-        if(!transaction.hasOwnProperty(k)){
+        if(!unsignedTransaction.hasOwnProperty(k)){
             reject(k + 'not found');
         }
     });
 
-    const {amount, nonce, gasLimit, gasPrice, to, private_key, timestamp, data} = transaction;
+    const {private_key} = transaction;
     // recover keypair
     let ecKey;
     try{
@@ -45,48 +45,81 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     }catch (e) {
         reject('invalid private key');
     }
-
-    // get encodeRow
-    let encodedTx = {};
-    encodedTx.nonce = AionRlp.encode(toHex(nonce));
-    encodedTx.to = AionRlp.encode(toHex(to));
-    encodedTx.amount = AionRlp.encode(toHex(amount));
-    if(data) {
-        encodedTx.data = AionRlp.encode(toHex(data));
-    }else {
-        encodedTx.data = AionRlp.encode(data);
+    let tx;
+    try {
+        tx = txInputFormatter(transaction);
+    }catch (e) {
+        reject(e)
     }
-    encodedTx.timestamp = AionRlp.encode(toHex(timestamp));
-    encodedTx.gasLimit = AionRlp.encode(toHex(gasLimit));
-    encodedTx.gasPrice = AionRlp.encode(toHex(gasPrice));
-    encodedTx.type = AionRlp.encode(1);
+    const unsignedTransaction = {
+        to: tx.to || '0x',
+        data: tx.data || '0x',
+        value: tx.value || '0x',
+        timestamp: tx.timestamp || Math.floor(new Date().getTime() * 1000),
+        type: toHex(tx.type||1)
+    };
 
-    let encoded = AionRlp.encodeList([
-        encodedTx.nonce,
-        encodedTx.to,
-        encodedTx.amount,
-        encodedTx.data,
-        encodedTx.timestamp,
-        encodedTx.gasLimit,
-        encodedTx.gasPrice,
-        encodedTx.type
+    const rlpEncoded = rlp.encode([
+        unsignedTransaction.nonce,
+        unsignedTransaction.to.toLowerCase(),
+        unsignedTransaction.value,
+        unsignedTransaction.data,
+        unsignedTransaction.timestamp,
+        rlp.AionLong(tx.gasLimit),
+        rlp.AionLong(tx.gasPrice),
+        unsignedTransaction.type
     ]);
-    let rawHash = blake2b(32).update(encoded).digest();
+    // hash encoded message
+    let rawHash = blake2b(32).update(rlpEncoded).digest();
+    // sign
     let signature = ecKey.sign(rawHash);
-    let fullSignature = Buffer.concat([signature,Buffer.from(hexString2Array(ecKey.publicKey))]);
-    encodedTx.fullSignature  = AionRlp.encode(fullSignature);
 
-    let encoded2 = AionRlp.encodeList([
-        encodedTx.nonce,
-        encodedTx.to,
-        encodedTx.amount,
-        encodedTx.data,
-        encodedTx.timestamp,
-        encodedTx.gasLimit,
-        encodedTx.gasPrice,
-        encodedTx.type,
-        encodedTx.fullSignature,
-    ]);
-    resolve({encoded:encoded2.toString('hex'), signature:toHex(signature)})
+    // verify signature
+    if (sodium.crypto_sign_verify_detached(signature, rawHash, ecKey.publicKey) === false) {
+        throw new Error('Could not verify signature.');
+    }
+
+    let fullSignature = Buffer.concat([signature,Buffer.from(hexString2Array(ecKey.publicKey))]);
+    // add the aion fullSignature
+    const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
+
+    // re-encode with signature included
+    const rawTransaction = rlp.encode(rawTx);
+
+    resolve({encoded:rawTransaction.toString('hex'), signature:toHex(signature)})
 });
+
+
+const txInputFormatter = (options) => {
+
+    if (options.to) { // it might be contract creation
+        options.to = inputAddressFormatter(options.to);
+    }
+
+    if (options.data && options.input) {
+        throw new Error('You can\'t have "data" and "input" as properties of transactions at the same time, please use either "data" or "input" instead.');
+    }
+
+    if (!options.data && options.input) {
+        options.data = options.input;
+        delete options.input;
+    }
+
+    if(options.data && !isHex(options.data)) {
+        throw new Error('The data field must be HEX encoded data.');
+    }
+
+    // allow both
+    if (options.gas || options.gasLimit) {
+        options.gasLimit = options.gas || options.gasLimit;
+    }
+
+    ['gasPrice', 'gasLimit', 'value', 'nonce'].filter(function (key) {
+        return options[key] !== undefined;
+    }).forEach(function(key){
+        options[key] = toHex(options[key]);
+    });
+
+    return options;
+};
 

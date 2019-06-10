@@ -57,9 +57,12 @@ const longToByteArray =  (long) => {
     return byteArray
 };
 
+
+const isHex = val => typeof val === 'string' && /^(-0x|0x)?[0-9a-f]+$/i.test(val) === true
 export {
     toHex,
     hmacSha512,
     hexString2Array,
-    longToByteArray
+    longToByteArray,
+    isHex
 };

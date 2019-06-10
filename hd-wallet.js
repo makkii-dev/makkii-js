@@ -28,7 +28,7 @@ class HDWallet {
         bip39.mnemonicToSeed(this.mnemonic, '').then(seed=>{
             if(coinType === CoinType.AION){
                 const keyPair = coin.aion.derivePath(path ,seed);
-                resolve({privateKey: keyPair.privateKey, publicKey: keyPair.publicKey, address:keyPair.address, index: address_index});
+                resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: address_index});
             }else {
                 let node = hdKey.fromMasterSeed(seed);
                 let keyPairBIP44 = node.derive(path);
