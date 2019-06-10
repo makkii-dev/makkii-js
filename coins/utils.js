@@ -57,12 +57,27 @@ const longToByteArray =  (long) => {
     return byteArray
 };
 
+/***
+ *
+ * @param val
+ * @returns {boolean}
+ */
+const isHex = val => typeof val === 'string' && /^(-0x|0x)?[0-9a-f]+$/i.test(val) === true;
 
-const isHex = val => typeof val === 'string' && /^(-0x|0x)?[0-9a-f]+$/i.test(val) === true
+/***
+ *
+ * @param val
+ * @returns {void | string}
+ */
+const removeLeadingZeroX = val =>
+    /^0x/i.test(val) === true ? val.replace(/^0x/i, '') : val;
+
+
 export {
     toHex,
     hmacSha512,
     hexString2Array,
     longToByteArray,
-    isHex
+    isHex,
+    removeLeadingZeroX
 };

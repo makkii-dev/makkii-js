@@ -1,18 +1,10 @@
-import {toHex,hexString2Array,isHex} from '../utils'
+import {toHex,hexString2Array,isHex,removeLeadingZeroX} from '../utils'
 import {keyPair} from "./keyPair";
 import {inputAddressFormatter} from './address';
 import blake2b from 'blake2b';
 import sodium from 'sodium-javascript';
 import rlp from 'aion-rlp';
-const KEY_MAP = [
-    'amount',
-    'nonce',
-    'gasLimit',
-    'gasPrice',
-    'to',
-    'private_key',
-    'timestamp',
-];
+import BigNumber from 'bignumber.js';
 
 /***
  *
@@ -30,12 +22,7 @@ const KEY_MAP = [
  * @returns {Promise<any> | Promise<*>} {encoded: hex String: signature: hex string}
  */
 export const signTransaction = (transaction) => new Promise((resolve, reject) => {
-    // check key;
-    KEY_MAP.forEach(k=>{
-        if(!unsignedTransaction.hasOwnProperty(k)){
-            reject(k + 'not found');
-        }
-    });
+
 
     const {private_key} = transaction;
     // recover keypair
@@ -45,6 +32,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     }catch (e) {
         reject('invalid private key');
     }
+    // format tx
     let tx;
     try {
         tx = txInputFormatter(transaction);
@@ -65,8 +53,8 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         unsignedTransaction.value,
         unsignedTransaction.data,
         unsignedTransaction.timestamp,
-        rlp.AionLong(tx.gasLimit),
-        rlp.AionLong(tx.gasPrice),
+        toAionLong(tx.gasLimit),
+        toAionLong(tx.gasPrice),
         unsignedTransaction.type
     ]);
     // hash encoded message
@@ -75,7 +63,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     let signature = ecKey.sign(rawHash);
 
     // verify signature
-    if (sodium.crypto_sign_verify_detached(signature, rawHash, ecKey.publicKey) === false) {
+    if (sodium.crypto_sign_verify_detached(signature, rawHash, Buffer.from(ecKey.publicKey,'hex')) === false) {
         throw new Error('Could not verify signature.');
     }
 
@@ -123,3 +111,29 @@ const txInputFormatter = (options) => {
     return options;
 };
 
+
+const toAionLong = (val) => {
+    let num;
+    if (
+        val === undefined ||
+        val === null ||
+        val === '' ||
+        val === '0x'
+    ) {
+        return null;
+    }
+
+    if (typeof val === 'string') {
+        if(isHex(val.toLowerCase())){
+            num = new BigNumber(val, 16);
+        }else{
+            num = new BigNumber(val, 10);
+        }
+    }
+
+    if (typeof val === 'number') {
+        num = new BigNumber(val);
+    }
+
+    return new rlp.AionLong(num);
+};
