@@ -1,5 +1,6 @@
 import {buildTransferTransaction} from '@tronscan/client/src/utils/transactionBuilder';
 import {signTransaction as TronSignTransaction} from '@tronscan/client/src/utils/crypto';
+
 import {longToByteArray, hexString2Array} from '../utils';
 import {sha256} from "ethereumjs-util";
 
@@ -30,7 +31,10 @@ import {sha256} from "ethereumjs-util";
 export const signTransaction = (transaction) => new Promise((resolve, reject) => {
     try {
         const {private_key, expiration, timestamp, to_address, owner_address, amount, latest_block} = transaction;
-        let tx = buildTransferTransaction('TRX', owner_address, to_address, amount);
+        let tx = buildTransferTransaction('_', owner_address, to_address, amount);
+
+        // add block ref ;
+        console.log('add block ref');
         let latestBlockHash = latest_block.hash;
         let latestBlockNum = latest_block.number;
         let numBytes = longToByteArray(latestBlockNum);
@@ -43,14 +47,14 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         rawData.setExpiration(expiration);
         rawData.setTimestamp(timestamp);
         tx.setRawData(rawData);
-        const signed = TronSignTransaction(hexString2Array(private_key), tx);
-        const txID = sha256(signed.hex).toString('hex');
+        const signed = TronSignTransaction(private_key, tx);
+        const txID = sha256(Buffer.from(rawData.serializeBinary())).toString('hex');
         const signature = signed.transaction.getSignatureList().map(e=>Buffer.from(e).toString('hex'));
-        const ref_block_bytes = signed.transaction.toObject().rawData.refBlockBytes;
-        const ref_block_hash = signed.transaction.toObject().rawData.refBlockHash;
+        const ref_block_bytes = Buffer.from(Uint8Array.from(numBytes.slice(6, 8))).toString('hex');
+        const ref_block_hash = Buffer.from(Uint8Array.from(generateBlockId.slice(8, 16))).toString('hex');
         resolve({signature, txID, ref_block_bytes, ref_block_hash});
     }catch (e) {
-        reject('eth sign transaction failed',e);
+        reject('tron sign transaction failed: ',e);
     }
 
 
