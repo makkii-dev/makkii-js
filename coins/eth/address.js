@@ -1,5 +1,5 @@
-import {isValidChecksumAddress} from 'ethereumjs-util';
+import {isValidAddress} from 'ethereumjs-util';
 
 export const validateAddress = (address) => new Promise((resolve, reject) => {
-   resolve(isValidChecksumAddress(address))
+   resolve(isValidAddress(address))
 });
