@@ -69,14 +69,14 @@ const recoverKeyPairByPrivateKey = (priKey, coinType, isTestNet) => {
                     break;
                 case CoinType.BITCOIN:
                     let options1 = isTestNet ? {network: 'BTCTEST'} : {network: 'BTC'};
-                    keyPair = coins.aion.keyPair(priKey, options1);
+                    keyPair = coins.btc.keyPair(priKey, options1);
                     break;
                 case CoinType.ETHEREUM:
                     keyPair = coins.eth.keyPair(priKey);
                     break;
                 case CoinType.LITECOIN:
-                    let options2 = isTestNet ? {network: 'BTCTEST'} : {network: 'BTC'};
-                    keyPair = coins.aion.keyPair(priKey, options2);
+                    let options2 = isTestNet ? {network: 'LTCTEST'} : {network: 'LTC'};
+                    keyPair = coins.btc.keyPair(priKey, options2);
                     break;
                 case CoinType.TRON:
                     keyPair = coins.tron.keyPair(priKey);
