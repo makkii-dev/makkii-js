@@ -18,7 +18,8 @@ const signTransaction = (tx, coinType)  => {
     switch (coinType) {
         case CoinType.AION:
             return coins.aion.signTransaction(tx);
-        case CoinType.BITCOIN || CoinType.LITECOIN:
+        case CoinType.BITCOIN:
+        case CoinType.LITECOIN:
             const {network} = tx;
             let transaction = Object.assign({},tx);
             return coins.btc.signTransaction(transaction, network);
