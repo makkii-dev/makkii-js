@@ -1,7 +1,7 @@
 import {buildTransferTransaction} from '@tronscan/client/src/utils/transactionBuilder';
 import {signTransaction as TronSignTransaction} from '@tronscan/client/src/utils/crypto';
 
-import {longToByteArray, hexString2Array} from '../utils';
+import {longToByteArray, hexString2Array, removeLeadingZeroX} from '../utils';
 import {sha256} from "ethereumjs-util";
 
 /***
@@ -47,7 +47,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         rawData.setExpiration(expiration);
         rawData.setTimestamp(timestamp);
         tx.setRawData(rawData);
-        const signed = TronSignTransaction(private_key, tx);
+        const signed = TronSignTransaction(removeLeadingZeroX(private_key), tx);
         const txID = sha256(Buffer.from(rawData.serializeBinary())).toString('hex');
         const signature = signed.transaction.getSignatureList().map(e=>Buffer.from(e).toString('hex'));
         const ref_block_bytes = Buffer.from(Uint8Array.from(numBytes.slice(6, 8))).toString('hex');

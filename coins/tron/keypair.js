@@ -46,6 +46,6 @@ export const keyPair = function(priKey:Buffer|String, options?:any) {
     const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(bip32pubKey[1].toArray()))]);
     let address = computeAddress(publicKey);
     address = getBase58checkAddress(address);
-    return {privateKey: key.getPrivate('hex'), publicKey: toHex(publicKey), address, sign: key.sign}
+    return {privateKey: key.getPrivate('hex'), publicKey: publicKey.toString('hex'), address, sign: key.sign}
 
 };

@@ -1,5 +1,5 @@
 import EthereumTx from 'ethereumjs-tx';
-import {toHex} from "../utils";
+import {removeLeadingZeroX, toHex} from "../utils";
 
 const KEY_MAP = [
     'amount',
@@ -29,7 +29,7 @@ const KEY_MAP = [
  */
 export const signTransaction = (transaction)=> new Promise((resolve, reject) => {
     const {network, amount, nonce, gasLimit, gasPrice, to, private_key, data} = transaction;
-    const privateKey = new Buffer(private_key,'hex');
+    const privateKey = Buffer.from(removeLeadingZeroX(private_key),'hex');
 
     // check key;
     KEY_MAP.forEach(k=>{

@@ -35,7 +35,7 @@ export const keyPair = function(priKey: Buffer|String, option?:any) {
         return addressHash;
     }
 
-    return {privateKey:toHex(privateKey), publicKey:toHex(publicKey), address:toHex(address), sign}
+    return {privateKey:privateKey.toString('hex'), publicKey:publicKey.toString('hex'), address:toHex(address), sign}
 };
 
 export const getKeyPairFromSeed = function (seed) {
