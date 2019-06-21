@@ -24,7 +24,7 @@ import {removeLeadingZeroX} from "../utils";
  * @returns {Promise<any>} {encoded: hex String}
  */
 export const signTransaction = (transaction, network='BTC')=> new Promise((resolve, reject) => {
-    const {private_key, utxos, amount: amount_, to_address, change_address} = transaction;
+    const {private_key, utxos, amount: amount_, to_address, change_address, byte_fee} = transaction;
     const mainnet = networks[network];
     try {
         const keyPair = ECPair.fromPrivateKey(Buffer.from(removeLeadingZeroX(private_key), 'hex'), {network: mainnet});
@@ -32,7 +32,7 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
         const txb = new TransactionBuilder(mainnet);
         const amount = new BigNumber(amount_);
 
-        const fee = estimateFeeBTC(utxos.length, 2);
+        const fee = network==='BTC'||network==='BTCTEST'?estimateFeeBTC(utxos.length, 2,byte_fee):estimateFeeLTC``;
 
         let balance = new BigNumber(0);
         for (let ip = 0; ip < utxos.length; ip++) {
@@ -55,4 +55,5 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
     }
 });
 
-const estimateFeeBTC = (m,n)=>148 * m + 34 * n + 10;
+const estimateFeeBTC = (m,n, byte_fee)=>byte_fee*(148 * m + 34 * n + 10);
+const estimateFeeLTC = 500000;
