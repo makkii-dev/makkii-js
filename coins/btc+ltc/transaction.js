@@ -32,7 +32,7 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
         const txb = new TransactionBuilder(mainnet);
         const amount = new BigNumber(amount_);
 
-        const fee = network==='BTC'||network==='BTCTEST'?estimateFeeBTC(utxos.length, 2,byte_fee):estimateFeeLTC``;
+        const fee = network==='BTC'||network==='BTCTEST'?estimateFeeBTC(utxos.length, 2,byte_fee):estimateFeeLTC;
 
         let balance = new BigNumber(0);
         for (let ip = 0; ip < utxos.length; ip++) {
