@@ -20,6 +20,9 @@ export const keyPair = function(priKey:Buffer|String, options?:any) {
         }
         priKey = Buffer.from(priKey, 'hex');
     }
+    if (priKey.length !== 32) {
+        throw 'private key length is ' + priKey.length + " , expected eth 32 bytes";
+    }
     const key = ec.keyFromPrivate(priKey);
     const bip32pubKey = key.getPublic().toJSON();
     const publicKey = Buffer.concat([padTo32(new Buffer(bip32pubKey[0].toArray())), padTo32(new Buffer(bip32pubKey[1].toArray()))]);
