@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native';
 import {CoinType} from './coinType';
-import {hdWallet} from "./hd-wallet";
+import {HDWallet, hdWallet} from "./hd-wallet";
 import coins from './coins';
 
 
@@ -52,6 +52,11 @@ const createByMnemonic = (mnemonic, passphrase) => {
 
 const generateMnemonic = () => {
     return hdWallet.genMnemonic();
+};
+
+const getKeyFromMnemonic = (coinType, account ,change, address_index, isTestNet, mnemonic) => {
+    const wallet = new HDWallet(mnemonic);
+    return wallet.derivePath(coinType,account,change,address_index,isTestNet);
 };
 
 /***
@@ -126,5 +131,6 @@ export default {
     generateMnemonic,
     recoverKeyPairByPrivateKey,
     validateAddress,
+    getKeyFromMnemonic,
     CoinType
 };

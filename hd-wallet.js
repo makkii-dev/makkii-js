@@ -6,7 +6,8 @@ import hdKey from 'hdkey';
 class HDWallet {
     mnemonic;
 
-    constructor() {
+    constructor(mnemonic) {
+        this.mnemonic = mnemonic;
     }
 
     setMnemonic =(mnemonic)=>{
@@ -63,6 +64,7 @@ class HDWallet {
 
 }
 
+export {HDWallet}
 
 export const hdWallet = new HDWallet();
 
