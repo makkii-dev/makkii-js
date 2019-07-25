@@ -1,11 +1,9 @@
-import { NativeModules } from 'react-native';
 import {CoinType} from './coinType';
 import {HDWallet, hdWallet} from "./hd-wallet";
 import coins from './coins';
 
 
 
-const { RNMakkiiCore } = NativeModules;
 
 
 /***
@@ -124,7 +122,6 @@ const validateAddress = (address, coinType) => {
 };
 
 export default {
-    ...RNMakkiiCore,
     signTransaction,
     getKey,
     createByMnemonic,

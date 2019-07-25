@@ -7,29 +7,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/github_account/react-native-makkii-core.git",
-    "baseUrl": "https://github.com/github_account/react-native-makkii-core"
-  },
   "keywords": [
     "react-native"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "yourname@email.com"
+    "name": "chenCheng",
+    "email": "chen@aion.com"
   },
   "license": "Apache-2.0",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "peerDependencies": {
-    "react": "16.6.3",
-    "react-native": "^0.58.4"
-  },
-  "devDependencies": {
-    "react": "16.6.3",
-    "react-native": "^0.58.4"
-  },
   "dependencies": {
     "@tronscan/client": "^0.2.48",
     "aion-rlp": "^0.0.1",
