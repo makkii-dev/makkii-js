@@ -1,9 +1,9 @@
 import * as bip39 from 'bip39';
 import {CoinType} from './coinType';
-import * as aion from './aion/keystore';
-import * as btc from './btc+ltc/keystore';
-import * as eth from './eth/keystore';
-import * as tron from './tron/keystore';
+import aion from './aion/keystore';
+import btc from './btc+ltc/keystore';
+import eth from './eth/keystore';
+import tron from './tron/keystore';
 import hdKey from 'hdkey';
 
 class HDWallet {
