@@ -1,4 +1,4 @@
-import wallet from 'react-native-keystore-hw-wallet';
+import wallet from 'react-native-aion-hw-wallet';
 
 const signByLedger = (index, sender, msg) => {
     return new Promise((resolve, reject) => {
