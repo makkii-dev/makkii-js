@@ -51,8 +51,10 @@ const sendAll = async (address, symbol, network) => {
 
 const formatAddress1Line = address => `${address.slice(0, 12)}...${address.slice(-10)}`;
 
+const sameAddress = (address1, address2)=> address1 === address2;
 export {
     validateBalanceSufficiency,
     sendAll,
-    formatAddress1Line
+    formatAddress1Line,
+    sameAddress
 }

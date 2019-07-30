@@ -139,16 +139,12 @@ export function client (support_coin_lists, isTestNet) {
     }
 
     function sameAddress(coinType, address1, address2) {
-        if (coinType === 'AION' || coinType === 'ETH') {
-            return address1.toLowerCase() === address2.toLowerCase();
+        const coin = COINS[coinType.toUpperCase()];
+        if (coin.api !== undefined && coin.api.sameAddress !== undefined) {
+
+            return coin.api.sameAddress(address1, address2);
         }
-        if (coinType === 'TRX') {
-            return address1 === address2;
-        }
-        if (coinType === 'BTC' || coinType === 'LTC') {
-            return address1 === address2;
-        }
-        return true;
+        throw new Error(`No sameAddress impl for coin ${coinType}`);
     }
 
     function formatAddress1Line(coinType, address) {

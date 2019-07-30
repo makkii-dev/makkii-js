@@ -15,7 +15,12 @@ function validateBalanceSufficiency(account, symbol, amount) {
     });
 }
 
+function sameAddress(address1, address2){
+    return address1 === address2;
+}
+
 export {
     formatAddress1Line,
-    validateBalanceSufficiency
+    validateBalanceSufficiency,
+    sameAddress
 }
