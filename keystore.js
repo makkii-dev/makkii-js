@@ -76,7 +76,7 @@ export function client (support_coin_lists, isTestNet) {
         if(coin.keystore!==undefined){
             return coin.keystore.signTransaction(tx, coin.network);
         }
-       return Promise.reject('not support coin:', coinType);
+       return Promise.reject(`not support coin: ${coinType}`);
     }
 
 
@@ -119,10 +119,10 @@ export function client (support_coin_lists, isTestNet) {
                 if (keyPair !== undefined) {
                     resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address: keyPair.address})
                 } else {
-                    reject('recover privKey failed: not support this coinType ', coinType);
+                    reject(`recover privKey failed: not support this coinType ${coinType}`);
                 }
             } catch (e) {
-                reject('recover privKey failed: not support this coinType ', coinType);
+                reject(`recover privKey failed: not support this coinType ${coinType}`);
             }
         }));
     };
@@ -138,7 +138,7 @@ export function client (support_coin_lists, isTestNet) {
         if(coin.keystore!==undefined){
             return coin.keystore.validateAddress(address);
         }
-        return Promise.reject('not support this coinType ', coinType);
+        return Promise.reject(`not support this coinType ${coinType}`);
     };
 
 

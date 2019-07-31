@@ -54,7 +54,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         const ref_block_hash = Buffer.from(Uint8Array.from(generateBlockId.slice(8, 16))).toString('hex');
         resolve({signature, txID, ref_block_bytes, ref_block_hash});
     }catch (e) {
-        reject('keystore sign transaction failed: ',e);
+        reject(`keystore sign transaction failed: ${e}`);
     }
 
 

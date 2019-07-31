@@ -54,7 +54,7 @@ export const signTransaction = (transaction)=> new Promise((resolve, reject) => 
         tx.sign(privateKey);
         resolve({encoded:tx.serialize().toString('hex'), r:tx.r.toString('hex'),s:tx.s.toString('hex'),v:tx.v.toString('hex') })
     }catch (e) {
-        reject('keystore sign transaction failed',e);
+        reject(`keystore sign transaction failed: ${e}`);
     }
 });
 

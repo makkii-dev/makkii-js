@@ -56,7 +56,7 @@ class HDWallet {
                 if(keyPair) {
                     resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: address_index});
                 }else {
-                    reject("not support coin:", coinType);
+                    reject(`not support coin: ${coinType}`);
                 }
             }
         }).catch(e=>{
