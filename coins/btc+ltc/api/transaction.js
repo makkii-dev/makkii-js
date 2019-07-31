@@ -1,5 +1,5 @@
 import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
-import {signTransaction} from "../keystore";
+import keystore from "../keystore";
 
 const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC') =>
     new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                     private_key: account.private_key,
                     utxos,
                 };
-                signTransaction(tx, network)
+                keystore.signTransaction(tx, network)
                     .then(res => {
                         console.log('[keystore sign resp]=>', res);
                         broadcastTransaction(res.encoded, network)

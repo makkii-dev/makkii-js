@@ -1,4 +1,4 @@
-import {signTransaction} from "../keystore";
+import keystore from "../keystore";
 import {
     getTransactionById,
     getTransactionInfoById,
@@ -29,7 +29,7 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
                     private_key: account.private_key,
                     latest_block,
                 };
-                signTransaction(tx)
+                keystore.signTransaction(tx)
                     .then(signRes => {
                         console.log('sign result =>', signRes);
                         const signedTx = {

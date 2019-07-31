@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract';
-import {signTransaction} from "../keystore";
+import keystore from "../keystore";
 import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "./jsonrpc";
 import {ERC20ABI, etherscanApikey, getEtherscanBaseUrl} from "./constants";
 import ApiCaller from "../../../utils/Api_caller";
@@ -21,7 +21,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
                 if (data !== undefined) {
                     tx = { ...tx, data };
                 }
-                signTransaction(tx)
+                keystore.signTransaction(tx)
                     .then(res => {
                         const { v, r, s, encoded } = res;
                         console.log('sign result:');

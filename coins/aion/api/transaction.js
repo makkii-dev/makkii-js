@@ -3,7 +3,7 @@ import Contract from 'aion-web3-eth-contract';
 import { CONTRACT_ABI } from "./constants";
 import { getTransactionReceipt, getTransactionCount, sendSignedTransaction } from './jsonrpc';
 import ApiCaller from "../../../utils/Api_caller";
-import {signTransaction} from '../keystore';
+import keystore from '../keystore';
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
     const { type, derivationIndex, private_key: privateKey } = account;
     return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
                     tx = { ...tx, data };
                 }
 
-                signTransaction(tx)
+                keystore.signTransaction(tx)
                     .then(({encoded}) => {
                         sendSignedTransaction(encoded, network)
                             .then(hash => {
