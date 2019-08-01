@@ -91,7 +91,7 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page 
                 const { data } = res;
                 if (data.status === '1') {
                     const transfers = {};
-                    const { result: txs } = data;
+                    const { result: txs = []} = data;
                     txs.forEach(t => {
                         const tx = {};
                         tx.hash = t.hash;

@@ -116,7 +116,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
         console.log(`get account token transactions: ${url}`);
         ApiCaller.get(url)
             .then(res => {
-                const { content } = res;
+                const { content = [] } = res;
                 const txs = {};
                 content.forEach(t => {
                     const tx = {};

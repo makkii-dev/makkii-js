@@ -10,8 +10,8 @@ export async function getKeyFromMnemonic(mnemonic, index, options){
         const seed = await bip39.mnemonicToSeed(mnemonic);
         let node = hdKey.fromMasterSeed(seed);
         let keyPairBIP44 = node.derive(path);
-        const keyPair = keyPair(keyPairBIP44.privateKey, options);
-        return {private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: index};
+        const key = keyPair(keyPairBIP44.privateKey, options);
+        return {private_key: key.privateKey, public_key: key.publicKey, address:key.address, index: index};
     }catch (e) {
         throw Error(`get Key ${options.network} failed: ${e}`)
     }
