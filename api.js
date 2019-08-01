@@ -1,7 +1,6 @@
 import {toHex} from "./utils";
 import ApiCaller from "./utils/Api_caller";
 import {app_server_api} from "./remote_server";
-import {CoinType} from "./coins/coinType";
 
 import aionApi from './coins/aion/api';
 import btcApi from './coins/btc+ltc/api';

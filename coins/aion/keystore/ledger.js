@@ -29,6 +29,16 @@ const signByLedger = (index, sender, msg) => {
     });
 };
 
+const getKeyByLedger = async (index) => {
+    try {
+        const {address} = await wallet.getAccount(index);
+        return {address, index};
+    }catch (e) {
+        throw e;
+    }
+};
+
 export {
     signByLedger,
+    getKeyByLedger,
 }

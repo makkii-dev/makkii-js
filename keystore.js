@@ -1,9 +1,8 @@
-import {CoinType} from './coins/coinType';
-import {HDWallet, hdWallet} from "./coins/hd-wallet";
 import aionkeystore from './coins/aion/keystore';
 import btckeystore from './coins/btc+ltc/keystore';
 import ethkeystore from './coins/eth/keystore';
 import tronkeystore from './coins/tron/keystore';
+import * as bip39 from "bip39";
 
 function initKeystore(support_coin_lists,isTestNet){
     let COINS = {};
@@ -63,7 +62,7 @@ function initKeystore(support_coin_lists,isTestNet){
 export function client (support_coin_lists, isTestNet) {
 
     const COINS = initKeystore(support_coin_lists, isTestNet);
-
+    let _mnemonic = '';
 
     /***
      *
@@ -86,29 +85,42 @@ export function client (support_coin_lists, isTestNet) {
      * @param address_index
      * @returns {*|Promise|Promise<any>|Promise<*>}
      */
-    const getKey = (coinType, address_index) => {
-        coinType = typeof coinType === "number"? coinType: CoinType.fromCoinSymbol(coinType);
-        return hdWallet.derivePath(coinType, 0, 0, address_index, isTestNet);
-    };
+    const getKey = (coinType, address_index) => new Promise((resolve, reject) => {
+        const coin = COINS[coinType.toUpperCase()];
+        if(coin.keystore!==undefined){
+            coin.keystore.getKeyFromMnemonic(_mnemonic, address_index, {network:coin.network}).then(res=>
+                resolve(res)
+            ).catch(e=>{
+                reject(e)
+            })
+        }
+        reject(`not support coin: ${coinType}`);
+    });
 
     const setMnemonic = (mnemonic, passphrase) => {
-        hdWallet.setMnemonic(mnemonic)
+        _mnemonic = mnemonic;
     };
 
     const generateMnemonic = () => {
-        return hdWallet.genMnemonic();
+        _mnemonic =  bip39.generateMnemonic();
+        return _mnemonic;
     };
 
-    const getKeyFromMnemonic = (coinType, address_index, mnemonic) => {
-        coinType = typeof coinType === "number"? coinType: CoinType.fromCoinSymbol(coinType);
-        const wallet = new HDWallet(mnemonic);
-        return wallet.derivePath(coinType, 0, 0, address_index, isTestNet);
-    };
+    const getKeyFromMnemonic = (coinType, address_index, mnemonic) => new Promise((resolve, reject) => {
+        const coin = COINS[coinType.toUpperCase()];
+        if(coin.keystore!==undefined){
+            coin.keystore.getKeyFromMnemonic(mnemonic, address_index, {network:coin.network}).then(res=>
+                resolve(res)
+            ).catch(e=>{
+                reject(e)
+            })
+        }
+        reject(`not support coin: ${coinType}`);
+    });
 
     /***
      * @param priKey
      * @param coinType
-     * @param isTestNet
      * @returns {Promise<any> | Promise<*>}
      */
     const recoverKeyPairByPrivateKey = (priKey, coinType) => {
@@ -142,6 +154,19 @@ export function client (support_coin_lists, isTestNet) {
     };
 
 
+    const getKeyByLedger = async  (symbol, index) => {
+        const coin = COINS[symbol.toUpperCase()];
+        if (coin.keystore !== undefined) {
+            try {
+                return await coin.keystore.getKeyByLedger(index);
+            }catch (e) {
+                throw e;
+            }
+        }
+        return Error(`not support coin: ${symbol}`);
+    };
+
+
     return {
         signTransaction,
         getKey,
@@ -150,5 +175,6 @@ export function client (support_coin_lists, isTestNet) {
         recoverKeyPairByPrivateKey,
         validateAddress,
         getKeyFromMnemonic,
+        getKeyByLedger
     }
 }

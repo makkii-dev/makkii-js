@@ -4,9 +4,8 @@ import AbiCoder from 'aion-web3-eth-abi';
 import axios from 'axios';
 import {processRequest } from './jsonrpc';
 import ApiCaller from "../../../utils/Api_caller";
-import {getEndpoint, CONTRACT_ABI} from "./constants";
+import {getEndpoint, CONTRACT_ABI, getRemoteServer} from "./constants";
 import {hexToAscii} from "../../../utils";
-import {app_server_api} from "../../../remote_server";
 
 function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
@@ -138,9 +137,9 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
     });
 }
 
-const getTopTokens = (topN = 20) => {
+const getTopTokens = (topN = 20, network) => {
     return new Promise((resolve, reject) => {
-        const url = `${app_server_api}/token/aion?offset=0&limit=${topN}`;
+        const url = `${getRemoteServer(network)}/token/aion?offset=0&limit=${topN}`;
         console.log(`get top aion tokens: ${url}`);
         ApiCaller.get(url, false)
             .then(res => {
@@ -153,9 +152,9 @@ const getTopTokens = (topN = 20) => {
     });
 };
 
-const searchTokens = keyword => {
+const searchTokens = (keyword, network) => {
     return new Promise((resolve, reject) => {
-        const url = `${app_server_api}/token/aion/search?keyword=${keyword}`;
+        const url = `${getRemoteServer(network)}/token/aion/search?keyword=${keyword}`;
         console.log(`search aion token: ${url}`);
         ApiCaller.get(url, false)
             .then(res => {

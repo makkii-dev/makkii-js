@@ -5,7 +5,7 @@ import blake2b from 'blake2b';
 import sodium from 'sodium-javascript';
 import rlp from 'aion-rlp';
 import {BN} from "ethereumjs-util";
-import {signByLedger} from "../../../utils/ledger";
+import {signByLedger} from "./ledger";
 
 /***
  *

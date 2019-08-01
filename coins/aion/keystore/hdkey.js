@@ -1,5 +1,8 @@
 import {hmacSha512} from '../../../utils';
 import {getKeyPairFromSeed} from "./keyPair";
+import * as bip39 from "bip39";
+import hdKey from "hdkey";
+import {keyPair} from "./keyPair";
 
 const ED25519_CURVE = 'ed25519 seed';
 const HARDENED_KEY_MULTIPLIER = 0x80000000;
@@ -7,7 +10,7 @@ const HARDENED_KEY_MULTIPLIER = 0x80000000;
 const getHardenedNumber = (nr) => {
     return new Buffer(((HARDENED_KEY_MULTIPLIER | nr) >>> 0).toString(16), 'hex');
 };
-export const derivePath = (path, seed) => {
+const derivePath = (path, seed) => {
     if (!isValidPath(path)) {
         throw new Error('Invalid derivation path');
     }
@@ -49,3 +52,17 @@ const isValidPath = (path) => {
         .map(replaceDerive)
         .some(isNaN);
 };
+
+
+
+export async function getKeyFromMnemonic(mnemonic, index, options){
+    try {
+        const path = `m/44'/425'/0/0/${index}`;
+        const seed = await bip39.mnemonicToSeed(mnemonic);
+        let keyPairBIP44 = derivePath(path ,seed);
+        const keyPair = keyPair(keyPairBIP44.privateKey, options);
+        return {private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: index};
+    }catch (e) {
+        throw Error(`get Key ${options.network} failed: ${e}`)
+    }
+}

@@ -238,11 +238,14 @@ const ERC20ABI = [
         type: 'event',
     },
 ];
-
+const getRemoteServer =  network => {
+    return network === 'mainnet'?  'https://www.chaion.net/makkii' : 'http://45.118.132.89:8080';
+};
 export {
     ERC20ABI,
     getEndpoint,
     etherscanApikey,
     getEtherscanBaseUrl,
-    ETHERSCAN_URL_MAP
+    ETHERSCAN_URL_MAP,
+    getRemoteServer
 }

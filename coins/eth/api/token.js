@@ -3,10 +3,9 @@ import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract'
 import AbiCoder from 'web3-eth-abi';
 import ApiCaller from "../../../utils/Api_caller";
-import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP} from "./constants";
+import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexToAscii} from "../../../utils";
-import {app_server_api} from "../../../remote_server";
 
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
@@ -117,9 +116,9 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page 
 
 const fetchAccountTokens = () => Promise.resolve({});
 
-function getTopTokens(topN = 20) {
+function getTopTokens(topN = 20, network) {
     return new Promise((resolve, reject) => {
-        const url = `${app_server_api}/token/eth/search?offset=0&limit=${topN}`;
+        const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=${topN}`;
         console.log(`get top eth tokens: ${url}`);
         ApiCaller.get(url, false)
             .then(res => {
@@ -132,9 +131,9 @@ function getTopTokens(topN = 20) {
     });
 }
 
-function searchTokens(keyword) {
+function searchTokens(keyword, network) {
     return new Promise((resolve, reject) => {
-        const url = `${app_server_api}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
         ApiCaller.get(url, false)
             .then(res => {
@@ -147,8 +146,8 @@ function searchTokens(keyword) {
     });
 }
 
-function getTokenIconUrl(tokenSymbol, contractAddress) {
-    return `${app_server_api}/token/eth/img?contractAddress=${contractAddress}`;
+function getTokenIconUrl(tokenSymbol, contractAddress, network) {
+    return `${getRemoteServer(network)}/token/eth/img?contractAddress=${contractAddress}`;
 }
 
 export {

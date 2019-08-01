@@ -1,11 +1,13 @@
-import {derivePath} from './hdkey';
+import {getKeyFromMnemonic} from './hdkey';
 import {keyPair} from "./keyPair";
 import {validateAddress} from "./address";
 import {signTransaction} from './transaction';
+import {getKeyByLedger} from "./ledger";
 
 export default {
-    derivePath,
+    getKeyFromMnemonic,
     keyPair,
     validateAddress,
     signTransaction,
+    getKeyByLedger
 }
