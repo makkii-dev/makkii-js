@@ -72,7 +72,7 @@ export function client (support_coin_lists, isTestNet) {
      */
     function signTransaction (tx, coinType){
         const coin = COINS[coinType.toUpperCase()];
-        if(coin.keystore!==undefined){
+        if(coin.keystore.signTransaction!==undefined){
             return coin.keystore.signTransaction(tx, coin.network);
         }
        return Promise.reject(`not support coin: ${coinType}`);
@@ -87,14 +87,15 @@ export function client (support_coin_lists, isTestNet) {
      */
     const getKey = (coinType, address_index) => new Promise((resolve, reject) => {
         const coin = COINS[coinType.toUpperCase()];
-        if(coin.keystore!==undefined){
+        if(coin.keystore.getKeyFromMnemonic!==undefined){
             coin.keystore.getKeyFromMnemonic(_mnemonic, address_index, {network:coin.network}).then(res=>
                 resolve(res)
             ).catch(e=>{
                 reject(e)
             })
+        }else{
+            reject(`not support coin: ${coinType}`);
         }
-        reject(`not support coin: ${coinType}`);
     });
 
     const setMnemonic = (mnemonic, passphrase) => {
@@ -108,14 +109,15 @@ export function client (support_coin_lists, isTestNet) {
 
     const getKeyFromMnemonic = (coinType, address_index, mnemonic) => new Promise((resolve, reject) => {
         const coin = COINS[coinType.toUpperCase()];
-        if(coin.keystore!==undefined){
+        if(coin.keystore.getKeyFromMnemonic!==undefined){
             coin.keystore.getKeyFromMnemonic(mnemonic, address_index, {network:coin.network}).then(res=>
                 resolve(res)
             ).catch(e=>{
                 reject(e)
             })
+        }else{
+            reject(`not support coin: ${coinType}`);
         }
-        reject(`not support coin: ${coinType}`);
     });
 
     /***
@@ -147,7 +149,7 @@ export function client (support_coin_lists, isTestNet) {
      */
     const validateAddress = (address, coinType) => {
         const coin = COINS[coinType.toUpperCase()];
-        if(coin.keystore!==undefined){
+        if(coin.keystore.validateAddress!==undefined){
             return coin.keystore.validateAddress(address);
         }
         return Promise.reject(`not support this coinType ${coinType}`);
@@ -156,7 +158,7 @@ export function client (support_coin_lists, isTestNet) {
 
     const getKeyByLedger = async  (symbol, index) => {
         const coin = COINS[symbol.toUpperCase()];
-        if (coin.keystore !== undefined) {
+        if (coin.keystore.getKeyByLedger !== undefined) {
             try {
                 return await coin.keystore.getKeyByLedger(index);
             }catch (e) {

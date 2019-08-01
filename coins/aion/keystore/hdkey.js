@@ -62,6 +62,6 @@ export async function getKeyFromMnemonic(mnemonic, index, options){
         const keyPair = derivePath(path ,seed);
         return {private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: index};
     }catch (e) {
-        throw Error(`get Key ${options.network} failed: ${e}`)
+        throw Error(`get Key AION failed: ${e}`)
     }
 }
