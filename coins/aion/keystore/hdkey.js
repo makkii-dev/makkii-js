@@ -57,7 +57,7 @@ const isValidPath = (path) => {
 
 export async function getKeyFromMnemonic(mnemonic, index, options){
     try {
-        const path = `m/44'/425'/0/0/${index}`;
+        const path = `m/44'/425'/0'/0/${index}`;
         const seed = await bip39.mnemonicToSeed(mnemonic);
         const keyPair = derivePath(path ,seed);
         return {private_key: keyPair.privateKey, public_key: keyPair.publicKey, address:keyPair.address, index: index};

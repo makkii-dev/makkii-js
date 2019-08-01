@@ -5,7 +5,7 @@ import {keyPair} from "./keypair";
 
 export async function getKeyFromMnemonic(mnemonic, index){
     try {
-        const path = `m/44'/195'/0/0/${index}`;
+        const path = `m/44'/195'/0'/0/${index}`;
         const seed = await bip39.mnemonicToSeed(mnemonic);
         let node = hdKey.fromMasterSeed(seed);
         let keyPairBIP44 = node.derive(path);
