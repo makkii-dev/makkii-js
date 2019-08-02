@@ -7,9 +7,11 @@ import {
 } from './jsonrpc';
 import {base58check2HexString} from "../../../utils";
 import ApiCaller from "../../../utils/Api_caller";
+import BigNumber from "bignumber.js";
 
 function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet') {
     return new Promise((resolve, reject) => {
+        value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getLatestBlock(network)
             .then(block => {
                 console.log('get latest block =>', block);

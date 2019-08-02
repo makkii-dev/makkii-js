@@ -1,8 +1,10 @@
 import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
 import keystore from "../keystore";
+import BigNumber from "bignumber.js";
 
 const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC') =>
     new Promise((resolve, reject) => {
+        value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getUnspentTx(account.address, network)
             .then(utxos => {
                 const tx = {
