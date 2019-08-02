@@ -157,7 +157,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
                     resolve({
                         status: parseInt(receipt.status, 16) === 1,
                         blockNumber: parseInt(receipt.blockNumber, 16),
-                        gasUsed: receipt.cumulativeGasUsed,
+                        gasUsed: parseInt(receipt.gasUsed,16),
                     });
                 } else {
                     resolve(null);
