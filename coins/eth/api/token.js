@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract'
 import AbiCoder from 'web3-eth-abi';
 import ApiCaller from "../../../utils/Api_caller";
-import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer} from "./constants";
+import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer, etherscanApikey} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexToAscii} from "../../../utils";
 
