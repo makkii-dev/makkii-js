@@ -26,7 +26,8 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
                     type: 1,
                     gasPrice,
                     gas: gasLimit,
-                    extra_params
+                    extra_params,
+                    private_key: privateKey
                 };
                 if (data !== undefined) {
                     tx = { ...tx, data };
