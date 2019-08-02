@@ -127,6 +127,7 @@ function getTransactionsByAddress(address, page, size, network = 'mainnet') {
                     tx.value = BigNumber(t.value, 10).shiftedBy(-18).toNumber();
                     tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
                     tx.blockNumber = parseInt(t.blockNumber);
+                    tx.fee = t.gasPrice * t.gasUsed * 10**-18;
                     txs[tx.hash] = tx;
                 });
                 resolve(txs);

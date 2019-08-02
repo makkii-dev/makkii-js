@@ -143,6 +143,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
                     tx.value = new BigNumber(t.value, 10).toNumber();
                     tx.status = t.txError === '' ? 'CONFIRMED' : 'FAILED';
                     tx.blockNumber = t.blockNumber;
+                    tx.fee = t.nrgConsumed * t.nrgPrice * 10**-18;
                     txs[tx.hash] = tx;
                 });
                 resolve(txs);
