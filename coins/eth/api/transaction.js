@@ -7,11 +7,12 @@ import ApiCaller from "../../../utils/Api_caller";
 
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet') {
     return new Promise((resolve, reject) => {
+        value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getTransactionCount(account.address, 'latest', network)
             .then(count => {
                 let tx = {
                     network,
-                    amount: value.shiftedBy(18),
+                    amount: value.shiftedBy(18).toNumber(),
                     nonce: count,
                     gasLimit: gasLimit,
                     gasPrice: gasPrice,

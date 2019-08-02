@@ -7,6 +7,7 @@ import keystore from '../keystore';
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
     const { type, derivationIndex, private_key: privateKey } = account;
     return new Promise((resolve, reject) => {
+        value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getTransactionCount(account.address, 'pending', network)
             .then(count => {
                 let extra_params = { type: type};

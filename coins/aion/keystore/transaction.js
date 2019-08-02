@@ -36,7 +36,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         nonce: tx.nonce,
         to: tx.to || '0x',
         data: tx.data || '0x',
-        amount: tx.amount || '0x',
+        amount: toHex(tx.amount) || '0x',
         timestamp: tx.timestamp || Math.floor(new Date().getTime()*1000),
         type: new BN(tx.type||1),
         gasLimit: tx.gasLimit,
