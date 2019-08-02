@@ -36,6 +36,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
                                     to,
                                     value,
                                     status: 'PENDING',
+                                    gasPrice
                                 };
                                 resolve({ pendingTx });
                             })
@@ -127,7 +128,7 @@ function getTransactionsByAddress(address, page, size, network = 'mainnet') {
                     tx.value = BigNumber(t.value, 10).shiftedBy(-18).toNumber();
                     tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
                     tx.blockNumber = parseInt(t.blockNumber);
-                    tx.fee = t.gasPrice * t.gasUsed * 10**-18;
+                    tx.fee = t.gasPrice * t.cumulativeGasUsed * 10**-18;
                     txs[tx.hash] = tx;
                 });
                 resolve(txs);
@@ -155,6 +156,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
                     resolve({
                         status: parseInt(receipt.status, 16) === 1,
                         blockNumber: parseInt(receipt.blockNumber, 16),
+                        gasUsed: receipt.cumulativeGasUsed,
                     });
                 } else {
                     resolve(null);

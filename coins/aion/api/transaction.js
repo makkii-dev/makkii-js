@@ -42,6 +42,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
                                     to,
                                     value,
                                     status: 'PENDING',
+                                    gasPrice
                                 };
                                 resolve({ pendingTx, pendingTokenTx: undefined });
                             })
@@ -166,6 +167,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
                     resolve({
                         status: parseInt(receipt.status, 16) === 1,
                         blockNumber: parseInt(receipt.blockNumber, 16),
+                        gasUsed: receipt.cumulativeGasUsed,
                     });
                 } else {
                     resolve(null);
