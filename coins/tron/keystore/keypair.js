@@ -34,7 +34,7 @@ const getBase58checkAddress = function(address){
     return bs58.encode(Buffer.concat([addressBytes, checkSum]));
 };
 
-export const keyPair = function(priKey:Buffer|String, options?:any) {
+export const keyPair = function(priKey) {
     if (typeof priKey == 'string') {
         if (priKey.startsWith('0x')){
             priKey = priKey.substring(2);

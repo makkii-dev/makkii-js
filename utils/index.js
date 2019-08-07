@@ -1,4 +1,4 @@
-import * as crypto from 'react-native-crypto';
+const crypto =  typeof window === 'undefined'? require('react-native-crypto'): require('crypto-browserify');
 import BigNumber from 'bignumber.js';
 import bs58check from 'bs58check';
 function hmacSha512(key, str) {

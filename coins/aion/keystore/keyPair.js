@@ -3,7 +3,7 @@ import blake2b from 'blake2b';
 import {toHex} from '../../../utils';
 const A0_IDENTIFIER = [0xA0];
 
-export const keyPair = function(priKey: Buffer|String, option?:any) {
+export const keyPair = function(priKey) {
 
     if (typeof priKey == 'string') {
         if (priKey.startsWith('0x')){

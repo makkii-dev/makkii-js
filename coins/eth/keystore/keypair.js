@@ -13,7 +13,7 @@ const padTo32 = function(msg){
 };
 
 
-export const keyPair = function(priKey:Buffer|String, options?:any) {
+export const keyPair = function(priKey) {
     if (typeof priKey == 'string') {
         if (priKey.startsWith('0x')){
             priKey = priKey.substring(2);
