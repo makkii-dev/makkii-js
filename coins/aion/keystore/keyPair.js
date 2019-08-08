@@ -19,8 +19,8 @@ export const keyPair = function(priKey) {
     }
     const keyPair = priKey.length === 64?nacl.sign.keyPair.fromSecretKey(priKey):nacl.sign.keyPair.fromSeed(priKey);
 
-    const privateKey = keyPair.secretKey;
-    const publicKey = keyPair.publicKey;
+    const privateKey = Buffer.from(keyPair.secretKey);
+    const publicKey = Buffer.from(keyPair.publicKey);
     const address = computeA0Address(publicKey);
 
     function sign(digest){
