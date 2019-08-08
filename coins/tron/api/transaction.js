@@ -6,7 +6,7 @@ import {
     broadcastTransaction,
 } from './jsonrpc';
 import {base58check2HexString} from "../../../utils";
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import BigNumber from "bignumber.js";
 
 function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet') {
@@ -133,7 +133,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
     }
     console.log(`[tron req] get tron txs by address: ${url}`);
     return new Promise((resolve, reject) => {
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 const { data } = res.data;
                 const txs = {};

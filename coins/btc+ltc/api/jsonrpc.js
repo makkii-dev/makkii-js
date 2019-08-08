@@ -1,11 +1,11 @@
 import BigNumber from "bignumber.js";
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {baseurl} from "./constants";
 
 const getBalance = (address, network = 'BTC') =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/get_address_balance/${network}/${address}`;
-        const promise = ApiCaller.get(url);
+        const promise = HttpClient.get(url);
         console.log(`[${network} http req] get_balance[${address}]`);
         promise
             .then(res => {
@@ -28,7 +28,7 @@ const getBalance = (address, network = 'BTC') =>
 const getUnspentTx = (address, network = 'BTC') =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/get_tx_unspent/${network}/${address}`;
-        const promise = ApiCaller.get(url);
+        const promise = HttpClient.get(url);
         console.log(`[${network} http req] get_tx_unspent[${address}]`);
         promise
             .then(res => {
@@ -61,7 +61,7 @@ const broadcastTransaction = (encoded, network) =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/send_tx/${network}`;
         console.log(`[${network} http req] send_tx`, encoded);
-        const promise = ApiCaller.post(url, { tx_hex: encoded }, false);
+        const promise = HttpClient.post(url, { tx_hex: encoded }, false);
         promise
             .then(res => {
                 const { data } = res;
@@ -82,7 +82,7 @@ const getBlockByHash = (blockhash, network = 'BTC') =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/get_block/${network}/${blockhash}`;
         console.log(`[${network} http req]  get_block `, blockhash);
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(res => {
                 const { data } = res;
                 console.log(`[${network} http resp]  get_block `, data);
@@ -99,7 +99,7 @@ const getTransactionStatus = (txId, network = 'BTC') =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/get_tx/${network}/${txId}`;
         console.log(`[${network} http req]  get_tx `, txId);
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(res => {
                 const { data } = res;
                 console.log(`[${network} http resp]  get_tx `, data);
@@ -132,7 +132,7 @@ const getTransactionStatus = (txId, network = 'BTC') =>
 const getTransactionsByAddress = (address, page, size, network = 'BTC') =>
     new Promise((resolve, reject) => {
         const url = `${baseurl}/address/${network}/${address}`;
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(res => {
                 const { data } = res;
                 if (data.status && data.status === 'success') {

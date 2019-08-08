@@ -168,6 +168,17 @@ export function client (support_coin_lists, isTestNet) {
         return Error(`not support coin: ${symbol}`);
     };
 
+    const recoverFromKeystore = (coinType, input, password) =>{
+        const coin = COINS[coinType.toUpperCase()];
+        if (coin.keystore.getKeyByLedger !== undefined) {
+            try {
+                return coin.keystore.fromV3(input, password);
+            }catch (e) {
+                throw e;
+            }
+        }
+        return Error(`not support coin: ${coinType}`);
+    };
 
     return {
         signTransaction,
@@ -177,6 +188,7 @@ export function client (support_coin_lists, isTestNet) {
         recoverKeyPairByPrivateKey,
         validateAddress,
         getKeyFromMnemonic,
-        getKeyByLedger
+        getKeyByLedger,
+        recoverFromKeystore
     }
 }

@@ -1,6 +1,6 @@
 const optional = require('optional');
 const {AionApp} = require('lib-hw-ledger-js');
-let wallet =  typeof window === 'undefined'? optional('react-native-aion-hw-wallet'): {};
+let wallet =   global.platform && global.platform === 'mobile'? optional('react-native-aion-hw-wallet'): {};
 
 const initWallet = (transport) => wallet = new AionApp(transport);
 

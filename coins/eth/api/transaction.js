@@ -3,7 +3,7 @@ import Contract from 'web3-eth-contract';
 import keystore from "../keystore";
 import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "./jsonrpc";
 import {ERC20ABI, etherscanApikey, getEtherscanBaseUrl} from "./constants";
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet') {
     return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ function getTransactionsByAddress(address, page, size, network = 'mainnet') {
     )}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
     console.log(`[eth http req] get transactions by address: ${url}`);
     return new Promise((resolve, reject) => {
-        ApiCaller.get(url, false).then(
+        HttpClient.get(url, false).then(
             res => {
                 console.log('[http resp]', res.data);
                 const { result } = res.data;
