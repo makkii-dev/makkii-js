@@ -3,7 +3,6 @@ import Contract from 'web3-eth-contract';
 import keystore from "../keystore";
 import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "./jsonrpc";
 import {ERC20ABI, etherscanApikey, getEtherscanBaseUrl} from "./constants";
-import HttpClient from "../../../utils/Api_caller";
 import {HttpClient} from "lib-common-util-js";
 
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet') {

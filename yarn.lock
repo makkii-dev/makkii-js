@@ -2040,7 +2040,7 @@ keccakjs@^0.2.1:
 
 "lib-common-util-js@https://github.com/chaion/lib-common-util-js.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#150e9932035cc447c115296ce63ee2825db29640"
+  resolved "https://github.com/chaion/lib-common-util-js.git#91853aba7bb7b5c4dbd574ddac8fed4dd1784062"
   dependencies:
     axios "^0.19.0"
     querystring "^0.2.0"
