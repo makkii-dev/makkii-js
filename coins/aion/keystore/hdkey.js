@@ -1,7 +1,5 @@
 import {hmacSha512} from '../../../utils';
-import {getKeyPairFromSeed} from "./keyPair";
 import * as bip39 from "bip39";
-import hdKey from "hdkey";
 import {keyPair} from "./keyPair";
 
 const ED25519_CURVE = 'ed25519 seed';
@@ -21,7 +19,7 @@ const derivePath = (path, seed) => {
         .map(replaceDerive)
         .map(el => parseInt(el, 10));
     let ret = segments.reduce((parentKey,el)=>CKDPriv(parentKey,el),key);
-    return getKeyPairFromSeed(ret);
+    return keyPair(ret);
 
 };
 

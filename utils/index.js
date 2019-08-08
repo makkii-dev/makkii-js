@@ -1,4 +1,5 @@
-const crypto =  typeof window === 'undefined'? require('react-native-crypto'): require('crypto-browserify');
+const optional = require('optional');
+const crypto =  typeof window === 'undefined'? optional('react-native-crypto'): optional('crypto-browserify');
 import BigNumber from 'bignumber.js';
 import bs58check from 'bs58check';
 function hmacSha512(key, str) {
@@ -95,6 +96,21 @@ function base58check2HexString(str) {
 }
 
 
+
+const stripZeroXHexString = (str)=>{
+    if(isHex(str)){
+        str = str.toLowerCase();
+        str = str.startsWith('0x')? str.slice(2): str;
+        return str;
+    }else{
+        throw Error('input must be a hex string')
+    }
+};
+
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
 export {
     toHex,
     hmacSha512,
@@ -103,5 +119,8 @@ export {
     isHex,
     removeLeadingZeroX,
     hexToAscii,
-    base58check2HexString
+    base58check2HexString,
+    stripZeroXHexString,
+    crypto,
+    ab2str
 };

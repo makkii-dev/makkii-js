@@ -2,7 +2,7 @@ import {toHex,hexString2Array,isHex,removeLeadingZeroX} from '../../../utils'
 import {keyPair} from "./keyPair";
 import {inputAddressFormatter} from './address';
 import blake2b from 'blake2b';
-import sodium from 'sodium-javascript';
+import nacl from 'tweetnacl';
 import rlp from 'aion-rlp';
 import {BN} from "ethereumjs-util";
 import {signByLedger} from "./ledger";
@@ -83,7 +83,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         // sign
         let signature = ecKey.sign(rawHash);
         // verify signature
-        if (sodium.crypto_sign_verify_detached(signature, rawHash, Buffer.from(hexString2Array(ecKey.publicKey))) === false) {
+        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(hexString2Array(ecKey.publicKey))) === false) {
             throw new Error('Could not verify signature.');
         }
 

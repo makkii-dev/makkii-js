@@ -1,6 +1,6 @@
-import sodium from 'sodium-javascript';
+import nacl from 'tweetnacl';
 import blake2b from 'blake2b';
-import {toHex} from '../../../utils';
+import {stripZeroXHexString, toHex} from '../../../utils';
 const A0_IDENTIFIER = [0xA0];
 
 export const keyPair = function(priKey) {
@@ -12,21 +12,27 @@ export const keyPair = function(priKey) {
         priKey = Buffer.from(priKey, 'hex');
     }
 
-    const privateKey = priKey;
-    const publicKey = priKey.slice(32,64);
+    if(typeof priKey === 'string'){
+        priKey = Buffer.from(stripZeroXHexString(priKey), 'hex');
+    }else if(!Buffer.isBuffer(priKey)){
+        throw Error('Seed must be a buffer or a hex string');
+    }
+    const keyPair = priKey.length === 64?nacl.sign.keyPair.fromSecretKey(priKey):nacl.sign.keyPair.fromSeed(priKey);
+
+    const privateKey = keyPair.secretKey;
+    const publicKey = keyPair.publicKey;
     const address = computeA0Address(publicKey);
 
     function sign(digest){
-        let signedMessage = new Buffer((new Uint8Array(64)));
         if (typeof hash === 'string') {
             digest = Buffer.from(digest, 'hex');
         }
-        let res = sodium.crypto_sign_detached(signedMessage, digest, Buffer.from(privateKey));
-
-        if (res === -1) {
+        try{
+            let res = nacl.sign(digest, Buffer.from(privateKey));
+            return Buffer.from(res);
+        }catch (e) {
             throw new Error("Message failed to sign");
         }
-        return signedMessage;
     }
 
     function computeA0Address(publicKey){
@@ -38,13 +44,6 @@ export const keyPair = function(priKey) {
     return {privateKey:privateKey.toString('hex'), publicKey:publicKey.toString('hex'), address:toHex(address), sign}
 };
 
-export const getKeyPairFromSeed = function (seed) {
-    let pk = new Buffer(new Uint8Array(32));
-    let sk = new Buffer(new Uint8Array(64));
-    let bufferSeed = new Buffer(seed);
 
-    sodium.crypto_sign_seed_keypair(pk, sk, bufferSeed);
-    return keyPair(sk);
-};
 
 

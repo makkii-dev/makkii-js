@@ -1,4 +1,8 @@
-import wallet from 'react-native-aion-hw-wallet';
+const optional = require('optional');
+const {AionApp} = require('lib-hw-ledger-js');
+let wallet =  typeof window === 'undefined'? optional('react-native-aion-hw-wallet'): {};
+
+const initWallet = (transport) => wallet = new AionApp(transport);
 
 const signByLedger = (index, sender, msg) => {
     return new Promise((resolve, reject) => {
@@ -41,4 +45,5 @@ const getKeyByLedger = async (index) => {
 export {
     signByLedger,
     getKeyByLedger,
+    initWallet
 }
