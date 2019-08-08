@@ -3,14 +3,14 @@ import Contract from 'aion-web3-eth-contract';
 import AbiCoder from 'aion-web3-eth-abi';
 import axios from 'axios';
 import {processRequest } from './jsonrpc';
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {getEndpoint, CONTRACT_ABI, getRemoteServer} from "./constants";
 import {hexToAscii} from "../../../utils";
 
 function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
         const url = `https://${network}-api.aion.network/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(json => {
                 const res = {};
                 if (json.content.length > 0) {
@@ -43,7 +43,7 @@ const fetchAccountTokenBalance = (contractAddress, address, network) =>
         ]);
         console.log('[AION get token balance req]:', getEndpoint(network));
 
-        ApiCaller.post(getEndpoint(network), requestData, true)
+        HttpClient.post(getEndpoint(network), requestData, true)
             .then(res => {
                 if (res.data.result) {
                     resolve(BigNumber(AbiCoder.decodeParameter('uint128', res.data.result)));
@@ -72,9 +72,9 @@ const fetchTokenDetail = (contractAddress, network) =>
             'latest',
         ]);
         const url = getEndpoint(network);
-        const promiseSymbol = ApiCaller.post(url, requestGetSymbol, true);
-        const promiseName = ApiCaller.post(url, requestGetName, true);
-        const promiseDecimals = ApiCaller.post(url, requestGetDecimals, true);
+        const promiseSymbol = HttpClient.post(url, requestGetSymbol, true);
+        const promiseName = HttpClient.post(url, requestGetName, true);
+        const promiseDecimals = HttpClient.post(url, requestGetDecimals, true);
         console.log('[AION get token detail req]:', getEndpoint(network));
         axios
             .all([promiseSymbol, promiseName, promiseDecimals])
@@ -114,7 +114,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
     return new Promise((resolve, reject) => {
         const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
         console.log(`get account token transactions: ${url}`);
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(res => {
                 const { content = [] } = res;
                 const txs = {};
@@ -141,7 +141,7 @@ const getTopTokens = (topN = 20, network) => {
     return new Promise((resolve, reject) => {
         const url = `${getRemoteServer(network)}/token/aion?offset=0&limit=${topN}`;
         console.log(`get top aion tokens: ${url}`);
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 resolve(res.data);
             })
@@ -156,7 +156,7 @@ const searchTokens = (keyword, network) => {
     return new Promise((resolve, reject) => {
         const url = `${getRemoteServer(network)}/token/aion/search?keyword=${keyword}`;
         console.log(`search aion token: ${url}`);
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 resolve(res.data);
             })

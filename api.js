@@ -1,5 +1,5 @@
 import {toHex} from "./utils";
-import ApiCaller from "./utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {app_server_api} from "./remote_server";
 
 import aionApi from './coins/aion/api';
@@ -167,7 +167,7 @@ export function client (support_coin_lists, isTestNet) {
         const url = `${app_server_api}/market/prices?cryptos=${cryptos}&fiat=${currency}`;
         console.log(`[http req]fetch coin prices: ${url}`);
         return new Promise((resolve, reject) => {
-            ApiCaller.get(url, false).then(
+            HttpClient.get(url, false).then(
                 res => {
                     console.log('[http resp]', res.data);
                     resolve(res.data);

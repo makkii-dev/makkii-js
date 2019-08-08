@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {getEndpoint} from "./constants";
 
 const checkBlockTag = blockTag => {
@@ -36,7 +36,7 @@ const processRequest = (methodName, params) => {
 const getBlockByNumber = (blockNumber /* hex string */, fullTxs = false, network = 'mainnet') =>
     new Promise((resolve, reject) => {
         const requestData = processRequest('eth_getBlockByNumber', [blockNumber, fullTxs]);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[eth http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
@@ -50,7 +50,7 @@ const getBlockByNumber = (blockNumber /* hex string */, fullTxs = false, network
 const blockNumber = (network = 'mainnet') =>
     new Promise((resolve, reject) => {
         const requestData = processRequest('eth_blockNumber', []);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log('[keystore http req] eth_blockNumber[]');
@@ -65,7 +65,7 @@ const getBalance = (address, network = 'mainnet') =>
     new Promise((resolve, reject) => {
         const params = [address.toLowerCase(), 'latest'];
         const requestData = processRequest('eth_getBalance', params);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[eth http req] eth_getBalance[${address},  'latest']`);
@@ -79,7 +79,7 @@ const getTransactionCount = (address, blockTag, network) =>
     new Promise((resolve, reject) => {
         const params = [address.toLowerCase(), checkBlockTag(blockTag)];
         const requestData = processRequest('eth_getTransactionCount', params);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[eth http req] eth_getTransactionCount[${address}, ${blockTag}]`);
@@ -101,7 +101,7 @@ const sendSignedTransaction = (signedTx, network = 'mainnet') =>
         const params = [signedTx];
         const requestData = processRequest('eth_sendRawTransaction', params);
         console.log(`send signed tx: ${getEndpoint(network)}`);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[eth http req] eth_sendRawTransaction[${signedTx}]`);
@@ -116,7 +116,7 @@ const getTransactionReceipt = (hash, network = 'mainnet') =>
     new Promise((resolve, reject) => {
         const params = [hash];
         const requestData = processRequest('eth_getTransactionReceipt', params);
-        const promise = ApiCaller.post(getEndpoint(network), requestData, true, {
+        const promise = HttpClient.post(getEndpoint(network), requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[${network} eth http req] eth_getTransactionReceipt[${hash}]`);

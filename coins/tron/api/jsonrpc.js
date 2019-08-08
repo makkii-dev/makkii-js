@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {getEndpoint} from "./constants";
 import {base58check2HexString} from "../../../utils";
 
@@ -10,7 +10,7 @@ const getBalance = (address, network = 'mainnet') =>
         const body = {
             address: hexAddress,
         };
-        const promise = ApiCaller.post(url, body, true, { 'Content-Type': 'application/json' });
+        const promise = HttpClient.post(url, body, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
         console.log('[keystore http req] body:', body);
         promise.then(res => {
@@ -29,7 +29,7 @@ const getBalance = (address, network = 'mainnet') =>
 const getLatestBlock = (network = 'mainnet') =>
     new Promise(resolve => {
         const url = `${getEndpoint(network)}/wallet/getnowblock`;
-        const promise = ApiCaller.post(url, {}, true, { 'Content-Type': 'application/json' });
+        const promise = HttpClient.post(url, {}, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
             console.log('[keystore http resp] ', res.data);
@@ -40,7 +40,7 @@ const getLatestBlock = (network = 'mainnet') =>
 const broadcastTransaction = (tx, network = 'mainnet') =>
     new Promise(resolve => {
         const url = `${getEndpoint(network)}/wallet/broadcasttransaction`;
-        const promise = ApiCaller.post(url, tx, true, { 'Content-Type': 'application/json' });
+        const promise = HttpClient.post(url, tx, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
             console.log('[keystore http resp] ', res.data);
@@ -51,7 +51,7 @@ const broadcastTransaction = (tx, network = 'mainnet') =>
 const getTransactionById = (hash, network = 'mainnet') =>
     new Promise(resolve => {
         const url = `${getEndpoint(network)}/walletsolidity/gettransactionbyid`;
-        const promise = ApiCaller.post(
+        const promise = HttpClient.post(
             url,
             {
                 value: hash,
@@ -69,7 +69,7 @@ const getTransactionById = (hash, network = 'mainnet') =>
 const getTransactionInfoById = (hash, network = 'mainnet') =>
     new Promise(resolve => {
         const url = `${getEndpoint(network)}/walletsolidity/gettransactioninfobyid`;
-        const promise = ApiCaller.post(
+        const promise = HttpClient.post(
             url,
             {
                 value: hash,

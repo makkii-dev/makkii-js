@@ -2,7 +2,7 @@ import axios from 'axios';
 import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract'
 import AbiCoder from 'web3-eth-abi';
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer, etherscanApikey} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexToAscii} from "../../../utils";
@@ -15,7 +15,7 @@ const fetchAccountTokenBalance = (contractAddress, address, network) =>
             'latest',
         ]);
         console.log('[ETH get token balance req]:', getEndpoint(network));
-        ApiCaller.post(getEndpoint(network), requestData, true)
+        HttpClient.post(getEndpoint(network), requestData, true)
             .then(res => {
                 if (res.data.result) {
                     resolve(BigNumber(AbiCoder.decodeParameter('uint256', res.data.result)));
@@ -44,9 +44,9 @@ const fetchTokenDetail = (contractAddress, network) =>
             'latest',
         ]);
         const url = getEndpoint(network);
-        const promiseSymbol = ApiCaller.post(url, requestGetSymbol, true);
-        const promiseName = ApiCaller.post(url, requestGetName, true);
-        const promiseDecimals = ApiCaller.post(url, requestGetDecimals, true);
+        const promiseSymbol = HttpClient.post(url, requestGetSymbol, true);
+        const promiseName = HttpClient.post(url, requestGetName, true);
+        const promiseDecimals = HttpClient.post(url, requestGetDecimals, true);
         console.log('[ETH get token detail req]:', getEndpoint(network));
         axios
             .all([promiseSymbol, promiseName, promiseDecimals])
@@ -86,7 +86,7 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page 
     new Promise((resolve, reject) => {
         const url = `${ETHERSCAN_URL_MAP[network]}/api?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
         console.log(`[eth http req] get token history by address: ${url}`);
-        ApiCaller.get(url)
+        HttpClient.get(url)
             .then(res => {
                 const { data } = res;
                 if (data.status === '1') {
@@ -120,7 +120,7 @@ function getTopTokens(topN = 20, network) {
     return new Promise((resolve, reject) => {
         const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=${topN}`;
         console.log(`get top eth tokens: ${url}`);
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 resolve(res.data);
             })
@@ -135,7 +135,7 @@ function searchTokens(keyword, network) {
     return new Promise((resolve, reject) => {
         const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 resolve(res.data);
             })

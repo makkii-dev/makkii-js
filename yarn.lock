@@ -1258,6 +1258,23 @@ crypto-browserify@^3.12.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
+crypto-browserify@latest:
+  version "3.12.0"
+  resolved "https://registry.npm.taobao.org/crypto-browserify/download/crypto-browserify-3.12.0.tgz#396cf9f3137f03e4b8e532c58f698254e00f80ec"
+  integrity sha1-OWz58xN/A+S45TLFj2mCVOAPgOw=
+  dependencies:
+    browserify-cipher "^1.0.0"
+    browserify-sign "^4.0.0"
+    create-ecdh "^4.0.0"
+    create-hash "^1.1.0"
+    create-hmac "^1.1.0"
+    diffie-hellman "^5.0.0"
+    inherits "^2.0.1"
+    pbkdf2 "^3.0.3"
+    public-encrypt "^4.0.0"
+    randombytes "^2.0.0"
+    randomfill "^1.0.3"
+
 crypto-js@^3.1.9-1:
   version "3.1.9-1"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
@@ -2020,6 +2037,13 @@ keccakjs@^0.2.1:
   dependencies:
     browserify-sha3 "^0.0.4"
     sha3 "^1.2.2"
+
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git":
+  version "1.0.0"
+  resolved "https://github.com/chaion/lib-common-util-js.git#150e9932035cc447c115296ce63ee2825db29640"
+  dependencies:
+    axios "^0.19.0"
+    querystring "^0.2.0"
 
 lodash.padend@^4.6.1:
   version "4.6.1"

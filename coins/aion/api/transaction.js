@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import Contract from 'aion-web3-eth-contract';
 import { CONTRACT_ABI } from "./constants";
 import { getTransactionReceipt, getTransactionCount, sendSignedTransaction } from './jsonrpc';
-import ApiCaller from "../../../utils/Api_caller";
+import {HttpClient} from "lib-common-util-js";
 import keystore from '../keystore';
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
     const { type, derivationIndex, private_key: privateKey } = account;
@@ -123,7 +123,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
     const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
     console.log(`[aion req] get aion transactions by address: ${url}`);
     return new Promise((resolve, reject) => {
-        ApiCaller.get(url, false)
+        HttpClient.get(url, false)
             .then(res => {
                 console.log('[keystore resp] res:', res.data);
                 const { content } = res.data;
