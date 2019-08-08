@@ -180,6 +180,18 @@ export function client (support_coin_lists, isTestNet) {
         return Error(`not support coin: ${coinType}`);
     };
 
+    const setLedgerTransport = (coinType, transport) => {
+        const coin = COINS[coinType.toUpperCase()];
+        if (coin.keystore.initWallet !== undefined) {
+            try {
+                return coin.keystore.initWallet(transport);
+            }catch (e) {
+                throw e;
+            }
+        }
+        return Error(`not support coin: ${coinType}`);
+    };
+
     return {
         signTransaction,
         getKey,
@@ -189,6 +201,7 @@ export function client (support_coin_lists, isTestNet) {
         validateAddress,
         getKeyFromMnemonic,
         getKeyByLedger,
-        recoverFromKeystore
+        recoverFromKeystore,
+        setLedgerTransport
     }
 }

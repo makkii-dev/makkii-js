@@ -2,7 +2,13 @@ const optional = require('optional');
 const {AionApp} = require('lib-hw-ledger-js');
 let wallet =   global.platform && global.platform === 'mobile'? optional('react-native-aion-hw-wallet'): {};
 
-const initWallet = (transport) => wallet = new AionApp(transport);
+const initWallet = (transport) => {
+    if(global.platform && global.platform === 'mobile'){
+        throw Error('current platform not support')
+    }else{
+        wallet = new AionApp(transport);
+    }
+};
 
 const signByLedger = (index, sender, msg) => {
     return new Promise((resolve, reject) => {
