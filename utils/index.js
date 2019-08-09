@@ -1,5 +1,13 @@
-const optional = require('optional');
-const crypto =   global.platform && global.platform === 'mobile'? optional('react-native-crypto'): require('crypto-browserify');
+let crypto = {};
+if(global.platform && global.platform === 'mobile'){
+    try{
+        crypto = require('react-native-crypto');
+    }catch (e) {
+        crypto = require('crypto-browserify')
+    }
+}else {
+    crypto = require('crypto-browserify')
+}
 import BigNumber from 'bignumber.js';
 import bs58check from 'bs58check';
 function hmacSha512(key, str) {
