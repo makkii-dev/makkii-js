@@ -3642,7 +3642,7 @@ lcid@^2.0.0:
 
 "lib-common-util-js@https://github.com/chaion/lib-common-util-js.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#ec55d123934f7ffacbef85cc44700461b05b15bb"
+  resolved "https://github.com/chaion/lib-common-util-js.git#d20c66459ffc5bf55a54ce8c750a9e14c917afba"
   dependencies:
     axios "^0.19.0"
     bip39 "^2.5.0"
