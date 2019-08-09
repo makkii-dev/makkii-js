@@ -1,5 +1,5 @@
 import { pubToAddress ,toChecksumAddress} from 'ethereumjs-util';
-import {toHex} from '../../../utils';
+import {hexutil} from "lib-common-util-js";
 const ec = require('elliptic').ec('secp256k1');
 
 const padTo32 = function(msg){
@@ -30,6 +30,6 @@ export const keyPair = function(priKey) {
     let address = '0x'+pubToAddress(publicKey).toString('hex');
     address = toChecksumAddress(address);
     console.log('get keystore address');
-    return {privateKey: key.getPrivate('hex'), publicKey: toHex(publicKey), address, sign: key.sign}
+    return {privateKey: key.getPrivate('hex'), publicKey: hexutil.toHex(publicKey), address, sign: key.sign}
 
 };

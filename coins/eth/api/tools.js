@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import {validateAmount, validatePositiveInteger} from "../../../utils/validate";
+import { validator } from "lib-common-util-js";
 
 function formatAddress1Line(address) {
     const pre = address.startsWith('0x') ? 2 : 0;
@@ -8,10 +8,10 @@ function formatAddress1Line(address) {
 
 function validateBalanceSufficiency(account, symbol, amount, extraParams) {
     return new Promise(resolve => {
-        if (!validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
-        if (!validateAmount(extraParams.gasPrice))
+        if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
+        if (!validator.validateAmount(extraParams.gasPrice))
             resolve({ result: false, err: 'error_invalid_gas_price' });
-        if (!validatePositiveInteger(extraParams.gasLimit))
+        if (!validator.validatePositiveInteger(extraParams.gasLimit))
             resolve({ result: false, err: 'error_invalid_gas_limit' });
 
         const gasLimit = BigNumber(extraParams.gasLimit);

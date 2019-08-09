@@ -1,7 +1,7 @@
 import {ECPair, TransactionBuilder} from "bitcoinjs-lib";
 import BigNumber from "bignumber.js";
 import {networks} from './network';
-import {removeLeadingZeroX} from "../../../utils";
+import { hexutil } from "lib-common-util-js";
 /***
  *
  * @param transaction
@@ -27,7 +27,7 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
     const {private_key, utxos, amount: amount_, to_address, change_address, byte_fee} = transaction;
     const mainnet = networks[network];
     try {
-        const keyPair = ECPair.fromPrivateKey(Buffer.from(removeLeadingZeroX(private_key), 'hex'), {network: mainnet});
+        const keyPair = ECPair.fromPrivateKey(Buffer.from(hexutil.removeLeadingZeroX(private_key), 'hex'), {network: mainnet});
 
         const txb = new TransactionBuilder(mainnet);
         const amount = new BigNumber(amount_);

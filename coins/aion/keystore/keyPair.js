@@ -1,6 +1,6 @@
 import nacl from 'tweetnacl';
 import blake2b from 'blake2b';
-import {stripZeroXHexString, toHex} from '../../../utils';
+import { hexutil } from "lib-common-util-js";
 const A0_IDENTIFIER = [0xA0];
 
 export const keyPair = function(priKey) {
@@ -13,7 +13,7 @@ export const keyPair = function(priKey) {
     }
 
     if(typeof priKey === 'string'){
-        priKey = Buffer.from(stripZeroXHexString(priKey), 'hex');
+        priKey = Buffer.from(hexutil.stripZeroXHexString(priKey), 'hex');
     }else if(!Buffer.isBuffer(priKey)){
         throw Error('Seed must be a buffer or a hex string');
     }
@@ -41,7 +41,7 @@ export const keyPair = function(priKey) {
         return addressHash;
     }
 
-    return {privateKey:privateKey.toString('hex'), publicKey:publicKey.toString('hex'), address:toHex(address), sign}
+    return {privateKey:privateKey.toString('hex'), publicKey:publicKey.toString('hex'), address:hexutil.toHex(address), sign}
 };
 
 

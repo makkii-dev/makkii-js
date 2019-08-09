@@ -5,7 +5,7 @@ import AbiCoder from 'web3-eth-abi';
 import {HttpClient} from "lib-common-util-js";
 import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer, etherscanApikey} from "./constants";
 import {processRequest} from "./jsonrpc";
-import {hexToAscii} from "../../../utils";
+import {hexutil} from "lib-common-util-js";
 
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
@@ -61,13 +61,13 @@ const fetchTokenDetail = (contractAddress, network) =>
                         try {
                             symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
                         } catch (e) {
-                            symbol = hexToAscii(symbolRet.data.result);
+                            symbol = hexutil.hexToAscii(symbolRet.data.result);
                             symbol = symbol.slice(0, symbol.indexOf('\u0000'));
                         }
                         try {
                             name = AbiCoder.decodeParameter('string', nameRet.data.result);
                         } catch (e) {
-                            name = hexToAscii(nameRet.data.result);
+                            name = hexutil.hexToAscii(nameRet.data.result);
                             name = name.slice(0, name.indexOf('\u0000'));
                         }
                         const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);

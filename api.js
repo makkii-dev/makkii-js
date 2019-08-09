@@ -1,6 +1,6 @@
-import {toHex} from "./utils";
 import {HttpClient} from "lib-common-util-js";
 import {app_server_api} from "./remote_server";
+import { hexutil} from "lib-common-util-js";
 
 import aionApi from './coins/aion/api';
 import btcApi from './coins/btc+ltc/api';
@@ -76,7 +76,7 @@ export function client (support_coin_lists, isTestNet) {
     function getBlockByNumber(coinType, blockNumber) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.getBlockByNumber !== undefined) {
-            return coin.api.getBlockByNumber(toHex(blockNumber), false, coin.network);
+            return coin.api.getBlockByNumber(hexutil.toHex(blockNumber), false, coin.network);
         }
         throw new Error(`No getBlockByNumber impl for coin ${coinType}`);
     }

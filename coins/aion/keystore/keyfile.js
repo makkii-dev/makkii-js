@@ -1,4 +1,5 @@
-import {ab2str, crypto, toHex} from "../../../utils";
+import {ab2str, crypto } from "../../../utils";
+import { hexutil } from "lib-common-util-js";
 import RLP from 'aion-rlp'
 import scrypt from 'scrypt.js'
 import blake2b from 'blake2b';
@@ -12,7 +13,7 @@ function fromV3(input, password){
 
     let Keystore = {};
     Keystore['id'] = ab2str(KeystoreItem[0]); //0
-    Keystore['version'] = toHex(KeystoreItem[1]); //1
+    Keystore['version'] = hexutil.toHex(KeystoreItem[1]); //1
     Keystore['address'] = ab2str(KeystoreItem[2]);//2
 
     Keystore['crypto'] = {};//3
@@ -28,11 +29,11 @@ function fromV3(input, password){
     let derivedKey;
     if (Keystore.crypto['kdf'] === 'scrypt') {
         Keystore.crypto['kdfParams'] = {};
-        Keystore.crypto.kdfParams['c'] = toHex(KdfParams[0]);//11
-        Keystore.crypto.kdfParams['dklen'] = toHex(KdfParams[1]);//12
-        Keystore.crypto.kdfParams['n'] = toHex(KdfParams[2]);//13
-        Keystore.crypto.kdfParams['p'] = toHex(KdfParams[3]);//14
-        Keystore.crypto.kdfParams['r'] = toHex(KdfParams[4]);//15
+        Keystore.crypto.kdfParams['c'] = hexutil.toHex(KdfParams[0]);//11
+        Keystore.crypto.kdfParams['dklen'] = hexutil.toHex(KdfParams[1]);//12
+        Keystore.crypto.kdfParams['n'] = hexutil.toHex(KdfParams[2]);//13
+        Keystore.crypto.kdfParams['p'] = hexutil.toHex(KdfParams[3]);//14
+        Keystore.crypto.kdfParams['r'] = hexutil.toHex(KdfParams[4]);//15
         Keystore.crypto.kdfParams['salt'] = ab2str(KdfParams[5]);//16
         derivedKey = scrypt(
             Buffer.from(password),
@@ -44,8 +45,8 @@ function fromV3(input, password){
         );
     }else if(Keystore.crypto['kdf'] === 'pbkdf2'){
         Keystore.crypto['kdfParams'] = {};
-        Keystore.crypto.kdfParams['c'] = toHex(KdfParams[0]);//11
-        Keystore.crypto.kdfParams['dklen'] = toHex(KdfParams[1]);//12
+        Keystore.crypto.kdfParams['c'] = hexutil.toHex(KdfParams[0]);//11
+        Keystore.crypto.kdfParams['dklen'] = hexutil.toHex(KdfParams[1]);//12
         Keystore.crypto.kdfParams['prf'] = 'hmac-sha256';//13
         Keystore.crypto.kdfParams['salt'] = ab2str(KdfParams[5]);//16
         derivedKey = crypto.pbkdf2Sync(

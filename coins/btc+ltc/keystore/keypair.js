@@ -1,6 +1,5 @@
 import {ECPair, payments} from 'bitcoinjs-lib';
 import {networks} from './network';
-import {toHex} from '../../../utils';
 
 export const keyPair = function(priKey, options){
     if (typeof priKey == 'string') {

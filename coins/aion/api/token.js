@@ -5,7 +5,7 @@ import axios from 'axios';
 import {processRequest } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import {getEndpoint, CONTRACT_ABI, getRemoteServer} from "./constants";
-import {hexToAscii} from "../../../utils";
+import { hexutil } from "lib-common-util-js";
 
 function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
@@ -89,13 +89,13 @@ const fetchTokenDetail = (contractAddress, network) =>
                         try {
                             symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
                         } catch (e) {
-                            symbol = hexToAscii(symbolRet.data.result);
+                            symbol = hexutil.hexToAscii(symbolRet.data.result);
                             symbol = symbol.slice(0, symbol.indexOf('\u0000'));
                         }
                         try {
                             name = AbiCoder.decodeParameter('string', nameRet.data.result);
                         } catch (e) {
-                            name = hexToAscii(nameRet.data.result);
+                            name = hexutil.hexToAscii(nameRet.data.result);
                             name = name.slice(0, name.indexOf('\u0000'));
                         }
                         const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);

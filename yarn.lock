@@ -1696,6 +1696,17 @@ bip32@^2.0.3:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
+bip39@^2.5.0:
+  version "2.6.0"
+  resolved "https://registry.npm.taobao.org/bip39/download/bip39-2.6.0.tgz#9e3a720b42ec8b3fbe4038f1e445317b6a99321c"
+  integrity sha1-njpyC0Lsiz++QDjx5EUxe2qZMhw=
+  dependencies:
+    create-hash "^1.1.0"
+    pbkdf2 "^3.0.9"
+    randombytes "^2.0.1"
+    safe-buffer "^5.0.1"
+    unorm "^1.3.3"
+
 bip39@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.2.tgz#2baf42ff3071fc9ddd5103de92e8f80d9257ee32"
@@ -3631,9 +3642,10 @@ lcid@^2.0.0:
 
 "lib-common-util-js@https://github.com/chaion/lib-common-util-js.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#91853aba7bb7b5c4dbd574ddac8fed4dd1784062"
+  resolved "https://github.com/chaion/lib-common-util-js.git#ec55d123934f7ffacbef85cc44700461b05b15bb"
   dependencies:
     axios "^0.19.0"
+    bip39 "^2.5.0"
     querystring "^0.2.0"
 
 "lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git":
@@ -5324,6 +5336,11 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
+
+unorm@^1.3.3:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/unorm/download/unorm-1.6.0.tgz#029b289661fba714f1a9af439eb51d9b16c205af"
+  integrity sha1-ApsolmH7pxTxqa9DnrUdmxbCBa8=
 
 unorm@^1.4.1:
   version "1.5.0"

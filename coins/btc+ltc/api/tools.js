@@ -1,10 +1,10 @@
 import BigNumber from "bignumber.js";
 import {getUnspentTx} from "./jsonrpc";
-import {validateAmount} from "../../../utils/validate";
+import { validator } from "lib-common-util-js";
 
 const validateBalanceSufficiency = (account, symbol, amount, extraParams) =>
     new Promise((resolve, reject) => {
-        if (!validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
+        if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
         getUnspentTx(account.address, extraParams.network)
             .then(utxos => {
                 let balance = BigNumber(0);

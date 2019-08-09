@@ -1,11 +1,11 @@
 import BigNumber from "bignumber.js";
-import {validateAmount} from "../../../utils/validate";
+import {validator} from "lib-common-util-js";
 
 const formatAddress1Line = address => `${address.slice(0, 12)}...${address.slice(-10)}`;
 
 function validateBalanceSufficiency(account, symbol, amount) {
     return new Promise(resolve => {
-        if (!validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
+        if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
         const balance = BigNumber(account.balance);
         const transferAmount = BigNumber(amount);
         if (transferAmount.isGreaterThan(balance)) {

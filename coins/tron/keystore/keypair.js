@@ -1,4 +1,3 @@
-import {toHex} from '../../../utils';
 import {keccak256,sha256} from 'ethereumjs-util';
 import bs58 from 'bs58'
 const ec = require('elliptic').ec('secp256k1');

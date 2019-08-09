@@ -1,4 +1,4 @@
-import {toHex,hexString2Array,isHex,removeLeadingZeroX} from '../../../utils'
+import { hexutil } from "lib-common-util-js";
 import {keyPair} from "./keyPair";
 import {inputAddressFormatter} from './address';
 import blake2b from 'blake2b';
@@ -36,7 +36,7 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         nonce: tx.nonce,
         to: tx.to || '0x',
         data: tx.data || '0x',
-        amount: toHex(tx.amount) || '0x',
+        amount: hexutil.toHex(tx.amount) || '0x',
         timestamp: tx.timestamp || Math.floor(new Date().getTime()*1000),
         type: new BN(tx.type||1),
         gasLimit: tx.gasLimit,
@@ -58,14 +58,14 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     // ledger
     if(extra_param&&extra_param.type === '[ledger]'){
         signByLedger(extra_param.derivationIndex, extra_param.sender, Object.values(rlpEncoded)).then(({signature, publicKey})=>{
-            let fullSignature = Buffer.concat([Buffer.from(hexString2Array(publicKey)), signature]);
+            let fullSignature = Buffer.concat([Buffer.from(hexutil.hexString2Array(publicKey)), signature]);
             // add the keystore fullSignature
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
 
             // re-encode with signature included
             const rawTransaction = rlp.encode(rawTx);
 
-            resolve({encoded: rawTransaction.toString('hex'), signature: toHex(signature)})
+            resolve({encoded: rawTransaction.toString('hex'), signature: hexutil.toHex(signature)})
         }).catch(e=>{
             reject(e);
         })
@@ -83,18 +83,18 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         // sign
         let signature = ecKey.sign(rawHash);
         // verify signature
-        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(hexString2Array(ecKey.publicKey))) === false) {
+        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(hexutil.hexString2Array(ecKey.publicKey))) === false) {
             throw new Error('Could not verify signature.');
         }
 
-        let fullSignature = Buffer.concat([Buffer.from(hexString2Array(ecKey.publicKey)), signature]);
+        let fullSignature = Buffer.concat([Buffer.from(hexutil.hexString2Array(ecKey.publicKey)), signature]);
         // add the keystore fullSignature
         const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
 
         // re-encode with signature included
         const rawTransaction = rlp.encode(rawTx);
 
-        resolve({encoded: rawTransaction.toString('hex'), signature: toHex(signature)})
+        resolve({encoded: rawTransaction.toString('hex'), signature: hexutil.toHex(signature)})
     }
 });
 
@@ -114,7 +114,7 @@ const  txInputFormatter = (options) => {
         delete options.input;
     }
 
-    if(options.data && !isHex(options.data)) {
+    if(options.data && !hexutil.isHex(options.data)) {
         throw new Error('The data field must be HEX encoded data.');
     }
 
@@ -126,7 +126,7 @@ const  txInputFormatter = (options) => {
     ['gasPrice', 'gasLimit', 'nonce'].filter(function (key) {
         return options[key] !== undefined;
     }).forEach(function(key){
-        options[key] = toHex(options[key]);
+        options[key] = hexutil.toHex(options[key]);
     });
 
     return options;
@@ -145,8 +145,8 @@ const toAionLong = (val) => {
     }
 
     if (typeof val === 'string') {
-        if(isHex(val.toLowerCase())){
-            num = new BN(removeLeadingZeroX(val.toLowerCase()), 16);
+        if(hexutil.isHex(val.toLowerCase())){
+            num = new BN(hexutil.removeLeadingZeroX(val.toLowerCase()), 16);
         }else{
             num = new BN(val, 10);
         }
