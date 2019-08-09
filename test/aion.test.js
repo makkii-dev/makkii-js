@@ -19,16 +19,16 @@ describe('test AION',function () {
         })
     });
     describe('test keyfile', function () {
-        it('test fromV3 case 1', function () {
+        it('test fromV3 case 1', async function () {
             const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2019-08-08T02:54:38.611Z--a0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38'));
-            const key = fromV3(content, 'password');
+            const key = await fromV3(content, 'password');
             assert.strictEqual(key.address, '0xa0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38');
         });
-        it('test fromV3 case 2', function () {
+        it('test fromV3 case 2', async function () {
             this.timeout(10000);
 
             const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2018-11-08T02-57-21.335Z--a05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf'));
-            const key = fromV3(content, 'password');
+            const key = await fromV3(content, 'password');
             assert.strictEqual(key.address, '0xa05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf');
         });
     });
