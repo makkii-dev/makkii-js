@@ -40,7 +40,7 @@
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.1.0",
     "hdkey": "^1.1.1",
-    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git",
+    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897",
     "lib-hw-ledger-js": "https://github.com/chaion/lib-hw-ledger-js.git",
     "querystring": "^0.2.0",
     "rlp": "^2.2.3",
