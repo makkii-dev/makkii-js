@@ -168,6 +168,18 @@ export function client (support_coin_lists, isTestNet) {
         return Error(`not support coin: ${symbol}`);
     };
 
+    const signByLedger = async  (symbol, index, sender, msg) => {
+        const coin = COINS[symbol.toUpperCase()];
+        if (coin.keystore.signByLedger !== undefined) {
+            try {
+                return await coin.keystore.signByLedger(index, sender, msg);
+            }catch (e) {
+                throw e;
+            }
+        }
+        return Error(`not support coin: ${symbol}`);
+    };
+
     const recoverFromKeystore = (coinType, input, password) =>{
         const coin = COINS[coinType.toUpperCase()];
         if (coin.keystore.getKeyByLedger !== undefined) {
@@ -201,6 +213,7 @@ export function client (support_coin_lists, isTestNet) {
         validateAddress,
         getKeyFromMnemonic,
         getKeyByLedger,
+        signByLedger,
         recoverFromKeystore,
         setLedgerTransport
     }
