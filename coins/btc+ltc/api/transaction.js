@@ -2,7 +2,7 @@ import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
 import keystore from "../keystore";
 import BigNumber from "bignumber.js";
 
-const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC') =>
+const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC', shouldBroadCast=true) =>
     new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getUnspentTx(account.address, network)
@@ -18,18 +18,22 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                 keystore.signTransaction(tx, network)
                     .then(res => {
                         console.log('[keystore sign resp]=>', res);
-                        broadcastTransaction(res.encoded, network)
-                            .then(txid => {
-                                const pendingTx = {
-                                    hash: txid,
-                                    from: account.address,
-                                    to,
-                                    value,
-                                    status: 'PENDING',
-                                };
-                                resolve({ pendingTx });
-                            })
-                            .catch(e => reject(e));
+                        if(shouldBroadCast) {
+                            broadcastTransaction(res.encoded, network)
+                                .then(txid => {
+                                    const pendingTx = {
+                                        hash: txid,
+                                        from: account.address,
+                                        to,
+                                        value,
+                                        status: 'PENDING',
+                                    };
+                                    resolve({pendingTx});
+                                })
+                                .catch(e => reject(e));
+                        }else{
+                            resolve({encoded: res})
+                        }
                     })
                     .catch(e => reject(e));
             })

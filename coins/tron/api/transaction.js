@@ -9,7 +9,7 @@ import {base58check2HexString} from "../../../utils";
 import {HttpClient} from "lib-common-util-js";
 import BigNumber from "bignumber.js";
 
-function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet') {
+function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast = true) {
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getLatestBlock(network)
@@ -60,26 +60,30 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
                                 timestamp: tx.timestamp,
                             },
                         };
-                        broadcastTransaction(signedTx, network)
-                            .then(broadcastRes => {
-                                if (broadcastRes.result) {
-                                    const pendingTx = {
-                                        hash: `0x${signedTx.txID}`,
-                                        timestamp: now,
-                                        from: account.address,
-                                        to,
-                                        value,
-                                        status: 'PENDING',
-                                    };
-                                    resolve({ pendingTx, pendingTokenTx: undefined });
-                                } else {
-                                    reject(res);
-                                }
-                            })
-                            .catch(err => {
-                                console.log('keystore broadcast tx failed', err);
-                                reject(err);
-                            });
+                        if(shouldBroadCast) {
+                            broadcastTransaction(signedTx, network)
+                                .then(broadcastRes => {
+                                    if (broadcastRes.result) {
+                                        const pendingTx = {
+                                            hash: `0x${signedTx.txID}`,
+                                            timestamp: now,
+                                            from: account.address,
+                                            to,
+                                            value,
+                                            status: 'PENDING',
+                                        };
+                                        resolve({pendingTx, pendingTokenTx: undefined});
+                                    } else {
+                                        reject(res);
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log('keystore broadcast tx failed', err);
+                                    reject(err);
+                                });
+                        }else{
+                            resolve({encoded: signedTx})
+                        }
                     })
                     .catch(err => {
                         console.log('keystore sign tx failed', err);

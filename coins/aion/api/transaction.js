@@ -4,7 +4,7 @@ import { CONTRACT_ABI } from "./constants";
 import { getTransactionReceipt, getTransactionCount, sendSignedTransaction } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import keystore from '../keystore';
-function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
+function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast) {
     const { type, derivationIndex, private_key: privateKey } = account;
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
@@ -35,23 +35,27 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
 
                 keystore.signTransaction(tx)
                     .then(({encoded}) => {
-                        sendSignedTransaction(encoded, network)
-                            .then(hash => {
-                                const pendingTx = {
-                                    hash,
-                                    timestamp: tx.timestamp/ 1000,
-                                    from: account.address,
-                                    to,
-                                    value,
-                                    status: 'PENDING',
-                                    gasPrice
-                                };
-                                resolve({ pendingTx, pendingTokenTx: undefined });
-                            })
-                            .catch(err => {
-                                console.log('keystore send signed tx error:', err);
-                                reject(err);
-                            });
+                        if(shouldBroadCast) {
+                            sendSignedTransaction(encoded, network)
+                                .then(hash => {
+                                    const pendingTx = {
+                                        hash,
+                                        timestamp: tx.timestamp / 1000,
+                                        from: account.address,
+                                        to,
+                                        value,
+                                        status: 'PENDING',
+                                        gasPrice
+                                    };
+                                    resolve({pendingTx, pendingTokenTx: undefined});
+                                })
+                                .catch(err => {
+                                    console.log('keystore send signed tx error:', err);
+                                    reject(err);
+                                });
+                        }else{
+                            resolve({encoded});
+                        }
                     })
                     .catch(err => {
                         console.log('keystore sign tx error:', err);
@@ -65,16 +69,16 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
     });
 }
 
-function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet') {
+function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast=true) {
     const { gasPrice } = extraParams;
     const { gasLimit } = extraParams;
     if (account.symbol === symbol) {
-        return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network);
+        return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast);
     }
-    return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network);
+    return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast);
 }
 
-function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet') {
+function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet', shouldBroadCast) {
     const { tokens } = account;
     const { contractAddr, tokenDecimal } = tokens[symbol];
     console.log('tokenDecimal=>', tokenDecimal);
@@ -99,6 +103,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
             gasLimit,
             methodsData,
             network,
+            shouldBroadCast
         )
             .then(res => {
                 const { pendingTx } = res;

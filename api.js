@@ -121,7 +121,7 @@ export function client (support_coin_lists, isTestNet) {
         throw new Error(`No getBalance impl for coin ${coinType}`);
     }
 
-    function sendTransaction(account, symbol, to, value, extraParams, data = undefined) {
+    function sendTransaction(account, symbol, to, value, extraParams, data = undefined, shouldBroadCast) {
         const coin = COINS[account.symbol.toUpperCase()];
         if (coin.api !== undefined && coin.api.sendTransaction !== undefined) {
             return coin.api.sendTransaction(
@@ -132,6 +132,7 @@ export function client (support_coin_lists, isTestNet) {
                 extraParams,
                 data,
                 coin.network,
+                shouldBroadCast
             );
         }
         throw new Error(`No sendTransaction impl for coin ${account.symbol}`);

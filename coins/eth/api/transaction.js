@@ -5,7 +5,7 @@ import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "
 import {ERC20ABI, etherscanApikey, getEtherscanBaseUrl} from "./constants";
 import {HttpClient} from "lib-common-util-js";
 
-function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet') {
+function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet', shouldBroadCast) {
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getTransactionCount(account.address, 'latest', network)
@@ -29,22 +29,26 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
                         console.log(`v:${v},r=${r},s=${s}`);
                         const encodedTx = encoded;
                         console.log('encoded keystore tx => ', encodedTx);
-                        sendSignedTransaction(encodedTx, network)
-                            .then(hash => {
-                                const pendingTx = {
-                                    hash,
-                                    from: account.address,
-                                    to,
-                                    value,
-                                    status: 'PENDING',
-                                    gasPrice
-                                };
-                                resolve({ pendingTx });
-                            })
-                            .catch(e => {
-                                console.log('send signed tx:', e);
-                                reject(e);
-                            });
+                        if(shouldBroadCast) {
+                            sendSignedTransaction(encodedTx, network)
+                                .then(hash => {
+                                    const pendingTx = {
+                                        hash,
+                                        from: account.address,
+                                        to,
+                                        value,
+                                        status: 'PENDING',
+                                        gasPrice
+                                    };
+                                    resolve({pendingTx});
+                                })
+                                .catch(e => {
+                                    console.log('send signed tx:', e);
+                                    reject(e);
+                                });
+                        }else {
+                            resolve({encoded})
+                        }
                     })
                     .catch(e => {
                         console.log('sign error:', e);
@@ -58,7 +62,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
     });
 }
 
-function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet') {
+function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet', shouldBroadCast) {
     const { tokens } = account;
     const { contractAddr, tokenDecimal } = tokens[symbol];
 
@@ -81,6 +85,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
             gasLimit,
             methodsData,
             network,
+            shouldBroadCast
         )
             .then(res => {
                 const { pendingTx } = res;
@@ -100,13 +105,13 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
     });
 }
 
-function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet') {
+function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast=true) {
     const { gasPrice } = extraParams;
     const { gasLimit } = extraParams;
     if (account.symbol === symbol) {
-        return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network);
+        return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast);
     }
-    return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network);
+    return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast);
 }
 
 function getTransactionsByAddress(address, page, size, network = 'mainnet') {
