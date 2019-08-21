@@ -94,16 +94,20 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
             shouldBroadCast
         )
             .then(res => {
-                const { pendingTx } = res;
-                const pendingTokenTx = {
-                    hash: pendingTx.hash,
-                    from: pendingTx.from,
-                    to,
-                    value,
-                    status: 'PENDING',
-                };
+                if(shouldBroadCast) {
+                    const {pendingTx} = res;
+                    const pendingTokenTx = {
+                        hash: pendingTx.hash,
+                        from: pendingTx.from,
+                        to,
+                        value,
+                        status: 'PENDING',
+                    };
 
-                resolve({ pendingTx, pendingTokenTx });
+                    resolve({pendingTx, pendingTokenTx});
+                }else{
+                    resolve(res)
+                }
             })
             .catch(err => {
                 reject(err);
