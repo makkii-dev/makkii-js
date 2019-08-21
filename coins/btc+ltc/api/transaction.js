@@ -32,7 +32,12 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                                 })
                                 .catch(e => reject(e));
                         }else{
-                            resolve({encoded: res})
+                            const txObj = {
+                                from: account.address,
+                                to,
+                                value,
+                            };
+                            resolve({encoded: res, txObj})
                         }
                     })
                     .catch(e => reject(e));

@@ -54,7 +54,14 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, sho
                                     reject(err);
                                 });
                         }else{
-                            resolve({encoded});
+                            const txObj = {
+                                timestamp: tx.timestamp / 1000,
+                                from: account.address,
+                                to,
+                                value,
+                                gasPrice
+                            };
+                            resolve({encoded, txObj});
                         }
                     })
                     .catch(err => {

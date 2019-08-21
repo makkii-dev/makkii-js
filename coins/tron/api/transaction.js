@@ -82,7 +82,13 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
                                     reject(err);
                                 });
                         }else{
-                            resolve({encoded: signedTx})
+                            const txObj = {
+                                timestamp: now,
+                                from: account.address,
+                                to,
+                                value,
+                            };
+                            resolve({encoded: signedTx, txObj})
                         }
                     })
                     .catch(err => {
