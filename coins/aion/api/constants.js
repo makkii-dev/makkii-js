@@ -113,17 +113,8 @@ const CONTRACT_ABI = [
         type: 'function',
     },
 ];
-const getEndpoint = network => {
-    return `https://aion.api.nodesmith.io/v1/${network}/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780`;
-};
-
-const getRemoteServer =  network => {
-    return network === 'mainnet'?  'https://www.chaion.net/makkii' : 'http://45.118.132.89:8080';
-};
 
 export {
     CONTRACT_ABI,
-    getEndpoint,
-    getRemoteServer,
 }
 

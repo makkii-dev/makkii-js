@@ -4,6 +4,11 @@ import { CONTRACT_ABI } from "./constants";
 import { getTransactionReceipt, getTransactionCount, sendSignedTransaction } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import keystore from '../keystore';
+import {coins} from '../../server';
+const {aion:{networks}} = coins;
+
+
+
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast) {
     const { type, derivationIndex, private_key: privateKey } = account;
     return new Promise((resolve, reject) => {
@@ -136,7 +141,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
 }
 
 function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainnet') {
-    const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
+    const url = `${networks[network].explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
     console.log(`[aion req] get aion transactions by address: ${url}`);
     return new Promise((resolve, reject) => {
         HttpClient.get(url, false)
@@ -174,7 +179,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    return `https://${network}.aion.network/#/transaction/${txHash}`;
+    return `${networks[network].explorer}/${txHash}`;
 }
 
 function getTransactionStatus(txHash, network = 'mainnet') {

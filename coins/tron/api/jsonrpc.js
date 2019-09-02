@@ -1,18 +1,19 @@
 import BigNumber from "bignumber.js";
 import {HttpClient} from "lib-common-util-js";
-import {getEndpoint} from "./constants";
 import {base58check2HexString} from "../../../utils";
+import {coins} from '../../server';
+const {tron:{networks}} = coins;
+
 
 const getBalance = (address, network = 'mainnet') =>
     new Promise((resolve, reject) => {
-        const url = `${getEndpoint(network)}/wallet/getaccount`;
+        const url = `${networks[network].jsonrpc}/wallet/getaccount`;
         const hexAddress = base58check2HexString(address);
         const body = {
             address: hexAddress,
         };
         const promise = HttpClient.post(url, body, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
-        console.log('[keystore http req] body:', body);
         promise.then(res => {
             console.log('[keystore http resp] ', res.data);
             if (res.data.Error !== undefined) {
@@ -28,7 +29,7 @@ const getBalance = (address, network = 'mainnet') =>
 
 const getLatestBlock = (network = 'mainnet') =>
     new Promise(resolve => {
-        const url = `${getEndpoint(network)}/wallet/getnowblock`;
+        const url = `${networks[network].jsonrpc}/wallet/getnowblock`;
         const promise = HttpClient.post(url, {}, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
@@ -39,7 +40,7 @@ const getLatestBlock = (network = 'mainnet') =>
 
 const broadcastTransaction = (tx, network = 'mainnet') =>
     new Promise(resolve => {
-        const url = `${getEndpoint(network)}/wallet/broadcasttransaction`;
+        const url = `${networks[network].jsonrpc}/wallet/broadcasttransaction`;
         const promise = HttpClient.post(url, tx, true, { 'Content-Type': 'application/json' });
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
@@ -50,7 +51,7 @@ const broadcastTransaction = (tx, network = 'mainnet') =>
 
 const getTransactionById = (hash, network = 'mainnet') =>
     new Promise(resolve => {
-        const url = `${getEndpoint(network)}/walletsolidity/gettransactionbyid`;
+        const url = `${networks[network].jsonrpc}/walletsolidity/gettransactionbyid`;
         const promise = HttpClient.post(
             url,
             {
@@ -68,7 +69,7 @@ const getTransactionById = (hash, network = 'mainnet') =>
 
 const getTransactionInfoById = (hash, network = 'mainnet') =>
     new Promise(resolve => {
-        const url = `${getEndpoint(network)}/walletsolidity/gettransactioninfobyid`;
+        const url = `${networks[network].jsonrpc}/walletsolidity/gettransactioninfobyid`;
         const promise = HttpClient.post(
             url,
             {

@@ -8,6 +8,9 @@ import {
 import {base58check2HexString} from "../../../utils";
 import {HttpClient} from "lib-common-util-js";
 import BigNumber from "bignumber.js";
+import {coins} from '../../server';
+const {tron:{networks}} = coins;
+
 
 function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast = true) {
     return new Promise((resolve, reject) => {
@@ -135,12 +138,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
 }
 
 function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainnet') {
-    let url;
-    if (network === 'mainnet') {
-        url = `https://apilist.tronscan.org/api/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
-    } else {
-        url = `https://api.shasta.tronscan.org/api/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
-    }
+    const url = `${networks[network].explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
     console.log(`[tron req] get tron txs by address: ${url}`);
     return new Promise((resolve, reject) => {
         HttpClient.get(url, false)
@@ -167,10 +165,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    if (network === 'mainnet') {
-        return `https://tronscan.org/#/transaction/${txHash}`;
-    }
-    return `https://${network}.tronscan.org/#/transaction/${txHash}`;
+    return `${networks[network].explorer}/${txHash}`;
 }
 
 export {

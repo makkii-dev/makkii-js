@@ -3,9 +3,12 @@ import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract'
 import AbiCoder from 'web3-eth-abi';
 import {HttpClient} from "lib-common-util-js";
-import {getEndpoint, ERC20ABI, ETHERSCAN_URL_MAP, getRemoteServer, etherscanApikey} from "./constants";
+import {ERC20ABI} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexutil} from "lib-common-util-js";
+import {coins} from '../../server';
+
+const {eth:{networks, etherscanApikey}} = coins;
 
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
@@ -14,8 +17,8 @@ const fetchAccountTokenBalance = (contractAddress, address, network) =>
             { to: contractAddress, data: contract.methods.balanceOf(address).encodeABI() },
             'latest',
         ]);
-        console.log('[ETH get token balance req]:', getEndpoint(network));
-        HttpClient.post(getEndpoint(network), requestData, true)
+        console.log('[ETH get token balance req]:', networks[network].jsonrpc);
+        HttpClient.post(networks[network].jsonrpc, requestData, true)
             .then(res => {
                 if (res.data.result) {
                     resolve(BigNumber(AbiCoder.decodeParameter('uint256', res.data.result)));
@@ -43,11 +46,11 @@ const fetchTokenDetail = (contractAddress, network) =>
             { to: contractAddress, data: contract.methods.decimals().encodeABI() },
             'latest',
         ]);
-        const url = getEndpoint(network);
+        const url = networks[network].jsonrpc;
         const promiseSymbol = HttpClient.post(url, requestGetSymbol, true);
         const promiseName = HttpClient.post(url, requestGetName, true);
         const promiseDecimals = HttpClient.post(url, requestGetDecimals, true);
-        console.log('[ETH get token detail req]:', getEndpoint(network));
+        console.log('[ETH get token detail req]:', networks[network].jsonrpc);
         axios
             .all([promiseSymbol, promiseName, promiseDecimals])
             .then(
@@ -84,7 +87,7 @@ const fetchTokenDetail = (contractAddress, network) =>
 
 const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page = 0, size = 25) =>
     new Promise((resolve, reject) => {
-        const url = `${ETHERSCAN_URL_MAP[network]}/api?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
+        const url = `${networks[network].explorer_api}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
         console.log(`[eth http req] get token history by address: ${url}`);
         HttpClient.get(url)
             .then(res => {
@@ -118,7 +121,7 @@ const fetchAccountTokens = () => Promise.resolve({});
 
 function getTopTokens(topN = 20, network) {
     return new Promise((resolve, reject) => {
-        const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=${topN}`;
+        const url = `${networks[network].remote}/token/eth/search?offset=0&limit=${topN}`;
         console.log(`get top eth tokens: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
@@ -133,7 +136,7 @@ function getTopTokens(topN = 20, network) {
 
 function searchTokens(keyword, network) {
     return new Promise((resolve, reject) => {
-        const url = `${getRemoteServer(network)}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        const url = `${networks[network].remote}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
@@ -147,7 +150,7 @@ function searchTokens(keyword, network) {
 }
 
 function getTokenIconUrl(tokenSymbol, contractAddress, network) {
-    return `${getRemoteServer(network)}/token/eth/img?contractAddress=${contractAddress}`;
+    return `${networks[network].remote}/token/eth/img?contractAddress=${contractAddress}`;
 }
 
 export {
