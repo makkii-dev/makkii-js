@@ -81,9 +81,9 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         // hash encoded message
         let rawHash = blake2b(32).update(rlpEncoded).digest();
         // sign
-        let signature = ecKey.sign(rawHash);
+        let signature = ecKey.sign(rawHash); // 96 bytes signature(64) + publicKey(32)
         // verify signature
-        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(hexutil.hexString2Array(ecKey.publicKey))) === false) {
+        if (nacl.sign.detached.verify(rawHash, signature.slice(0, 64), Buffer.from(hexutil.hexString2Array(ecKey.publicKey))) === false) {
             throw new Error('Could not verify signature.');
         }
 
