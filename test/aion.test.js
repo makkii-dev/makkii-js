@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require("path");
 const {keyPair} = require('../coins/aion/keystore/keyPair');
 const {fromV3} = require('../coins/aion/keystore/keyfile');
+const {validator} = require('lib-common-util-js');
 
 describe('test AION',function () {
     describe('test keypair',function () {
@@ -30,6 +31,20 @@ describe('test AION',function () {
             const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2018-11-08T02-57-21.335Z--a05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf'));
             const key = await fromV3(content, 'password');
             assert.strictEqual(key.address, '0xa05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf');
+        });
+    });
+    describe('test validateMnemonic', function() {
+        it('empty mnemonic', async function() {
+            let result = validator.validateMnemonic('');
+            assert.strictEqual(result, false);
+        });
+        it('11 words', async function() {
+            let result = validator.validateMnemonic('rescue surge feature damage erase body noise always void wet mechanic');
+            assert.strictEqual(result, false);
+        });
+        it('12 words', async function() {
+            let result = validator.validateMnemonic('rescue surge feature damage erase body noise always void wet mechanic waste');
+            assert.strictEqual(result, true);
         });
     });
 });
