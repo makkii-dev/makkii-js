@@ -42,8 +42,6 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         gasLimit: tx.gasLimit,
         gasPrice: tx.gasPrice,
     };
-    console.log('unsigned ++++=>', unsignedTransaction);
-
 
     const rlpEncoded = rlp.encode([
         unsignedTransaction.nonce,
