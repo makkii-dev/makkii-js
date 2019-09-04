@@ -6,7 +6,7 @@ import nacl from 'tweetnacl';
 import rlp from 'aion-rlp';
 import {BN} from "ethereumjs-util";
 import {signByLedger} from "./ledger";
-
+import BigNumber from "bignumber.js";
 /***
  *
  * @param transaction
@@ -35,14 +35,13 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     const unsignedTransaction = {
         nonce: tx.nonce,
         to: tx.to || '0x',
-        data: tx.data || '0x',
-        amount: hexutil.toHex(tx.amount) || '0x',
+        data: tx.data,
+        amount: numberToHex(tx.amount) || '0x',
         timestamp: tx.timestamp || Math.floor(new Date().getTime()*1000),
-        type: new BN(tx.type||1),
+        type: tx.type || 1,
         gasLimit: tx.gasLimit,
         gasPrice: tx.gasPrice,
     };
-    console.log('unsigned ++++=>', unsignedTransaction);
 
 
     const rlpEncoded = rlp.encode([
@@ -50,10 +49,10 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         unsignedTransaction.to.toLowerCase(),
         unsignedTransaction.amount,
         unsignedTransaction.data,
-        toAionLong(unsignedTransaction.timestamp),
+        unsignedTransaction.timestamp,
         toAionLong(unsignedTransaction.gasLimit),
         toAionLong(unsignedTransaction.gasPrice),
-        unsignedTransaction.type
+        toAionLong(unsignedTransaction.type)
     ]);
     // ledger
     if(extra_param&&extra_param.type === '[ledger]'){
@@ -81,9 +80,9 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
         // hash encoded message
         let rawHash = blake2b(32).update(rlpEncoded).digest();
         // sign
-        let signature = ecKey.sign(rawHash); // 96 bytes signature(64) + publicKey(32)
+        let signature = ecKey.sign(rawHash);
         // verify signature
-        if (nacl.sign.detached.verify(rawHash, signature.slice(0, 64), Buffer.from(hexutil.hexString2Array(ecKey.publicKey))) === false) {
+        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(hexutil.hexString2Array(ecKey.publicKey))) === false) {
             throw new Error('Could not verify signature.');
         }
 
@@ -126,7 +125,7 @@ const  txInputFormatter = (options) => {
     ['gasPrice', 'gasLimit', 'nonce'].filter(function (key) {
         return options[key] !== undefined;
     }).forEach(function(key){
-        options[key] = hexutil.toHex(options[key]);
+        options[key] = numberToHex(options[key]);
     });
 
     return options;
@@ -157,4 +156,10 @@ const toAionLong = (val) => {
     }
 
     return new rlp.AionLong(num);
+};
+
+
+const numberToHex = function (value) {
+    value = BigNumber.isBigNumber(value)? value: BigNumber(value);
+    return '0x'+ value.toString(16);
 };

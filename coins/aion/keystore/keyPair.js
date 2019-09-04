@@ -24,14 +24,14 @@ export const keyPair = function(priKey) {
     const address = computeA0Address(publicKey);
 
     function sign(digest){
-        if (typeof hash === 'string') {
+        if (typeof digest === 'string') {
             digest = Buffer.from(digest, 'hex');
         }
         try{
-            let res = nacl.sign(digest, Buffer.from(privateKey));
+            let res = nacl.sign.detached(digest, Buffer.from(privateKey));
             return Buffer.from(res);
         }catch (e) {
-            throw new Error("Message failed to sign");
+            throw `Message failed to sign, ${e}`;
         }
     }
 

@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require("path");
 const {keyPair} = require('../coins/aion/keystore/keyPair');
 const {fromV3} = require('../coins/aion/keystore/keyfile');
+const {signTransaction} = require('../coins/aion/keystore/transaction');
 const {validator} = require('lib-common-util-js');
 
 describe('test AION',function () {
@@ -17,6 +18,22 @@ describe('test AION',function () {
         it('test private_child 2', function () {
             const key1 = keyPair('0x900050df31286e102017a0ddceebac54de5fbb4a6a57026756fdd2bcd3cad1d1077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114');
             assert.strictEqual(key1.address, '0xa03c27530d83ad581bf73627a8aa65a698a3bf70d65152d13aed5afd26b119ef');
+        });
+        it('test sign', function () {
+            const key1 = keyPair('0x900050df31286e102017a0ddceebac54de5fbb4a6a57026756fdd2bcd3cad1d1077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114');
+            const digest = '0f35699c5ea859907ba372e5fab2abfc18fab4a9b70513971ae95015a11cbba2';
+            let res = key1.sign(digest);
+            res = Buffer.concat([Buffer.from(key1.publicKey,'hex'),res]);
+            assert.strictEqual('0x'+res.toString('hex'), '0x077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac44811494ab971999504cd308da0cffc962f7f1702645e75cee300acb16c1f07ce0c6857a755a20c1f075b55ab75b3bfaa9a3c686c07e3b51f00ce3731d511695720600');
+        });
+        it('test sign Tx', async  function () {
+            const acc =  keyPair('0x900050df31286e102017a0ddceebac54de5fbb4a6a57026756fdd2bcd3cad1d1077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114');
+            const expected_rawTx = '0xf89c00a0a03c27530d83ad581bf73627a8aa65a698a3bf70d65152d13aed5afd26b119ef0080870591b2ccf46058830334508800000002540be40001b860077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114db019670396ed7dc4c27e5df4f3a8d3ba9841c0dd5ede015733ad3781644f0c99bedee17d37e9ffdc2475099c465c272914a0a87be5dbbf42f618933bbd35e0b'
+
+            const tx  = {amount: 0, nonce:0, to: acc.address, gasLimit:210000,gasPrice:10**10, timestamp: 1567572012327000,private_key: acc.privateKey};
+            const {encoded}  = await signTransaction(tx);
+            assert.strictEqual('0x'+encoded, expected_rawTx);
+
         })
     });
     describe('test keyfile', function () {
