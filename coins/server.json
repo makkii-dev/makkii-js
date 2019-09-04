@@ -1,0 +1,77 @@
+{
+  "coins": {
+    "aion": {
+      "networks": {
+        "mainnet": {
+          "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
+          "explorer_api": "https://mainnet-api.aion.network",
+          "explorer": "https://mainnet.aion.network/#/transaction/",
+          "remote": "https://www.chaion.net/makkii"
+        },
+        "mastery": {
+          "jsonrpc": "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
+          "explorer_api": "https://mastery-api.aion.network",
+          "explorer": "https://mastery.aion.network/#/transaction/",
+          "remote": "http://45.118.132.89:8080"
+        }
+      }
+    },
+    "btc": {
+      "networks": {
+        "BTC": {
+          "jsonrpc": "https://insight.bitpay.com/api",
+          "explorer": "https://insight.bitpay.com/tx"
+        },
+        "BTCTEST": {
+          "jsonrpc": "https://test-insight.bitpay.com/api",
+          "explorer": "https://test-insight.bitpay.com/tx/"
+        },
+        "LTC": {
+          "jsonrpc": "https://insight.litecore.io/api",
+          "explorer": "https://insight.litecore.io/tx"
+        },
+        "LTCTEST": {
+          "jsonrpc": "https://testnet.litecore.io/api",
+          "explorer": "https://testnet.litecore.io/tx"
+        }
+      }
+    },
+    "eth": {
+      "networks": {
+        "mainnet": {
+          "jsonrpc": "https://mainnet.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
+          "explorer_api": "https://api.etherscan.io/api",
+          "explorer": "https://etherscan.io/tx",
+          "remote": "https://www.chaion.net/makkii"
+        },
+        "ropsten": {
+          "jsonrpc": "https://ropsten.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
+          "explorer_api": "https://api-ropsten.etherscan.io/api",
+          "explorer": "https://ropsten.etherscan.io/tx",
+          "remote": "http://45.118.132.89:8080"
+        },
+        "pokket": {
+          "jsonrpc": "http://45.118.132.89:8080/pokketchain",
+          "explorer_api": "https://api-ropsten.etherscan.io/api",
+          "explorer": "https://ropsten.etherscan.io/tx",
+          "remote": "http://45.118.132.89:8080"
+        }
+      },
+      "etherscanApikey": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2"
+    },
+    "tron": {
+      "networks": {
+        "mannet": {
+          "jsonprc": "https://api.trongrid.io",
+          "explorer_api": "https://apilist.tronscan.org/api",
+          "explorer": "https://tronscan.org/#/transaction"
+        },
+        "shasta": {
+          "jsonrpc": "https://api.shasta.trongrid.io",
+          "explorer_api": "https://api.shasta.tronscan.org/api",
+          "explorer": "https://shasta.tronscan.org/#/transaction"
+        }
+      }
+    }
+  }
+}

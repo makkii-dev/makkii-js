@@ -1,6 +1,8 @@
 import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
 import keystore from "../keystore";
 import BigNumber from "bignumber.js";
+import {coins} from '../../server';
+const {btc:{networks}} = coins;
 
 const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC', shouldBroadCast=true) =>
     new Promise((resolve, reject) => {
@@ -54,16 +56,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
     });
 
 const getTransactionUrlInExplorer = (txHash, network = 'BTC') => {
-    switch (network) {
-        case "BTC":
-            return `https://insight.bitpay.com/tx/${txHash}`;
-        case "BTCTEST":
-            return `https://test-insight.bitpay.com/tx/${txHash}`;
-        case "LTC":
-            return `https://insight.litecore.io/tx/${txHash}`;
-        case "LTCTEST":
-            return `https://testnet.litecore.io/tx/${txHash}`;
-    }
+    return `${networks[network].explorer}/${txHash}`;
 };
 
 export {

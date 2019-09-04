@@ -1,10 +1,10 @@
 import BigNumber from "bignumber.js";
 import {HttpClient} from "lib-common-util-js";
-import {getEndPoint} from "./constants";
-
+import {coins} from '../../server';
+const {btc:{networks}} = coins;
 
 const getBalance =  async (address, network = 'BTC') => {
-    const url = `${getEndPoint(network)}/addr/${address}`;
+    const url = `${networks[network].jsonrpc}/addr/${address}`;
     console.log(`[${network} getBalance req]: ${url}` );
     try {
         const {data} = await HttpClient.get(url);
@@ -18,7 +18,7 @@ const getBalance =  async (address, network = 'BTC') => {
 
 
 const getUnspentTx = async (address, network = 'BTC') => {
-    const url = `${getEndPoint(network)}/addr/${address}/utxo`;
+    const url = `${networks[network].jsonrpc}/addr/${address}/utxo`;
     console.log(`[${network} getUnspentTx req]: ${url}` );
     try {
         const {data=[]} = await HttpClient.get(url);
@@ -39,7 +39,7 @@ const getUnspentTx = async (address, network = 'BTC') => {
 };
 
 const broadcastTransaction = async (encoded, network) => {
-    const url = `${getEndPoint(network)}/tx/send`;
+    const url = `${networks[network].jsonrpc}/tx/send`;
     console.log(`[${network} broadcastTransaction req]: ${url}` );
     try {
         const {data} = await HttpClient.post(url, { rawtx: encoded }, false);
@@ -53,7 +53,7 @@ const broadcastTransaction = async (encoded, network) => {
 };
 
 const getTransactionStatus = async (txId, network='BTC') => {
-    const url = `${getEndPoint(network)}/tx/${txId}`;
+    const url = `${networks[network].jsonrpc}/tx/${txId}`;
     console.log(`[${network} getTransactionStatus req]: ${url}` );
     try {
         const {data} = await HttpClient.get(url);
@@ -71,7 +71,7 @@ const getTransactionStatus = async (txId, network='BTC') => {
 
 
 const getTransactionsByAddress = async (address, page, size, network = 'BTC')=> {
-    const url = `${getEndPoint(network)}/txs/?address=${address}`;
+    const url = `${networks[network].jsonrpc}/txs/?address=${address}`;
     console.log(`[${network} getTransactionsByAddress req]: ${url}` );
     try {
         const {data} = await HttpClient.get(url);

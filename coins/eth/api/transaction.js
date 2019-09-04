@@ -2,9 +2,10 @@ import BigNumber from "bignumber.js";
 import Contract from 'web3-eth-contract';
 import keystore from "../keystore";
 import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "./jsonrpc";
-import {ERC20ABI, etherscanApikey, getEtherscanBaseUrl} from "./constants";
+import {ERC20ABI} from "./constants";
 import {HttpClient} from "lib-common-util-js";
-
+import { coins } from '../../server';
+const {eth: {networks,etherscanApikey}} = coins;
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet', shouldBroadCast) {
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
@@ -125,9 +126,7 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
 }
 
 function getTransactionsByAddress(address, page, size, network = 'mainnet') {
-    const url = `${getEtherscanBaseUrl(
-        network,
-    )}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
+    const url = `${networks[network].explorer_api}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
     console.log(`[eth http req] get transactions by address: ${url}`);
     return new Promise((resolve, reject) => {
         HttpClient.get(url, false).then(
@@ -158,10 +157,7 @@ function getTransactionsByAddress(address, page, size, network = 'mainnet') {
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    if (network === 'mainnet') {
-        return `https://etherscan.io/tx/${txHash}`;
-    }
-    return `https://${network}.etherscan.io/tx/${txHash}`;
+    return `${networks[network].explorer}/${txhash}`
 }
 
 function getTransactionStatus(txHash, network = 'mainnet') {

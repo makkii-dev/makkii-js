@@ -10,61 +10,71 @@ import tronApi from './coins/tron/api';
 function initApi(support_coin_lists, isTestNet) {
     let COINS = {};
     for (let coin of support_coin_lists){
-       switch (coin) {
-           case 'AION':
-               COINS = {
-                   ...COINS,
-                   AION: {
-                       api: aionApi,
-                       network: isTestNet ? 'mastery' : 'mainnet',
-                   }
-               };
-               break;
-           case 'BTC':
-               COINS = {
-                   ...COINS,
-                   BTC: {
-                       api: btcApi,
-                       network: isTestNet ? 'BTCTEST' : 'BTC',
-                   }
-               };
-               break;
-           case 'ETH':
-               COINS = {
-                   ...COINS,
-                   ETH: {
-                       api: ethApi,
-                       network: isTestNet ? 'ropsten' : 'mainnet',
-                   }
-               };
-               break;
-           case 'LTC':
-               COINS = {
-                   ...COINS,
-                   LTC: {
-                       api: btcApi,
-                       network: isTestNet ? 'LTCTEST' : 'LTC',
-                   }
-               };
-               break;
-           case 'TRX':
-               COINS = {
-                   ...COINS,
-                   TRX: {
-                       api: tronApi,
-                       network: isTestNet ? 'shasta' : 'mainnet',
-                   }
-               };
-               break;
-           default:
-               throw new Error(`Not support for coin ${coin}`);
-       }
+        switch (coin) {
+            case 'AION':
+                COINS = {
+                    ...COINS,
+                    AION: {
+                        api: aionApi,
+                        network: isTestNet ? 'mastery' : 'mainnet',
+                    }
+                };
+                break;
+            case 'BTC':
+                COINS = {
+                    ...COINS,
+                    BTC: {
+                        api: btcApi,
+                        network: isTestNet ? 'BTCTEST' : 'BTC',
+                    }
+                };
+                break;
+            case 'ETH':
+                COINS = {
+                    ...COINS,
+                    ETH: {
+                        api: ethApi,
+                        network: isTestNet ? 'ropsten' : 'mainnet',
+                    }
+                };
+                break;
+            case 'LTC':
+                COINS = {
+                    ...COINS,
+                    LTC: {
+                        api: btcApi,
+                        network: isTestNet ? 'LTCTEST' : 'LTC',
+                    }
+                };
+                break;
+            case 'TRX':
+                COINS = {
+                    ...COINS,
+                    TRX: {
+                        api: tronApi,
+                        network: isTestNet ? 'shasta' : 'mainnet',
+                    }
+                };
+                break;
+            default:
+                throw new Error(`Not support for coin ${coin}`);
+        }
     }
     return COINS;
 }
 
 export function client (support_coin_lists, isTestNet) {
     const COINS = initApi(support_coin_lists, isTestNet);
+
+    function setCoinNetwork(coinType, network){
+        console.warn('setCoinNetWork are dangerous');
+        if(COINS[coinType]){
+            COINS[coinType].network = network;
+        }else{
+            throw new Error(`coin ${coinType} not init`);
+        }
+    }
+
     function getTokenIconUrl(coinType, tokenSymbol = undefined, contractAddress = undefined) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.getTokenIconUrl !== undefined) {
@@ -236,6 +246,7 @@ export function client (support_coin_lists, isTestNet) {
     }
 
     return {
+        setCoinNetwork,
         getTokenIconUrl,
         getBlockByNumber,
         getTransactionExplorerUrl,

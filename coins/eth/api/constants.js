@@ -1,21 +1,3 @@
-const getEndpoint = network => {
-    return `https://${network}.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5`;
-};
-
-const etherscanApikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
-const getEtherscanBaseUrl = network => {
-    if (network === 'mainnet') {
-        return `https://api.etherscan.io/api`;
-    }
-    return `https://api-${network}.etherscan.io/api`;
-};
-
-const ETHERSCAN_URL_MAP = {
-    ropsten: 'https://api-ropsten.etherscan.io',
-    kovan: 'https://api-kovan.etherscan.io',
-    rinkeby: 'https://api-rinkeby.etherscan.io',
-    mainnet: 'https://api.etherscan.io',
-};
 const ERC20ABI = [
     {
         constant: true,
@@ -238,14 +220,6 @@ const ERC20ABI = [
         type: 'event',
     },
 ];
-const getRemoteServer =  network => {
-    return network === 'mainnet'?  'https://www.chaion.net/makkii' : 'http://45.118.132.89:8080';
-};
 export {
     ERC20ABI,
-    getEndpoint,
-    etherscanApikey,
-    getEtherscanBaseUrl,
-    ETHERSCAN_URL_MAP,
-    getRemoteServer
 }
