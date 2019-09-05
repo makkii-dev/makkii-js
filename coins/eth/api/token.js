@@ -121,7 +121,8 @@ const fetchAccountTokens = () => Promise.resolve({});
 
 function getTopTokens(topN = 20, network) {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/eth/search?offset=0&limit=${topN}`;
+        // const url = `${networks[network].remote}/token/eth/search?offset=0&limit=${topN}`;
+        const url = `${networks[network].remote}/token/eth/popular`;
         console.log(`get top eth tokens: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
