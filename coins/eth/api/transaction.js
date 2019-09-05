@@ -157,7 +157,7 @@ function getTransactionsByAddress(address, page, size, network = 'mainnet') {
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    return `${networks[network].explorer}/${txhash}`
+    return `${networks[network].explorer}/${txHash}`
 }
 
 function getTransactionStatus(txHash, network = 'mainnet') {
