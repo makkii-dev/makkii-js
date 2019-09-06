@@ -5,13 +5,13 @@
         "mainnet": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
           "explorer_api": "https://mainnet-api.aion.network",
-          "explorer": "https://mainnet.aion.network/#/transaction/",
+          "explorer": "https://mainnet.aion.network/#/transaction",
           "remote": "https://www.chaion.net/makkii"
         },
         "mastery": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
           "explorer_api": "https://mastery-api.aion.network",
-          "explorer": "https://mastery.aion.network/#/transaction/",
+          "explorer": "https://mastery.aion.network/#/transaction",
           "remote": "http://45.118.132.89:8080"
         }
       }
