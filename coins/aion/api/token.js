@@ -13,10 +13,10 @@ function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
         const url = `${networks[network].explorer_api}/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;
         HttpClient.get(url)
-            .then(json => {
+            .then(({data}) => {
                 const res = {};
-                if (json.content.length > 0) {
-                    const { tokens } = json.content[0];
+                if (data.content.length > 0) {
+                    const { tokens } = data.content[0];
                     tokens.forEach(token => {
                         res[token.symbol] = {
                             symbol: token.symbol,
@@ -118,7 +118,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
         console.log(`get account token transactions: ${url}`);
         HttpClient.get(url)
             .then(res => {
-                const { content = [] } = res;
+                const { content = [] } = res.data;
                 const txs = {};
                 content.forEach(t => {
                     const tx = {};
