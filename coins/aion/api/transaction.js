@@ -15,10 +15,10 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, sho
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getTransactionCount(account.address, 'pending', network)
             .then(count => {
-                let extra_params = { type: type};
+                let extra_param = { type: type};
                 if (type === '[ledger]'){
-                    extra_params = {
-                        ...extra_params,
+                    extra_param = {
+                        ...extra_param,
                         derivationIndex,
                         sender: account.address,
                     }
@@ -31,7 +31,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, sho
                     type: 1,
                     gasPrice,
                     gas: gasLimit,
-                    extra_params,
+                    extra_param,
                     private_key: privateKey
                 };
                 if (data !== undefined) {
