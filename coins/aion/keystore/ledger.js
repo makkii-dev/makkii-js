@@ -18,12 +18,12 @@ const initWallet = (transport) => {
 const signByLedger = (index, sender, msg) => {
     return new Promise((resolve, reject) => {
         try {
-            wallet.getAccount(index).then(
+            wallet.getAccount(parseInt(index)).then(
                 account => {
                     if (account.address !== sender) {
                         reject(new Error('error.wrong_device'));
                     }
-                    wallet.sign(index, Object.values(msg)).then(
+                    wallet.sign(parseInt(index), msg).then(
                         res => {
                             resolve({signature: res, publicKey: account.publicKey})
                         },

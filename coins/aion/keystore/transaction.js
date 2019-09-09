@@ -57,14 +57,14 @@ export const signTransaction = (transaction) => new Promise((resolve, reject) =>
     // ledger
     if(extra_param&&extra_param.type === '[ledger]'){
         signByLedger(extra_param.derivationIndex, extra_param.sender, Object.values(rlpEncoded)).then(({signature, publicKey})=>{
-            let fullSignature = Buffer.concat([Buffer.from(hexutil.hexString2Array(publicKey)), signature]);
+            let fullSignature = Buffer.concat([Buffer(hexutil.stripZeroXHexString(publicKey), 'hex'), Buffer(signature)]);
             // add the keystore fullSignature
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
 
             // re-encode with signature included
             const rawTransaction = rlp.encode(rawTx);
 
-            resolve({encoded: rawTransaction.toString('hex'), signature: hexutil.toHex(signature)})
+            resolve({encoded: rawTransaction.toString('hex'), signature: Buffer(signature).toString('hex')})
         }).catch(e=>{
             reject(e);
         })
