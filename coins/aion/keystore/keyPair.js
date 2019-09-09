@@ -25,7 +25,7 @@ export const keyPair = function(priKey) {
 
     function sign(digest){
         if (typeof digest === 'string') {
-            digest = Buffer.from(digest, 'hex');
+            digest = Buffer.from(hexutil.stripZeroXHexString(digest), 'hex');
         }
         try{
             let res = nacl.sign.detached(digest, Buffer.from(privateKey));

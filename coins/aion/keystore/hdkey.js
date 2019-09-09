@@ -19,7 +19,7 @@ const derivePath = (path, seed) => {
         .map(replaceDerive)
         .map(el => parseInt(el, 10));
     let ret = segments.reduce((parentKey,el)=>CKDPriv(parentKey,el),key);
-    return keyPair(ret);
+    return keyPair(ret.slice(0,32));
 
 };
 
