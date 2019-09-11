@@ -13,14 +13,15 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                     amount: value.shiftedBy(8).toNumber(),
                     change_address: account.address,
                     to_address: to,
-                    byte_fee: 2,
+                    byte_fee: 10,
                     private_key: account.private_key,
+                    ...extraParams,
                     utxos,
                 };
                 const valueIn = utxos.reduce((valueIn, el)=>{
                     return valueIn.plus(BigNumber(el.amount))
                 }, BigNumber(0));
-                let fee = network.match('BTC')? BigNumber(2*(148 * utxos.length + 34 * 2 + 10)):BigNumber(40000);
+                let fee = network.match('BTC')? BigNumber(tx.byte_fee*(148 * utxos.length + 34 * 2 + 10)):BigNumber(40000);
                 keystore.signTransaction(tx, network)
                     .then(res => {
                         console.log('[keystore sign resp]=>', res);

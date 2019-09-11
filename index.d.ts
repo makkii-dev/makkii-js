@@ -18,13 +18,13 @@ declare namespace Api {
 
         getBalance(coinType: string, address: string): Promise<any>;
 
-        sendTransaction(account: Sender, symbol: string, to: string, value: BigNumber | number, extraParams: any, data: any, shouldBroadCast: boolean): Promise<any>;
+        sendTransaction(account: Sender, symbol: string, to: string, value: BigNumber | number, extraParams: ETHParams|BTCParams, data: any, shouldBroadCast: boolean): Promise<any>;
 
         sameAddress(coinType: string, address1: string, address2: string): boolean;
 
         formatAddress1Line(coinType: string, address: string): string
 
-        validateBalanceSufficiency(account: Account, symbol: string, amount: BigNumber | number, extraParams: any): Promise<any>;
+        validateBalanceSufficiency(account: Account, symbol: string, amount: BigNumber | number, extraParams?: ETHParams|BTCParams): Promise<any>;
 
         getCoinPrices(currency: string): Promise<any>
 
@@ -54,6 +54,17 @@ declare namespace Api {
         symbol?: string;
         tokens?: any
     }
+
+    interface ETHParams {
+        gasPrice: number|BigNumber,
+        gasLimit: number|BigNumber,
+    }
+
+    interface BTCParams {
+        byte_fee: number,
+        network? : string,
+    }
+
 }
 declare namespace Keystore {
     interface client {
