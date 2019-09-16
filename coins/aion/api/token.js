@@ -141,7 +141,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
 
 const getTopTokens = (topN = 20, network) => {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/aion?offset=0&limit=${topN}`;
+        const url = `${networks[network].remote}/token/aion?offset=0&size=${topN}`;
         console.log(`get top aion tokens: ${url}`);
         HttpClient.get(url, false)
             .then(res => {

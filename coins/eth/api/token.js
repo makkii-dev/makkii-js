@@ -137,7 +137,7 @@ function getTopTokens(topN = 20, network) {
 
 function searchTokens(keyword, network) {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        const url = `${networks[network].remote}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
