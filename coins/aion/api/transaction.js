@@ -52,7 +52,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, sho
                                         status: 'PENDING',
                                         gasPrice
                                     };
-                                    resolve({pendingTx, pendingTokenTx: undefined});
+                                    resolve({pendingTx});
                                 })
                                 .catch(err => {
                                     console.log('keystore send signed tx error:', err);
@@ -120,16 +120,9 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
             .then(res => {
                 if(shouldBroadCast) {
                     const {pendingTx} = res;
-                    const pendingTokenTx = {
-                        hash: pendingTx.hash,
-                        timestamp: pendingTx.timestamp,
-                        from: pendingTx.from,
-                        to,
-                        value,
-                        status: 'PENDING',
-                    };
-
-                    resolve({pendingTx, pendingTokenTx});
+                    pendingTx.tknTo = to;
+                    pendingTx.tknValue = value,
+                    resolve({pendingTx});
                 }else {
                     resolve(res)
                 }
