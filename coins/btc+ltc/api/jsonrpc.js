@@ -87,6 +87,7 @@ const getTransactionsByAddress = async (address, page, size, network = 'BTC')=> 
             const { vin, vout } = t;
             tx.from = _aggregateItems(vin);
             tx.to = _aggregateItems(vout);
+            tx.fee = t.fees;
             if(tx.blockNumber>0){
                 txs[tx.hash] = tx;
             }

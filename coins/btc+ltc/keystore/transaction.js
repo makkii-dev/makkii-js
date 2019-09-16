@@ -58,4 +58,4 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
 });
 
 export const estimateFeeBTC = (m, n, byte_fee)=>BigNumber(148 * m + 34 * n + 10).times(byte_fee);
-export const estimateFeeLTC = BigNumber(40000);
+export const estimateFeeLTC = BigNumber(20000);
