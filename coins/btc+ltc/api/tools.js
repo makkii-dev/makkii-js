@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import {getUnspentTx} from "./jsonrpc";
 import { validator } from "lib-common-util-js";
+import {estimateFeeBTC, estimateFeeLTC} from "../keystore/transaction";
 
 const validateBalanceSufficiency = (account, symbol, amount, extraParams) =>
     new Promise((resolve, reject) => {
@@ -12,9 +13,7 @@ const validateBalanceSufficiency = (account, symbol, amount, extraParams) =>
                     balance = balance.plus(BigNumber(utxo.amount));
                 });
 
-                const BTCfee = BigNumber(148 * utxos.length + 34 * 2 + 10).times(2);
-                const LTCfee = BigNumber(40000);
-                const fee = symbol === 'LTC' ? LTCfee : BTCfee;
+                const fee = symbol === 'LTC' ?estimateFeeLTC: estimateFeeBTC(utxos.length, 2, extraParams.byte_fee|| 10);
                 const totalFee = BigNumber(amount)
                     .shiftedBy(8)
                     .plus(fee);
@@ -28,18 +27,16 @@ const validateBalanceSufficiency = (account, symbol, amount, extraParams) =>
     });
 
 
-const sendAll = async (address, symbol, network) => {
+const sendAll = async (address, symbol, network, byte_fee=10) => {
     try {
         const utxos = await getUnspentTx(address, network);
         let balance = BigNumber(0);
         utxos.forEach(utxo => {
             balance = balance.plus(BigNumber(utxo.amount));
         });
-        const BTCfee = BigNumber(148 * utxos.length + 34 * 2 + 10).times(2);
-        const LTCfee = BigNumber(40000);
         return Math.max(
             balance
-                .minus(symbol === 'LTC' ? LTCfee : BTCfee)
+                .minus(symbol === 'LTC' ?estimateFeeLTC: estimateFeeBTC(utxos.length, 2, byte_fee|| 10))
                 .shiftedBy(-8)
                 .toNumber(),
             0,

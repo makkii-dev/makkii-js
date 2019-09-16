@@ -32,19 +32,19 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
         const txb = new TransactionBuilder(mainnet);
         const amount = new BigNumber(amount_);
 
-        const fee = network==='BTC'||network==='BTCTEST'?estimateFeeBTC(utxos.length, 2,byte_fee):estimateFeeLTC;
+        const fee = network==='BTC'||network==='BTCTEST'?estimateFeeBTC(utxos.length, 2,byte_fee||10):estimateFeeLTC;
 
         let balance = new BigNumber(0);
         for (let ip = 0; ip < utxos.length; ip++) {
             balance = balance.plus(new BigNumber(utxos[ip].amount));
             txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
         }
-        if (balance.toNumber() < amount.toNumber() + fee) {
+        if (balance < amount + fee) {
             reject("error_insufficient_amount")
         }
-        const needChange = balance.toNumber() > amount.toNumber() + fee;
+        const needChange = balance > amount + fee;
         txb.addOutput(to_address, amount.toNumber());
-        needChange && txb.addOutput(change_address, balance.toNumber() - amount.toNumber() - fee);
+        needChange && txb.addOutput(change_address, balance - amount - fee);
         for (let ip = 0; ip < utxos.length; ip++) {
             txb.sign(ip, keyPair);
         }
@@ -55,5 +55,5 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
     }
 });
 
-const estimateFeeBTC = (m,n, byte_fee)=>byte_fee*(148 * m + 34 * n + 10);
-const estimateFeeLTC = 40000;
+export const estimateFeeBTC = (m, n, byte_fee)=>BigNumber(148 * m + 34 * n + 10).times(byte_fee);
+export const estimateFeeLTC = BigNumber(40000);

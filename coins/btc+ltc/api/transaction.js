@@ -2,6 +2,7 @@ import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
 import keystore from "../keystore";
 import BigNumber from "bignumber.js";
 import {coins} from '../../server';
+import {estimateFeeBTC, estimateFeeLTC} from "../keystore/transaction";
 const {btc:{networks}} = coins;
 
 const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC', shouldBroadCast=true) =>
@@ -21,7 +22,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                 const valueIn = utxos.reduce((valueIn, el)=>{
                     return valueIn.plus(BigNumber(el.amount))
                 }, BigNumber(0));
-                let fee = network.match('BTC')? BigNumber(tx.byte_fee*(148 * utxos.length + 34 * 2 + 10)):BigNumber(40000);
+                let fee = network.match(/LTC/)? estimateFeeLTC: estimateFeeBTC(utxos.length, 2, tx.byte_fee|| 10);
                 keystore.signTransaction(tx, network)
                     .then(res => {
                         console.log('[keystore sign resp]=>', res);
