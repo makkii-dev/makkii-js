@@ -39,12 +39,14 @@ export const signTransaction = (transaction, network='BTC')=> new Promise((resol
             balance = balance.plus(new BigNumber(utxos[ip].amount));
             txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
         }
-        if (balance < amount + fee) {
+        if (balance.isLessThan(amount.plus(fee))) {
             reject("error_insufficient_amount")
         }
-        const needChange = balance > amount + fee;
+        const needChange = balance.isGreaterThan(amount.plus(fee));
         txb.addOutput(to_address, amount.toNumber());
-        needChange && txb.addOutput(change_address, balance - amount - fee);
+        if(needChange){
+            txb.addOutput(change_address, balance.minus(amount).minus(fee).toNumber())
+        }
         for (let ip = 0; ip < utxos.length; ip++) {
             txb.sign(ip, keyPair);
         }

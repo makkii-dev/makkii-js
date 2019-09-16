@@ -17,9 +17,10 @@ const validateBalanceSufficiency = (account, symbol, amount, extraParams) =>
                 const totalFee = BigNumber(amount)
                     .shiftedBy(8)
                     .plus(fee);
-                balance.isGreaterThan(totalFee) ||
+                if(balance.isGreaterThanOrEqualTo(totalFee)) {
+                    resolve({ result: true })
+                }
                 resolve({ result: false, err: 'error_insufficient_amount' });
-                balance.isGreaterThan(totalFee) && resolve({ result: true });
             })
             .catch(() => {
                 reject({ result: false, err: 'error_insufficient_amount' });
