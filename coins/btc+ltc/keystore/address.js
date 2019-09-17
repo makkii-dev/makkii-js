@@ -1,22 +1,41 @@
 import {address as BTCAddress} from 'bitcoinjs-lib'
 
-const validateBase58 = (address) => {
+
+const Base58Prefix = {
+    'BTC':[0x00, 0x05],
+    'BTCTEST': [0x6f, 0xc4],
+    'LTC': [0x30, 0x32],
+    'LTCTEST': [0x6f, 0xc4, 0x3a]
+};
+
+const Bench32prefix = {
+    'BTC': 'bc',
+    'BTCTEST': 'tb',
+    'LTC': 'ltc',
+    'LTCTEST': 'tltc'
+};
+
+
+const validateBase58 = (address, network) => {
     try{
-        let res = BTCAddress.fromBase58Check(address);
-        return true;
+        const res = BTCAddress.fromBase58Check(address);
+        const networkType = Base58Prefix[network] || Base58Prefix['BTC'] ;
+        return networkType.indexOf(res.version)>=0;
     }catch (e) {
         return false;
     }
 };
 
-const validateBench32 = (address) => {
+const validateBench32 = (address, network) => {
     try{
-        let res = BTCAddress.fromBech32(address);
-        return true;
+        const res = BTCAddress.fromBech32(address);
+        const prefix = Bench32prefix[network] || Bench32prefix['BTC'];
+        return prefix === res.prefix;
     }catch (e) {
         return  false;
     }
 };
-export const validateAddress = (address) =>new Promise((resolve, reject) => {
-    resolve(validateBase58(address)||validateBench32(address));
-});
+export const validateAddress = async (address, network) =>{
+    return validateBase58(address, network)||validateBench32(address,network);
+};
+

@@ -34,8 +34,8 @@ export const networks = {
     LTCTEST:{
         messagePrefix: '\x19Litecoin Signed Message:\n',
         bip32: {
-            public: 0x043587cf,
-            private: 0x04358394
+            public: 0x0436EF7D,
+            private: 0x0436F6E1
         },
         pubKeyHash: 0x6f,
         scriptHash: 0xc4, //  for segwit (start with 2)

@@ -6,7 +6,7 @@ const ED25519_CURVE = 'ed25519 seed';
 const HARDENED_KEY_MULTIPLIER = 0x80000000;
 
 const getHardenedNumber = (nr) => {
-    return new Buffer(((HARDENED_KEY_MULTIPLIER | nr) >>> 0).toString(16), 'hex');
+    return Buffer.from(((HARDENED_KEY_MULTIPLIER | nr) >>> 0).toString(16), 'hex');
 };
 const derivePath = (path, seed) => {
     if (!isValidPath(path)) {

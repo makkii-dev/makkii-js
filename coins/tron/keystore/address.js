@@ -1,10 +1,13 @@
 import bs58check from 'bs58check';
 
-export const validateAddress = (address)=> new Promise((resolve, reject) => {
+export const validateAddress = async (address)=> {
    try {
-       bs58check.decode(address);
-       resolve(true)
+       const buffer = Buffer.from(address);
+       if(buffer.length!==34)
+           return false;
+       const res = bs58check.decode(address);
+       return  res.length === 21 && res[0] === 0x41
    } catch (e) {
-       resolve(false)
+       return false;
    }
-});
+};

@@ -11,8 +11,8 @@ if(global.platform && global.platform === 'mobile'){
 import bs58check from 'bs58check';
 
 function hmacSha512(key, str) {
-    const hmac = crypto.createHmac('sha512', new Buffer(key, 'utf-8'));
-    return hmac.update(new Buffer(str,'utf-8')).digest();
+    const hmac = crypto.createHmac('sha512',  Buffer.from(key, 'utf-8'));
+    return hmac.update(Buffer.from(str,'utf-8')).digest();
 }
 
 const longToByteArray =  (long) => {

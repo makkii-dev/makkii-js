@@ -150,7 +150,7 @@ export function client (support_coin_lists, isTestNet) {
     const validateAddress = (address, coinType) => {
         const coin = COINS[coinType.toUpperCase()];
         if(coin.keystore.validateAddress!==undefined){
-            return coin.keystore.validateAddress(address);
+            return coin.keystore.validateAddress(address, coin.network);
         }
         return Promise.reject(`not support this coinType ${coinType}`);
     };
