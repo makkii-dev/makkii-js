@@ -63,9 +63,9 @@ function initApi(support_coin_lists, isTestNet) {
     return COINS;
 }
 
-export function client (support_coin_lists, isTestNet) {
+export function client (support_coin_lists, isTestNet, _remoteApi) {
     const COINS = initApi(support_coin_lists, isTestNet);
-
+    let remoteApi = _remoteApi || 'prod';
     function setCoinNetwork(coinType, network){
         console.warn('setCoinNetWork are dangerous');
         if(COINS[coinType]){
@@ -75,10 +75,14 @@ export function client (support_coin_lists, isTestNet) {
         }
     }
 
+    function setRemoteApi(network) {
+        remoteApi = network;
+    }
+
     function getTokenIconUrl(coinType, tokenSymbol = undefined, contractAddress = undefined) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.getTokenIconUrl !== undefined) {
-            return coin.api.getTokenIconUrl(tokenSymbol, contractAddress, coin.network);
+            return coin.api.getTokenIconUrl(tokenSymbol, contractAddress, remoteApi);
         }
         throw new Error(`No getTokenIconUrl impl for coin ${coinType}`);
     }
@@ -232,7 +236,7 @@ export function client (support_coin_lists, isTestNet) {
     function getTopTokens(coinType, topN = 20) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.getTopTokens !== undefined) {
-            return coin.api.getTopTokens(topN, coin.network);
+            return coin.api.getTopTokens(topN, remoteApi);
         }
         throw new Error(`No getTopTokens impl for coin ${coinType}`);
     }
@@ -240,12 +244,13 @@ export function client (support_coin_lists, isTestNet) {
     function searchTokens(coinType, keyword) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.searchTokens !== undefined) {
-            return coin.api.searchTokens(keyword, coin.network);
+            return coin.api.searchTokens(keyword, remoteApi);
         }
         throw new Error(`No searchTokens impl for coin ${coinType}`);
     }
 
     return {
+        setRemoteApi,
         setCoinNetwork,
         getTokenIconUrl,
         getBlockByNumber,

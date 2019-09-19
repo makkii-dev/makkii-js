@@ -6,9 +6,9 @@ import {processRequest } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import {CONTRACT_ABI} from "./constants";
 import { hexutil } from "lib-common-util-js";
-import {coins} from '../../server';
+import {coins, api} from '../../server';
 const {aion:{networks}} = coins;
-
+const {remote} = api;
 function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
         const url = `${networks[network].explorer_api}/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;
@@ -141,7 +141,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page 
 
 const getTopTokens = (topN = 20, network) => {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/aion?offset=0&size=${topN}`;
+        const url = `${remote[network]}/token/aion?offset=0&size=${topN}`;
         console.log(`get top aion tokens: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
@@ -156,7 +156,7 @@ const getTopTokens = (topN = 20, network) => {
 
 const searchTokens = (keyword, network) => {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/aion/search?keyword=${keyword}`;
+        const url = `${remote[network]}/token/aion/search?keyword=${keyword}`;
         console.log(`search aion token: ${url}`);
         HttpClient.get(url, false)
             .then(res => {

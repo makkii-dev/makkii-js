@@ -6,10 +6,10 @@ import {HttpClient} from "lib-common-util-js";
 import {ERC20ABI} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexutil} from "lib-common-util-js";
-import {coins} from '../../server';
+import {coins, api} from '../../server';
 
 const {eth:{networks, etherscanApikey}} = coins;
-
+const {remote} = api;
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
         const contract = new Contract(ERC20ABI);
@@ -122,7 +122,7 @@ const fetchAccountTokens = () => Promise.resolve({});
 function getTopTokens(topN = 20, network) {
     return new Promise((resolve, reject) => {
         // const url = `${networks[network].remote}/token/eth/search?offset=0&limit=${topN}`;
-        const url = `${networks[network].remote}/token/eth/popular`;
+        const url = `${remote[network]}/token/eth/popular`;
         console.log(`get top eth tokens: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
@@ -137,7 +137,7 @@ function getTopTokens(topN = 20, network) {
 
 function searchTokens(keyword, network) {
     return new Promise((resolve, reject) => {
-        const url = `${networks[network].remote}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
+        const url = `${remote[network]}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
         HttpClient.get(url, false)
             .then(res => {
@@ -151,7 +151,7 @@ function searchTokens(keyword, network) {
 }
 
 function getTokenIconUrl(tokenSymbol, contractAddress, network) {
-    return `${networks[network].remote}/token/eth/img?contractAddress=${contractAddress}`;
+    return `${remote[network]}/token/eth/img?contractAddress=${contractAddress}`;
 }
 
 export {
