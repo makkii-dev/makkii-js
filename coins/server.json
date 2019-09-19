@@ -56,7 +56,7 @@
     },
     "tron": {
       "networks": {
-        "mannet": {
+        "mainnet": {
           "jsonrpc": "https://api.trongrid.io",
           "explorer_api": "https://apilist.tronscan.org/api",
           "explorer": "https://tronscan.org/#/transaction"
