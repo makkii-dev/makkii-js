@@ -93,7 +93,9 @@ declare namespace Keystore {
 
         recoverFromKeystore(coinType: string, input: string, password: string): Promise<any>,
 
-        setLedgerTransport(coinType: string, transport: any): void
+        setLedgerTransport(coinType: string, transport: any): void,
+
+        validatePrivateKey(address: string, coinType:string):boolean
     }
 
     interface AionTransaction extends EthTransaction{

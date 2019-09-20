@@ -5,17 +5,13 @@ const A0_IDENTIFIER = [0xA0];
 
 export const keyPair = function(priKey) {
 
-    if (typeof priKey == 'string') {
-        if (priKey.startsWith('0x')){
-            priKey = priKey.substring(2);
-        }
-        priKey = Buffer.from(priKey, 'hex');
-    }
-
     if(typeof priKey === 'string'){
         priKey = Buffer.from(hexutil.stripZeroXHexString(priKey), 'hex');
     }else if(!Buffer.isBuffer(priKey)){
         throw Error('Seed must be a buffer or a hex string');
+    }
+    if(!validatePrivateKey(priKey)){
+        throw Error('inValid privateKey')
     }
     const keyPair = priKey.length === 64?nacl.sign.keyPair.fromSecretKey(priKey):nacl.sign.keyPair.fromSeed(priKey);
 
@@ -42,6 +38,24 @@ export const keyPair = function(priKey) {
     }
 
     return {privateKey:privateKey.toString('hex'), publicKey:publicKey.toString('hex'), address:hexutil.toHex(address), sign}
+};
+
+
+export const validatePrivateKey = (priKey)=>{
+    if(typeof priKey === 'string'){
+        priKey = Buffer.from(hexutil.stripZeroXHexString(priKey), 'hex');
+    }else if(!Buffer.isBuffer(priKey)){
+        throw Error('Seed must be a buffer or a hex string');
+    }
+    if(priKey.length === nacl.sign.seedLength){
+        return true;
+    }else if(priKey.length !== nacl.sign.secretKeyLength){
+        return false;
+    }
+    const keyPair = nacl.sign.keyPair.fromSecretKey(priKey);
+    const msg = Buffer.from('test');
+    const sig = nacl.sign.detached(msg, keyPair.secretKey);
+    return nacl.sign.detached.verify(msg,sig,keyPair.publicKey);
 };
 
 

@@ -22,7 +22,7 @@ describe('test AION',function () {
     });
     describe('test keypair',function () {
         it('test private_child 0', function () {
-            const key1 = keyPair('0x91805827f72842531cd3b5f4e488e6556f764cc08a04eee0587f53b5b1c4f021d24339d38554265d0fda57e4bda904f80f3b76f0842415a607d2ee78c50f3af2');
+            const key1 = keyPair('0x91805827f72842531cd3b5f4e488e6556f764cc08a04eee0587f53b5b1c4f021d24339d38554265d0fda57e4bda904f80f3b76f0842415a607d2ee78c50f3af3');
             assert.strictEqual(key1.address, '0xa0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38');
             assert.strictEqual(key1.privateKey, '91805827f72842531cd3b5f4e488e6556f764cc08a04eee0587f53b5b1c4f021d24339d38554265d0fda57e4bda904f80f3b76f0842415a607d2ee78c50f3af2');
 

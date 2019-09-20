@@ -155,6 +155,14 @@ export function client (support_coin_lists, isTestNet) {
         return Promise.reject(`not support this coinType ${coinType}`);
     };
 
+    const validatePrivateKey = (address, coinType) => {
+        const coin = COINS[coinType.toUpperCase()];
+        if(coin.keystore.validatePrivateKey!==undefined){
+            return coin.keystore.validatePrivateKey(address);
+        }
+        return true;
+    };
+
 
     const getKeyByLedger = async  (symbol, index) => {
         const coin = COINS[symbol.toUpperCase()];
@@ -215,6 +223,7 @@ export function client (support_coin_lists, isTestNet) {
         getKeyByLedger,
         signByLedger,
         recoverFromKeystore,
-        setLedgerTransport
+        setLedgerTransport,
+        validatePrivateKey
     }
 }
