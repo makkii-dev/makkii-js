@@ -155,10 +155,10 @@ export function client (support_coin_lists, isTestNet) {
         return Promise.reject(`not support this coinType ${coinType}`);
     };
 
-    const validatePrivateKey = (address, coinType) => {
+    const validatePrivateKey = (privateKey, coinType) => {
         const coin = COINS[coinType.toUpperCase()];
         if(coin.keystore.validatePrivateKey!==undefined){
-            return coin.keystore.validatePrivateKey(address);
+            return coin.keystore.validatePrivateKey(privateKey);
         }
         return true;
     };
