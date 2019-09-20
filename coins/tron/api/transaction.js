@@ -146,15 +146,17 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
                 const { data } = res.data;
                 const txs = {};
                 data.forEach(t => {
-                    const tx = {};
-                    tx.hash = `0x${t.transactionHash}`;
-                    tx.timestamp = t.timestamp;
-                    tx.from = t.transferFromAddress;
-                    tx.to = t.transferToAddress;
-                    tx.value = new BigNumber(t.amount, 10).shiftedBy(-6).toNumber();
-                    tx.blockNumber = t.block;
-                    tx.status = t.confirmed ? 'CONFIRMED' : 'FAILED';
-                    txs[tx.hash] = tx;
+                    if(t.tokenName === '_') {
+                        const tx = {};
+                        tx.hash = `0x${t.transactionHash}`;
+                        tx.timestamp = t.timestamp;
+                        tx.from = t.transferFromAddress;
+                        tx.to = t.transferToAddress;
+                        tx.value = new BigNumber(t.amount, 10).shiftedBy(-6).toNumber();
+                        tx.blockNumber = t.block;
+                        tx.status = t.confirmed ? 'CONFIRMED' : 'FAILED';
+                        txs[tx.hash] = tx;
+                    }
                 });
                 resolve(txs);
             })
