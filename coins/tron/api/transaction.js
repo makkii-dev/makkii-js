@@ -68,7 +68,7 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
                                 .then(broadcastRes => {
                                     if (broadcastRes.result) {
                                         const pendingTx = {
-                                            hash: `0x${signedTx.txID}`,
+                                            hash: `${signedTx.txID}`,
                                             timestamp: now,
                                             from: account.address,
                                             to,
@@ -167,6 +167,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
+    txHash = txHash.startsWith('0x')? txHash.slice(2):txHash;
     return `${networks[network].explorer}/${txHash}`;
 }
 
