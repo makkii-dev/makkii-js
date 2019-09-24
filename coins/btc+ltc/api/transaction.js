@@ -49,7 +49,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                                 })
                                 .catch(e => reject(e));
                         }else{
-                            resolve({encoded: res, txObj})
+                            resolve({encoded: res.encoded, txObj})
                         }
                     })
                     .catch(e => reject(e));
