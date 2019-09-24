@@ -39,18 +39,18 @@ const getUnspentTx = async (address, network = 'BTC') => {
 };
 
 const broadcastTransaction = async (encoded, network) => {
-    const url = `${networks[network].jsonrpc}/tx/send`;
+    const url = `${networks[network].broadcast}`;
     console.log(`[${network} broadcastTransaction req]: ${url}` );
     let resp;
     try {
-        resp = await HttpClient.post(url, { rawtx: encoded });
+        resp = await HttpClient.post(url, { rawtx: encoded, tx: encoded });
         console.log(`[${network} broadcastTransaction resp]:`,resp);
     }catch (e) {
         throw Error(`[${network} broadcastTransaction error]: ${e}`);
     }
-    const { data:{ txid } = {} } = resp || {};
-    if(txid) {
-        return txid;
+    const { data:{ txid, hash } = {} } = resp || {};
+    if(txid || hash) {
+        return txid || hash;
     }else{
         throw Error(`[${network} broadcastTransaction error]: ${resp.data}`)
     }
