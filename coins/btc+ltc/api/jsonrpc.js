@@ -52,7 +52,7 @@ const broadcastTransaction = async (encoded, network) => {
     if(txid) {
         return txid;
     }else{
-        throw Error(`[${network} broadcastTransaction error]: ${resp}`)
+        throw Error(`[${network} broadcastTransaction error]: ${resp.data}`)
     }
 
 };
