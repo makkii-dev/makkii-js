@@ -44,14 +44,14 @@ const broadcastTransaction = async (encoded, network) => {
     let resp;
     try {
         const payload = network.match('TEST')? {rawtx: encoded}: {tx: encoded};
-        resp = await HttpClient.post(url, payload);
+        resp = await HttpClient.post(url, payload, true);
         console.log(`[${network} broadcastTransaction resp]:`,resp);
     }catch (e) {
         throw Error(`[${network} broadcastTransaction error]: ${e}`);
     }
-    const { data:{ txid, hash } = {} } = resp || {};
-    if(txid || hash) {
-        return txid || hash;
+    const { data:{ txid, tx } = {} } = resp || {};
+    if(txid || tx) {
+        return txid || tx.hash;
     }else{
         throw Error(`[${network} broadcastTransaction error]: ${resp.data}`)
     }
