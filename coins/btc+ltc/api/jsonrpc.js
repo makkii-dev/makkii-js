@@ -43,7 +43,8 @@ const broadcastTransaction = async (encoded, network) => {
     console.log(`[${network} broadcastTransaction req]: ${url}` );
     let resp;
     try {
-        resp = await HttpClient.post(url, { rawtx: encoded, tx: encoded });
+        const payload = network.match('TEST')? {rawtx: encoded}: {tx: encoded};
+        resp = await HttpClient.post(url, payload);
         console.log(`[${network} broadcastTransaction resp]:`,resp);
     }catch (e) {
         throw Error(`[${network} broadcastTransaction error]: ${e}`);
