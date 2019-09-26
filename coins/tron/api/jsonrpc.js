@@ -1,8 +1,8 @@
 import BigNumber from "bignumber.js";
 import {HttpClient} from "lib-common-util-js";
 import {base58check2HexString} from "../../../utils";
-import {coins} from '../../server';
-const {tron:{networks}} = coins;
+import {config} from '../../serverConfig';
+const {tron:{networks}} = config.coins;
 
 
 const getBalance = (address, network = 'mainnet') =>

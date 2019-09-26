@@ -1,9 +1,9 @@
 import {broadcastTransaction, getUnspentTx} from "./jsonrpc";
 import keystore from "../keystore";
 import BigNumber from "bignumber.js";
-import {coins} from '../../server';
+import {config} from '../../serverConfig';
 import {estimateFeeBTC, estimateFeeLTC} from "../keystore/transaction";
-const {btc:{networks}} = coins;
+const {btc:{networks}} = config.coins;
 
 const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC', shouldBroadCast=true) =>
     new Promise((resolve, reject) => {

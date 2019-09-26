@@ -4,10 +4,8 @@ import { CONTRACT_ABI } from "./constants";
 import { getTransactionReceipt, getTransactionCount, sendSignedTransaction } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import keystore from '../keystore';
-import {coins} from '../../server';
-const {aion:{networks}} = coins;
-
-
+import {config} from '../../serverConfig';
+const {aion:{networks}} = config.coins;
 
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast) {
     const { type, derivationIndex, private_key: privateKey } = account;

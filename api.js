@@ -6,8 +6,12 @@ import aionApi from './coins/aion/api';
 import btcApi from './coins/btc+ltc/api';
 import ethApi from './coins/eth/api';
 import tronApi from './coins/tron/api';
+import {customConfig} from "./coins/serverConfig";
 
-function initApi(support_coin_lists, isTestNet) {
+function initApi(support_coin_lists, isTestNet, customServerConfig) {
+    if(customServerConfig && customServerConfig.toString() === "[object Object]") {
+        customConfig(customServerConfig)
+    }
     let COINS = {};
     for (let coin of support_coin_lists){
         switch (coin) {

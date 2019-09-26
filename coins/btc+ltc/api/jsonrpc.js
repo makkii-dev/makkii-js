@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import {HttpClient} from "lib-common-util-js";
-import {coins} from '../../server';
-const {btc:{networks}} = coins;
+import {config} from '../../serverConfig';
+const {btc:{networks}} = config.coins;
 
 const getBalance =  async (address, network = 'BTC') => {
     const url = `${networks[network].jsonrpc}/addr/${address}`;

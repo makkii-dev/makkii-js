@@ -1,0 +1,24 @@
+{
+  "coins": {
+    "aion": {
+      "networks": {
+        "mainnet": {
+          "jsonrpc": "123",
+          "explorer_api": "https://mainnet-api.aion.network",
+          "explorer": "https://mainnet.aion.network/#/transaction"
+        },
+        "mastery": {
+          "jsonrpc": "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
+          "explorer_api": "https://mastery-api.aion.network",
+          "explorer": "https://mastery.aion.network/#/transaction"
+        }
+      }
+    },
+    "api": {
+      "remote": {
+        "dev": "http://45.118.132.89:8080",
+        "prod": "https://www.chaion.net/makkii"
+      }
+    }
+  }
+}

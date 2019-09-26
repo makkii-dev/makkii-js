@@ -4,8 +4,8 @@ import keystore from "../keystore";
 import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "./jsonrpc";
 import {ERC20ABI} from "./constants";
 import {HttpClient} from "lib-common-util-js";
-import { coins } from '../../server';
-const {eth: {networks,etherscanApikey}} = coins;
+import { config } from '../../serverConfig';
+const {eth: {networks,etherscanApikey}} = config.coins;
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet', shouldBroadCast) {
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);

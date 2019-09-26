@@ -6,10 +6,10 @@ import {HttpClient} from "lib-common-util-js";
 import {ERC20ABI} from "./constants";
 import {processRequest} from "./jsonrpc";
 import {hexutil} from "lib-common-util-js";
-import {coins, api} from '../../server';
+import {config} from '../../serverConfig';
 
-const {eth:{networks, etherscanApikey}} = coins;
-const {remote} = api;
+const {eth:{networks, etherscanApikey}} = config.coins;
+const {remote} = config.api;
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
         const contract = new Contract(ERC20ABI);

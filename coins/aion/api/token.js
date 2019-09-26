@@ -6,9 +6,9 @@ import {processRequest } from './jsonrpc';
 import {HttpClient} from "lib-common-util-js";
 import {CONTRACT_ABI} from "./constants";
 import { hexutil } from "lib-common-util-js";
-import {coins, api} from '../../server';
-const {aion:{networks}} = coins;
-const {remote} = api;
+import {config} from '../../serverConfig';
+const {aion:{networks}} = config.coins;
+const {remote} = config.api;
 function fetchAccountTokens(address, network) {
     return new Promise((resolve, reject) => {
         const url = `${networks[network].explorer_api}/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;

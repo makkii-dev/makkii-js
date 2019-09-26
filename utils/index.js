@@ -36,10 +36,20 @@ function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));
 }
 
+
+function deepMergeObject (obj1, obj2){
+    Object.keys(obj2).forEach(key=> {
+        obj1[key] = obj1[key] && obj1[key].toString() === "[object Object]" ?
+            deepMergeObject(obj1[key], obj2[key]) : obj1[key] = obj2[key];
+    });
+    return obj1;
+}
+
 export {
     hmacSha512,
     longToByteArray,
     base58check2HexString,
+    deepMergeObject,
     crypto,
     ab2str
 };

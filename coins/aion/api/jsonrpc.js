@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import {HttpClient} from "lib-common-util-js";
-import {coins} from '../../server';
-const {aion:{networks}} = coins;
+import {config} from '../../serverConfig';
+const {aion:{networks}} = config.coins;
 
 const checkBlockTag = blockTag => {
     if (blockTag == null) {

@@ -8,8 +8,8 @@ import {
 import {base58check2HexString} from "../../../utils";
 import {HttpClient} from "lib-common-util-js";
 import BigNumber from "bignumber.js";
-import {coins} from '../../server';
-const {tron:{networks}} = coins;
+import {config} from '../../serverConfig';
+const {tron:{networks}} = config.coins;
 
 
 function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast = true) {
