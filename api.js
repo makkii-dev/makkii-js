@@ -1,5 +1,5 @@
 import {HttpClient} from "lib-common-util-js";
-import {app_server_api} from "./remote_server";
+import {app_server_api, setCurrentServer} from "./remote_server";
 import { hexutil} from "lib-common-util-js";
 
 import aionApi from './coins/aion/api';
@@ -81,6 +81,7 @@ export function client (support_coin_lists, isTestNet, _remoteApi) {
 
     function setRemoteApi(network) {
         remoteApi = network;
+        setCurrentServer(network)
     }
 
     function getTokenIconUrl(coinType, tokenSymbol = undefined, contractAddress = undefined) {
