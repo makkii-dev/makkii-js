@@ -1,25 +1,20 @@
 import BigNumber from "bignumber.js";
 import {HttpClient} from "lib-common-util-js";
-import {base58check2HexString} from "../../../utils";
 import {config} from '../../serverConfig';
 const {tron:{networks}} = config.coins;
 
 
 const getBalance = (address, network = 'mainnet') =>
     new Promise((resolve, reject) => {
-        const url = `${networks[network].jsonrpc}/wallet/getaccount`;
-        const hexAddress = base58check2HexString(address);
-        const body = {
-            address: hexAddress,
-        };
-        const promise = HttpClient.post(url, body, true, { 'Content-Type': 'application/json' });
+        const url = `${networks[network].jsonrpc}/v1/accounts/${address}`;
+        const promise = HttpClient.get(url);
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
             console.log('[keystore http resp] ', res.data);
-            if (res.data.Error !== undefined) {
-                reject(res.data.Error);
-            } else if (res.data.balance !== undefined) {
-                resolve(new BigNumber(res.data.balance).shiftedBy(-6));
+            if (res.data.error !== undefined) {
+                reject(res.data.error);
+            } else if (res.data.data.balance !== undefined) {
+                resolve(new BigNumber(res.data.data.balance).shiftedBy(-6));
             } else {
                 resolve(new BigNumber(0));
             }
@@ -30,7 +25,7 @@ const getBalance = (address, network = 'mainnet') =>
 const getLatestBlock = (network = 'mainnet') =>
     new Promise(resolve => {
         const url = `${networks[network].jsonrpc}/wallet/getnowblock`;
-        const promise = HttpClient.post(url, {}, true, { 'Content-Type': 'application/json' });
+        const promise = HttpClient.get(url);
         console.log(`[tron http req] ${url}`);
         promise.then(res => {
             console.log('[keystore http resp] ', res.data);
