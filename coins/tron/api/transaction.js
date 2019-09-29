@@ -148,7 +148,7 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
                 data.forEach(t => {
                     if(t.tokenName === '_') {
                         const tx = {};
-                        tx.hash = `0x${t.transactionHash}`;
+                        tx.hash = `${t.transactionHash}`;
                         tx.timestamp = t.timestamp;
                         tx.from = t.transferFromAddress;
                         tx.to = t.transferToAddress;
