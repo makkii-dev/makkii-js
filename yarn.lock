@@ -3646,9 +3646,9 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#1c060a6e220c8193f3633573bfda36a933069a9f":
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#1c060a6e220c8193f3633573bfda36a933069a9f"
+  resolved "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
