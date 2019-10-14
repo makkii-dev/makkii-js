@@ -47,17 +47,18 @@ declare namespace Api {
         'prod'
     }
     interface Sender {
-        address: string;
-        private_key: string;
-        type?: any
-        derivationIndex?: number
+        address: string,
+        private_key: string,
+        compressed?: boolean,
+        type?: any,
+        derivationIndex?: number,
     }
 
     interface Account {
-        address: string;
-        balance: BigNumber | number;
-        symbol?: string;
-        tokens?: any
+        address: string,
+        balance: BigNumber | number,
+        symbol?: string,
+        tokens?: any,
     }
 
     interface ETHParams {
@@ -81,7 +82,9 @@ declare namespace Keystore {
 
         generateMnemonic(): string,
 
-        recoverKeyPairByPrivateKey(priKey: string, coinType: string): Promise<any>,
+        recoverKeyPairByPrivateKey(priKey: string, coinType: string, options?:any): Promise<any>,
+
+        recoverKeyPairByWIF(priKey: string, coinType: string, options?:any): Promise<any>,
 
         validateAddress(address: string, coinType: string): Promise<any>,
 
@@ -122,6 +125,7 @@ declare namespace Keystore {
 
     interface BtcTransaction {
         private_key:string,
+        compressed?:boolean,
         to_address: string,
         change_address: string,
         amount: BigNumber|number,
