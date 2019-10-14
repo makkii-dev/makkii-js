@@ -30,6 +30,6 @@ export const keyPair = function(priKey) {
     let address = '0x'+pubToAddress(publicKey).toString('hex');
     address = toChecksumAddress(address);
     console.log('get keystore address');
-    return {privateKey: key.getPrivate('hex'), publicKey: hexutil.toHex(publicKey), address, sign: key.sign}
+    return {privateKey: key.getPrivate('hex'), publicKey: hexutil.toHex(publicKey), address, sign: (hash)=>key.sign(hash)}
 
 };

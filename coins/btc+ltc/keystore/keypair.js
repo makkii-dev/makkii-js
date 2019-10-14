@@ -21,8 +21,8 @@ export const keyPair = function(priKey, options){
             privateKey: privateKey.toString('hex'),
             publicKey: publicKey.toString('hex'),
             address,
-            sign: key.sign,
-            toWIF: key.toWIF
+            sign: (hash)=>key.sign(hash),
+            toWIF: ()=>key.toWIF()
         }
     }catch (e) {
         return undefined;
@@ -43,8 +43,8 @@ export const keyPairFromWIF = function (WIF, options) {
             privateKey: privateKey.toString('hex'),
             publicKey: publicKey.toString('hex'),
             address,
-            sign: key.sign,
-            toWIF: key.toWIF,
+            sign: (hash)=>key.sign(hash),
+            toWIF: ()=>key.toWIF(),
             compressed: key.compressed
         }
     }catch (e) {
