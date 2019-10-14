@@ -16,6 +16,6 @@ export const keyPair = function(priKey, options){
     const privateKey = key.privateKey;
     const publicKey = key.publicKey;
     const { address } = payments.p2pkh({ pubkey: key.publicKey, network:network});
-    return {privateKey: privateKey.toString('hex'), publicKey: publicKey.toString('hex'), address, sign: key.sign}
+    return {privateKey: privateKey.toString('hex'), publicKey: publicKey.toString('hex'), address, sign: key.sign, toWIF: key.toWIF}
 };
 

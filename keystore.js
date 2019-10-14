@@ -131,7 +131,8 @@ export function client (support_coin_lists, isTestNet) {
             try {
                 let keyPair = coin.keystore.keyPair(priKey, {network: coin.network});
                 if (keyPair !== undefined) {
-                    resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address: keyPair.address})
+                    const {privateKey, publicKey, address, ...reset} = keyPair;
+                    resolve({private_key: privateKey, public_key: publicKey, address, ...reset})
                 } else {
                     reject(`recover privKey failed: not support this coinType ${coinType}`);
                 }

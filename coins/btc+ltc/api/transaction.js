@@ -16,6 +16,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                     to_address: to,
                     byte_fee: 10,
                     private_key: account.private_key,
+                    WIF: account.WIF,
                     ...extraParams,
                     utxos,
                 };
