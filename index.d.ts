@@ -171,6 +171,6 @@ export interface CoinType {
     TRON: 195,
     fromCoinSymbol(symbol):number
 }
-export function apiClient(support_coin_lists:Array<string>, isTestNet:boolean):Api.client
+export function apiClient(support_coin_lists:Array<string>, isTestNet:boolean, customServerConfig?: string):Api.client
 export function keystoreClient(support_coin_lists:Array<string>, isTestNet:boolean):Keystore.client
 export function setCurrentServer(server):void
