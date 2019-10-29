@@ -62,11 +62,11 @@ describe('test AION',function () {
         })
     });
     describe('test keyfile', function () {
-        it('test fromV3 case 1', async function () {
-            const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2019-08-08T02:54:38.611Z--a0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38'));
-            const key = await fromV3(content, 'password');
-            assert.strictEqual(key.address, '0xa0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38');
-        });
+        // it('test fromV3 case 1', async function () {
+        //     const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2019-08-08T02:54:38.611Z--a0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38'));
+        //     const key = await fromV3(content, 'password');
+        //     assert.strictEqual(key.address, '0xa0014115968c43a785fd1aeeafdb8999c8415fd386aa4e518829b57d4b375b38');
+        // });
         it('test fromV3 case 2', async function () {
             this.timeout(10000);
 
