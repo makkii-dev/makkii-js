@@ -67,9 +67,9 @@ function initApi(support_coin_lists, isTestNet, customServerConfig) {
     return COINS;
 }
 
-export function client (support_coin_lists, isTestNet, _remoteApi) {
-    const COINS = initApi(support_coin_lists, isTestNet);
-    let remoteApi = _remoteApi || 'prod';
+export function client (support_coin_lists, isTestNet, customServerConfig) {
+    const COINS = initApi(support_coin_lists, isTestNet, customServerConfig);
+    let remoteApi =  'prod'; // default is prod
     function setCoinNetwork(coinType, network){
         console.warn('setCoinNetWork are dangerous');
         if(COINS[coinType]){
@@ -80,6 +80,7 @@ export function client (support_coin_lists, isTestNet, _remoteApi) {
     }
 
     function setRemoteApi(network) {
+        console.warn('setRemoteApi are dangerous');
         remoteApi = network;
         setCurrentServer(network)
     }

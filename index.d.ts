@@ -2,8 +2,17 @@ import BigNumber from "bignumber.js";
 declare namespace Api {
 
     interface client {
+        /**
+         * set client remote api
+         * @param network (qa or prod)
+         */
         setRemoteApi(network:RemoteApi);
 
+        /**
+         * set single coin network
+         * @param coinType
+         * @param network (mainnet or testnet)
+         */
         setCoinNetwork(coinType: string, network?: string);
 
         getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string
@@ -43,8 +52,8 @@ declare namespace Api {
         searchTokens(coinType: string, keyword: string): Promise<any>;
     }
     enum RemoteApi {
-        'dev',
-        'prod'
+        qa='qa',
+        prod='prod'
     }
     interface Sender {
         address: string,
