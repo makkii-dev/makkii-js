@@ -15,6 +15,12 @@ declare namespace Api {
          */
         setCoinNetwork(coinType: string, network?: string);
 
+        /**
+         * cover remote api
+         * @param customServerConfig see: 'coins/server.json'
+         */
+        coverRemoteApi(customServerConfig:any);
+
         getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string
 
         getBlockByNumber(coinType: string, blockNumber: number): Promise<any>;

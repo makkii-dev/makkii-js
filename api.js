@@ -70,6 +70,10 @@ function initApi(support_coin_lists, isTestNet, customServerConfig) {
 export function client (support_coin_lists, isTestNet, customServerConfig) {
     const COINS = initApi(support_coin_lists, isTestNet, customServerConfig);
     let remoteApi =  'prod'; // default is prod
+    function coverRemoteApi(customServerConfig) {
+        customConfig(customServerConfig)
+    }
+
     function setCoinNetwork(coinType, network){
         console.warn('setCoinNetWork are dangerous');
         if(COINS[coinType]){
@@ -276,5 +280,6 @@ export function client (support_coin_lists, isTestNet, customServerConfig) {
         fetchAccountTokenBalance,
         getTopTokens,
         searchTokens,
+        coverRemoteApi,
     }
 }
