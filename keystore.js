@@ -3,6 +3,7 @@ import btckeystore from './coins/btc+ltc/keystore';
 import ethkeystore from './coins/eth/keystore';
 import tronkeystore from './coins/tron/keystore';
 import * as bip39 from "bip39";
+import {getWalletStatus} from "./coins/btc+ltc/keystore/ledger";
 
 function initKeystore(support_coin_lists,isTestNet){
     let COINS = {};
@@ -237,6 +238,18 @@ export function client (support_coin_lists, isTestNet) {
         return Error(`not support coin: ${coinType}`);
     };
 
+    const getLedgerStatus = (coinType) => {
+        const coin = COINS[coinType.toUpperCase()];
+        if (coin.keystore.initWallet !== undefined) {
+            try {
+                return coin.keystore.getWalletStatus();
+            }catch (e) {
+                throw e;
+            }
+        }
+        return Error(`not support coin: ${coinType}`);
+    };
+
     return {
         signTransaction,
         getKey,
@@ -250,6 +263,7 @@ export function client (support_coin_lists, isTestNet) {
         signByLedger,
         recoverFromKeystore,
         setLedgerTransport,
-        validatePrivateKey
+        validatePrivateKey,
+        getLedgerStatus
     }
 }

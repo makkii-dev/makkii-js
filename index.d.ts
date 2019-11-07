@@ -114,6 +114,8 @@ declare namespace Keystore {
         setLedgerTransport(coinType: string, transport: any): void,
 
         validatePrivateKey(privateKey: string|Buffer, coinType:string):boolean
+
+        getLedgerStatus(coinType:string):boolean
     }
 
     interface AionTransaction extends EthTransaction{
