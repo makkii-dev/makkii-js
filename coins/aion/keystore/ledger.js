@@ -1,21 +1,17 @@
-const {AionApp} = require('lib-hw-ledger-js');
+import {AionApp} from 'lib-hw-ledger-js'
 let wallet =  {};
-if(global.platform && global.platform === 'mobile'){
-    try{
-        wallet = require('react-native-aion-hw-wallet').default;
-    }catch (e) {
-        wallet = {}
-    }
-}
+let isConnect = false;
 const initWallet = (transport) => {
-    if(global.platform && global.platform === 'mobile'){
-        throw Error('current platform not support')
-    }else{
-        wallet = new AionApp(transport);
-    }
+    transport.on('disconnect',()=>{
+        isConnect = false
+    });
+    wallet = new AionApp(transport);
 };
 
+const getWalletStatus = ()=>isConnect;
+
 const signByLedger = (index, sender, msg) => {
+    msg = Buffer.isBuffer(msg)? msg: Buffer.from(msg);
     return new Promise((resolve, reject) => {
         try {
             wallet.getAccount(parseInt(index)).then(
@@ -56,5 +52,6 @@ const getKeyByLedger = async (index) => {
 export {
     signByLedger,
     getKeyByLedger,
-    initWallet
+    initWallet,
+    getWalletStatus
 }
