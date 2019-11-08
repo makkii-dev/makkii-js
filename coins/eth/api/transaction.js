@@ -153,24 +153,29 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
             );
         });
     } else {
-        const url = `${explorer_api["url"]}/getAddressTransactions/${address}?apiKey=${ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}`;
+        const url = `${explorer_api["url"]}/getAddressTransactions/${address}?apiKey=${ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
         console.log(`[eth http req] get transactions by address: ${url}`);
         return new Promise((resolve, reject) => {
             HttpClient.get(url, false).then(
                 res => {
-                    console.log('[http resp]', res.data);
-                    const txs = {};
-                    res.data.forEach(t => {
-                       const tx = {};
-                       tx.hash = t.hash;
-                       tx.timestamp = t.timestamp * 1000;
-                       tx.from = t.from;
-                       tx.to = t.to;
-                       tx.value = BigNumber(t.value);
-                       tx.status = t.success? "CONFIRMED": 'FAILED';
-                       txs[tx.hash] = tx;
-                    });
-                    resolve(txs);
+                    if (res.error) {
+                        console.log('[http resp] err: ', res.error);
+                        reject(res.error);
+                    } else {
+                        console.log('[http resp]', res.data);
+                        const txs = {};
+                        res.data.forEach(t => {
+                            const tx = {};
+                            tx.hash = t.hash;
+                            tx.timestamp = t.timestamp * 1000;
+                            tx.from = t.from;
+                            tx.to = t.to;
+                            tx.value = BigNumber(t.value);
+                            tx.status = t.success ? "CONFIRMED" : 'FAILED';
+                            txs[tx.hash] = tx;
+                        });
+                        resolve(txs);
+                    }
                 },
                 err => {
                     console.log('[http resp] err: ', err);
@@ -186,7 +191,7 @@ function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
     if (explorer["provider"] === "etherscan") {
         return `${explorer["url"]}/${txHash}`
     } else {
-        reutrn `${explorer["url"]}/${txHash}`;
+        return `${explorer["url"]}/${txHash}`;
     }
 }
 
