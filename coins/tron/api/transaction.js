@@ -137,7 +137,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
     });
 }
 
-function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainnet') {
+function getTransactionsByAddress(address, page = 0, size = 25, timestamp = undefined, network = 'mainnet') {
     const url = `${networks[network].explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
     console.log(`[tron req] get tron txs by address: ${url}`);
     return new Promise((resolve, reject) => {

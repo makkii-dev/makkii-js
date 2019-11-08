@@ -76,7 +76,7 @@ const getTransactionStatus = async (txId, network='BTC') => {
 };
 
 
-const getTransactionsByAddress = async (address, page, size, network = 'BTC')=> {
+const getTransactionsByAddress = async (address, page, size, timestamp = undefined, network = 'BTC')=> {
     const url = `${networks[network].jsonrpc}/txs/?address=${address}`;
     console.log(`[${network} getTransactionsByAddress req]: ${url}` );
     try {

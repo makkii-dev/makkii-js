@@ -5,7 +5,9 @@ import {sendSignedTransaction, getTransactionCount,getTransactionReceipt} from "
 import {ERC20ABI} from "./constants";
 import {HttpClient} from "lib-common-util-js";
 import { config } from '../../serverConfig';
-const {eth: {networks,etherscanApikey}} = config.coins;
+
+const {eth: {networks,etherscanApikey, ethplorerApiKey}} = config.coins;
+
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet', shouldBroadCast) {
     return new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
@@ -119,39 +121,73 @@ function sendTransaction(account, symbol, to, value, extraParams, data, network 
     return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast);
 }
 
-function getTransactionsByAddress(address, page, size, network = 'mainnet') {
-    const url = `${networks[network].explorer_api}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
-    console.log(`[eth http req] get transactions by address: ${url}`);
-    return new Promise((resolve, reject) => {
-        HttpClient.get(url, false).then(
-            res => {
-                console.log('[http resp]', res.data);
-                const { result } = res.data;
-                const txs = {};
-                result.forEach(t => {
-                    const tx = {};
-                    tx.hash = t.hash;
-                    tx.timestamp = parseInt(t.timeStamp) * 1000;
-                    tx.from = t.from;
-                    tx.to = t.to;
-                    tx.value = BigNumber(t.value, 10).shiftedBy(-18).toNumber();
-                    tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
-                    tx.blockNumber = parseInt(t.blockNumber);
-                    tx.fee = t.gasPrice * t.gasUsed * 10**-18;
-                    txs[tx.hash] = tx;
-                });
-                resolve(txs);
-            },
-            err => {
-                console.log('[http resp] err: ', err);
-                reject(err);
-            },
-        );
-    });
+function getTransactionsByAddress(address, page, size, timestamp, network = 'mainnet') {
+    let explorer_api = networks[network].explorer_api;
+    if (explorer_api["provider"] === "etherscan") {
+        const url = `${explorer_api["url"]}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
+        console.log(`[eth http req] get transactions by address: ${url}`);
+        return new Promise((resolve, reject) => {
+            HttpClient.get(url, false).then(
+                res => {
+                    console.log('[http resp]', res.data);
+                    const { result } = res.data;
+                    const txs = {};
+                    result.forEach(t => {
+                        const tx = {};
+                        tx.hash = t.hash;
+                        tx.timestamp = parseInt(t.timeStamp) * 1000;
+                        tx.from = t.from;
+                        tx.to = t.to;
+                        tx.value = BigNumber(t.value, 10).shiftedBy(-18).toNumber();
+                        tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
+                        tx.blockNumber = parseInt(t.blockNumber);
+                        tx.fee = t.gasPrice * t.gasUsed * 10**-18;
+                        txs[tx.hash] = tx;
+                    });
+                    resolve(txs);
+                },
+                err => {
+                    console.log('[http resp] err: ', err);
+                    reject(err);
+                },
+            );
+        });
+    } else {
+        const url = `${explorer_api["url"]}/getAddressTransactions/${address}?apiKey=${ethplorerApiKey}&limit=${page}&timestamp=${timestamp / 1000 - 1}`;
+        console.log(`[eth http req] get transactions by address: ${url}`);
+        return new Promise((resolve, reject) => {
+            HttpClient.get(url, false).then(
+                res => {
+                    console.log('[http resp', res);
+                    const txs = {};
+                    result.forEach(t => {
+                       const tx = {};
+                       tx.hash = t.hash;
+                       tx.timestamp = t.timestamp * 1000;
+                       tx.from = t.from;
+                       tx.to = t.to;
+                       tx.value = BigNumber(t.value);
+                       tx.status = t.success? "CONFIRMED": 'FAILED';
+                       txs[tx.hash] = tx;
+                    });
+                    resolve(txs);
+                },
+                err => {
+                    console.log('[http resp] err: ', err);
+                    reject(err);
+                },
+            );
+        });
+    }
 }
 
 function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    return `${networks[network].explorer}/${txHash}`
+    let explorer = networks[network].explorer;
+    if (explorer["provider"] === "etherscan") {
+        return `${explorer["url"]}/${txHash}`
+    } else {
+        reutrn `${explorer["url"]}/${txHash}`;
+    }
 }
 
 function getTransactionStatus(txHash, network = 'mainnet') {

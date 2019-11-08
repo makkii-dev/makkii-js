@@ -57,7 +57,7 @@ Get token icon url. Currently only support ERC-20 token icon.
 * getTransactionExplorerUrl(coinType, tx_hash)
 
 Return explorer url of a transaction, such as https://etherscan.io/tx/0xeb522116199db6d24c79749f26520523d1cb0ee324018ae307c407335ed61b81
-* getTransactionsByAddress(coinType, address, page, size)
+* getTransactionsByAddress(coinType, address, page, size, timestamp)
 
 Get transaction list by page for the given account
 * getBlockNumber(coinType)
@@ -72,7 +72,7 @@ Get balance of the given account
 * formatAddress1Line(coinType, address)
 * validateBalanceSufficiency(account, symbol, amount, extraParams)
 * fetchTokenDetail(coinType, contractAddress, network)
-* fetchAccountTokenTransferHistory(coinType, address, symbolAddress, network, page, size)
+* fetchAccountTokenTransferHistory(coinType, address, symbolAddress, network, page, size, timestamp)
 * fetchAccountTokens(coinType, address, network)
 * fetchAccountTokenBalance(coinType, contractAddress, address, network)
 * getTopTokens(coinType, topN)

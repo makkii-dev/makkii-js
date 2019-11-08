@@ -131,7 +131,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = '
     });
 }
 
-function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainnet') {
+function getTransactionsByAddress(address, page = 0, size = 25, timestamp = undefined, network = 'mainnet') {
     const url = `${networks[network].explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
     console.log(`[aion req] get aion transactions by address: ${url}`);
     return new Promise((resolve, reject) => {

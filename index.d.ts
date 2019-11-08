@@ -12,7 +12,7 @@ declare namespace Api {
 
         getTransactionExplorerUrl(coinType: string, hash: string): string;
 
-        getTransactionsByAddress(coinType: string, address: string, page: number, size: number): Promise<any>;
+        getTransactionsByAddress(coinType: string, address: string, page: number, size: number, timestamp: number): Promise<any>;
 
         getBlockNumber(conType: string): Promise<any>;
 
@@ -32,7 +32,7 @@ declare namespace Api {
 
         fetchTokenDetail(coinType: string, contractAddress: string, network?: string): Promise<any>;
 
-        fetchAccountTokenTransferHistory(coinType: string, address: string, symbolAddress: string, network?: string, page?: number, size?: number): Promise<any>
+        fetchAccountTokenTransferHistory(coinType: string, address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number): Promise<any>
 
         fetchAccountTokens(coinType: string, address: string, network?: string): Promise<any>;
 

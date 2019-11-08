@@ -8,8 +8,9 @@ import {processRequest} from "./jsonrpc";
 import {hexutil} from "lib-common-util-js";
 import {config} from '../../serverConfig';
 
-const {eth:{networks, etherscanApikey}} = config.coins;
+const {eth:{networks, etherscanApikey, ethplorerApiKey}} = config.coins;
 const {remote} = config.api;
+
 const fetchAccountTokenBalance = (contractAddress, address, network) =>
     new Promise((resolve, reject) => {
         const contract = new Contract(ERC20ABI);
@@ -85,36 +86,62 @@ const fetchTokenDetail = (contractAddress, network) =>
             });
     });
 
-const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page = 0, size = 25) =>
+const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page = 0, size = 25, timestamp) =>
     new Promise((resolve, reject) => {
-        const url = `${networks[network].explorer_api}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
-        console.log(`[eth http req] get token history by address: ${url}`);
-        HttpClient.get(url)
-            .then(res => {
-                const { data } = res;
-                if (data.status === '1') {
+        let explorer_api = networks[network].explorer_api;
+        if (explorer_api["provider"] === "etherscan") {
+            const url = `${explorer_api["url"]}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${etherscanApikey}`;
+            console.log(`[eth http req] get token history by address: ${url}`);
+            HttpClient.get(url)
+                .then(res => {
+                    const {data} = res;
+                    if (data.status === '1') {
+                        const transfers = {};
+                        const {result: txs = []} = data;
+                        txs.forEach(t => {
+                            const tx = {};
+                            tx.hash = t.hash;
+                            tx.timestamp = parseInt(t.timeStamp) * 1000;
+                            tx.from = t.from;
+                            tx.to = t.to;
+                            tx.value = BigNumber(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                            tx.status = 'CONFIRMED';
+                            tx.blockNumber = t.blockNumber;
+                            transfers[tx.hash] = tx;
+                        });
+                        resolve(transfers);
+                    } else {
+                        resolve({});
+                    }
+                })
+                .catch(err => {
+                    console.log('[http resp] err: ', err);
+                    reject(err);
+                });
+        } else {
+            const url = `${explorer_api["url"]}/getAddressHistory/${address}?apiKey=${ethplorerApiKey}&token=${symbolAddress}&type=transfer&limit=${size}&timestamp=${timestamp / 1000 - 1}`;
+            console.log(`[eth http req] get token history by address: ${url}`);
+            HttpClient.get(url)
+                .then(res => {
                     const transfers = {};
-                    const { result: txs = []} = data;
+                    const {operations: txs = []} = res;
                     txs.forEach(t => {
                         const tx = {};
-                        tx.hash = t.hash;
-                        tx.timestamp = parseInt(t.timeStamp) * 1000;
+                        tx.hash = t.transactionHash;
+                        tx.timestamp = t.timeStamp * 1000;
                         tx.from = t.from;
                         tx.to = t.to;
-                        tx.value = BigNumber(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                        tx.value = BigNumber(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
                         tx.status = 'CONFIRMED';
-                        tx.blockNumber = t.blockNumber;
                         transfers[tx.hash] = tx;
                     });
                     resolve(transfers);
-                } else {
-                    resolve({});
-                }
-            })
-            .catch(err => {
-                console.log('[http resp] err: ', err);
-                reject(err);
-            });
+                })
+                .catch(err => {
+                    console.log('[http resp] err: ', err);
+                    reject(err);
+                });
+        }
     });
 
 const fetchAccountTokens = () => Promise.resolve({});

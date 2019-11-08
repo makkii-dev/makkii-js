@@ -108,10 +108,10 @@ export function client (support_coin_lists, isTestNet, _remoteApi) {
         throw new Error(`No getTransactionExplorerUrl impl for coin ${coinType}`);
     }
 
-    function getTransactionsByAddress(coinType, address, page = 0, size = 5) {
+    function getTransactionsByAddress(coinType, address, page = 0, size = 5, timestamp) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.getTransactionsByAddress !== undefined) {
-            return coin.api.getTransactionsByAddress(address, page, size, coin.network);
+            return coin.api.getTransactionsByAddress(address, page, size, timestamp, coin.network);
         }
         throw new Error(`No getTransactionsByAddress impl for coin ${coinType}`);
     }
@@ -208,7 +208,7 @@ export function client (support_coin_lists, isTestNet, _remoteApi) {
         throw new Error(`No fetchTokenDetail impl for coin ${coinType}`);
     }
 
-    function fetchAccountTokenTransferHistory(coinType, address, symbolAddress, network, page = 0, size = 25) {
+    function fetchAccountTokenTransferHistory(coinType, address, symbolAddress, network, page = 0, size = 25, timestamp) {
         const coin = COINS[coinType.toUpperCase()];
         if (coin.api !== undefined && coin.api.fetchAccountTokenTransferHistory !== undefined) {
             return coin.api.fetchAccountTokenTransferHistory(
@@ -217,6 +217,7 @@ export function client (support_coin_lists, isTestNet, _remoteApi) {
                 network || coin.network,
                 page,
                 size,
+                timestamp,
             );
         }
         throw new Error(`No fetchAccountTokenTransferHistory impl for coin ${coinType}`);

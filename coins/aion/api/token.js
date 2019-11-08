@@ -112,7 +112,7 @@ const fetchTokenDetail = (contractAddress, network) =>
             });
     });
 
-function fetchAccountTokenTransferHistory(address, symbolAddress, network, page = 0, size = 25) {
+function fetchAccountTokenTransferHistory(address, symbolAddress, network, page = 0, size = 25, timestamp = undefined) {
     return new Promise((resolve, reject) => {
         const url = `${networks[network].explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
         console.log(`get account token transactions: ${url}`);
