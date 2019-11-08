@@ -158,11 +158,11 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
         return new Promise((resolve, reject) => {
             HttpClient.get(url, false).then(
                 res => {
-                    if (res.error) {
-                        console.log('[http resp] err: ', res.error);
-                        reject(res.error);
+                    console.log('[http resp]', res.data);
+                    if (res.data.error) {
+                        console.log('[http resp] err: ', res.data.error);
+                        reject(res.data.error);
                     } else {
-                        console.log('[http resp]', res.data);
                         const txs = {};
                         res.data.forEach(t => {
                             const tx = {};

@@ -4,13 +4,13 @@
       "networks": {
         "mainnet": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
-          "explorer_api": "https://mainnet-api.theoan.network",
-          "explorer": "https://mainnet.aion.network/#/transaction"
+          "explorer_api": "https://mainnet-api.theoan.com",
+          "explorer": "https://mainnet.theoan.com/#/transaction"
         },
         "mastery": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
-          "explorer_api": "https://mastery-api.theoan.network",
-          "explorer": "https://mastery.aion.network/#/transaction"
+          "explorer_api": "https://mastery-api.theoan.com",
+          "explorer": "https://mastery.theoan.com/#/transaction"
         }
       }
     },
