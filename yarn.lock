@@ -3699,9 +3699,9 @@ lcid@^2.0.0:
     bip39 "^3.0.2"
     querystring "^0.2.0"
 
-"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b":
+"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a":
   version "0.0.1"
-  resolved "https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b"
+  resolved "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a"
   dependencies:
     "@ledgerhq/hw-transport" "^4.68.2"
 
