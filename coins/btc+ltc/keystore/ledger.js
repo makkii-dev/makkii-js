@@ -1,6 +1,6 @@
 import Btc from "@ledgerhq/hw-app-btc";
 import {payments} from "bitcoinjs-lib";
-
+import {networks} from './network';
 let wallet = {};
 let isConnect =  false;
 
@@ -19,10 +19,11 @@ const getKeyByLedger = async (index, network) => {
         purpose 49: for p2sh, prefix: 3
         purpose 84: for bench32, prefix: bc1
     */
+    const network_ = networks[network]
     const path = `m/49'/0'/0'/0/${index}`;
     try {
         const {publicKey} = await wallet.getWalletPublicKey(path);
-        const {address} = payments.p2pkh({pubkey: Buffer.from(publicKey, 'hex'), network: network});
+        const {address} = payments.p2pkh({pubkey: Buffer.from(publicKey, 'hex'), network: network_});
         return {address, index, publicKey};
     }catch (e) {
         throw e;

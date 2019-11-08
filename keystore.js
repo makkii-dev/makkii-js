@@ -194,7 +194,7 @@ export function client (support_coin_lists, isTestNet) {
         const coin = COINS[symbol.toUpperCase()];
         if (coin.keystore.getKeyByLedger !== undefined) {
             try {
-                return await coin.keystore.getKeyByLedger(index);
+                return await coin.keystore.getKeyByLedger(index, coin.network);
             }catch (e) {
                 throw e;
             }
@@ -206,7 +206,7 @@ export function client (support_coin_lists, isTestNet) {
         const coin = COINS[symbol.toUpperCase()];
         if (coin.keystore.signByLedger !== undefined) {
             try {
-                return await coin.keystore.signByLedger(index, sender, msg);
+                return await coin.keystore.signByLedger(index, sender, msg, coin.netowrk);
             }catch (e) {
                 throw e;
             }
