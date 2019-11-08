@@ -158,9 +158,9 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
         return new Promise((resolve, reject) => {
             HttpClient.get(url, false).then(
                 res => {
-                    console.log('[http resp', res);
+                    console.log('[http resp]', res.data);
                     const txs = {};
-                    result.forEach(t => {
+                    res.data.forEach(t => {
                        const tx = {};
                        tx.hash = t.hash;
                        tx.timestamp = t.timestamp * 1000;

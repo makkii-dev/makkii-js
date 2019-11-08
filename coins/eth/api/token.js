@@ -124,7 +124,7 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page 
             HttpClient.get(url)
                 .then(res => {
                     const transfers = {};
-                    const {operations: txs = []} = res;
+                    const {operations: txs = []} = res.data;
                     txs.forEach(t => {
                         const tx = {};
                         tx.hash = t.transactionHash;
