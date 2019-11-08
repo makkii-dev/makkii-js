@@ -153,7 +153,7 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
             );
         });
     } else {
-        const url = `${explorer_api["url"]}/getAddressTransactions/${address}?apiKey=${ethplorerApiKey}&limit=${page}&timestamp=${timestamp / 1000 - 1}`;
+        const url = `${explorer_api["url"]}/getAddressTransactions/${address}?apiKey=${ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}`;
         console.log(`[eth http req] get transactions by address: ${url}`);
         return new Promise((resolve, reject) => {
             HttpClient.get(url, false).then(
