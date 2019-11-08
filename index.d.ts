@@ -2,9 +2,24 @@ import BigNumber from "bignumber.js";
 declare namespace Api {
 
     interface client {
+        /**
+         * set client remote api
+         * @param network (qa or prod)
+         */
         setRemoteApi(network:RemoteApi);
 
+        /**
+         * set single coin network
+         * @param coinType
+         * @param network (mainnet or testnet)
+         */
         setCoinNetwork(coinType: string, network?: string);
+
+        /**
+         * cover remote api
+         * @param customServerConfig see: 'coins/server.json'
+         */
+        coverRemoteApi(customServerConfig:any);
 
         getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string
 
@@ -43,21 +58,22 @@ declare namespace Api {
         searchTokens(coinType: string, keyword: string): Promise<any>;
     }
     enum RemoteApi {
-        'dev',
-        'prod'
+        qa='qa',
+        prod='prod'
     }
     interface Sender {
-        address: string;
-        private_key: string;
-        type?: any
-        derivationIndex?: number
+        address: string,
+        private_key: string,
+        compressed?: boolean,
+        type?: any,
+        derivationIndex?: number,
     }
 
     interface Account {
-        address: string;
-        balance: BigNumber | number;
-        symbol?: string;
-        tokens?: any
+        address: string,
+        balance: BigNumber | number,
+        symbol?: string,
+        tokens?: any,
     }
 
     interface ETHParams {
@@ -81,7 +97,9 @@ declare namespace Keystore {
 
         generateMnemonic(): string,
 
-        recoverKeyPairByPrivateKey(priKey: string, coinType: string): Promise<any>,
+        recoverKeyPairByPrivateKey(priKey: string, coinType: string, options?:any): Promise<any>,
+
+        recoverKeyPairByWIF(priKey: string, coinType: string, options?:any): Promise<any>,
 
         validateAddress(address: string, coinType: string): Promise<any>,
 
@@ -122,6 +140,7 @@ declare namespace Keystore {
 
     interface BtcTransaction {
         private_key:string,
+        compressed?:boolean,
         to_address: string,
         change_address: string,
         amount: BigNumber|number,
@@ -167,6 +186,13 @@ export interface CoinType {
     TRON: 195,
     fromCoinSymbol(symbol):number
 }
-export function apiClient(support_coin_lists:Array<string>, isTestNet:boolean):Api.client
+
+/**
+ *
+ * @param support_coin_lists
+ * @param isTestNet
+ * @param customServerConfig see 'coins/server.json'
+ */
+export function apiClient(support_coin_lists:Array<string>, isTestNet:boolean, customServerConfig?: any):Api.client
 export function keystoreClient(support_coin_lists:Array<string>, isTestNet:boolean):Keystore.client
 export function setCurrentServer(server):void

@@ -24,10 +24,11 @@ import { hexutil } from "lib-common-util-js";
  * @returns {Promise<any>} {encoded: hex String}
  */
 export const signTransaction = (transaction, network='BTC')=> new Promise((resolve, reject) => {
-    const {private_key, utxos, amount: amount_, to_address, change_address, byte_fee} = transaction;
+    const {private_key, compressed, utxos, amount: amount_, to_address, change_address, byte_fee} = transaction;
     const mainnet = networks[network];
     try {
-        const keyPair = ECPair.fromPrivateKey(Buffer.from(hexutil.removeLeadingZeroX(private_key), 'hex'), {network: mainnet});
+
+        const  keyPair = ECPair.fromPrivateKey(Buffer.from(hexutil.removeLeadingZeroX(private_key), 'hex'), {network: mainnet, compressed:compressed});
 
         const txb = new TransactionBuilder(mainnet);
         const amount = new BigNumber(amount_);

@@ -123,20 +123,45 @@ export function client (support_coin_lists, isTestNet) {
     /***
      * @param priKey
      * @param coinType
+     * @param options
      * @returns {Promise<any> | Promise<*>}
      */
-    const recoverKeyPairByPrivateKey = (priKey, coinType) => {
+    const recoverKeyPairByPrivateKey = (priKey, coinType, options) => {
         const coin = COINS[coinType.toUpperCase()];
         return new Promise(((resolve, reject) => {
             try {
-                let keyPair = coin.keystore.keyPair(priKey, {network: coin.network});
+                let keyPair = coin.keystore.keyPair(priKey, {network: coin.network, ...options});
                 if (keyPair !== undefined) {
-                    resolve({private_key: keyPair.privateKey, public_key: keyPair.publicKey, address: keyPair.address})
+                    const {privateKey, publicKey, address, ...reset} = keyPair;
+                    resolve({private_key: privateKey, public_key: publicKey, address, ...reset})
                 } else {
                     reject(`recover privKey failed: not support this coinType ${coinType}`);
                 }
             } catch (e) {
                 reject(`recover privKey failed: not support this coinType ${coinType}`);
+            }
+        }));
+    };
+
+    /***
+     * @param WIF
+     * @param coinType
+     * @param options
+     * @returns {Promise<any> | Promise<*>}
+     */
+    const recoverKeyPairByWIF = (WIF, coinType, options) => {
+        const coin = COINS[coinType.toUpperCase()];
+        return new Promise(((resolve, reject) => {
+            try {
+                let keyPair = coin.keystore.keyPairFromWIF(WIF, {network: coin.network, ...options});
+                if (keyPair !== undefined) {
+                    const {privateKey, publicKey, address, ...reset} = keyPair;
+                    resolve({private_key: privateKey, public_key: publicKey, address, ...reset})
+                } else {
+                    reject(`recover WIF failed: not support this coinType ${coinType}`);
+                }
+            } catch (e) {
+                reject(`recover WIF failed: not support this coinType ${coinType}`);
             }
         }));
     };
@@ -218,6 +243,7 @@ export function client (support_coin_lists, isTestNet) {
         setMnemonic,
         generateMnemonic,
         recoverKeyPairByPrivateKey,
+        recoverKeyPairByWIF,
         validateAddress,
         getKeyFromMnemonic,
         getKeyByLedger,

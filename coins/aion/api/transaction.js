@@ -39,7 +39,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, sho
                 keystore.signTransaction(tx)
                     .then(({encoded}) => {
                         if(shouldBroadCast) {
-                            sendSignedTransaction(encoded, network)
+                            sendSignedTransaction('0x'+encoded, network)
                                 .then(hash => {
                                     const pendingTx = {
                                         hash,
