@@ -160,7 +160,6 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
                 res => {
                     console.log('[http resp]', res.data);
                     if (res.data.error) {
-                        console.log('[http resp] err: ', res.data.error);
                         reject(res.data.error);
                     } else {
                         const txs = {};
