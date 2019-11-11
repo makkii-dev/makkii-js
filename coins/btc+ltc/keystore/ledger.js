@@ -1,6 +1,7 @@
 import Btc from "@ledgerhq/hw-app-btc";
 import {payments} from "bitcoinjs-lib";
 import {networks} from './network';
+
 let wallet = {};
 let isConnect =  false;
 
@@ -22,19 +23,32 @@ const getKeyByLedger = async (index, network) => {
     const network_ = networks[network]
     const path = `m/49'/0'/0'/0/${index}`;
     try {
-        const {publicKey} = await wallet.getWalletPublicKey(path);
+        let {publicKey} = await wallet.getWalletPublicKey(path);
+        publicKey = getCompressPublicKey(publicKey);
         const {address} = payments.p2pkh({pubkey: Buffer.from(publicKey, 'hex'), network: network_});
+        console.log('publicKey=>', publicKey);
         return {address, index, publicKey};
     }catch (e) {
         throw e;
     }
 };
 
+
+function getCompressPublicKey(publicKey) {
+    let compressedKeyIndex;
+    if (parseInt(publicKey.substring(128, 130), 16) % 2 !== 0) {
+        compressedKeyIndex = "03";
+    } else {
+        compressedKeyIndex = "02";
+    }
+    return compressedKeyIndex + publicKey.substring(2, 66);
+}
 const signByLedger = async (index, sender, msg, network) => {
     msg = Buffer.isBuffer(msg)? msg: Buffer.from(msg);
     let address;
     try{
-        address = await getKeyByLedger(index, network).address;
+        const ret  = await getKeyByLedger(index, network);
+        address = ret.address;
     }catch (e) {
         throw e;
     }
@@ -43,17 +57,16 @@ const signByLedger = async (index, sender, msg, network) => {
     const path = `m/49'/0'/0'/0/${index}`;
     let result;
     try{
-        result = await wallet.signMessageNew_async(path,msg.toString('hex'));
+        result = await wallet.signMessageNew(path,msg.toString('hex'));
     }catch (e) {
         throw e;
     }
-    const v = result['v'] + 27 + 4;
-    const signature = Buffer.from(v.toString(16) + result['r'] + result['s'], 'hex').toString('base64');
-    return {signature}
+    return {signature: result.r+result.s}
 };
 
 
 export {
+    wallet,
     initWallet,
     getKeyByLedger,
     signByLedger,

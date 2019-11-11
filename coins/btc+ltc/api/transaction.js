@@ -5,11 +5,20 @@ import {config} from '../../serverConfig';
 import {estimateFeeBTC, estimateFeeLTC} from "../keystore/transaction";
 const {btc:{networks}} = config.coins;
 
-const sendTransaction = (account, symbol, to, value, extraParams, data, network = 'BTC', shouldBroadCast=true) =>
+const sendTransaction = (account, symbol, to, value, _extraParams, data, network = 'BTC', shouldBroadCast=true) =>
     new Promise((resolve, reject) => {
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getUnspentTx(account.address, network)
             .then(utxos => {
+                const {type,derivationIndex} =account;
+                let extra_param = {type};
+                if(type === '[ledger]'){
+                    extra_param = {
+                        ...extra_param,
+                        derivationIndex,
+                        sender: account.address,
+                    }
+                }
                 const tx = {
                     amount: value.shiftedBy(8).toNumber(),
                     change_address: account.address,
@@ -17,7 +26,7 @@ const sendTransaction = (account, symbol, to, value, extraParams, data, network 
                     byte_fee: 10,
                     private_key: account.private_key,
                     compressed: account.compressed,
-                    ...extraParams,
+                    extra_param,
                     utxos,
                 };
                 const valueIn = utxos.reduce((valueIn, el)=>{

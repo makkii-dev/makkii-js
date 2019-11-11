@@ -21,7 +21,7 @@ const signByLedger = (index, sender, msg) => {
                     }
                     wallet.sign(parseInt(index), msg).then(
                         res => {
-                            resolve({signature: res, publicKey: account.publicKey})
+                            resolve({signature: res, publicKey: account.pubKey})
                         },
                         err => {
                             console.log(`sign tx error: ${err}`);

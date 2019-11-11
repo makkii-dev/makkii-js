@@ -1,9 +1,9 @@
-import {ECPair} from "bitcoinjs-lib";
-import {TransactionBuilder} from './transaction_builder';
+import {ECPair, TransactionBuilder} from "bitcoinjs-lib";
 import BigNumber from "bignumber.js";
 import {networks} from './network';
 import {hexutil} from "lib-common-util-js";
-import {getKeyByLedger, signByLedger} from "./ledger";
+import {getKeyByLedger, wallet} from "./ledger";
+import {getRawTx} from "../api/jsonrpc";
 
 /***
  *
@@ -30,24 +30,54 @@ import {getKeyByLedger, signByLedger} from "./ledger";
 export const signTransaction = async  (transaction, network='BTC') => {
     const {private_key, compressed, utxos, amount: amount_, to_address, change_address, byte_fee, extra_param} = transaction;
     const mainnet = networks[network];
-    let keyPair;
+    console.log('signTransaction param:', transaction, network);
+    const amount = new BigNumber(amount_);
+    const fee = network === 'BTC' || network === 'BTCTEST' ? estimateFeeBTC(utxos.length, 2, byte_fee || 10) : estimateFeeLTC;
+    let balance = new BigNumber(0);
+    for (let ip = 0; ip < utxos.length; ip++) {
+        balance = balance.plus(new BigNumber(utxos[ip].amount));
+    }
+    if (balance.isLessThan(amount.plus(fee))) {
+        throw new Error("error_insufficient_amount");
+    }
+    const needChange = balance.isGreaterThan(amount.plus(fee));
+    const txb = new TransactionBuilder(mainnet);
+    for (let ip = 0; ip < utxos.length; ip++) {
+        txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
+    }
+    txb.addOutput(to_address, amount.toNumber());
+    if (needChange) {
+        txb.addOutput(change_address, balance.minus(amount).minus(fee).toNumber())
+    }
     if(extra_param&&extra_param.type === '[ledger]'){
         const {sender, derivationIndex} = extra_param;
         // account type is ledger
-        try{
-            const {publicKey} = await getKeyByLedger(derivationIndex, mainnet);
-            keyPair = {
-                publicKey: Buffer.from(publicKey, 'hex'),
-                network: mainnet,
-                sign: async (msg, lowR)=>{
-                    return await signByLedger(derivationIndex, sender, msg, mainnet);
-                }
-            }
-        }catch (e) {
-            throw e;
+        const {address, publicKey} = await  getKeyByLedger(derivationIndex, network);
+        if(sender !== address)
+            throw new Error('ledger.wrong_device');
+
+        const tx =  txb.buildIncomplete();
+        let inputs = [];
+        let paths = [];
+        for (let ip = 0; ip < utxos.length; ip++) {
+            const preTxhex =  await getRawTx(utxos[ip].hash, network);
+            const preTx = wallet.splitTransaction(preTxhex);
+            inputs.push(
+                [
+                    preTx,
+                    utxos[ip].index,
+                ]
+            );
+            paths.push(`m/49'/0'/0'/0/${derivationIndex}`);
         }
+        const tx2 = wallet.splitTransaction(tx.toHex());
+        const outputScriptHex = wallet.serializeTransactionOutputs(tx2).toString('hex');
+        const encoded = await wallet.createPaymentTransactionNew(inputs,paths, undefined, outputScriptHex, 0, 1, false);
+        console.log('signedTransaction=>',encoded);
+        return {encoded}
 
     }else {
+        let keyPair;
         try {
             keyPair = ECPair.fromPrivateKey(Buffer.from(hexutil.removeLeadingZeroX(private_key), 'hex'), {
                 network: mainnet,
@@ -56,31 +86,14 @@ export const signTransaction = async  (transaction, network='BTC') => {
         } catch (e) {
             throw e;
         }
-    }
 
-    const txb = new TransactionBuilder(mainnet);
-    const amount = new BigNumber(amount_);
 
-    const fee = network === 'BTC' || network === 'BTCTEST' ? estimateFeeBTC(utxos.length, 2, byte_fee || 10) : estimateFeeLTC;
-
-    let balance = new BigNumber(0);
-    for (let ip = 0; ip < utxos.length; ip++) {
-        balance = balance.plus(new BigNumber(utxos[ip].amount));
-        txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
+        for (let ip = 0; ip < utxos.length; ip++) {
+            txb.sign(ip, keyPair);
+        }
+        const tx = txb.build();
+        return {encoded: tx.toHex()}
     }
-    if (balance.isLessThan(amount.plus(fee))) {
-        throw new Error("error_insufficient_amount");
-    }
-    const needChange = balance.isGreaterThan(amount.plus(fee));
-    txb.addOutput(to_address, amount.toNumber());
-    if (needChange) {
-        txb.addOutput(change_address, balance.minus(amount).minus(fee).toNumber())
-    }
-    for (let ip = 0; ip < utxos.length; ip++) {
-        await txb.async_sign(ip, keyPair);
-    }
-    const tx = txb.build();
-    return {encoded: tx.toHex()}
 
 };
 
