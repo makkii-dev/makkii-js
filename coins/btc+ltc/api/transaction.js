@@ -40,7 +40,7 @@ const sendTransaction = (account, symbol, to, value, _extraParams, data, network
                             {addr:to, value:value.toNumber()},
                         ];
                         if(valueIn.toNumber()> value.shiftedBy(8).toNumber() + fee.toNumber()){
-                            vout.push({addr:account.address, value:valueIn.minus(value.shiftedBy(8)).minus(fee).toNumber()});
+                            vout.push({addr:account.address, value:valueIn.minus(value.shiftedBy(8)).minus(fee).shiftedBy(-8).toNumber()});
                         }
                         const txObj = {
                             from: [{addr:account.address, value:valueIn.shiftedBy(-8).toNumber()}],
