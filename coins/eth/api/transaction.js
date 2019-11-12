@@ -13,6 +13,15 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
         value = BigNumber.isBigNumber(value)? value: BigNumber(value);
         getTransactionCount(account.address, 'latest', network)
             .then(count => {
+                const {type,derivationIndex} =account;
+                let extra_param = {type};
+                if(type === '[ledger]'){
+                    extra_param = {
+                        ...extra_param,
+                        derivationIndex,
+                        sender: account.address,
+                    }
+                }
                 let tx = {
                     network,
                     amount: value.shiftedBy(18).toNumber(),
@@ -21,19 +30,17 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'm
                     gasPrice: gasPrice,
                     to: to,
                     private_key: account.private_key,
+                    extra_param,
                 };
                 if (data !== undefined) {
                     tx = { ...tx, data };
                 }
                 keystore.signTransaction(tx)
                     .then(res => {
-                        const { v, r, s, encoded } = res;
-                        console.log('sign result:');
-                        console.log(`v:${v},r=${r},s=${s}`);
-                        const encodedTx = encoded;
-                        console.log('encoded keystore tx => ', encodedTx);
+                        const { encoded } = res;
+                        console.log('encoded keystore tx => ', encoded);
                         if(shouldBroadCast) {
-                            sendSignedTransaction(encodedTx, network)
+                            sendSignedTransaction(encoded, network)
                                 .then(hash => {
                                     const pendingTx = {
                                         hash,

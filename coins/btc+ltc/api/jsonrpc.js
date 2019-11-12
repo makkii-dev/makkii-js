@@ -38,6 +38,18 @@ const getUnspentTx = async (address, network = 'BTC') => {
     }
 };
 
+const getRawTx = async (txhash, network ='BTC') => {
+    const url = `${networks[network].jsonrpc}/rawtx/${txhash}`;
+    console.log(`[${network} getRawTx req]: ${url}` );
+    try{
+        const {data={}} = await HttpClient.get(url);
+        return data.rawtx;
+    }catch (e) {
+        throw Error(`[${network} getRawTx error]: ${e}`);
+    }
+};
+
+
 const broadcastTransaction = async (encoded, network) => {
     const url = `${networks[network].broadcast}`;
     console.log(`[${network} broadcastTransaction req]: ${url}` );
@@ -175,5 +187,6 @@ export {
     getBalance,
     getTransactionStatus,
     getTransactionsByAddress,
-    getUnspentTx
+    getUnspentTx,
+    getRawTx
 }

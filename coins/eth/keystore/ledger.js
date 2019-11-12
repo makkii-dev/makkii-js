@@ -1,27 +1,37 @@
-import {AionApp} from 'lib-hw-ledger-js'
-let wallet =  {};
+import Eth from '@ledgerhq/hw-app-eth';
+import {AionApp} from "lib-hw-ledger-js";
+let wallet = {};
 let isConnect = false;
-const initWallet = (transport) => {
+
+const initWallet = transport => {
     transport.on('disconnect',()=>{
         isConnect = false
     });
-    wallet = new AionApp(transport);
+    wallet = new Eth(transport);
 };
 
-const getWalletStatus = ()=>isConnect;
+const getWalletStatus = () => isConnect;
+
 
 const signByLedger = (index, sender, msg) => {
     msg = Buffer.isBuffer(msg)? msg: Buffer.from(msg);
+    const path = `44'/60'/0'/0/${index}`;
     return new Promise((resolve, reject) => {
         try {
-            wallet.getAccount(parseInt(index)).then(
+            wallet.getAddress(path).then(
                 account => {
                     if (account.address !== sender) {
                         reject(new Error('error.wrong_device'));
                     }
-                    wallet.sign(parseInt(index), msg).then(
-                        res => {
-                            resolve({signature: res, publicKey: account.pubKey})
+                    wallet.signPersonalMessage(path, msg.toString('hex')).then(
+                        result => {
+                            let v = result['v'] - 27;
+                            v = v.toString(16);
+                            if (v.length < 2) {
+                                v = "0" + v;
+                            }
+                            const signature = result['r'] + result['s'] + v;
+                            resolve({signature, publicKey: account.publicKey})
                         },
                         err => {
                             console.log(`sign tx error: ${err}`);
@@ -40,16 +50,19 @@ const signByLedger = (index, sender, msg) => {
     });
 };
 
+
 const getKeyByLedger = async (index) => {
     try {
-        const {address} = await wallet.getAccount(index);
-        return {address, index};
+        const path = `44'/60'/0'/0/${index}`;
+        const {address, publicKey} = await wallet.getAddress(path, false);
+        return {address, index, publicKey};
     }catch (e) {
         throw e;
     }
 };
 
 export {
+    wallet,
     signByLedger,
     getKeyByLedger,
     initWallet,

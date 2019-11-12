@@ -2,7 +2,7 @@ import {getKeyFromMnemonic} from './hdkey';
 import {keyPair, validatePrivateKey} from "./keyPair";
 import {validateAddress} from "./address";
 import {signTransaction} from './transaction';
-import {getKeyByLedger, initWallet} from "./ledger";
+import {getKeyByLedger, initWallet, getWalletStatus} from "./ledger";
 import {fromV3, toV3} from "./keyfile";
 
 export default {
@@ -14,5 +14,6 @@ export default {
     fromV3,
     toV3,
     initWallet,
-    validatePrivateKey
+    validatePrivateKey,
+    getWalletStatus
 }

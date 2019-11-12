@@ -2,10 +2,15 @@ import {keyPair, keyPairFromWIF} from "./keypair";
 import {validateAddress} from "./address";
 import {signTransaction} from "./transaction";
 import {getKeyFromMnemonic} from './hdkey'
+import {initWallet, getKeyByLedger, getWalletStatus} from "./ledger";
+
 export default  {
     keyPair,
     validateAddress,
     signTransaction,
     getKeyFromMnemonic,
-    keyPairFromWIF
+    keyPairFromWIF,
+    initWallet,
+    getKeyByLedger,
+    getWalletStatus,
 };
