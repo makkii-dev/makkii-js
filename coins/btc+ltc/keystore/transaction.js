@@ -54,7 +54,7 @@ export const signTransaction = async  (transaction, network='BTC') => {
         const {address, publicKey} = await  getKeyByLedger(derivationIndex, network);
         if(sender !== address)
             throw new Error('ledger.wrong_device');
-
+        const coinType = network.startsWith('BTC') ? 0 : 2;
         const tx =  txb.buildIncomplete();
         let inputs = [];
         let paths = [];
@@ -67,12 +67,11 @@ export const signTransaction = async  (transaction, network='BTC') => {
                     utxos[ip].index,
                 ]
             );
-            paths.push(`m/49'/0'/0'/0/${derivationIndex}`);
+            paths.push(`m/49'/${coinType}'/0'/0/${derivationIndex}`);
         }
         const tx2 = wallet.splitTransaction(tx.toHex());
         const outputScriptHex = wallet.serializeTransactionOutputs(tx2).toString('hex');
         const encoded = await wallet.createPaymentTransactionNew(inputs,paths, undefined, outputScriptHex, 0, 1, false);
-        console.log('signedTransaction=>',encoded);
         return {encoded}
 
     }else {

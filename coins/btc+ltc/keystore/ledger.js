@@ -20,8 +20,9 @@ const getKeyByLedger = async (index, network) => {
         purpose 49: for p2sh, prefix: 3
         purpose 84: for bench32, prefix: bc1
     */
-    const network_ = networks[network]
-    const path = `m/49'/0'/0'/0/${index}`;
+    const coinType = network.startsWith('BTC') ? 0 : 2;
+    const network_ = networks[network];
+    const path = `m/49'/${coinType}'/0'/0/${index}`;
     try {
         let {publicKey} = await wallet.getWalletPublicKey(path);
         publicKey = getCompressPublicKey(publicKey);
@@ -53,7 +54,8 @@ const signByLedger = async (index, sender, msg, network) => {
     }
     if(address!==sender)
         throw new Error('error.wrong_device');
-    const path = `m/49'/0'/0'/0/${index}`;
+    const coinType = network.startsWith('BTC') ? 0 : 2;
+    const path = `m/49'/${coinType}'/0'/0/${index}`;
     let result;
     try{
         result = await wallet.signMessageNew(path,msg.toString('hex'));
