@@ -30,7 +30,6 @@ import {getRawTx} from "../api/jsonrpc";
 export const signTransaction = async  (transaction, network='BTC') => {
     const {private_key, compressed, utxos, amount: amount_, to_address, change_address, byte_fee, extra_param} = transaction;
     const mainnet = networks[network];
-    console.log('signTransaction param:', transaction, network);
     const amount = new BigNumber(amount_);
     const fee = network === 'BTC' || network === 'BTCTEST' ? estimateFeeBTC(utxos.length, 2, byte_fee || 10) : estimateFeeLTC;
     let balance = new BigNumber(0);

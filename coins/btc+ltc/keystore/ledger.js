@@ -26,7 +26,6 @@ const getKeyByLedger = async (index, network) => {
         let {publicKey} = await wallet.getWalletPublicKey(path);
         publicKey = getCompressPublicKey(publicKey);
         const {address} = payments.p2pkh({pubkey: Buffer.from(publicKey, 'hex'), network: network_});
-        console.log('publicKey=>', publicKey);
         return {address, index, publicKey};
     }catch (e) {
         throw e;
