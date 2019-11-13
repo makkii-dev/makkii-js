@@ -71,7 +71,7 @@ export function client (support_coin_lists, isTestNet) {
      * @param coinType
      * @returns {Promise<never>|Promise<any>|Promise<*>|Promise<any>}
      */
-    function signTransaction (tx, coinType){
+    function signTransaction (coinType, tx){
         const coin = COINS[coinType.toUpperCase()];
         if(coin.keystore.signTransaction!==undefined){
             return coin.keystore.signTransaction(tx, coin.network);
@@ -122,12 +122,12 @@ export function client (support_coin_lists, isTestNet) {
     });
 
     /***
-     * @param priKey
      * @param coinType
+     * @param priKey
      * @param options
      * @returns {Promise<any> | Promise<*>}
      */
-    const recoverKeyPairByPrivateKey = (priKey, coinType, options) => {
+    const recoverKeyPairByPrivateKey = (coinType, priKey, options) => {
         const coin = COINS[coinType.toUpperCase()];
         return new Promise(((resolve, reject) => {
             try {
@@ -145,12 +145,12 @@ export function client (support_coin_lists, isTestNet) {
     };
 
     /***
-     * @param WIF
      * @param coinType
+     * @param WIF
      * @param options
      * @returns {Promise<any> | Promise<*>}
      */
-    const recoverKeyPairByWIF = (WIF, coinType, options) => {
+    const recoverKeyPairByWIF = (coinType, WIF, options) => {
         const coin = COINS[coinType.toUpperCase()];
         return new Promise(((resolve, reject) => {
             try {
@@ -173,7 +173,7 @@ export function client (support_coin_lists, isTestNet) {
      * @param coinType
      * @returns {Promise<never>|*|Promise|Promise<any>|Promise<*>}
      */
-    const validateAddress = (address, coinType) => {
+    const validateAddress = (coinType, address) => {
         const coin = COINS[coinType.toUpperCase()];
         if(coin.keystore.validateAddress!==undefined){
             return coin.keystore.validateAddress(address, coin.network);
@@ -181,7 +181,7 @@ export function client (support_coin_lists, isTestNet) {
         return Promise.reject(`not support this coinType ${coinType}`);
     };
 
-    const validatePrivateKey = (privateKey, coinType) => {
+    const validatePrivateKey = (coinType, privateKey) => {
         const coin = COINS[coinType.toUpperCase()];
         if(coin.keystore.validatePrivateKey!==undefined){
             return coin.keystore.validatePrivateKey(privateKey);
@@ -190,8 +190,8 @@ export function client (support_coin_lists, isTestNet) {
     };
 
 
-    const getKeyByLedger = async  (symbol, index) => {
-        const coin = COINS[symbol.toUpperCase()];
+    const getKeyByLedger = async  (coinType, index) => {
+        const coin = COINS[coinType.toUpperCase()];
         if (coin.keystore.getKeyByLedger !== undefined) {
             try {
                 return await coin.keystore.getKeyByLedger(index, coin.network);
@@ -199,11 +199,11 @@ export function client (support_coin_lists, isTestNet) {
                 throw e;
             }
         }
-        return Error(`not support coin: ${symbol}`);
+        return Error(`not support coin: ${coinType}`);
     };
 
-    const signByLedger = async  (symbol, index, sender, msg) => {
-        const coin = COINS[symbol.toUpperCase()];
+    const signByLedger = async  (coinType, index, sender, msg) => {
+        const coin = COINS[coinType.toUpperCase()];
         if (coin.keystore.signByLedger !== undefined) {
             try {
                 return await coin.keystore.signByLedger(index, sender, msg, coin.netowrk);
@@ -211,7 +211,7 @@ export function client (support_coin_lists, isTestNet) {
                 throw e;
             }
         }
-        return Error(`not support coin: ${symbol}`);
+        return Error(`not support coin: ${coinType}`);
     };
 
     const recoverFromKeystore = (coinType, input, password) =>{

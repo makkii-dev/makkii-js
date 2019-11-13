@@ -16,7 +16,7 @@ import {getRawTx} from "../api/jsonrpc";
  *    utxos: [
  *        {
  *            amount: number (satoshi)
- *            script: hex String
+ *            scripts: hex String
  *            hash: hex String
  *            index: number
  *        }
