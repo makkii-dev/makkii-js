@@ -1,0 +1,41 @@
+{
+  "name": "@makkii/app-btc",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Chengchcc <chen@aion.network>",
+  "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaion/react-native-makkii-core.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "pretsc":"npm run clean",
+    "tsc": "tsc",
+    "pretest": "npm run tsc",
+    "test": "mocha __tests__/*.js"
+  },
+  "bugs": {
+    "url": "https://github.com/chaion/react-native-makkii-core/issues"
+  },
+  "dependencies": {
+    "@ledgerhq/hw-app-btc": "^4.73.7",
+    "bignumber.js": "^9.0.0",
+    "bip39": "^3.0.2",
+    "bitcoinjs-lib": "^5.1.6",
+    "hdkey": "^1.1.1",
+    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "@makkii/makkii-core",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Chengchcc <chen@aion.network>",
+  "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
+  "license": "ISC",
+  "main": "lib/makkii-core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaion/react-native-makkii-core.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "pretsc": "npm run clean",
+    "tsc": "tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/chaion/react-native-makkii-core/issues"
+  },
+  "dependencies": {
+    "@makkii/app-aion": "^0.0.0",
+    "@makkii/app-btc": "^0.0.0",
+    "@makkii/app-eth": "^0.0.0",
+    "@makkii/app-tron": "^0.0.0",
+    "bignumber.js": "^9.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
+}

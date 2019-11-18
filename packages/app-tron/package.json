@@ -1,0 +1,44 @@
+{
+  "name": "@makkii/app-tron",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Chengchcc <chen@aion.network>",
+  "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
+  "license": "ISC",
+  "main": "lib/app-tron.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaion/react-native-makkii-core.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "pretsc": "npm run clean",
+    "tsc": "tsc",
+    "pretest": "npm run tsc",
+    "test": "mocha __tests__/*.js"
+  },
+  "bugs": {
+    "url": "https://github.com/chaion/react-native-makkii-core/issues"
+  },
+  "dependencies": {
+    "@tronscan/client": "^0.2.48",
+    "bignumber.js": "^9.0.0",
+    "bip39": "^3.0.2",
+    "bs58": "^4.0.1",
+    "bs58check": "^2.1.2",
+    "elliptic": "^6.4.1",
+    "ethereumjs-util": "^6.1.0",
+    "hdkey": "^1.1.1",
+    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
+}

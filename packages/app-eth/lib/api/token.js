@@ -1,0 +1,181 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = require("axios");
+const bignumber_js_1 = require("bignumber.js");
+const web3_eth_contract_1 = require("web3-eth-contract");
+const web3_eth_abi_1 = require("web3-eth-abi");
+const lib_common_util_js_1 = require("lib-common-util-js");
+const constants_1 = require("./constants");
+const jsonrpc_1 = require("./jsonrpc");
+const network_1 = require("../network");
+const fetchAccountTokenBalance = (contractAddress, address, network) => new Promise((resolve, reject) => {
+    const contract = new web3_eth_contract_1.default(constants_1.ERC20ABI);
+    const requestData = jsonrpc_1.processRequest('eth_call', [
+        { to: contractAddress, data: contract.methods.balanceOf(address).encodeABI() },
+        'latest',
+    ]);
+    console.log('[ETH get token balance req]:', network_1.config.networks[network].jsonrpc);
+    lib_common_util_js_1.HttpClient.post(network_1.config.networks[network].jsonrpc, requestData, true)
+        .then(res => {
+        if (res.data.result) {
+            resolve(bignumber_js_1.default(web3_eth_abi_1.default.decodeParameter('uint256', res.data.result)));
+        }
+        else {
+            reject(new Error(`get account Balance failed:${res.data.error}`));
+        }
+    })
+        .catch(e => {
+        reject(new Error(`get account Balance failed:${e}`));
+    });
+});
+exports.fetchAccountTokenBalance = fetchAccountTokenBalance;
+const fetchTokenDetail = (contractAddress, network) => new Promise((resolve, reject) => {
+    const contract = new web3_eth_contract_1.default(constants_1.ERC20ABI);
+    const requestGetSymbol = jsonrpc_1.processRequest('eth_call', [
+        { to: contractAddress, data: contract.methods.symbol().encodeABI() },
+        'latest',
+    ]);
+    const requestGetName = jsonrpc_1.processRequest('eth_call', [
+        { to: contractAddress, data: contract.methods.name().encodeABI() },
+        'latest',
+    ]);
+    const requestGetDecimals = jsonrpc_1.processRequest('eth_call', [
+        { to: contractAddress, data: contract.methods.decimals().encodeABI() },
+        'latest',
+    ]);
+    const url = network_1.config.networks[network].jsonrpc;
+    const promiseSymbol = lib_common_util_js_1.HttpClient.post(url, requestGetSymbol, true);
+    const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
+    const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
+    console.log('[ETH get token detail req]:', network_1.config.networks[network].jsonrpc);
+    axios_1.default
+        .all([promiseSymbol, promiseName, promiseDecimals])
+        .then(axios_1.default.spread((symbolRet, nameRet, decimalsRet) => {
+        if (symbolRet.data.result && nameRet.data.result && decimalsRet.data.result) {
+            console.log('[get token symobl resp]=>', symbolRet.data);
+            console.log('[get token name resp]=>', nameRet.data);
+            console.log('[get token decimals resp]=>', decimalsRet.data);
+            let symbol;
+            let name;
+            try {
+                symbol = web3_eth_abi_1.default.decodeParameter('string', symbolRet.data.result);
+            }
+            catch (e) {
+                symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
+                symbol = symbol.slice(0, symbol.indexOf('\u0000'));
+            }
+            try {
+                name = web3_eth_abi_1.default.decodeParameter('string', nameRet.data.result);
+            }
+            catch (e) {
+                name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
+                name = name.slice(0, name.indexOf('\u0000'));
+            }
+            const decimals = web3_eth_abi_1.default.decodeParameter('uint8', decimalsRet.data.result);
+            resolve({ contractAddr: contractAddress, symbol, name, decimals });
+        }
+        else {
+            reject(new Error('get token detail failed'));
+        }
+    }))
+        .catch(e => {
+        reject(new Error(`get token detail failed:${e}`));
+    });
+});
+exports.fetchTokenDetail = fetchTokenDetail;
+const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page = 0, size = 25, timestamp) => new Promise((resolve, reject) => {
+    const { explorer_api } = network_1.config.networks[network];
+    if (explorer_api.provider === "etherscan") {
+        const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${network_1.config.etherscanApikey}`;
+        console.log(`[eth http req] get token history by address: ${url}`);
+        lib_common_util_js_1.HttpClient.get(url)
+            .then(res => {
+            const { data } = res;
+            if (data.status === '1') {
+                const transfers = {};
+                const { result: txs = [] } = data;
+                txs.forEach(t => {
+                    const tx = {};
+                    tx.hash = t.hash;
+                    tx.timestamp = parseInt(t.timeStamp) * 1000;
+                    tx.from = t.from;
+                    tx.to = t.to;
+                    tx.value = bignumber_js_1.default(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                    tx.status = 'CONFIRMED';
+                    tx.blockNumber = t.blockNumber;
+                    transfers[tx.hash] = tx;
+                });
+                resolve(transfers);
+            }
+            else {
+                resolve({});
+            }
+        })
+            .catch(err => {
+            console.log('[http resp] err: ', err);
+            reject(err);
+        });
+    }
+    else {
+        const url = `${explorer_api.url}/getAddressHistory/${address}?apiKey=${network_1.config.ethplorerApiKey}&token=${symbolAddress}&type=transfer&limit=${size}&timestamp=${timestamp / 1000 - 1}`;
+        console.log(`[eth http req] get token history by address: ${url}`);
+        lib_common_util_js_1.HttpClient.get(url)
+            .then(res => {
+            const transfers = {};
+            const { operations: txs = [] } = res.data;
+            txs.forEach(t => {
+                const tx = {};
+                tx.hash = t.transactionHash;
+                tx.timestamp = t.timeStamp * 1000;
+                tx.from = t.from;
+                tx.to = t.to;
+                tx.value = bignumber_js_1.default(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
+                tx.status = 'CONFIRMED';
+                transfers[tx.hash] = tx;
+            });
+            resolve(transfers);
+        })
+            .catch(err => {
+            console.log('[http resp] err: ', err);
+            reject(err);
+        });
+    }
+});
+exports.fetchAccountTokenTransferHistory = fetchAccountTokenTransferHistory;
+const fetchAccountTokens = () => Promise.resolve({});
+exports.fetchAccountTokens = fetchAccountTokens;
+function getTopTokens(topN = 20, network) {
+    return new Promise((resolve, reject) => {
+        const url = `${network_1.remote[network]}/token/eth/popular`;
+        console.log(`get top eth tokens: ${url}`);
+        lib_common_util_js_1.HttpClient.get(url, false)
+            .then(res => {
+            resolve(res.data);
+        })
+            .catch(err => {
+            console.log('get keystore top tokens error:', err);
+            reject(err);
+        });
+    });
+}
+exports.getTopTokens = getTopTokens;
+function searchTokens(keyword, network) {
+    return new Promise((resolve, reject) => {
+        const url = `${network_1.remote[network]}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
+        console.log(`search eth token: ${url}`);
+        lib_common_util_js_1.HttpClient.get(url, false)
+            .then(res => {
+            resolve(res.data);
+        })
+            .catch(err => {
+            console.log('search keystore token error:', err);
+            reject(err);
+        });
+    });
+}
+exports.searchTokens = searchTokens;
+function getTokenIconUrl(tokenSymbol, contractAddress, network) {
+    return `${network_1.remote[network]}/token/eth/img?contractAddress=${contractAddress}`;
+}
+exports.getTokenIconUrl = getTokenIconUrl;
+//# sourceMappingURL=token.js.map
