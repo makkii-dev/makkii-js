@@ -6,6 +6,7 @@ const app_eth_1 = require("@makkii/app-eth");
 const app_tron_1 = require("@makkii/app-tron");
 class KeystoreClient {
     constructor(support_coin_lists, isTestNet = true) {
+        this.coins = {};
         support_coin_lists.forEach(c => {
             if (c.toLowerCase() === 'aion') {
                 this.coins.aion = new app_aion_1.AionKeystoreClient();

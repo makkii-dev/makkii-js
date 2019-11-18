@@ -1,12 +1,13 @@
 import { hexutil } from 'lib-common-util-js';
-import blake2b from 'blake2b';
-import nacl from 'tweetnacl';
-import rlp from 'aion-rlp';
-import BN from 'bn.js';
 import BigNumber from 'bignumber.js';
 import { signByLedger } from './ledger';
 import { inputAddressFormatter } from './address';
 import { keyPair } from './keyPair';
+
+const blake2b = require('blake2b')
+const nacl = require('tweetnacl')
+const rlp = require('aion-rlp')
+const BN = require('bn.js')
 /** *
  *
  * @param transaction

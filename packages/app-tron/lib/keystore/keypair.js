@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethereumjs_util_1 = require("ethereumjs-util");
-const bs58_1 = require("bs58");
+const bs58 = require('bs58');
 const ec = require('elliptic').ec('secp256k1');
 const prefix = '41';
 const padTo32 = function (msg) {
@@ -27,7 +27,7 @@ const getBase58checkAddress = function (address) {
     const hash1 = ethereumjs_util_1.sha256(hash0);
     const checkSum = hash1.slice(0, 4);
     const addressBytes = Buffer.from(address, 'hex');
-    return bs58_1.default.encode(Buffer.concat([addressBytes, checkSum]));
+    return bs58.encode(Buffer.concat([addressBytes, checkSum]));
 };
 exports.keyPair = function (priKey) {
     if (typeof priKey === 'string') {

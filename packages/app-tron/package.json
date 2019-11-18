@@ -21,7 +21,6 @@
     "clean": "rm -rf lib",
     "pretsc": "npm run clean",
     "tsc": "tsc",
-    "pretest": "npm run tsc",
     "test": "mocha __tests__/*.js"
   },
   "bugs": {
@@ -39,6 +38,7 @@
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
   },
   "devDependencies": {
+    "assert": "^2.0.0",
     "mocha": "^6.2.2"
   }
 }

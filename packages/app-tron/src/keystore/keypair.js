@@ -1,6 +1,6 @@
 import {keccak256,sha256} from 'ethereumjs-util';
-import bs58 from 'bs58'
 
+const bs58 = require('bs58');
 const ec = require('elliptic').ec('secp256k1');
 
 const prefix = '41';

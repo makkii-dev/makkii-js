@@ -29,7 +29,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
-
+lib
 #lerna
 lerna-debug.log
 

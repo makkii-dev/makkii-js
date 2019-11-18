@@ -1,9 +1,10 @@
 import { hexutil } from 'lib-common-util-js';
-import RLP from 'aion-rlp';
-import scrypt from 'scrypt.js';
-import blake2b from 'blake2b';
 import { ab2str, crypto } from '../utils';
 import { keyPair } from './keyPair';
+
+const RLP = require('aion-rlp');
+const scrypt = require('scrypt.js');
+const blake2b = require('blake2b');
 
 const fromV3 = (input, password) => new Promise((resolve, reject) => {
   try {

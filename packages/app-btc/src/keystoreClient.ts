@@ -56,8 +56,11 @@ export default class BtcKeystoreClient  implements keystoreClient, keystoreLedge
         const network = this.getCurrentNetwork();
         try {
             const keyPair = KYSTORE.keyPair(priKey, { network, ...options });
-            const { privateKey, publicKey, address, ...reset } = keyPair;
-            return Promise.resolve({ private_key: privateKey, public_key: publicKey, address, ...reset })
+            if(keyPair){
+                const { privateKey, publicKey, address, ...reset } = keyPair;
+                return Promise.resolve({ private_key: privateKey, public_key: publicKey, address, ...reset })
+            }
+            return Promise.reject(new Error(`${this.coin} recover privKey failed`));
         } catch (e) {
             return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));
         }
@@ -67,8 +70,11 @@ export default class BtcKeystoreClient  implements keystoreClient, keystoreLedge
         const network = this.getCurrentNetwork();
         try {
             const keyPair = KYSTORE.keyPairFromWIF(WIF, { network, ...options });
-            const { privateKey, publicKey, address, ...reset } = keyPair;
-            return Promise.resolve({ private_key: privateKey, public_key: publicKey, address, ...reset })
+            if(keyPair){
+                const { privateKey, publicKey, address, ...reset } = keyPair;
+                return Promise.resolve({ private_key: privateKey, public_key: publicKey, address, ...reset })
+            }
+            return Promise.reject(new Error(`${this.coin} recover privKey failed`));
         } catch (e) {
             return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));
         }

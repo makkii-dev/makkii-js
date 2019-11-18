@@ -39,6 +39,7 @@
     "web3-eth-contract": "1.0.0-beta.37"
   },
   "devDependencies": {
+    "assert": "^2.0.0",
     "mocha": "^6.2.2"
   }
 }

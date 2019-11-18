@@ -8,11 +8,8 @@
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
     "sourceMap": true,
-    "lib": [
-      "es6"
-    ]
+    "target": "es6"
   },
   "exclude": [
     "node_modules",

@@ -53,8 +53,11 @@ class BtcKeystoreClient {
         const network = this.getCurrentNetwork();
         try {
             const keyPair = keystore_1.default.keyPair(priKey, Object.assign({ network }, options));
-            const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-            return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+            if (keyPair) {
+                const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+            }
+            return Promise.reject(new Error(`${this.coin} recover privKey failed`));
         }
         catch (e) {
             return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));
@@ -64,8 +67,11 @@ class BtcKeystoreClient {
         const network = this.getCurrentNetwork();
         try {
             const keyPair = keystore_1.default.keyPairFromWIF(WIF, Object.assign({ network }, options));
-            const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-            return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+            if (keyPair) {
+                const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+            }
+            return Promise.reject(new Error(`${this.coin} recover privKey failed`));
         }
         catch (e) {
             return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));

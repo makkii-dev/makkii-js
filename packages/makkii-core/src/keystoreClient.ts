@@ -6,7 +6,7 @@ import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } fro
 
 export default class KeystoreClient implements IkeystoreClient {
 
-    coins: {[coin: string]: IsingleKeystoreClient| IsingleKeystoreFullClient };
+    coins: {[coin: string]: IsingleKeystoreClient| IsingleKeystoreFullClient } = {};
 
     constructor(support_coin_lists: Array<string>, isTestNet: boolean = true){
         support_coin_lists.forEach(c=>{

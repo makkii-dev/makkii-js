@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bs58check_1 = require("bs58check");
+const bs58check = require('bs58check');
 exports.validateAddress = (address) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const buffer = Buffer.from(address);
         if (buffer.length !== 34)
             return false;
-        const res = bs58check_1.default.decode(address);
+        const res = bs58check.decode(address);
         return res.length === 21 && res[0] === 0x41;
     }
     catch (e) {

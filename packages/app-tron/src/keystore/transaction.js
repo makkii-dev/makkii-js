@@ -1,10 +1,10 @@
-import {buildTransferTransaction} from '@tronscan/client/src/utils/transactionBuilder';
-import {signTransaction as TronSignTransaction} from '@tronscan/client/src/utils/crypto';
 
 import {hexutil} from "lib-common-util-js";
 import {sha256} from "ethereumjs-util";
 import {longToByteArray} from '../utils';
 
+const {buildTransferTransaction} = require('@tronscan/client/src/utils/transactionBuilder');
+const TronSignTransaction = require("@tronscan/client/src/utils/crypto").signTransaction;
 /** *
  *
  * @param transaction

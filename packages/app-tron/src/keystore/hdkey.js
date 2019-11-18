@@ -1,6 +1,7 @@
-import * as bip39 from "bip39";
-import hdKey from "hdkey";
 import {keyPair} from "./keypair";
+
+const bip39  = require('bip39');
+const hdKey = require('hdkey');
 
 
 // eslint-disable-next-line import/prefer-default-export

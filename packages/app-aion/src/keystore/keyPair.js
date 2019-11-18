@@ -1,6 +1,7 @@
-import nacl from 'tweetnacl';
-import blake2b from 'blake2b';
 import { hexutil } from 'lib-common-util-js';
+
+const nacl = require('tweetnacl')
+const blake2b = require('blake2b')
 
 const A0_IDENTIFIER = [0xA0];
 
