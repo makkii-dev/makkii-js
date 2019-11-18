@@ -20,7 +20,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "pretsc": "npm run clean",
-    "tsc": "tsc",
+    "tsc": "tsc --build tsconfig.json",
     "test": "mocha __tests__/*.js"
   },
   "bugs": {
