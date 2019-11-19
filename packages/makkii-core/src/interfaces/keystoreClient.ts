@@ -1,70 +1,70 @@
 export interface IsingleKeystoreClient {
-    signTransaction(tx: any): Promise<any> 
+    signTransaction: (tx: any) => Promise<any> 
 
-    getKey(address_index: number): Promise<any> 
+    getKey: (address_index: number) => Promise<any> 
 
-    setMnemonic(mnemonic: string, passphrase?: string): void 
+    setMnemonic: (mnemonic: string, passphrase?: string) => void 
 
-    generateMnemonic(): string 
+    generateMnemonic: () => string 
 
-    recoverKeyPairByPrivateKey(priKey: string, options?: any): Promise<any> 
+    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any> 
 
-    recoverKeyPairByWIF(WIF: string, options?: any): Promise<any> 
+    recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any> 
 
-    recoverKeyPairBykeyFile(file: string, password: string): Promise<any> 
+    recoverKeyPairBykeyFile: (file: string, password: string) => Promise<any> 
 
-    validatePrivateKey(privateKey: string | Buffer): boolean 
+    validatePrivateKey: (privateKey: string | Buffer) => boolean 
 
-    validateAddress(address: string): Promise<any> 
+    validateAddress: (address: string) => Promise<any> 
 
-    getKeyFromMnemonic(address_index: number, mnemonic: string): Promise<any> 
+    getKeyFromMnemonic: (address_index: number, mnemonic: string) => Promise<any> 
 }
 
 export interface IsingleKeystoreLedgerClient {
     readonly ledgerSupport: boolean
     
-    getKeyByLedger(index: number): Promise<any> 
+    getKeyByLedger: (index: number) => Promise<any> 
 
-    signByLedger(index: number, sender: string, msg: Buffer): Promise<any> 
+    signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any> 
 
-    setLedgerTransport(transport: any): void 
+    setLedgerTransport: (transport: any) => void 
 
-    getLedgerStatus(): boolean 
+    getLedgerStatus: () => boolean 
 }
 
 export interface IsingleKeystoreFullClient extends IsingleKeystoreClient, IsingleKeystoreLedgerClient{}
 
 export interface IkeystoreClient {
     
-    addCoin(coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient): void;
+    addCoin: (coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient) => void;
 
-    removeCoin(coinType: string):boolean
+    removeCoin: (coinType: string) =>boolean
 
-    signTransaction(coinType: string, tx: any): Promise<any> 
+    signTransaction: (coinType: string, tx: any) => Promise<any> 
 
-    getKey(coinType: string, address_index: number): Promise<any> 
+    getKey: (coinType: string, address_index: number) => Promise<any> 
 
-    setMnemonic(coinType: string, mnemonic: string, passphrase?: string): void 
+    setMnemonic: (coinType: string, mnemonic: string, passphrase?: string) => void 
 
-    generateMnemonic(coinType: string): string 
+    generateMnemonic: (coinType: string) => string 
 
-    recoverKeyPairByPrivateKey(coinType: string, priKey: string, options?: any): Promise<any> 
+    recoverKeyPairByPrivateKey: (coinType: string, priKey: string, options?: any) => Promise<any> 
 
-    recoverKeyPairByWIF(coinType: string, WIF: string, options?: any): Promise<any> 
+    recoverKeyPairByWIF: (coinType: string, WIF: string, options?: any) => Promise<any> 
 
-    recoverKeyPairBykeyFile(coinType: string, file: string, password: string): Promise<any> 
+    recoverKeyPairBykeyFile: (coinType: string, file: string, password: string) => Promise<any> 
 
-    validatePrivateKey(coinType: string, privateKey: string | Buffer): boolean 
+    validatePrivateKey: (coinType: string, privateKey: string | Buffer) => boolean 
 
-    validateAddress(coinType: string, address: string): Promise<any> 
+    validateAddress: (coinType: string, address: string) => Promise<any> 
 
-    getKeyFromMnemonic(coinType: string, ddress_index: number, mnemonic: string): Promise<any> 
+    getKeyFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any> 
 
-    getKeyByLedger(coinType: string, index: number): Promise<any> 
+    getKeyByLedger: (coinType: string, index: number) => Promise<any> 
 
-    signByLedger(coinType: string, index: number, sender: string, msg: Buffer): Promise<any> 
+    signByLedger: (coinType: string, index: number, sender: string, msg: Buffer) => Promise<any> 
 
-    setLedgerTransport(coinType: string, transport: any): void 
+    setLedgerTransport: (coinType: string, transport: any) => void 
 
-    getLedgerStatus(coinType: string): boolean 
+    getLedgerStatus: (coinType: string) => boolean 
 }

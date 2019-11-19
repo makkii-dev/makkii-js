@@ -3,32 +3,32 @@ import KEYSTORE from './keystore';
 import { keystoreClient, keystoreLedgerClient } from './interfaces/keystoreClient';
 
 export default class EthKeystoreClient implements keystoreClient, keystoreLedgerClient {
-    
+
     ledgerSupport: boolean = true;
-    
+
     mnemonic: string = '';
 
-    signTransaction(tx: any): Promise<any> {
+    signTransaction = (tx: any) => {
         return KEYSTORE.signTransaction(tx);
     }
 
-    getKey(address_index: number): Promise<any> {
+    getKey = (address_index: number) => {
         if (!bip39.validateMnemonic(this.mnemonic))
             throw new Error('Set Mnemonic first');
         return KEYSTORE.getKeyFromMnemonic(this.mnemonic, address_index);
     }
 
-    setMnemonic(mnemonic: string, passphrase?: string): void {
+    setMnemonic = (mnemonic: string, passphrase?: string) => {
         this.mnemonic = mnemonic;
     }
 
-    generateMnemonic(): string {
+    generateMnemonic = () => {
         const mnemonic = bip39.generateMnemonic();
         this.mnemonic = mnemonic;
         return mnemonic;
     }
 
-    recoverKeyPairByPrivateKey(priKey: string, options?: any): Promise<any> {
+    recoverKeyPairByPrivateKey = (priKey: string, options?: any) => {
         try {
             const keyPair = KEYSTORE.keyPair(priKey);
             const {
@@ -42,46 +42,42 @@ export default class EthKeystoreClient implements keystoreClient, keystoreLedger
         }
     }
 
-    recoverKeyPairByWIF(WIF: string, options?: any): Promise<any> {
+    recoverKeyPairByWIF = (WIF: string, options?: any) => {
         throw new Error("[eth] recoverKeyPairByWIF not implemented.");
     }
 
-    recoverKeyPairBykeyFile(file: string, password: string): Promise<any> {
+    recoverKeyPairBykeyFile = (file: string, password: string) => {
         throw new Error("[eth] recoverKeyPairBykeyFile not implemented.");
     }
 
-    validatePrivateKey(privateKey: string | Buffer): boolean {
+    validatePrivateKey = (privateKey: string | Buffer) => {
         throw new Error("[eth] validatePrivateKey not implemented.");
     }
 
-    validateAddress(address: string): Promise<any> {
+    validateAddress = (address: string) => {
         return KEYSTORE.validateAddress(address);
     }
 
-    getKeyFromMnemonic(address_index: number, mnemonic: string): Promise<any> {
+    getKeyFromMnemonic = (address_index: number, mnemonic: string) => {
         return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
     }
 
-    getKeyByLedger(index: number): Promise<any> {
+    getKeyByLedger = (index: number) => {
         if (!this.getLedgerStatus()) {
             throw new Error('ledger is not available')
         }
         return KEYSTORE.getKeyByLedger(index);
     }
 
-    signByLedger(index: number, sender: string, msg: Buffer): Promise<any> {
+    signByLedger = (index: number, sender: string, msg: Buffer) => {
         throw new Error("[eth] signByLedger not implemented.");
     }
 
-    setLedgerTransport(transport: any): void {
+    setLedgerTransport = (transport: any) => {
         KEYSTORE.initWallet(transport);
     }
 
-    getLedgerStatus(): boolean {
+    getLedgerStatus = () => {
         return KEYSTORE.getWalletStatus();
     }
-
-
-
-
 }

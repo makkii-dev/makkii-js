@@ -15,99 +15,99 @@ export default class AionApiClient implements ApiClient, ApiTokenClient {
     this.isTestNet = isTestNet;
   }
 
-  setRemoteApi(api: string) {
+  setRemoteApi = (api: string) => {
     this.remoteApi = api;
   }
 
-  coverNetWorkConfig(network: any, remoteApi: any): void {
-    if(network.toString() === "[object Object]") {
+  coverNetWorkConfig = (network: any, remoteApi: any) => {
+    if (network.toString() === "[object Object]") {
       customNetwork(network);
     }
-    if(remoteApi.toString() === "[object Object]") {
+    if (remoteApi.toString() === "[object Object]") {
       customRemote(remoteApi);
     }
   }
 
-  getNetwork() {
+  getNetwork = () => {
     return this.isTestNet ? 'mastery' : 'mainnet';
   }
 
-  getBlockByNumber(blockNumber: Number): Promise<any> {
+  getBlockByNumber = (blockNumber: Number) => {
     const network = this.getNetwork();
     return API.getBlockByNumber(blockNumber, false, network);
   }
 
-  getBlockNumber(): Promise<any> {
+  getBlockNumber = () => {
     const network = this.getNetwork();
     return API.blockNumber(network);
   }
 
-  getTransactionStatus(hash: string): Promise<any> {
+  getTransactionStatus = (hash: string) => {
     const network = this.getNetwork();
     return API.getTransactionStatus(hash, network);
   }
 
-  getTransactionExplorerUrl(hash: any): string {
+  getTransactionExplorerUrl = (hash: any) => {
     const network = this.getNetwork();
     return API.getTransactionUrlInExplorer(hash, network);
   }
 
-  getBalance(address: string): Promise<any> {
+  getBalance = (address: string) => {
     const network = this.getNetwork();
     return API.getBalance(address, network);
   }
 
-  getTransactionsByAddress(address: string, page: number, size: number): Promise<any> {
+  getTransactionsByAddress = (address: string, page: number, size: number) => {
     const network = this.getNetwork();
     return API.getTransactionsByAddress(address, page, size, network);
   }
 
-  validateBalanceSufficiency(account: any, symbol: string, amount: number | BigNumber, extraParams?: any): Promise<any> {
+  validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
     return API.validateBalanceSufficiency(account, symbol, amount, extraParams);
   }
 
-  sendTransaction(account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean): Promise<any> {
+  sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
     const network = this.getNetwork();
     return API.sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast);
   }
 
-  sameAddress(address1: string, address2: string): boolean {
+  sameAddress = (address1: string, address2: string) => {
     return API.sameAddress(address1, address2);
   }
 
-  formatAddress1Line(address: string): string {
+  formatAddress1Line = (address: string) => {
     return API.formatAddress1Line(address);
   }
 
-  getTokenIconUrl(tokenSymbol: string, contractAddress: string): string {
+  getTokenIconUrl = (tokenSymbol: string, contractAddress: string) => {
     throw new Error('Method getTokenIconUrl not implemented.');
   }
 
-  fetchTokenDetail(contractAddress: string, network?: string): Promise<any> {
+  fetchTokenDetail = (contractAddress: string, network?: string) => {
     const network_ = this.getNetwork();
     return API.fetchTokenDetail(contractAddress, network || network_);
   }
 
-  fetchAccountTokenTransferHistory(address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number): Promise<any> {
+  fetchAccountTokenTransferHistory = (address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number) => {
     const network_ = this.getNetwork();
     return API.fetchAccountTokenTransferHistory(address, symbolAddress, network || network_, page, size);
   }
 
-  fetchAccountTokens(address: string, network?: string): Promise<any> {
+  fetchAccountTokens = (address: string, network?: string) => {
     const network_ = this.getNetwork();
     return API.fetchAccountTokens(address, network || network_);
   }
 
-  fetchAccountTokenBalance(contractAddress: string, address: string, network?: string): Promise<any> {
+  fetchAccountTokenBalance = (contractAddress: string, address: string, network?: string) => {
     const network_ = this.getNetwork();
     return API.fetchAccountTokenBalance(contractAddress, address, network || network_);
   }
 
-  getTopTokens(topN?: number): Promise<any> {
+  getTopTokens = (topN?: number) => {
     return API.getTopTokens(topN, this.remoteApi);
   }
 
-  searchTokens(keyword: string): Promise<any> {
+  searchTokens = (keyword: string) => {
     return API.searchTokens(keyword, this.remoteApi);
   }
 }

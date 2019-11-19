@@ -13,29 +13,29 @@ export class BtcApiClient implements ApiClient {
 
     constructor(isTestNet: boolean, coin?: string);
     
-    coverNetWorkConfig(network: any, remote?: any): void;
+    coverNetWorkConfig: (network: any, remote?: any) => void;
 
-    getCurrentNetwork(): string;
+    getCurrentNetwork: () => string;
 
-    getBlockByNumber(blockNumber: Number): Promise<any>;
+    getBlockByNumber: (blockNumber: Number) => Promise<any>;
 
-    getBlockNumber(): Promise<any>;
+    getBlockNumber: () => Promise<any>;
 
-    getTransactionStatus(hash: string): Promise<any>;
+    getTransactionStatus: (hash: string) => Promise<any>;
 
-    getTransactionExplorerUrl(hash: any): string;
+    getTransactionExplorerUrl: (hash: any) => string;
 
-    getBalance(address: string): Promise<any>;
+    getBalance: (address: string) => Promise<any>;
 
-    getTransactionsByAddress(address: string, page: number, size: number, timestamp?: number): Promise<any>;
+    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
 
-    validateBalanceSufficiency(account: any, symbol: string, amount: number | BigNumber, extraParams?: any): Promise<any>;
+    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction(account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean): Promise<any>;
+    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => Promise<any>;
 
-    sameAddress(address1: string, address2: string): boolean;
+    sameAddress: (address1: string, address2: string) => boolean;
 
-    formatAddress1Line(address: string): string;
+    formatAddress1Line: (address: string) => string;
 }
 
 export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
@@ -49,35 +49,35 @@ export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
 
     constructor(coin?: string, isTestNet?: boolean);
 
-    getCurrentNetwork(): string;
+    getCurrentNetwork: () => string;
 
-    checkLedgerSupport(): boolean;
+    checkLedgerSupport: () => boolean;
 
-    signTransaction(tx: any): Promise<any>;
+    signTransaction: (tx: any) => Promise<any>;
 
-    getKey(address_index: number): Promise<any>;
+    getKey: (address_index: number) => Promise<any>;
 
-    setMnemonic(mnemonic: string, passphrase?: string): void;
+    setMnemonic: (mnemonic: string, passphrase?: string) => void;
 
-    generateMnemonic(): string;
+    generateMnemonic: () => string;
 
-    recoverKeyPairByPrivateKey(priKey: string, options?: any): Promise<any>;
+    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any>;
 
-    recoverKeyPairByWIF(WIF: string, options?: any): Promise<any>;
+    recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
-    recoverKeyPairBykeyFile(file: string, password: string): Promise<any>;
+    recoverKeyPairBykeyFile: (file: string, password: string) => Promise<any>;
 
-    validatePrivateKey(privateKey: string | Buffer): boolean;
+    validatePrivateKey: (privateKey: string | Buffer) => boolean;
 
-    validateAddress(address: string): Promise<any>;
+    validateAddress: (address: string) => Promise<any>;
 
-    getKeyFromMnemonic(address_index: number, mnemonic: string): Promise<any>;
+    getKeyFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
 
-    getKeyByLedger(index: number): Promise<any>;
+    getKeyByLedger: (index: number) => Promise<any>;
 
-    signByLedger(index: number, sender: string, msg: Buffer): Promise<any>;
+    signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any>;
 
-    setLedgerTransport(transport: any): void;
+    setLedgerTransport: (transport: any) => void;
 
-    getLedgerStatus(): boolean;
+    getLedgerStatus: () => boolean;
 }

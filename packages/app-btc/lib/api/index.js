@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var transaction_1 = require("./transaction");
-var jsonrpc_1 = require("./jsonrpc");
-var tools_1 = require("./tools");
+const transaction_1 = require("./transaction");
+const jsonrpc_1 = require("./jsonrpc");
+const tools_1 = require("./tools");
 exports.default = {
     sendTransaction: transaction_1.sendTransaction,
     getTransactionUrlInExplorer: transaction_1.getTransactionUrlInExplorer,

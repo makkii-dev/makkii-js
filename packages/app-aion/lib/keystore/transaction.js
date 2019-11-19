@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var lib_common_util_js_1 = require("lib-common-util-js");
-var bignumber_js_1 = require("bignumber.js");
-var ledger_1 = require("./ledger");
-var address_1 = require("./address");
-var keyPair_1 = require("./keyPair");
-var blake2b = require('blake2b');
-var nacl = require('tweetnacl');
-var rlp = require('aion-rlp');
-var BN = require('bn.js');
-exports.signTransaction = function (transaction) { return new Promise(function (resolve, reject) {
-    var private_key = transaction.private_key, extra_param = transaction.extra_param;
-    var tx;
+const lib_common_util_js_1 = require("lib-common-util-js");
+const bignumber_js_1 = require("bignumber.js");
+const ledger_1 = require("./ledger");
+const address_1 = require("./address");
+const keyPair_1 = require("./keyPair");
+const blake2b = require('blake2b');
+const nacl = require('tweetnacl');
+const rlp = require('aion-rlp');
+const BN = require('bn.js');
+exports.signTransaction = (transaction) => new Promise((resolve, reject) => {
+    const { private_key, extra_param } = transaction;
+    let tx;
     try {
         tx = txInputFormatter(transaction);
     }
     catch (e) {
         reject(e);
     }
-    var unsignedTransaction = {
+    const unsignedTransaction = {
         nonce: tx.nonce,
         to: tx.to || '0x',
         data: tx.data,
@@ -28,7 +28,7 @@ exports.signTransaction = function (transaction) { return new Promise(function (
         gasLimit: tx.gasLimit,
         gasPrice: tx.gasPrice,
     };
-    var rlpEncoded = rlp.encode([
+    const rlpEncoded = rlp.encode([
         unsignedTransaction.nonce,
         unsignedTransaction.to.toLowerCase(),
         unsignedTransaction.amount,
@@ -39,38 +39,37 @@ exports.signTransaction = function (transaction) { return new Promise(function (
         toAionLong(unsignedTransaction.type),
     ]);
     if (extra_param && extra_param.type === '[ledger]') {
-        ledger_1.signByLedger(extra_param.derivationIndex, extra_param.sender, Object.values(rlpEncoded)).then(function (_a) {
-            var signature = _a.signature, publicKey = _a.publicKey;
-            console.log('signByLedger res=>', { signature: signature, publicKey: publicKey });
-            var fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(publicKey), 'hex'),
+        ledger_1.signByLedger(extra_param.derivationIndex, extra_param.sender, Object.values(rlpEncoded)).then(({ signature, publicKey }) => {
+            console.log('signByLedger res=>', { signature, publicKey });
+            const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(publicKey), 'hex'),
                 Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), 'hex')]);
-            var rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
-            var rawTransaction = rlp.encode(rawTx);
+            const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
+            const rawTransaction = rlp.encode(rawTx);
             resolve({ encoded: rawTransaction.toString('hex'), signature: Buffer.from(signature).toString('hex') });
-        }).catch(function (e) {
+        }).catch((e) => {
             reject(e);
         });
     }
     else {
-        var ecKey = void 0;
+        let ecKey;
         try {
             ecKey = keyPair_1.keyPair(private_key);
         }
         catch (e) {
             reject(new Error('invalid private key'));
         }
-        var rawHash = blake2b(32).update(rlpEncoded).digest();
-        var signature = ecKey.sign(rawHash);
+        const rawHash = blake2b(32).update(rlpEncoded).digest();
+        const signature = ecKey.sign(rawHash);
         if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey))) === false) {
             throw new Error('Could not verify signature.');
         }
-        var fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey)), signature]);
-        var rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
-        var rawTransaction = rlp.encode(rawTx);
+        const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey)), signature]);
+        const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
+        const rawTransaction = rlp.encode(rawTx);
         resolve({ encoded: rawTransaction.toString('hex'), signature: lib_common_util_js_1.hexutil.toHex(signature) });
     }
-}); };
-var txInputFormatter = function (options) {
+});
+const txInputFormatter = (options) => {
     if (options.to) {
         options.to = address_1.inputAddressFormatter(options.to);
     }
@@ -87,13 +86,13 @@ var txInputFormatter = function (options) {
     if (options.gas || options.gasLimit) {
         options.gasLimit = options.gas || options.gasLimit;
     }
-    ['gasPrice', 'gasLimit', 'nonce'].filter(function (key) { return options[key] !== undefined; }).forEach(function (key) {
+    ['gasPrice', 'gasLimit', 'nonce'].filter((key) => options[key] !== undefined).forEach((key) => {
         options[key] = numberToHex(options[key]);
     });
     return options;
 };
-var toAionLong = function (val) {
-    var num;
+const toAionLong = (val) => {
+    let num;
     if (val === undefined
         || val === null
         || val === ''
@@ -113,8 +112,8 @@ var toAionLong = function (val) {
     }
     return new rlp.AionLong(num);
 };
-var numberToHex = function (value) {
+const numberToHex = function (value) {
     value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
-    return "0x" + value.toString(16);
+    return `0x${value.toString(16)}`;
 };
 //# sourceMappingURL=transaction.js.map

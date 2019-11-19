@@ -1,7 +1,7 @@
 import * as bip39 from "bip39";
-import hdKey from "hdkey";
 import {keyPair} from "./keypair";
 
+const hdKey = require('hdkey');
 // eslint-disable-next-line import/prefer-default-export
 export async function getKeyFromMnemonic(mnemonic, index){
     try {

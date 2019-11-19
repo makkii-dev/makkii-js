@@ -1,33 +1,33 @@
 export interface keystoreClient {
-    signTransaction(tx: any): Promise<any> 
+    signTransaction: (tx: any) => Promise<any> 
 
-    getKey(address_index: number): Promise<any> 
+    getKey: (address_index: number) => Promise<any> 
 
-    setMnemonic(mnemonic: string, passphrase?: string): void 
+    setMnemonic: (mnemonic: string, passphrase?: string) => void 
 
-    generateMnemonic(): string 
+    generateMnemonic: () => string 
 
-    recoverKeyPairByPrivateKey(priKey: string, options?: any): Promise<any> 
+    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any> 
 
-    recoverKeyPairByWIF(WIF: string, options?: any): Promise<any> 
+    recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any> 
 
-    recoverKeyPairBykeyFile(file: string, password: string): Promise<any> 
+    recoverKeyPairBykeyFile: (file: string, password: string) => Promise<any> 
 
-    validatePrivateKey(privateKey: string | Buffer): boolean 
+    validatePrivateKey: (privateKey: string | Buffer) => boolean 
 
-    validateAddress(address: string): Promise<any> 
+    validateAddress: (address: string) => Promise<any> 
 
-    getKeyFromMnemonic(address_index: number, mnemonic: string): Promise<any> 
+    getKeyFromMnemonic: (address_index: number, mnemonic: string) => Promise<any> 
 
 }
 
 export interface keystoreLedgerClient {
-    getKeyByLedger(index: number): Promise<any> 
+    getKeyByLedger: (index: number) => Promise<any> 
 
-    signByLedger(index: number, sender: string, msg: Buffer): Promise<any> 
+    signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any> 
 
-    setLedgerTransport(transport: any): void 
+    setLedgerTransport: (transport: any) => void 
 
-    getLedgerStatus(): boolean 
+    getLedgerStatus: () => boolean 
 
 }

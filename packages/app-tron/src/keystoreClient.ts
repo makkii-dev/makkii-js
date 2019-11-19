@@ -9,28 +9,28 @@ export default class TronKeystoreClient implements keystoreClient {
         this.mnemonic = '';
     }
 
-    signTransaction(tx: any): Promise<any> {
+    signTransaction = (tx: any) => {
         return KEYSTORE.signTransaction(tx);
     }
 
-    getKey(address_index: number): Promise<any> {
+    getKey = (address_index: number) => {
         if (!bip39.validateMnemonic(this.mnemonic)) {
             throw new Error('set mnemonic first')
         }
         return KEYSTORE.getKeyFromMnemonic(this.mnemonic, address_index);
     }
 
-    setMnemonic(mnemonic: string, passphrase?: string): void {
+    setMnemonic = (mnemonic: string, passphrase?: string) => {
         this.mnemonic = mnemonic;
     }
 
-    generateMnemonic(): string {
+    generateMnemonic = () => {
         const mnemonic = bip39.generateMnemonic();
         this.mnemonic = mnemonic;
         return mnemonic;
     }
 
-    recoverKeyPairByPrivateKey(priKey: string, options?: any): Promise<any> {
+    recoverKeyPairByPrivateKey = (priKey: string, options?: any) => {
         try {
             const keyPair = KEYSTORE.keyPair(priKey);
             const {
@@ -44,23 +44,23 @@ export default class TronKeystoreClient implements keystoreClient {
         }
     }
 
-    recoverKeyPairByWIF(WIF: string, options?: any): Promise<any> {
+    recoverKeyPairByWIF = (WIF: string, options?: any) => {
         throw new Error("[tron] recoverKeyPairByWIF not implemented.");
     }
 
-    recoverKeyPairBykeyFile(file: string, password: string): Promise<any> {
+    recoverKeyPairBykeyFile = (file: string, password: string) => {
         throw new Error("[tron] recoverKeyPairBykeyFile not implemented.");
     }
 
-    validatePrivateKey(privateKey: string | Buffer): boolean {
+    validatePrivateKey = (privateKey: string | Buffer) => {
         throw new Error("[tron] validatePrivateKey not implemented.");
     }
 
-    validateAddress(address: string): Promise<any> {
+    validateAddress = (address: string) => {
         return KEYSTORE.validateAddress(address);
     }
 
-    getKeyFromMnemonic(address_index: number, mnemonic: string): Promise<any> {
+    getKeyFromMnemonic = (address_index: number, mnemonic: string) => {
         return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
     }
 
