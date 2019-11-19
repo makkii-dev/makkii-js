@@ -1,11 +1,9 @@
 import BigNumber from 'bignumber.js';
+import {HttpClient} from 'lib-common-util-js';
 import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/apiclient';
-
 
 function isIntanceOfApiClient(client: object) {
     const map = [
-        "addCoin",
-        "removeCoin",
         "getBlockByNumber",
         "getBlockNumber",
         "getTransactionStatus",
@@ -16,18 +14,12 @@ function isIntanceOfApiClient(client: object) {
         "sendTransaction",
         "sameAddress",
         "formatAddress1Line",
-        "getTokenIconUrl",
-        "fetchTokenDetail",
-        "fetchAccountTokenTransferHistory",
-        "fetchAccountTokens",
-        "fetchAccountTokenBalance",
-        "getTopTokens",
-        "searchTokens",
     ];
     return !map.some(i=> !(i in client));
 }
 
 export default class ApiClient implements IApiClient {
+    
 
     coins: { [coin: string]: IsingleApiClient | IsingleApiFullClient } = {};
 
@@ -162,5 +154,11 @@ export default class ApiClient implements IApiClient {
             return coin.searchTokens(keyword);
         }
         throw new Error(`[${coinType}] searchTokens is not implemented.`)
+    }
+
+    getCoinPrices(currency: string): Promise<any> {
+        const cryptos = Object.keys(this.coins).join(',');
+        const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
+        return HttpClient.get(url, false);
     }
 }

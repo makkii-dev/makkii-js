@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const lib_common_util_js_1 = require("lib-common-util-js");
 function isIntanceOfApiClient(client) {
     const map = [
-        "addCoin",
-        "removeCoin",
         "getBlockByNumber",
         "getBlockNumber",
         "getTransactionStatus",
@@ -14,13 +13,6 @@ function isIntanceOfApiClient(client) {
         "sendTransaction",
         "sameAddress",
         "formatAddress1Line",
-        "getTokenIconUrl",
-        "fetchTokenDetail",
-        "fetchAccountTokenTransferHistory",
-        "fetchAccountTokens",
-        "fetchAccountTokenBalance",
-        "getTopTokens",
-        "searchTokens",
     ];
     return !map.some(i => !(i in client));
 }
@@ -136,6 +128,11 @@ class ApiClient {
             return coin.searchTokens(keyword);
         }
         throw new Error(`[${coinType}] searchTokens is not implemented.`);
+    }
+    getCoinPrices(currency) {
+        const cryptos = Object.keys(this.coins).join(',');
+        const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
+        return lib_common_util_js_1.HttpClient.get(url, false);
     }
 }
 exports.default = ApiClient;

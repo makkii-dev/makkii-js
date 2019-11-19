@@ -39,6 +39,8 @@ export interface IApiClient {
     getTopTokens(coinType: string, topN?: number): Promise<any>
 
     searchTokens(coinType: string, keyword: string): Promise<any>
+
+    getCoinPrices(currency: string): Promise<any>
 }
 
 export interface IsingleApiClient {

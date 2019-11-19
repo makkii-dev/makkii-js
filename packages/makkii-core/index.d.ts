@@ -53,6 +53,8 @@ declare class ApiClient implements IApiClient {
     getTopTokens(coinType: string, topN?: number): Promise<any>;
 
     searchTokens(coinType: string, keyword: string): Promise<any>;
+
+    getCoinPrices(currency: string): Promise<any>;
 }
 
 declare class KeystoreClient implements IkeystoreClient {
