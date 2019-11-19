@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tools_1 = require("./tools");
-const jsonrpc_1 = require("./jsonrpc");
-const transaction_1 = require("./transaction");
-const token_1 = require("./token");
+var tools_1 = require("./tools");
+var jsonrpc_1 = require("./jsonrpc");
+var transaction_1 = require("./transaction");
+var token_1 = require("./token");
 exports.default = {
     formatAddress1Line: tools_1.formatAddress1Line,
     validateBalanceSufficiency: tools_1.validateBalanceSufficiency,

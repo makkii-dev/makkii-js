@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const apiClient_1 = require("./apiClient");
-const keystoreClient_1 = require("./keystoreClient");
-const apiClient = () => {
+var apiClient_1 = require("./apiClient");
+var keystoreClient_1 = require("./keystoreClient");
+var apiClient = function () {
     return new apiClient_1.default();
 };
 exports.apiClient = apiClient;
-const keystoreClient = () => {
+var keystoreClient = function () {
     return new keystoreClient_1.default();
 };
 exports.keystoreClient = keystoreClient;

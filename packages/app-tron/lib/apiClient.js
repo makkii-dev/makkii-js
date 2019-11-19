@@ -1,55 +1,56 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
-const network_1 = require("./network");
-class TronApiClient {
-    constructor(isTestNet) {
+var api_1 = require("./api");
+var network_1 = require("./network");
+var TronApiClient = (function () {
+    function TronApiClient(isTestNet) {
         this.tokenSupport = false;
         this.isTestNet = isTestNet;
     }
-    coverNetWorkConfig(network, remote) {
+    TronApiClient.prototype.coverNetWorkConfig = function (network, remote) {
         if (network.toString() === "[object Object]") {
             network_1.customNetwork(network);
         }
-    }
-    getNetwork() {
+    };
+    TronApiClient.prototype.getNetwork = function () {
         return this.isTestNet ? 'shasta' : 'mainnet';
-    }
-    getBlockByNumber(blockNumber) {
+    };
+    TronApiClient.prototype.getBlockByNumber = function (blockNumber) {
         throw new Error("[tron] getBlockByNumber not implemented.");
-    }
-    getBlockNumber() {
+    };
+    TronApiClient.prototype.getBlockNumber = function () {
         throw new Error("[tron] getBlockNumber not implemented.");
-    }
-    getTransactionStatus(hash) {
-        const network = this.getNetwork();
+    };
+    TronApiClient.prototype.getTransactionStatus = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionStatus(hash, network);
-    }
-    getTransactionExplorerUrl(hash) {
-        const network = this.getNetwork();
+    };
+    TronApiClient.prototype.getTransactionExplorerUrl = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionUrlInExplorer(hash, network);
-    }
-    getBalance(address) {
-        const network = this.getNetwork();
+    };
+    TronApiClient.prototype.getBalance = function (address) {
+        var network = this.getNetwork();
         return api_1.default.getBalance(address, network);
-    }
-    getTransactionsByAddress(address, page, size, timestamp) {
-        const network = this.getNetwork();
+    };
+    TronApiClient.prototype.getTransactionsByAddress = function (address, page, size, timestamp) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionsByAddress(address, page, size, timestamp, network);
-    }
-    validateBalanceSufficiency(account, symbol, amount, extraParams) {
+    };
+    TronApiClient.prototype.validateBalanceSufficiency = function (account, symbol, amount, extraParams) {
         return api_1.default.validateBalanceSufficiency(account, symbol, amount);
-    }
-    sendTransaction(account, symbol, to, value, extraParams, data, shouldBroadCast) {
-        const network = this.getNetwork();
+    };
+    TronApiClient.prototype.sendTransaction = function (account, symbol, to, value, extraParams, data, shouldBroadCast) {
+        var network = this.getNetwork();
         return api_1.default.sendTransaction(account, symbol, to, value, network, shouldBroadCast);
-    }
-    sameAddress(address1, address2) {
+    };
+    TronApiClient.prototype.sameAddress = function (address1, address2) {
         return api_1.default.sameAddress(address1, address2);
-    }
-    formatAddress1Line(address) {
+    };
+    TronApiClient.prototype.formatAddress1Line = function (address) {
         return api_1.default.formatAddress1Line(address);
-    }
-}
+    };
+    return TronApiClient;
+}());
 exports.default = TronApiClient;
 //# sourceMappingURL=apiClient.js.map

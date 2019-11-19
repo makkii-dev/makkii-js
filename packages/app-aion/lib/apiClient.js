@@ -1,89 +1,90 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
-const network_1 = require("./network");
-class AionApiClient {
-    constructor(isTestNet) {
+var api_1 = require("./api");
+var network_1 = require("./network");
+var AionApiClient = (function () {
+    function AionApiClient(isTestNet) {
         this.tokenSupport = true;
         this.remoteApi = 'prod';
         this.isTestNet = isTestNet;
     }
-    setRemoteApi(api) {
+    AionApiClient.prototype.setRemoteApi = function (api) {
         this.remoteApi = api;
-    }
-    coverNetWorkConfig(network, remoteApi) {
+    };
+    AionApiClient.prototype.coverNetWorkConfig = function (network, remoteApi) {
         if (network.toString() === "[object Object]") {
             network_1.customNetwork(network);
         }
         if (remoteApi.toString() === "[object Object]") {
             network_1.customRemote(remoteApi);
         }
-    }
-    getNetwork() {
+    };
+    AionApiClient.prototype.getNetwork = function () {
         return this.isTestNet ? 'mastery' : 'mainnet';
-    }
-    getBlockByNumber(blockNumber) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getBlockByNumber = function (blockNumber) {
+        var network = this.getNetwork();
         return api_1.default.getBlockByNumber(blockNumber, false, network);
-    }
-    getBlockNumber() {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getBlockNumber = function () {
+        var network = this.getNetwork();
         return api_1.default.blockNumber(network);
-    }
-    getTransactionStatus(hash) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getTransactionStatus = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionStatus(hash, network);
-    }
-    getTransactionExplorerUrl(hash) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getTransactionExplorerUrl = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionUrlInExplorer(hash, network);
-    }
-    getBalance(address) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getBalance = function (address) {
+        var network = this.getNetwork();
         return api_1.default.getBalance(address, network);
-    }
-    getTransactionsByAddress(address, page, size) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.getTransactionsByAddress = function (address, page, size) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionsByAddress(address, page, size, network);
-    }
-    validateBalanceSufficiency(account, symbol, amount, extraParams) {
+    };
+    AionApiClient.prototype.validateBalanceSufficiency = function (account, symbol, amount, extraParams) {
         return api_1.default.validateBalanceSufficiency(account, symbol, amount, extraParams);
-    }
-    sendTransaction(account, symbol, to, value, extraParams, data, shouldBroadCast) {
-        const network = this.getNetwork();
+    };
+    AionApiClient.prototype.sendTransaction = function (account, symbol, to, value, extraParams, data, shouldBroadCast) {
+        var network = this.getNetwork();
         return api_1.default.sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast);
-    }
-    sameAddress(address1, address2) {
+    };
+    AionApiClient.prototype.sameAddress = function (address1, address2) {
         return api_1.default.sameAddress(address1, address2);
-    }
-    formatAddress1Line(address) {
+    };
+    AionApiClient.prototype.formatAddress1Line = function (address) {
         return api_1.default.formatAddress1Line(address);
-    }
-    getTokenIconUrl(tokenSymbol, contractAddress) {
+    };
+    AionApiClient.prototype.getTokenIconUrl = function (tokenSymbol, contractAddress) {
         throw new Error('Method getTokenIconUrl not implemented.');
-    }
-    fetchTokenDetail(contractAddress, network) {
-        const network_ = this.getNetwork();
+    };
+    AionApiClient.prototype.fetchTokenDetail = function (contractAddress, network) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchTokenDetail(contractAddress, network || network_);
-    }
-    fetchAccountTokenTransferHistory(address, symbolAddress, network, page, size, timestamp) {
-        const network_ = this.getNetwork();
+    };
+    AionApiClient.prototype.fetchAccountTokenTransferHistory = function (address, symbolAddress, network, page, size, timestamp) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchAccountTokenTransferHistory(address, symbolAddress, network || network_, page, size);
-    }
-    fetchAccountTokens(address, network) {
-        const network_ = this.getNetwork();
+    };
+    AionApiClient.prototype.fetchAccountTokens = function (address, network) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchAccountTokens(address, network || network_);
-    }
-    fetchAccountTokenBalance(contractAddress, address, network) {
-        const network_ = this.getNetwork();
+    };
+    AionApiClient.prototype.fetchAccountTokenBalance = function (contractAddress, address, network) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchAccountTokenBalance(contractAddress, address, network || network_);
-    }
-    getTopTokens(topN) {
+    };
+    AionApiClient.prototype.getTopTokens = function (topN) {
         return api_1.default.getTopTokens(topN, this.remoteApi);
-    }
-    searchTokens(keyword) {
+    };
+    AionApiClient.prototype.searchTokens = function (keyword) {
         return api_1.default.searchTokens(keyword, this.remoteApi);
-    }
-}
+    };
+    return AionApiClient;
+}());
 exports.default = AionApiClient;
 //# sourceMappingURL=apiClient.js.map

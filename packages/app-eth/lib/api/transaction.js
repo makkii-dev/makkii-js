@@ -1,127 +1,143 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const bignumber_js_1 = require("bignumber.js");
-const web3_eth_contract_1 = require("web3-eth-contract");
-const lib_common_util_js_1 = require("lib-common-util-js");
-const keystore_1 = require("../keystore");
-const jsonrpc_1 = require("./jsonrpc");
-const constants_1 = require("./constants");
-const network_1 = require("../network");
-function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network = 'mainnet', shouldBroadCast) {
-    return new Promise((resolve, reject) => {
+var bignumber_js_1 = require("bignumber.js");
+var web3_eth_contract_1 = require("web3-eth-contract");
+var lib_common_util_js_1 = require("lib-common-util-js");
+var keystore_1 = require("../keystore");
+var jsonrpc_1 = require("./jsonrpc");
+var constants_1 = require("./constants");
+var network_1 = require("../network");
+function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    return new Promise(function (resolve, reject) {
         value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
         jsonrpc_1.getTransactionCount(account.address, 'latest', network)
-            .then(count => {
-            const { type, derivationIndex } = account;
-            let extra_param = { type };
+            .then(function (count) {
+            var type = account.type, derivationIndex = account.derivationIndex;
+            var extra_param = { type: type };
             if (type === '[ledger]') {
-                extra_param = Object.assign(Object.assign({}, extra_param), { derivationIndex, sender: account.address });
+                extra_param = __assign(__assign({}, extra_param), { derivationIndex: derivationIndex, sender: account.address });
             }
-            let tx = {
-                network,
+            var tx = {
+                network: network,
                 amount: value.shiftedBy(18).toNumber(),
                 nonce: count,
-                gasLimit,
-                gasPrice,
-                to,
+                gasLimit: gasLimit,
+                gasPrice: gasPrice,
+                to: to,
                 private_key: account.private_key,
-                extra_param,
+                extra_param: extra_param,
             };
             if (data !== undefined) {
-                tx = Object.assign(Object.assign({}, tx), { data });
+                tx = __assign(__assign({}, tx), { data: data });
             }
             keystore_1.default.signTransaction(tx)
-                .then(res => {
-                const { encoded } = res;
+                .then(function (res) {
+                var encoded = res.encoded;
                 console.log('encoded keystore tx => ', encoded);
                 if (shouldBroadCast) {
                     jsonrpc_1.sendSignedTransaction(encoded, network)
-                        .then(hash => {
-                        const pendingTx = {
-                            hash,
+                        .then(function (hash) {
+                        var pendingTx = {
+                            hash: hash,
                             from: account.address,
-                            to,
-                            value,
+                            to: to,
+                            value: value,
                             status: 'PENDING',
-                            gasPrice
+                            gasPrice: gasPrice
                         };
-                        resolve({ pendingTx });
+                        resolve({ pendingTx: pendingTx });
                     })
-                        .catch(e => {
+                        .catch(function (e) {
                         console.log('send signed tx:', e);
                         reject(e);
                     });
                 }
                 else {
-                    const txObj = {
+                    var txObj = {
                         from: account.address,
-                        to,
-                        value,
-                        gasPrice
+                        to: to,
+                        value: value,
+                        gasPrice: gasPrice
                     };
-                    resolve({ encoded, txObj });
+                    resolve({ encoded: encoded, txObj: txObj });
                 }
             })
-                .catch(e => {
+                .catch(function (e) {
                 console.log('sign error:', e);
                 reject(e);
             });
         })
-            .catch(err => {
+            .catch(function (err) {
             console.log('get tx count error:', err);
             reject(err);
         });
     });
 }
-function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet', shouldBroadCast) {
-    const { tokens } = account;
-    const { contractAddr, tokenDecimal } = tokens[symbol];
-    const tokenContract = new web3_eth_contract_1.default(constants_1.ERC20ABI, contractAddr);
-    const methodsData = tokenContract.methods
+function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    var tokens = account.tokens;
+    var _a = tokens[symbol], contractAddr = _a.contractAddr, tokenDecimal = _a.tokenDecimal;
+    var tokenContract = new web3_eth_contract_1.default(constants_1.ERC20ABI, contractAddr);
+    var methodsData = tokenContract.methods
         .transfer(to, value
         .shiftedBy(tokenDecimal - 0)
         .toFixed(0)
         .toString())
         .encodeABI();
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         sendNativeTx(account, contractAddr, bignumber_js_1.default(0), gasPrice, gasLimit, methodsData, network, shouldBroadCast)
-            .then(res => {
+            .then(function (res) {
             if (shouldBroadCast) {
-                const { pendingTx } = res;
+                var pendingTx = res.pendingTx;
                 pendingTx.tknTo = to;
                 pendingTx.tknValue = value;
-                resolve({ pendingTx });
+                resolve({ pendingTx: pendingTx });
             }
             else {
                 resolve(res);
             }
         })
-            .catch(err => {
+            .catch(function (err) {
             reject(err);
         });
     });
 }
-function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast = true) {
-    const { gasPrice } = extraParams;
-    const { gasLimit } = extraParams;
+function sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    if (shouldBroadCast === void 0) { shouldBroadCast = true; }
+    var gasPrice = extraParams.gasPrice;
+    var gasLimit = extraParams.gasLimit;
     if (account.symbol === symbol) {
         return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast);
     }
     return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast);
 }
 exports.sendTransaction = sendTransaction;
-function getTransactionsByAddress(address, page, size, timestamp, network = 'mainnet') {
-    const { explorer_api } = network_1.config.networks[network];
+function getTransactionsByAddress(address, page, size, timestamp, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    var explorer_api = network_1.config.networks[network].explorer_api;
     if (explorer_api.provider === "etherscan") {
-        const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${network_1.config.etherscanApikey}`;
-        console.log(`[eth http req] get transactions by address: ${url}`);
-        return new Promise((resolve, reject) => {
-            lib_common_util_js_1.HttpClient.get(url, false).then(res => {
+        var url_1 = explorer_api.url + "?module=account&action=txlist&address=" + address + "&page=" + page + "&offset=" + size + "&sort=asc&apikey=" + network_1.config.etherscanApikey;
+        console.log("[eth http req] get transactions by address: " + url_1);
+        return new Promise(function (resolve, reject) {
+            lib_common_util_js_1.HttpClient.get(url_1, false).then(function (res) {
                 console.log('[http resp]', res.data);
-                const { result } = res.data;
-                const txs = {};
-                result.forEach(t => {
-                    const tx = {};
+                var result = res.data.result;
+                var txs = {};
+                result.forEach(function (t) {
+                    var tx = {};
                     tx.hash = t.hash;
                     tx.timestamp = parseInt(t.timeStamp) * 1000;
                     tx.from = t.from;
@@ -133,53 +149,55 @@ function getTransactionsByAddress(address, page, size, timestamp, network = 'mai
                     txs[tx.hash] = tx;
                 });
                 resolve(txs);
-            }, err => {
+            }, function (err) {
                 console.log('[http resp] err: ', err);
                 reject(err);
             });
         });
     }
-    const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${network_1.config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
-    console.log(`[eth http req] get transactions by address: ${url}`);
-    return new Promise((resolve, reject) => {
-        lib_common_util_js_1.HttpClient.get(url, false).then(res => {
+    var url = explorer_api.url + "/getAddressTransactions/" + address + "?apiKey=" + network_1.config.ethplorerApiKey + "&limit=" + size + "&timestamp=" + (timestamp / 1000 - 1) + "&showZeroValues=true";
+    console.log("[eth http req] get transactions by address: " + url);
+    return new Promise(function (resolve, reject) {
+        lib_common_util_js_1.HttpClient.get(url, false).then(function (res) {
             console.log('[http resp]', res.data);
             if (res.data.error) {
                 reject(res.data.error);
             }
             else {
-                const txs = {};
-                res.data.forEach(t => {
-                    const tx = {};
+                var txs_1 = {};
+                res.data.forEach(function (t) {
+                    var tx = {};
                     tx.hash = t.hash;
                     tx.timestamp = t.timestamp * 1000;
                     tx.from = t.from;
                     tx.to = t.to;
                     tx.value = bignumber_js_1.default(t.value);
                     tx.status = t.success ? "CONFIRMED" : 'FAILED';
-                    txs[tx.hash] = tx;
+                    txs_1[tx.hash] = tx;
                 });
-                resolve(txs);
+                resolve(txs_1);
             }
-        }, err => {
+        }, function (err) {
             console.log('[http resp] err: ', err);
             reject(err);
         });
     });
 }
 exports.getTransactionsByAddress = getTransactionsByAddress;
-function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    const { explorer } = network_1.config.networks[network];
+function getTransactionUrlInExplorer(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    var explorer = network_1.config.networks[network].explorer;
     if (explorer.provider === "etherscan") {
-        return `${explorer.url}/${txHash}`;
+        return explorer.url + "/" + txHash;
     }
-    return `${explorer.url}/${txHash}`;
+    return explorer.url + "/" + txHash;
 }
 exports.getTransactionUrlInExplorer = getTransactionUrlInExplorer;
-function getTransactionStatus(txHash, network = 'mainnet') {
-    return new Promise((resolve, reject) => {
+function getTransactionStatus(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    return new Promise(function (resolve, reject) {
         jsonrpc_1.getTransactionReceipt(txHash, network)
-            .then(receipt => {
+            .then(function (receipt) {
             if (receipt !== null) {
                 resolve({
                     status: parseInt(receipt.status, 16) === 1,
@@ -191,7 +209,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
                 resolve(null);
             }
         })
-            .catch(err => {
+            .catch(function (err) {
             reject(err);
         });
     });

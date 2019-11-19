@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ERC20ABI = [
+var ERC20ABI = [
     {
         constant: true,
         inputs: [],

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
-const nacl = require('tweetnacl');
-const blake2b = require('blake2b');
-const A0_IDENTIFIER = [0xA0];
-exports.validatePrivateKey = (priKey) => {
+var lib_common_util_js_1 = require("lib-common-util-js");
+var nacl = require('tweetnacl');
+var blake2b = require('blake2b');
+var A0_IDENTIFIER = [0xA0];
+exports.validatePrivateKey = function (priKey) {
     if (typeof priKey === 'string') {
         priKey = Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(priKey), 'hex');
     }
@@ -17,17 +17,17 @@ exports.validatePrivateKey = (priKey) => {
     if (priKey.length !== nacl.sign.secretKeyLength) {
         return false;
     }
-    const keyPair = nacl.sign.keyPair.fromSecretKey(priKey);
-    const msg = Buffer.from('test');
-    const sig = nacl.sign.detached(msg, keyPair.secretKey);
+    var keyPair = nacl.sign.keyPair.fromSecretKey(priKey);
+    var msg = Buffer.from('test');
+    var sig = nacl.sign.detached(msg, keyPair.secretKey);
     return nacl.sign.detached.verify(msg, sig, keyPair.publicKey);
 };
 function computeA0Address(publicKey) {
-    const addressHash = blake2b(32).update(publicKey).digest();
+    var addressHash = blake2b(32).update(publicKey).digest();
     addressHash.set(A0_IDENTIFIER, 0);
     return addressHash;
 }
-exports.keyPair = (priKey) => {
+exports.keyPair = function (priKey) {
     if (typeof priKey === 'string') {
         priKey = Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(priKey), 'hex');
     }
@@ -37,24 +37,24 @@ exports.keyPair = (priKey) => {
     if (!exports.validatePrivateKey(priKey)) {
         throw Error('inValid privateKey');
     }
-    const keyPair_ = priKey.length === 64 ? nacl.sign.keyPair.fromSecretKey(priKey) : nacl.sign.keyPair.fromSeed(priKey);
-    const privateKey = Buffer.from(keyPair_.secretKey);
-    const publicKey = Buffer.from(keyPair_.publicKey);
-    const address = computeA0Address(publicKey);
+    var keyPair_ = priKey.length === 64 ? nacl.sign.keyPair.fromSecretKey(priKey) : nacl.sign.keyPair.fromSeed(priKey);
+    var privateKey = Buffer.from(keyPair_.secretKey);
+    var publicKey = Buffer.from(keyPair_.publicKey);
+    var address = computeA0Address(publicKey);
     function sign(digest) {
         if (typeof digest === 'string') {
             digest = Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(digest), 'hex');
         }
         try {
-            const res = nacl.sign.detached(digest, Buffer.from(privateKey));
+            var res = nacl.sign.detached(digest, Buffer.from(privateKey));
             return Buffer.from(res);
         }
         catch (e) {
-            throw new Error(`Message failed to sign, ${e}`);
+            throw new Error("Message failed to sign, " + e);
         }
     }
     return {
-        privateKey: privateKey.toString('hex'), publicKey: publicKey.toString('hex'), address: lib_common_util_js_1.hexutil.toHex(address), sign,
+        privateKey: privateKey.toString('hex'), publicKey: publicKey.toString('hex'), address: lib_common_util_js_1.hexutil.toHex(address), sign: sign,
     };
 };
 //# sourceMappingURL=keyPair.js.map

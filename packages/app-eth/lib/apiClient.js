@@ -1,89 +1,90 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
-const network_1 = require("./network");
-class EthApiClient {
-    constructor(isTetNet) {
+var api_1 = require("./api");
+var network_1 = require("./network");
+var EthApiClient = (function () {
+    function EthApiClient(isTetNet) {
         this.tokenSupport = true;
         this.remoteApi = 'prod';
         this.isTetNet = isTetNet;
     }
-    coverNetWorkConfig(network, remoteApi) {
+    EthApiClient.prototype.coverNetWorkConfig = function (network, remoteApi) {
         if (network.toString() === "[object Object]") {
             network_1.customNetwork(network);
         }
         if (remoteApi.toString() === "[object Object]") {
             network_1.customRemote(remoteApi);
         }
-    }
-    setRemoteApi(api) {
+    };
+    EthApiClient.prototype.setRemoteApi = function (api) {
         this.remoteApi = api;
-    }
-    getNetwork() {
+    };
+    EthApiClient.prototype.getNetwork = function () {
         return this.isTetNet ? 'mainnet' : 'ropsten';
-    }
-    getBlockByNumber(blockNumber) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getBlockByNumber = function (blockNumber) {
+        var network = this.getNetwork();
         return api_1.default.getBlockByNumber(blockNumber, false, network);
-    }
-    getBlockNumber() {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getBlockNumber = function () {
+        var network = this.getNetwork();
         return api_1.default.blockNumber(network);
-    }
-    getTransactionStatus(hash) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getTransactionStatus = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionStatus(hash, network);
-    }
-    getTransactionExplorerUrl(hash) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getTransactionExplorerUrl = function (hash) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionUrlInExplorer(hash, network);
-    }
-    getBalance(address) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getBalance = function (address) {
+        var network = this.getNetwork();
         return api_1.default.getBalance(address, network);
-    }
-    getTransactionsByAddress(address, page, size, timestamp) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getTransactionsByAddress = function (address, page, size, timestamp) {
+        var network = this.getNetwork();
         return api_1.default.getTransactionsByAddress(address, page, size, timestamp, network);
-    }
-    validateBalanceSufficiency(account, symbol, amount, extraParams) {
+    };
+    EthApiClient.prototype.validateBalanceSufficiency = function (account, symbol, amount, extraParams) {
         return api_1.default.validateBalanceSufficiency(account, symbol, amount, extraParams);
-    }
-    sendTransaction(account, symbol, to, value, extraParams, data, shouldBroadCast) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.sendTransaction = function (account, symbol, to, value, extraParams, data, shouldBroadCast) {
+        var network = this.getNetwork();
         return api_1.default.sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast);
-    }
-    sameAddress(address1, address2) {
+    };
+    EthApiClient.prototype.sameAddress = function (address1, address2) {
         return api_1.default.sameAddress(address1, address2);
-    }
-    formatAddress1Line(address) {
+    };
+    EthApiClient.prototype.formatAddress1Line = function (address) {
         return api_1.default.formatAddress1Line(address);
-    }
-    getTokenIconUrl(tokenSymbol, contractAddress) {
-        const network = this.getNetwork();
+    };
+    EthApiClient.prototype.getTokenIconUrl = function (tokenSymbol, contractAddress) {
+        var network = this.getNetwork();
         return api_1.default.getTokenIconUrl(tokenSymbol, contractAddress, network);
-    }
-    fetchTokenDetail(contractAddress, network) {
-        const network_ = this.getNetwork();
+    };
+    EthApiClient.prototype.fetchTokenDetail = function (contractAddress, network) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchTokenDetail(contractAddress, network || network_);
-    }
-    fetchAccountTokenTransferHistory(address, symbolAddress, network, page, size, timestamp) {
-        const network_ = this.getNetwork();
+    };
+    EthApiClient.prototype.fetchAccountTokenTransferHistory = function (address, symbolAddress, network, page, size, timestamp) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchAccountTokenTransferHistory(address, symbolAddress, network || network_, page, size, timestamp);
-    }
-    fetchAccountTokens(address, network) {
+    };
+    EthApiClient.prototype.fetchAccountTokens = function (address, network) {
         throw new Error("[ETH] fetchAccountTokens not implemented.");
-    }
-    fetchAccountTokenBalance(contractAddress, address, network) {
-        const network_ = this.getNetwork();
+    };
+    EthApiClient.prototype.fetchAccountTokenBalance = function (contractAddress, address, network) {
+        var network_ = this.getNetwork();
         return api_1.default.fetchAccountTokenBalance(contractAddress, address, network || network_);
-    }
-    getTopTokens(topN) {
+    };
+    EthApiClient.prototype.getTopTokens = function (topN) {
         return api_1.default.getTopTokens(topN, this.remoteApi);
-    }
-    searchTokens(keyword) {
+    };
+    EthApiClient.prototype.searchTokens = function (keyword) {
         return api_1.default.searchTokens(keyword, this.remoteApi);
-    }
-}
+    };
+    return EthApiClient;
+}());
 exports.default = EthApiClient;
 //# sourceMappingURL=apiClient.js.map

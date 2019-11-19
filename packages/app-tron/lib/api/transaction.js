@@ -1,36 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
-const bignumber_js_1 = require("bignumber.js");
-const keystore_1 = require("../keystore");
-const jsonrpc_1 = require("./jsonrpc");
-const utils_1 = require("../utils");
-const network_1 = require("../network");
-function sendTransaction(account, symbol, to, value, network = 'mainnet', shouldBroadCast = true) {
-    return new Promise((resolve, reject) => {
+var lib_common_util_js_1 = require("lib-common-util-js");
+var bignumber_js_1 = require("bignumber.js");
+var keystore_1 = require("../keystore");
+var jsonrpc_1 = require("./jsonrpc");
+var utils_1 = require("../utils");
+var network_1 = require("../network");
+function sendTransaction(account, symbol, to, value, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    if (shouldBroadCast === void 0) { shouldBroadCast = true; }
+    return new Promise(function (resolve, reject) {
         value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
         jsonrpc_1.getLatestBlock(network)
-            .then(block => {
+            .then(function (block) {
             console.log('get latest block =>', block);
-            const latest_block = {
+            var latest_block = {
                 hash: block.blockID,
                 number: block.block_header.raw_data.number,
             };
-            const now = new Date().getTime();
-            const expire = now + 10 * 60 * 60 * 1000;
-            const tx = {
+            var now = new Date().getTime();
+            var expire = now + 10 * 60 * 60 * 1000;
+            var tx = {
                 timestamp: now,
                 expiration: expire,
                 to_address: to,
                 amount: value.shiftedBy(6).toNumber(),
                 owner_address: account.address,
                 private_key: account.private_key,
-                latest_block,
+                latest_block: latest_block,
             };
             keystore_1.default.signTransaction(tx)
-                .then(signRes => {
+                .then(function (signRes) {
                 console.log('sign result =>', signRes);
-                const signedTx = {
+                var signedTx = {
                     signature: signRes.signature,
                     txID: signRes.txID,
                     raw_data: {
@@ -55,90 +57,95 @@ function sendTransaction(account, symbol, to, value, network = 'mainnet', should
                 };
                 if (shouldBroadCast) {
                     jsonrpc_1.broadcastTransaction(signedTx, network)
-                        .then(broadcastRes => {
+                        .then(function (broadcastRes) {
                         if (broadcastRes.result) {
-                            const pendingTx = {
-                                hash: `${signedTx.txID}`,
+                            var pendingTx = {
+                                hash: "" + signedTx.txID,
                                 timestamp: now,
                                 from: account.address,
-                                to,
-                                value,
+                                to: to,
+                                value: value,
                                 status: 'PENDING',
                             };
-                            resolve({ pendingTx, pendingTokenTx: undefined });
+                            resolve({ pendingTx: pendingTx, pendingTokenTx: undefined });
                         }
                         else {
-                            reject(new Error(`${broadcastRes}`));
+                            reject(new Error("" + broadcastRes));
                         }
                     })
-                        .catch(err => {
+                        .catch(function (err) {
                         console.log('keystore broadcast tx failed', err);
                         reject(err);
                     });
                 }
                 else {
-                    const txObj = {
+                    var txObj = {
                         timestamp: now,
                         from: account.address,
-                        to,
-                        value,
+                        to: to,
+                        value: value,
                     };
-                    resolve({ encoded: signedTx, txObj });
+                    resolve({ encoded: signedTx, txObj: txObj });
                 }
             })
-                .catch(err => {
+                .catch(function (err) {
                 console.log('keystore sign tx failed', err);
                 reject(err);
             });
         })
-            .catch(err => {
+            .catch(function (err) {
             console.log('keystore get latest block failed.', err);
             reject(err);
         });
     });
 }
 exports.sendTransaction = sendTransaction;
-function getTransactionStatus(txHash, network = 'mainnet') {
-    return new Promise((resolve, reject) => {
+function getTransactionStatus(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    return new Promise(function (resolve, reject) {
         jsonrpc_1.getTransactionInfoById(txHash, network)
-            .then(res => {
-            const { blockNumber } = res;
+            .then(function (res) {
+            var blockNumber = res.blockNumber;
             jsonrpc_1.getTransactionById(txHash, network)
-                .then(tx => {
+                .then(function (tx) {
                 if (tx.ret !== undefined &&
                     tx.ret instanceof Array &&
                     tx.ret.length > 0 &&
                     tx.ret[0].contractRet !== undefined) {
                     resolve({
-                        blockNumber,
+                        blockNumber: blockNumber,
                         status: tx.ret[0].contractRet === 'SUCCESS',
                     });
                     return;
                 }
                 resolve(undefined);
             })
-                .catch(err => {
+                .catch(function (err) {
                 reject(err);
             });
         })
-            .catch(err => {
+            .catch(function (err) {
             reject(err);
         });
     });
 }
 exports.getTransactionStatus = getTransactionStatus;
-function getTransactionsByAddress(address, page = 0, size = 25, timestamp = undefined, network = 'mainnet') {
-    const url = `${network_1.config.networks[network].explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page * size}&address=${address}`;
-    console.log(`[tron req] get tron txs by address: ${url}`);
-    return new Promise((resolve, reject) => {
+function getTransactionsByAddress(address, page, size, timestamp, network) {
+    if (page === void 0) { page = 0; }
+    if (size === void 0) { size = 25; }
+    if (timestamp === void 0) { timestamp = undefined; }
+    if (network === void 0) { network = 'mainnet'; }
+    var url = network_1.config.networks[network].explorer_api + "/transfer?sort=-timestamp&limit=" + size + "&start=" + page * size + "&address=" + address;
+    console.log("[tron req] get tron txs by address: " + url);
+    return new Promise(function (resolve, reject) {
         lib_common_util_js_1.HttpClient.get(url, false)
-            .then(res => {
-            const { data } = res.data;
-            const txs = {};
-            data.forEach(t => {
+            .then(function (res) {
+            var data = res.data.data;
+            var txs = {};
+            data.forEach(function (t) {
                 if (t.tokenName === '_') {
-                    const tx = {};
-                    tx.hash = `${t.transactionHash}`;
+                    var tx = {};
+                    tx.hash = "" + t.transactionHash;
                     tx.timestamp = t.timestamp;
                     tx.from = t.transferFromAddress;
                     tx.to = t.transferToAddress;
@@ -150,15 +157,16 @@ function getTransactionsByAddress(address, page = 0, size = 25, timestamp = unde
             });
             resolve(txs);
         })
-            .catch(err => {
+            .catch(function (err) {
             reject(err);
         });
     });
 }
 exports.getTransactionsByAddress = getTransactionsByAddress;
-function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
+function getTransactionUrlInExplorer(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
     txHash = txHash.startsWith('0x') ? txHash.slice(2) : txHash;
-    return `${network_1.config.networks[network].explorer}/${txHash}`;
+    return network_1.config.networks[network].explorer + "/" + txHash;
 }
 exports.getTransactionUrlInExplorer = getTransactionUrlInExplorer;
 //# sourceMappingURL=transaction.js.map

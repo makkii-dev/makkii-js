@@ -1,130 +1,148 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const bignumber_js_1 = require("bignumber.js");
-const aion_web3_eth_contract_1 = require("aion-web3-eth-contract");
-const lib_common_util_js_1 = require("lib-common-util-js");
-const constants_1 = require("./constants");
-const jsonrpc_1 = require("./jsonrpc");
-const keystore_1 = require("../keystore");
-const network_1 = require("../network");
+var bignumber_js_1 = require("bignumber.js");
+var aion_web3_eth_contract_1 = require("aion-web3-eth-contract");
+var lib_common_util_js_1 = require("lib-common-util-js");
+var constants_1 = require("./constants");
+var jsonrpc_1 = require("./jsonrpc");
+var keystore_1 = require("../keystore");
+var network_1 = require("../network");
 function sendNativeTx(account, to, value_, gasPrice, gasLimit, data, network, shouldBroadCast) {
-    const { type, derivationIndex, private_key: privateKey } = account;
-    return new Promise((resolve, reject) => {
-        const value = bignumber_js_1.default.isBigNumber(value_) ? value_ : new bignumber_js_1.default(value_);
+    var type = account.type, derivationIndex = account.derivationIndex, privateKey = account.private_key;
+    return new Promise(function (resolve, reject) {
+        var value = bignumber_js_1.default.isBigNumber(value_) ? value_ : new bignumber_js_1.default(value_);
         jsonrpc_1.getTransactionCount(account.address, 'pending', network)
-            .then((count) => {
-            let extra_param = { type };
+            .then(function (count) {
+            var extra_param = { type: type };
             if (type === '[ledger]') {
-                extra_param = Object.assign(Object.assign({}, extra_param), { derivationIndex, sender: account.address });
+                extra_param = __assign(__assign({}, extra_param), { derivationIndex: derivationIndex, sender: account.address });
             }
-            let tx = {
+            var tx = {
                 nonce: count,
-                to,
+                to: to,
                 amount: value.shiftedBy(18),
                 timestamp: new Date().getTime() * 1000,
                 type: 1,
-                gasPrice,
+                gasPrice: gasPrice,
                 gas: gasLimit,
-                extra_param,
+                extra_param: extra_param,
                 private_key: privateKey,
             };
             if (data !== undefined) {
-                tx = Object.assign(Object.assign({}, tx), { data });
+                tx = __assign(__assign({}, tx), { data: data });
             }
             keystore_1.default.signTransaction(tx)
-                .then(({ encoded }) => {
+                .then(function (_a) {
+                var encoded = _a.encoded;
                 if (shouldBroadCast) {
-                    jsonrpc_1.sendSignedTransaction(`0x${encoded}`, network)
-                        .then((hash) => {
-                        const pendingTx = {
-                            hash,
+                    jsonrpc_1.sendSignedTransaction("0x" + encoded, network)
+                        .then(function (hash) {
+                        var pendingTx = {
+                            hash: hash,
                             timestamp: tx.timestamp / 1000,
                             from: account.address,
-                            to,
-                            value,
+                            to: to,
+                            value: value,
                             status: 'PENDING',
-                            gasPrice,
+                            gasPrice: gasPrice,
                         };
-                        resolve({ pendingTx });
+                        resolve({ pendingTx: pendingTx });
                     })
-                        .catch((err) => {
+                        .catch(function (err) {
                         console.log('keystore send signed tx error:', err);
                         reject(err);
                     });
                 }
                 else {
-                    const txObj = {
+                    var txObj = {
                         timestamp: tx.timestamp / 1000,
                         from: account.address,
-                        to,
-                        value,
-                        gasPrice,
+                        to: to,
+                        value: value,
+                        gasPrice: gasPrice,
                     };
-                    resolve({ encoded, txObj });
+                    resolve({ encoded: encoded, txObj: txObj });
                 }
             })
-                .catch((err) => {
+                .catch(function (err) {
                 console.log('keystore sign tx error:', err);
                 reject(err);
             });
         })
-            .catch((err) => {
+            .catch(function (err) {
             console.log('keystore get transaction count error: ', err);
             reject(err);
         });
     });
 }
-function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network = 'mainnet', shouldBroadCast) {
-    const { tokens } = account;
-    const { contractAddr, tokenDecimal } = tokens[symbol];
+function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    var tokens = account.tokens;
+    var _a = tokens[symbol], contractAddr = _a.contractAddr, tokenDecimal = _a.tokenDecimal;
     console.log('tokenDecimal=>', tokenDecimal);
-    const tokenContract = new aion_web3_eth_contract_1.default(constants_1.CONTRACT_ABI, contractAddr);
-    const methodsData = tokenContract.methods
+    var tokenContract = new aion_web3_eth_contract_1.default(constants_1.CONTRACT_ABI, contractAddr);
+    var methodsData = tokenContract.methods
         .send(to, value
         .shiftedBy(tokenDecimal - 0)
         .toFixed(0)
         .toString(), '')
         .encodeABI();
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         sendNativeTx(account, contractAddr, new bignumber_js_1.default(0), gasPrice, gasLimit, methodsData, network, shouldBroadCast)
-            .then((res) => {
+            .then(function (res) {
             if (shouldBroadCast) {
-                const { pendingTx } = res;
+                var pendingTx = res.pendingTx;
                 pendingTx.tknTo = to;
                 pendingTx.tknValue = value;
-                resolve({ pendingTx });
+                resolve({ pendingTx: pendingTx });
             }
             else {
                 resolve(res);
             }
         })
-            .catch((err) => {
+            .catch(function (err) {
             reject(err);
         });
     });
 }
-function sendTransaction(account, symbol, to, value, extraParams, data, network = 'mainnet', shouldBroadCast = true) {
-    const { gasPrice } = extraParams;
-    const { gasLimit } = extraParams;
+function sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast) {
+    if (network === void 0) { network = 'mainnet'; }
+    if (shouldBroadCast === void 0) { shouldBroadCast = true; }
+    var gasPrice = extraParams.gasPrice;
+    var gasLimit = extraParams.gasLimit;
     if (account.symbol === symbol) {
         return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network, shouldBroadCast);
     }
     return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network, shouldBroadCast);
 }
 exports.sendTransaction = sendTransaction;
-function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainnet') {
-    const url = `${network_1.config.networks[network].explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
-    console.log(`[aion req] get aion transactions by address: ${url}`);
-    return new Promise((resolve, reject) => {
+function getTransactionsByAddress(address, page, size, network) {
+    if (page === void 0) { page = 0; }
+    if (size === void 0) { size = 25; }
+    if (network === void 0) { network = 'mainnet'; }
+    var url = network_1.config.networks[network].explorer_api + "/aion/dashboard/getTransactionsByAddress?accountAddress=" + address.toLowerCase() + "&page=" + page + "&size=" + size;
+    console.log("[aion req] get aion transactions by address: " + url);
+    return new Promise(function (resolve, reject) {
         lib_common_util_js_1.HttpClient.get(url, false)
-            .then((res) => {
+            .then(function (res) {
             console.log('[keystore resp] res:', res.data);
-            const { content } = res.data;
-            const txs = {};
-            content.forEach((t) => {
-                const tx = {};
-                const timestamp_ = `${t.transactionTimestamp}`;
-                tx.hash = `0x${t.transactionHash}`;
+            var content = res.data.content;
+            var txs = {};
+            content.forEach(function (t) {
+                var tx = {};
+                var timestamp_ = "" + t.transactionTimestamp;
+                tx.hash = "0x" + t.transactionHash;
                 tx.timestamp = timestamp_.length === 16
                     ? parseInt(timestamp_) / 1000
                     : timestamp_.length === 13
@@ -132,8 +150,8 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
                         : timestamp_.length === 10
                             ? parseInt(timestamp_) * 1000
                             : null;
-                tx.from = `0x${t.fromAddr}`;
-                tx.to = `0x${t.toAddr}`;
+                tx.from = "0x" + t.fromAddr;
+                tx.to = "0x" + t.toAddr;
                 tx.value = new bignumber_js_1.default(t.value, 10).toNumber();
                 tx.status = t.txError === '' ? 'CONFIRMED' : 'FAILED';
                 tx.blockNumber = t.blockNumber;
@@ -142,20 +160,22 @@ function getTransactionsByAddress(address, page = 0, size = 25, network = 'mainn
             });
             resolve(txs);
         })
-            .catch((err) => {
+            .catch(function (err) {
             reject(err);
         });
     });
 }
 exports.getTransactionsByAddress = getTransactionsByAddress;
-function getTransactionUrlInExplorer(txHash, network = 'mainnet') {
-    return `${network_1.config.networks[network].explorer}/${txHash}`;
+function getTransactionUrlInExplorer(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    return network_1.config.networks[network].explorer + "/" + txHash;
 }
 exports.getTransactionUrlInExplorer = getTransactionUrlInExplorer;
-function getTransactionStatus(txHash, network = 'mainnet') {
-    return new Promise((resolve, reject) => {
+function getTransactionStatus(txHash, network) {
+    if (network === void 0) { network = 'mainnet'; }
+    return new Promise(function (resolve, reject) {
         jsonrpc_1.getTransactionReceipt(txHash, network)
-            .then((receipt) => {
+            .then(function (receipt) {
             if (receipt !== null) {
                 resolve({
                     status: parseInt(receipt.status, 16) === 1,
@@ -167,7 +187,7 @@ function getTransactionStatus(txHash, network = 'mainnet') {
                 resolve(null);
             }
         })
-            .catch((err) => {
+            .catch(function (err) {
             reject(err);
         });
     });

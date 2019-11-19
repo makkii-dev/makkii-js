@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -11,55 +22,56 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bip39 = require("bip39");
-const keystore_1 = require("./keystore");
-class TronKeystoreClient {
-    constructor() {
+var bip39 = require("bip39");
+var keystore_1 = require("./keystore");
+var TronKeystoreClient = (function () {
+    function TronKeystoreClient() {
         this.mnemonic = '';
         this.mnemonic = '';
     }
-    signTransaction(tx) {
+    TronKeystoreClient.prototype.signTransaction = function (tx) {
         return keystore_1.default.signTransaction(tx);
-    }
-    getKey(address_index) {
+    };
+    TronKeystoreClient.prototype.getKey = function (address_index) {
         if (!bip39.validateMnemonic(this.mnemonic)) {
             throw new Error('set mnemonic first');
         }
         return keystore_1.default.getKeyFromMnemonic(this.mnemonic, address_index);
-    }
-    setMnemonic(mnemonic, passphrase) {
+    };
+    TronKeystoreClient.prototype.setMnemonic = function (mnemonic, passphrase) {
         this.mnemonic = mnemonic;
-    }
-    generateMnemonic() {
-        const mnemonic = bip39.generateMnemonic();
+    };
+    TronKeystoreClient.prototype.generateMnemonic = function () {
+        var mnemonic = bip39.generateMnemonic();
         this.mnemonic = mnemonic;
         return mnemonic;
-    }
-    recoverKeyPairByPrivateKey(priKey, options) {
+    };
+    TronKeystoreClient.prototype.recoverKeyPairByPrivateKey = function (priKey, options) {
         try {
-            const keyPair = keystore_1.default.keyPair(priKey);
-            const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-            return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+            var keyPair = keystore_1.default.keyPair(priKey);
+            var privateKey = keyPair.privateKey, publicKey = keyPair.publicKey, address = keyPair.address, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+            return Promise.resolve(__assign({ private_key: privateKey, public_key: publicKey, address: address }, reset));
         }
         catch (e) {
-            return Promise.reject(new Error(`recover privKey failed: ${e}`));
+            return Promise.reject(new Error("recover privKey failed: " + e));
         }
-    }
-    recoverKeyPairByWIF(WIF, options) {
+    };
+    TronKeystoreClient.prototype.recoverKeyPairByWIF = function (WIF, options) {
         throw new Error("[tron] recoverKeyPairByWIF not implemented.");
-    }
-    recoverKeyPairBykeyFile(file, password) {
+    };
+    TronKeystoreClient.prototype.recoverKeyPairBykeyFile = function (file, password) {
         throw new Error("[tron] recoverKeyPairBykeyFile not implemented.");
-    }
-    validatePrivateKey(privateKey) {
+    };
+    TronKeystoreClient.prototype.validatePrivateKey = function (privateKey) {
         throw new Error("[tron] validatePrivateKey not implemented.");
-    }
-    validateAddress(address) {
+    };
+    TronKeystoreClient.prototype.validateAddress = function (address) {
         return keystore_1.default.validateAddress(address);
-    }
-    getKeyFromMnemonic(address_index, mnemonic) {
+    };
+    TronKeystoreClient.prototype.getKeyFromMnemonic = function (address_index, mnemonic) {
         return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index);
-    }
-}
+    };
+    return TronKeystoreClient;
+}());
 exports.default = TronKeystoreClient;
 //# sourceMappingURL=keystoreClient.js.map

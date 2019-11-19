@@ -19,7 +19,7 @@ exports.remote = {
     prod: 'https://www.chaion.net/makkii',
 };
 function deepMergeObject(obj1, obj2) {
-    Object.keys(obj2).forEach(key => {
+    Object.keys(obj2).forEach(function (key) {
         obj1[key] = obj1[key] && obj1[key].toString() === "[object Object]" ?
             deepMergeObject(obj1[key], obj2[key]) : obj1[key] = obj2[key];
     });
