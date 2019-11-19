@@ -35,6 +35,11 @@ export interface IsingleKeystoreLedgerClient {
 export interface IsingleKeystoreFullClient extends IsingleKeystoreClient, IsingleKeystoreLedgerClient{}
 
 export interface IkeystoreClient {
+    
+    addCoin(coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient): void;
+
+    removeCoin(coinType: string):boolean
+
     signTransaction(coinType: string, tx: any): Promise<any> 
 
     getKey(coinType: string, address_index: number): Promise<any> 

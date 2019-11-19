@@ -1,32 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_aion_1 = require("@makkii/app-aion");
-const app_btc_1 = require("@makkii/app-btc");
-const app_eth_1 = require("@makkii/app-eth");
-const app_tron_1 = require("@makkii/app-tron");
+function isIntanceOfKeystoreClient(client) {
+    const map = [
+        "signTransaction",
+        "getKey",
+        "setMnemonic",
+        "generateMnemonic",
+        "recoverKeyPairByPrivateKey",
+        "recoverKeyPairByWIF",
+        "recoverKeyPairBykeyFile",
+        "validatePrivateKey",
+        "validateAddress",
+        "getKeyFromMnemonic",
+    ];
+    return !map.some(i => !(i in client));
+}
 class KeystoreClient {
-    constructor(support_coin_lists, isTestNet = true) {
+    constructor() {
         this.coins = {};
-        support_coin_lists.forEach(c => {
-            if (c.toLowerCase() === 'aion') {
-                this.coins.aion = new app_aion_1.AionKeystoreClient();
-            }
-            else if (c.toLowerCase() === 'btc') {
-                this.coins.btc = new app_btc_1.BtcKeystoreClient('btc', isTestNet);
-            }
-            else if (c.toLowerCase() === 'eth') {
-                this.coins.eth = new app_eth_1.EthKeystoreClient();
-            }
-            else if (c.toLowerCase() === 'ltc') {
-                this.coins.ltc = new app_btc_1.BtcKeystoreClient('ltc', isTestNet);
-            }
-            else if (c.toLowerCase() === 'trx') {
-                this.coins.trx = new app_tron_1.TronKeystoreClient();
-            }
-            else {
-                throw new Error(`coin: [${c}] is unsupported.`);
-            }
-        });
+    }
+    addCoin(coinType, client) {
+        if (!isIntanceOfKeystoreClient(client)) {
+            throw new Error('not a keystore client!');
+        }
+        this.coins[coinType.toLowerCase()] = client;
+    }
+    removeCoin(coinType) {
+        if (this.coins[coinType.toLowerCase()]) {
+            delete this.coins[coinType.toLowerCase()];
+            return true;
+        }
+        return false;
     }
     getCoin(coinType) {
         const coin = this.coins[coinType.toLowerCase()];

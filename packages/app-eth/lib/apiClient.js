@@ -8,12 +8,12 @@ class EthApiClient {
         this.remoteApi = 'prod';
         this.isTetNet = isTetNet;
     }
-    coverNetWorkConfig(network, remote) {
+    coverNetWorkConfig(network, remoteApi) {
         if (network.toString() === "[object Object]") {
             network_1.customNetwork(network);
         }
-        if (remote.toString() === "[object Object]") {
-            network_1.customRemote(remote);
+        if (remoteApi.toString() === "[object Object]") {
+            network_1.customRemote(remoteApi);
         }
     }
     setRemoteApi(api) {

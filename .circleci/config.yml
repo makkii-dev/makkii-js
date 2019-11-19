@@ -34,5 +34,5 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: lerna run tsc
-      - run: lerna run test
+      - run: npx lerna run tsc
+      - run: npx lerna run test

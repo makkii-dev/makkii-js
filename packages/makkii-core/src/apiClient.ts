@@ -1,54 +1,57 @@
-import {AionApiClient} from '@makkii/app-aion';
-import {BtcApiClient} from '@makkii/app-btc';
-import {EthApiClient} from '@makkii/app-eth';
-import {TronApiClient} from '@makkii/app-tron';
 import BigNumber from 'bignumber.js';
-import {IApiClient, IsingleApiClient, IsingleApiFullClient} from './interfaces/apiclient';
+import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/apiclient';
+
+
+function isIntanceOfApiClient(client: object) {
+    const map = [
+        "addCoin",
+        "removeCoin",
+        "getBlockByNumber",
+        "getBlockNumber",
+        "getTransactionStatus",
+        "getTransactionExplorerUrl",
+        "getBalance",
+        "getTransactionsByAddress",
+        "validateBalanceSufficiency",
+        "sendTransaction",
+        "sameAddress",
+        "formatAddress1Line",
+        "getTokenIconUrl",
+        "fetchTokenDetail",
+        "fetchAccountTokenTransferHistory",
+        "fetchAccountTokens",
+        "fetchAccountTokenBalance",
+        "getTopTokens",
+        "searchTokens",
+    ];
+    return !map.some(i=> !(i in client));
+}
 
 export default class ApiClient implements IApiClient {
-   
 
-    coins: {[coin:string]: IsingleApiClient | IsingleApiFullClient} = {};
+    coins: { [coin: string]: IsingleApiClient | IsingleApiFullClient } = {};
 
-    constructor(support_coin_lists: Array<string>, isTestNet: boolean){
-       support_coin_lists.forEach(c=>{
-           if(c.toLowerCase() === 'aion'){
-             this.coins.aion = new AionApiClient(isTestNet);
-           }else if(c.toLowerCase() === 'btc'){
-               this.coins.btc = new BtcApiClient(isTestNet, 'btc');
-           }else if(c.toLowerCase() === 'eth'){
-               this.coins.eth = new EthApiClient(isTestNet);
-           }else if(c.toLowerCase() === 'ltc'){
-               this.coins.ltc = new BtcApiClient(isTestNet, 'ltc');
-           }else if(c.toLowerCase() === 'trx'){
-               this.coins.trx = new TronApiClient(isTestNet);
-           }else {
-               throw new Error(`coin: [${c}] is unsupported.`)
-           }
-       })
+
+    addCoin(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void {
+        if(!isIntanceOfApiClient(client)){
+            throw new Error('not a api client!');
+        }
+        this.coins[coinType.toLowerCase()] = client;
     }
 
-    coverNetWorkConfig(config: any): void {
-        const {remote:{api={}}={}, coins={}} = config;
-        Object.keys(this.coins).forEach(symbol=>{
-            if(coins[symbol]){
-                this.coins[symbol].coverNetWorkConfig(coins[symbol], api);
-            }
-        })
+
+    removeCoin(coinType: string): boolean {
+        if (this.coins[coinType.toLowerCase()]) {
+            delete this.coins[coinType.toLowerCase()]
+            return true;
+        }
+        return false;
     }
 
-    setRemoteApi(api: string): void {
-       Object.values(this.coins).forEach(coin=>{
-           if('setRemoteApi' in coin) {
-               coin.setRemoteApi(api)
-           }
-       })
-    }
 
-    
-    getCoin(coinType: string){
+    getCoin(coinType: string) {
         const coin = this.coins[coinType.toLowerCase()];
-        if(!coin){
+        if (!coin) {
             throw new Error(`coin: [${coinType}] is not init or unsupported.`)
         }
         return coin;
@@ -106,16 +109,16 @@ export default class ApiClient implements IApiClient {
 
     getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.getTokenIconUrl(tokenSymbol, contractAddress);
         }
         throw new Error(`[${coinType}] getTokenIconUrl is not implemented.`)
-        
+
     }
 
     fetchTokenDetail(coinType: string, contractAddress: string, network?: string): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.fetchTokenDetail(contractAddress, network);
         }
         throw new Error(`[${coinType}] fetchTokenDetail is not implemented.`)
@@ -123,15 +126,15 @@ export default class ApiClient implements IApiClient {
 
     fetchAccountTokenTransferHistory(coinType: string, address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
-            return coin.fetchAccountTokenTransferHistory(address,symbolAddress, network, page, size, timestamp);
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            return coin.fetchAccountTokenTransferHistory(address, symbolAddress, network, page, size, timestamp);
         }
         throw new Error(`[${coinType}] fetchAccountTokenTransferHistory is not implemented.`)
     }
 
     fetchAccountTokens(coinType: string, address: string, network?: string): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.fetchAccountTokens(address, network);
         }
         throw new Error(`[${coinType}] fetchAccountTokens is not implemented.`)
@@ -139,7 +142,7 @@ export default class ApiClient implements IApiClient {
 
     fetchAccountTokenBalance(coinType: string, contractAddress: string, address: string, network?: string): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.fetchAccountTokenBalance(contractAddress, address, network);
         }
         throw new Error(`[${coinType}] fetchAccountTokenBalance is not implemented.`)
@@ -147,7 +150,7 @@ export default class ApiClient implements IApiClient {
 
     getTopTokens(coinType: string, topN?: number): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.getTopTokens(topN);
         }
         throw new Error(`[${coinType}] getTopTokens is not implemented.`)
@@ -155,7 +158,7 @@ export default class ApiClient implements IApiClient {
 
     searchTokens(coinType: string, keyword: string): Promise<any> {
         const coin = this.getCoin(coinType);
-        if('tokenSupport' in coin && !!coin.tokenSupport){
+        if ('tokenSupport' in coin && !!coin.tokenSupport) {
             return coin.searchTokens(keyword);
         }
         throw new Error(`[${coinType}] searchTokens is not implemented.`)

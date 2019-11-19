@@ -5,12 +5,15 @@ import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './src/interf
 import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './src/interfaces/keystoreClient';
 
 declare class ApiClient implements IApiClient {
+    
     coins: {
         [coin: string]: IsingleApiClient | IsingleApiFullClient;
     };
 
-    constructor(support_coin_lists: Array<string>, isTestNet: boolean);
+    addCoin(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void;
 
+    removeCoin(coinType: string): boolean;
+    
     coverNetWorkConfig(config: any): void;
 
     setRemoteApi(api: string): void;
@@ -53,12 +56,16 @@ declare class ApiClient implements IApiClient {
 }
 
 declare class KeystoreClient implements IkeystoreClient {
+    
+
     coins: {
         [coin: string]: IsingleKeystoreClient | IsingleKeystoreFullClient;
     };
 
-    constructor(support_coin_lists: Array<string>, isTestNet?: boolean);
+    addCoin(coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient): void;
 
+    removeCoin(coinType: string): boolean;
+    
     getCoin(coinType: string): IsingleKeystoreClient | IsingleKeystoreFullClient;
 
     signTransaction(coinType: string, tx: any): Promise<any>;

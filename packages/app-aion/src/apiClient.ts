@@ -19,12 +19,12 @@ export default class AionApiClient implements ApiClient, ApiTokenClient {
     this.remoteApi = api;
   }
 
-  coverNetWorkConfig(network: any, remote: any): void {
+  coverNetWorkConfig(network: any, remoteApi: any): void {
     if(network.toString() === "[object Object]") {
       customNetwork(network);
     }
-    if(remote.toString() === "[object Object]") {
-      customRemote(remote);
+    if(remoteApi.toString() === "[object Object]") {
+      customRemote(remoteApi);
     }
   }
 

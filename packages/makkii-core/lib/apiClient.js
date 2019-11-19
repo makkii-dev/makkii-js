@@ -1,47 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_aion_1 = require("@makkii/app-aion");
-const app_btc_1 = require("@makkii/app-btc");
-const app_eth_1 = require("@makkii/app-eth");
-const app_tron_1 = require("@makkii/app-tron");
+function isIntanceOfApiClient(client) {
+    const map = [
+        "addCoin",
+        "removeCoin",
+        "getBlockByNumber",
+        "getBlockNumber",
+        "getTransactionStatus",
+        "getTransactionExplorerUrl",
+        "getBalance",
+        "getTransactionsByAddress",
+        "validateBalanceSufficiency",
+        "sendTransaction",
+        "sameAddress",
+        "formatAddress1Line",
+        "getTokenIconUrl",
+        "fetchTokenDetail",
+        "fetchAccountTokenTransferHistory",
+        "fetchAccountTokens",
+        "fetchAccountTokenBalance",
+        "getTopTokens",
+        "searchTokens",
+    ];
+    return !map.some(i => !(i in client));
+}
 class ApiClient {
-    constructor(support_coin_lists, isTestNet) {
+    constructor() {
         this.coins = {};
-        support_coin_lists.forEach(c => {
-            if (c.toLowerCase() === 'aion') {
-                this.coins.aion = new app_aion_1.AionApiClient(isTestNet);
-            }
-            else if (c.toLowerCase() === 'btc') {
-                this.coins.btc = new app_btc_1.BtcApiClient(isTestNet, 'btc');
-            }
-            else if (c.toLowerCase() === 'eth') {
-                this.coins.eth = new app_eth_1.EthApiClient(isTestNet);
-            }
-            else if (c.toLowerCase() === 'ltc') {
-                this.coins.ltc = new app_btc_1.BtcApiClient(isTestNet, 'ltc');
-            }
-            else if (c.toLowerCase() === 'trx') {
-                this.coins.trx = new app_tron_1.TronApiClient(isTestNet);
-            }
-            else {
-                throw new Error(`coin: [${c}] is unsupported.`);
-            }
-        });
     }
-    coverNetWorkConfig(config) {
-        const { remote: { api = {} } = {}, coins = {} } = config;
-        Object.keys(this.coins).forEach(symbol => {
-            if (coins[symbol]) {
-                this.coins[symbol].coverNetWorkConfig(coins[symbol], api);
-            }
-        });
+    addCoin(coinType, client) {
+        if (!isIntanceOfApiClient(client)) {
+            throw new Error('not a api client!');
+        }
+        this.coins[coinType.toLowerCase()] = client;
     }
-    setRemoteApi(api) {
-        Object.values(this.coins).forEach(coin => {
-            if ('setRemoteApi' in coin) {
-                coin.setRemoteApi(api);
-            }
-        });
+    removeCoin(coinType) {
+        if (this.coins[coinType.toLowerCase()]) {
+            delete this.coins[coinType.toLowerCase()];
+            return true;
+        }
+        return false;
     }
     getCoin(coinType) {
         const coin = this.coins[coinType.toLowerCase()];

@@ -11,12 +11,12 @@ class AionApiClient {
     setRemoteApi(api) {
         this.remoteApi = api;
     }
-    coverNetWorkConfig(network, remote) {
+    coverNetWorkConfig(network, remoteApi) {
         if (network.toString() === "[object Object]") {
             network_1.customNetwork(network);
         }
-        if (remote.toString() === "[object Object]") {
-            network_1.customRemote(remote);
+        if (remoteApi.toString() === "[object Object]") {
+            network_1.customRemote(remoteApi);
         }
     }
     getNetwork() {

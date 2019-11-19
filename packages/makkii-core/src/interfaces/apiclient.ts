@@ -1,6 +1,11 @@
 import BigNumber from 'bignumber.js';
 
 export interface IApiClient {
+
+    addCoin(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void;
+
+    removeCoin(coinType: string):boolean
+
     getBlockByNumber(coinType: string, blockNumber: Number): Promise<any>
 
     getBlockNumber(coinType: string): Promise<any>
@@ -34,10 +39,6 @@ export interface IApiClient {
     getTopTokens(coinType: string, topN?: number): Promise<any>
 
     searchTokens(coinType: string, keyword: string): Promise<any>
-
-    coverNetWorkConfig(config: any): void;
-
-    setRemoteApi(api: string): void
 }
 
 export interface IsingleApiClient {
