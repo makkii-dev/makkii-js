@@ -7,6 +7,7 @@ const initWallet = (transport) => {
     isConnect = false;
   });
   wallet = new AionApp(transport);
+  isConnect = true;
 };
 
 const getWalletStatus = () => isConnect;

@@ -11,6 +11,7 @@ const initWallet = (transport) => {
     isConnect = false;
   });
   wallet = new Btc(transport);
+  isConnect = true;
 };
 
 const getWalletStatus = () => isConnect;

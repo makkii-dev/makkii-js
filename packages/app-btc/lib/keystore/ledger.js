@@ -20,6 +20,7 @@ const initWallet = (transport) => {
         isConnect = false;
     });
     exports.wallet = wallet = new hw_app_btc_1.default(transport);
+    isConnect = true;
 };
 exports.initWallet = initWallet;
 const getWalletStatus = () => isConnect;

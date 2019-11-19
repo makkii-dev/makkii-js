@@ -17,6 +17,7 @@ const initWallet = (transport) => {
         isConnect = false;
     });
     wallet = new lib_hw_ledger_js_1.AionApp(transport);
+    isConnect = true;
 };
 exports.initWallet = initWallet;
 const getWalletStatus = () => isConnect;

@@ -9,6 +9,7 @@ const initWallet = transport => {
         isConnect = false
     });
     wallet = new Eth(transport);
+    isConnect = true;
 };
 
 const getWalletStatus = () => isConnect;
