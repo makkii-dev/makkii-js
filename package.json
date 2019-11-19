@@ -4,9 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "mocha --require @babel/register",
-    "postinstall": "lerna bootstrap --hoist",
-    "lerna": "lerna bootstrap --hoist"
+    "postinstall": "lerna bootstrap"
   },
   "keywords": [
     "react-native"
@@ -18,8 +16,7 @@
   "license": "Apache-2.0",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
