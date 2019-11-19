@@ -14,16 +14,19 @@ const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const network_1 = require("./network");
 let wallet = {};
 exports.wallet = wallet;
-let isConnect = false;
 const initWallet = (transport) => {
-    transport.on('disconnect', () => {
-        isConnect = false;
-    });
     exports.wallet = wallet = new hw_app_btc_1.default(transport);
-    isConnect = true;
 };
 exports.initWallet = initWallet;
-const getWalletStatus = () => isConnect;
+const getWalletStatus = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield getKeyByLedger(0, 'BTC');
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+});
 exports.getWalletStatus = getWalletStatus;
 const getKeyByLedger = (index, network) => __awaiter(void 0, void 0, void 0, function* () {
     const coinType = network.startsWith('BTC') ? 0 : 2;

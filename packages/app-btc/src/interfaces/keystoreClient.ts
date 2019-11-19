@@ -30,6 +30,6 @@ export interface keystoreLedgerClient {
 
     setLedgerTransport: (transport: any) => void 
 
-    getLedgerStatus: () => boolean 
+    getLedgerStatus: () => Promise<boolean> 
 
 }

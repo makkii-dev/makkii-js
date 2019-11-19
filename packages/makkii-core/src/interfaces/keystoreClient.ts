@@ -29,7 +29,7 @@ export interface IsingleKeystoreLedgerClient {
 
     setLedgerTransport: (transport: any) => void 
 
-    getLedgerStatus: () => boolean 
+    getLedgerStatus: () => Promise<boolean> 
 }
 
 export interface IsingleKeystoreFullClient extends IsingleKeystoreClient, IsingleKeystoreLedgerClient{}
@@ -66,5 +66,5 @@ export interface IkeystoreClient {
 
     setLedgerTransport: (coinType: string, transport: any) => void 
 
-    getLedgerStatus: (coinType: string) => boolean 
+    getLedgerStatus: (coinType: string) => Promise<boolean> 
 }

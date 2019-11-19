@@ -12,16 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const hw_app_eth_1 = require("@ledgerhq/hw-app-eth");
 let wallet = {};
 exports.wallet = wallet;
-let isConnect = false;
 const initWallet = transport => {
-    transport.on('disconnect', () => {
-        isConnect = false;
-    });
     exports.wallet = wallet = new hw_app_eth_1.default(transport);
-    isConnect = true;
 };
 exports.initWallet = initWallet;
-const getWalletStatus = () => isConnect;
+const getWalletStatus = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield getKeyByLedger(0);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+});
 exports.getWalletStatus = getWalletStatus;
 const signByLedger = (index, sender, msg) => {
     msg = Buffer.isBuffer(msg) ? msg : Buffer.from(msg);

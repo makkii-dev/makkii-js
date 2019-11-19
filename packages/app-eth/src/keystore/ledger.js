@@ -2,17 +2,19 @@ import Eth from '@ledgerhq/hw-app-eth';
 
 // eslint-disable-next-line import/no-mutable-exports
 let wallet = {};
-let isConnect = false;
 
 const initWallet = transport => {
-    transport.on('disconnect', () => {
-        isConnect = false
-    });
     wallet = new Eth(transport);
-    isConnect = true;
 };
 
-const getWalletStatus = () => isConnect;
+const getWalletStatus = async () =>{
+    try{
+        await getKeyByLedger(0);
+        return true;
+    }catch(e){
+        return false;
+    }
+};
 
 
 const signByLedger = (index, sender, msg) => {

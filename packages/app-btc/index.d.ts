@@ -79,5 +79,5 @@ export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
 
     setLedgerTransport: (transport: any) => void;
 
-    getLedgerStatus: () => boolean;
+    getLedgerStatus: () => Promise<boolean>;
 }

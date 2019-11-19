@@ -11,16 +11,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_hw_ledger_js_1 = require("lib-hw-ledger-js");
 let wallet = {};
-let isConnect = false;
 const initWallet = (transport) => {
-    transport.on('disconnect', () => {
-        isConnect = false;
-    });
     wallet = new lib_hw_ledger_js_1.AionApp(transport);
-    isConnect = true;
 };
 exports.initWallet = initWallet;
-const getWalletStatus = () => isConnect;
+const getWalletStatus = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield getKeyByLedger(0);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+});
 exports.getWalletStatus = getWalletStatus;
 const signByLedger = (index, sender, msg) => {
     msg = Buffer.isBuffer(msg) ? msg : Buffer.from(msg);

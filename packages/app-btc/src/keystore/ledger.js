@@ -4,17 +4,19 @@ import { networks } from './network';
 
 // eslint-disable-next-line import/no-mutable-exports
 let wallet = {};
-let isConnect = false;
 
 const initWallet = (transport) => {
-  transport.on('disconnect', () => {
-    isConnect = false;
-  });
   wallet = new Btc(transport);
-  isConnect = true;
 };
 
-const getWalletStatus = () => isConnect;
+const getWalletStatus = async () =>{
+  try{
+    await getKeyByLedger(0, 'BTC');
+    return true;
+  }catch(e) {
+    return false;
+  }
+} ;
 
 const getKeyByLedger = async (index, network) => {
   /*

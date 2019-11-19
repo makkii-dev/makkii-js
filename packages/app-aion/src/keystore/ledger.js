@@ -1,16 +1,19 @@
 import { AionApp } from 'lib-hw-ledger-js';
 
 let wallet = {};
-let isConnect = false;
+
 const initWallet = (transport) => {
-  transport.on('disconnect', () => {
-    isConnect = false;
-  });
   wallet = new AionApp(transport);
-  isConnect = true;
 };
 
-const getWalletStatus = () => isConnect;
+const getWalletStatus = async () => {
+  try {
+    await getKeyByLedger(0);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 const signByLedger = (index, sender, msg) => {
   msg = Buffer.isBuffer(msg) ? msg : Buffer.from(msg);
