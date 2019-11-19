@@ -62,10 +62,7 @@ export default class EthKeystoreClient implements keystoreClient, keystoreLedger
         return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
     }
 
-    getKeyByLedger = (index: number) => {
-        if (!this.getLedgerStatus()) {
-            throw new Error('ledger is not available')
-        }
+    getKeyByLedger = async (index: number) => {
         return KEYSTORE.getKeyByLedger(index);
     }
 

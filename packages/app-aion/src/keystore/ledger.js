@@ -8,8 +8,8 @@ const initWallet = (transport) => {
 
 const getWalletStatus = async () => {
   try {
-    await getKeyByLedger(0);
-    return true;
+    const res = await getKeyByLedger(0);
+    return !!res;
   } catch (e) {
     return false;
   }

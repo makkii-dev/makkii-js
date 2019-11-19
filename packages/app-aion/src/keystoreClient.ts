@@ -70,16 +70,10 @@ export default class AionKeystoreClient implements keystoreClient, keystoreLedge
   }
 
   getKeyByLedger = (index: number) => {
-    if (!this.getLedgerStatus()) {
-      throw new Error('ledger is not available')
-    }
     return KEYSTORE.getKeyByLedger(index);
   }
 
   signByLedger = (index: number, sender: string, msg: Buffer) => {
-    if (!this.getLedgerStatus()) {
-      throw new Error('ledger is not available')
-    }
     return KEYSTORE.signByLedger(index, sender, msg);
   }
 

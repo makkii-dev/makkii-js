@@ -63,15 +63,9 @@ class AionKeystoreClient {
             return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index);
         };
         this.getKeyByLedger = (index) => {
-            if (!this.getLedgerStatus()) {
-                throw new Error('ledger is not available');
-            }
             return keystore_1.default.getKeyByLedger(index);
         };
         this.signByLedger = (index, sender, msg) => {
-            if (!this.getLedgerStatus()) {
-                throw new Error('ledger is not available');
-            }
             return keystore_1.default.signByLedger(index, sender, msg);
         };
         this.setLedgerTransport = (transport) => {

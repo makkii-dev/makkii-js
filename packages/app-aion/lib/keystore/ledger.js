@@ -17,8 +17,8 @@ const initWallet = (transport) => {
 exports.initWallet = initWallet;
 const getWalletStatus = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield getKeyByLedger(0);
-        return true;
+        const res = yield getKeyByLedger(0);
+        return !!res;
     }
     catch (e) {
         return false;
