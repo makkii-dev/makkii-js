@@ -11,7 +11,7 @@ export default class BtcKeystoreClient implements keystoreClient, keystoreLedger
 
     readonly isTestNet: boolean;
 
-    constructor(coin: string = 'btc', isTestNet = false) {
+    constructor(isTestNet: boolean, coin: string = 'btc') {
         this.mnemonic = '';
         this.coin = coin;
         this.isTestNet = isTestNet;

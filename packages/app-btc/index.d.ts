@@ -47,7 +47,7 @@ export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
 
     readonly isTestNet: boolean;
 
-    constructor(coin?: string, isTestNet?: boolean);
+    constructor(isTestNet?: boolean, coin?: string,);
 
     getCurrentNetwork: () => string;
 

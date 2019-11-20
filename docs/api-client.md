@@ -8,7 +8,7 @@ import {apiClient} from "makkii-coins";
 const support_coin_lists = ['aion'];
 const client = apiClient(support_coin_lists);
 ```
-## Support coins [reference](../index.d.ts)
+## Support coins [reference](../packages/makkii-core/index.d.ts)
 | method | Aion | BTC | ETH | LTC | TRON |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |getBlockByNumber|√|√|√|√|√|

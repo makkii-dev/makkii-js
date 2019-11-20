@@ -14,7 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
 const keystore_1 = require("./keystore");
 class BtcKeystoreClient {
-    constructor(coin = 'btc', isTestNet = false) {
+    constructor(isTestNet, coin = 'btc') {
         this.ledgerSupport = false;
         this.getCurrentNetwork = () => {
             const coin_ = this.coin.toUpperCase();

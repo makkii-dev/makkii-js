@@ -29,6 +29,10 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+
+#webstom
+.idea
+
 #lerna
 lerna-debug.log
 

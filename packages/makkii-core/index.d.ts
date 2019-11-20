@@ -96,7 +96,7 @@ declare class KeystoreClient implements IkeystoreClient {
 
     setLedgerTransport: (coinType: string, transport: any) => void;
 
-    getLedgerStatus: (coinType: string) => boolean;
+    getLedgerStatus: (coinType: string) => Promise<boolean>;
 }
 
 declare const apiClient: (support_coin_lists: any, isTestNet: any) => ApiClient;
