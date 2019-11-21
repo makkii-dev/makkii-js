@@ -1,3 +1,4 @@
+const bs58check = require('bs58check');
 const longToByteArray =  (long) => {
     // we want to represent the input as a 8-bytes array
     let byteArray = [0, 0, 0, 0, 0, 0, 0, 0];
