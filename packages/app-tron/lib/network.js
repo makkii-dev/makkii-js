@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = {
-    network: {
+    networks: {
         "mainnet": {
             "jsonrpc": "https://api.trongrid.io",
             "explorer_api": "https://apilist.tronscan.org/api",

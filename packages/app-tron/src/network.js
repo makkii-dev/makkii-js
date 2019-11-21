@@ -1,7 +1,7 @@
 /* eslint-disable import/no-mutable-exports */
 // eslint-disable-next-line import/prefer-default-export
 export let config = {
-    network: {
+    networks: {
         "mainnet": {
             "jsonrpc": "https://api.trongrid.io",
             "explorer_api": "https://apilist.tronscan.org/api",
