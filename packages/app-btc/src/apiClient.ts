@@ -47,6 +47,8 @@ export default class BtcApiClient implements IsingleApiClient {
         this.api = API(this.config);
     }
 
+    getNetwork = () => this.config.network;
+
     setNetwork = (config: IConfig) => {
         this.config = { ...this.config, ...config };
         this.api = API(this.config);
@@ -76,15 +78,19 @@ export default class BtcApiClient implements IsingleApiClient {
         return this.api.getTransactionsByAddress(address, page, size, timestamp);
     }
 
-    validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
-        return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
+    validateBalanceSufficiency = (account: any, amount: number | BigNumber, extraParams?: any) => {
+        return this.api.validateBalanceSufficiency(account, amount, extraParams);
     }
 
-    sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account, symbol, to, value, extraParams, shouldBroadCast);
+    sendTransaction = (account: any,to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
+        return this.api.sendTransaction(account, to, value, extraParams, shouldBroadCast);
     }
 
     sameAddress = (address1: string, address2: string) => {
         return this.api.sameAddress(address1, address2);
+    }
+
+    sendAll = (address:string, byte_fee:number) => {
+        return this.api.sendAll(address, byte_fee);
     }
 }

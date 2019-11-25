@@ -16,6 +16,7 @@ exports.default = config => {
         validateBalanceSufficiency,
         formatAddress1Line,
         sameAddress,
+        sendAll,
     };
 };
 //# sourceMappingURL=index.js.map

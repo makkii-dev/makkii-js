@@ -5,7 +5,7 @@ import { estimateFeeBTC, estimateFeeLTC } from '../lib_keystore/transaction';
 
 export default config => {
   const { broadcastTransaction, getUnspentTx } = jsonrpcClient(config);
-  const sendTransaction = (account, symbol, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
+  const sendTransaction = (account, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
     value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
     getUnspentTx(account.address)
       .then((utxos) => {

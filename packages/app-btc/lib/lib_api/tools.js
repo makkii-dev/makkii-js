@@ -15,16 +15,16 @@ const jsonrpc_1 = require("./jsonrpc");
 const transaction_1 = require("../lib_keystore/transaction");
 exports.default = config => {
     const { getUnspentTx } = jsonrpc_1.default(config);
-    const validateBalanceSufficiency = (account, symbol, amount, extraParams) => new Promise((resolve, reject) => {
+    const validateBalanceSufficiency = (account, amount, extraParams) => new Promise((resolve, reject) => {
         if (!lib_common_util_js_1.validator.validateAmount(amount))
             resolve({ result: false, err: 'error_format_amount' });
-        getUnspentTx(account.address, extraParams.network)
+        getUnspentTx(account.address)
             .then((utxos) => {
             let balance = bignumber_js_1.default(0);
             utxos.forEach((utxo) => {
                 balance = balance.plus(bignumber_js_1.default(utxo.amount));
             });
-            const fee = symbol === 'LTC' ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
+            const fee = config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
             const totalFee = bignumber_js_1.default(amount)
                 .shiftedBy(8)
                 .plus(fee);
@@ -37,15 +37,15 @@ exports.default = config => {
             resolve({ result: false, err: 'error_insufficient_amount' });
         });
     });
-    const sendAll = (address, symbol, network, byte_fee = 10) => __awaiter(void 0, void 0, void 0, function* () {
+    const sendAll = (address, byte_fee = 10) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const utxos = yield getUnspentTx(address, network);
+            const utxos = yield getUnspentTx(address);
             let balance = bignumber_js_1.default(0);
             utxos.forEach((utxo) => {
                 balance = balance.plus(bignumber_js_1.default(utxo.amount));
             });
             return Math.max(balance
-                .minus(symbol === 'LTC' ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))
+                .minus(config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))
                 .shiftedBy(-8)
                 .toNumber(), 0);
         }

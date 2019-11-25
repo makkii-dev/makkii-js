@@ -17,11 +17,13 @@ export class AionApiClient implements IsingleApiFullClient {
 
     tokenSupport: boolean;
 
-    remoteApi: string;
-
     isTestNet: boolean;
 
-    constructor(networkConfig: INetworkConfig);
+    config: INetworkConfig;
+
+    constructor(config: INetworkConfig);
+
+    getNetwork: () => string;
 
     setNetwork: (options: any) => void;
 
@@ -39,12 +41,11 @@ export class AionApiClient implements IsingleApiFullClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<any>;
 
-    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (address1: string, address2: string) => boolean;
-
 
     getTokenIconUrl: (tokenSymbol: string, contractAddress: string) => string;
 

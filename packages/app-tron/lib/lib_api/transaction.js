@@ -7,7 +7,7 @@ const jsonrpc_1 = require("./jsonrpc");
 const utils_1 = require("../utils");
 exports.default = config => {
     const { getTransactionById, getTransactionInfoById, getLatestBlock, broadcastTransaction, } = jsonrpc_1.default(config);
-    function sendTransaction(account, symbol, to, value, shouldBroadCast = true) {
+    function sendTransaction(account, to, value, shouldBroadCast = true) {
         return new Promise((resolve, reject) => {
             value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
             getLatestBlock()

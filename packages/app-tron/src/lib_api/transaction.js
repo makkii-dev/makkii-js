@@ -13,7 +13,7 @@ export default config => {
         broadcastTransaction,
     } = jsonrpcClient(config);
     
-    function sendTransaction(account, symbol, to, value, shouldBroadCast = true) {
+    function sendTransaction(account, to, value, shouldBroadCast = true) {
         return new Promise((resolve, reject) => {
             value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
             getLatestBlock()

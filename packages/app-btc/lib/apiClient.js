@@ -4,6 +4,7 @@ const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class BtcApiClient {
     constructor(config) {
+        this.getNetwork = () => this.config.network;
         this.setNetwork = (config) => {
             this.config = Object.assign(Object.assign({}, this.config), config);
             this.api = lib_api_1.default(this.config);
@@ -26,14 +27,17 @@ class BtcApiClient {
         this.getTransactionsByAddress = (address, page, size, timestamp) => {
             return this.api.getTransactionsByAddress(address, page, size, timestamp);
         };
-        this.validateBalanceSufficiency = (account, symbol, amount, extraParams) => {
-            return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
+        this.validateBalanceSufficiency = (account, amount, extraParams) => {
+            return this.api.validateBalanceSufficiency(account, amount, extraParams);
         };
-        this.sendTransaction = (account, symbol, to, value, extraParams, data, shouldBroadCast) => {
-            return this.api.sendTransaction(account, symbol, to, value, extraParams, shouldBroadCast);
+        this.sendTransaction = (account, to, value, extraParams, data, shouldBroadCast) => {
+            return this.api.sendTransaction(account, to, value, extraParams, shouldBroadCast);
         };
         this.sameAddress = (address1, address2) => {
             return this.api.sameAddress(address1, address2);
+        };
+        this.sendAll = (address, byte_fee) => {
+            return this.api.sendAll(address, byte_fee);
         };
         let restSet;
         ['network', 'insight_api'].forEach(f => {

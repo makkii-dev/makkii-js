@@ -5,16 +5,16 @@ import { estimateFeeBTC, estimateFeeLTC } from '../lib_keystore/transaction';
 
 export default config => {
   const { getUnspentTx } = jsonrpcClient(config)
-  const validateBalanceSufficiency = (account, symbol, amount, extraParams) => new Promise((resolve, reject) => {
+  const validateBalanceSufficiency = (account, amount, extraParams) => new Promise((resolve, reject) => {
     if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
-    getUnspentTx(account.address, extraParams.network)
+    getUnspentTx(account.address)
       .then((utxos) => {
         let balance = BigNumber(0);
         utxos.forEach((utxo) => {
           balance = balance.plus(BigNumber(utxo.amount));
         });
 
-        const fee = symbol === 'LTC' ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
+        const fee = config.network.match('LTC') ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
         const totalFee = BigNumber(amount)
           .shiftedBy(8)
           .plus(fee);
@@ -29,16 +29,16 @@ export default config => {
   });
 
 
-  const sendAll = async (address, symbol, network, byte_fee = 10) => {
+  const sendAll = async (address, byte_fee = 10) => {
     try {
-      const utxos = await getUnspentTx(address, network);
+      const utxos = await getUnspentTx(address);
       let balance = BigNumber(0);
       utxos.forEach((utxo) => {
         balance = balance.plus(BigNumber(utxo.amount));
       });
       return Math.max(
         balance
-          .minus(symbol === 'LTC' ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, byte_fee || 10))
+          .minus(config.network.match('LTC') ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, byte_fee || 10))
           .shiftedBy(-8)
           .toNumber(),
         0,

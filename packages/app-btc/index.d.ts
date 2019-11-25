@@ -12,7 +12,11 @@ interface IConfig {
 export class BtcApiClient implements IsingleApiClient {
 
     constructor(config: IConfig);
+
+    config: IConfig;
     
+    getNetwork: () => string;
+
     setNetwork: (options: any) => void;
 
     getCurrentNetwork: () => string;
@@ -29,13 +33,13 @@ export class BtcApiClient implements IsingleApiClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
 
-    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 
-    
+    sendAll: (address:string, byte_fee:number) => Promise<any>;
 }
 
 export class BtcKeystoreClient implements IsingleKeystoreFullClient {

@@ -6,7 +6,7 @@ const lib_keystore_1 = require("../lib_keystore");
 const transaction_1 = require("../lib_keystore/transaction");
 exports.default = config => {
     const { broadcastTransaction, getUnspentTx } = jsonrpc_1.default(config);
-    const sendTransaction = (account, symbol, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
+    const sendTransaction = (account, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
         value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
         getUnspentTx(account.address)
             .then((utxos) => {

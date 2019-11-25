@@ -6,7 +6,7 @@ function formatAddress1Line(address) {
     return `${address.substring(0, 10 + pre)}...${address.substring(address.length - 10)}`;
 }
 
-function validateBalanceSufficiency(account, symbol, amount, extraParams) {
+function validateBalanceSufficiency(account, amount, extraParams) {
     return new Promise(resolve => {
         if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
         if (!validator.validateAmount(extraParams.gasPrice))
@@ -18,7 +18,7 @@ function validateBalanceSufficiency(account, symbol, amount, extraParams) {
         const gasPrice = BigNumber(extraParams.gasPrice);
         const balance = BigNumber(account.balance);
         const transferAmount = BigNumber(amount);
-        if (account.symbol === symbol) {
+        if (extraParams.symbol === 'ETH') {
             if (
                 transferAmount
                     .plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)))
@@ -35,7 +35,7 @@ function validateBalanceSufficiency(account, symbol, amount, extraParams) {
             ) {
                 resolve({ result: false, err: 'error_insufficient_amount' });
             }
-            const totalCoins = account.tokens[symbol].balance;
+            const totalCoins = account.tokens[extraParams.symbol].balance;
             if (transferAmount.isGreaterThan(totalCoins)) {
                 resolve({ result: false, err: 'error_insufficient_amount' });
             }

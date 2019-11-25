@@ -4,7 +4,7 @@ const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const formatAddress1Line = address => `${address.slice(0, 12)}...${address.slice(-10)}`;
 exports.formatAddress1Line = formatAddress1Line;
-function validateBalanceSufficiency(account, symbol, amount) {
+function validateBalanceSufficiency(account, amount) {
     return new Promise(resolve => {
         if (!lib_common_util_js_1.validator.validateAmount(amount))
             resolve({ result: false, err: 'error_format_amount' });

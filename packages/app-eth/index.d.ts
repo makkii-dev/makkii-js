@@ -5,7 +5,7 @@ import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/apiclie
 
 
 interface IConfig {
-    network: 'mainnet' | 'amity';
+    network: 'mainnet' | 'ropsten';
     jsonrpc: string;
     explorer_api?: {
         provider: string,
@@ -24,6 +24,8 @@ export class EthApiClient implements IsingleApiFullClient {
 
     constructor(config: IConfig);
 
+    config: any;
+
     setNetwork: (options: IConfig) => void;
 
     getNetwork: () => "mainnet" | "ropsten";
@@ -40,9 +42,9 @@ export class EthApiClient implements IsingleApiFullClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
 
-    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 

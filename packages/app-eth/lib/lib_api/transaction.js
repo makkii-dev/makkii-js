@@ -101,8 +101,8 @@ exports.default = config => {
             });
         });
     }
-    function sendTransaction(account, symbol, to, value, data, extraParams, shouldBroadCast = true) {
-        const { gasPrice, gasLimit } = extraParams;
+    function sendTransaction(account, to, value, data, extraParams, shouldBroadCast = true) {
+        const { gasPrice, gasLimit, symbol } = extraParams;
         if (account.symbol === symbol) {
             return sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast);
         }

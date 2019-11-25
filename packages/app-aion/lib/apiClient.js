@@ -3,11 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class AionApiClient {
-    constructor(networkConfig) {
+    constructor(config) {
         this.tokenSupport = true;
-        this.setNetwork = (networkConfig) => {
-            this.networkConfig = Object.assign(Object.assign({}, this.networkConfig), networkConfig);
-            this.api = lib_api_1.default(this.networkConfig);
+        this.getNetwork = () => this.config.network;
+        this.setNetwork = (config) => {
+            this.config = Object.assign(Object.assign({}, this.config), config);
+            this.api = lib_api_1.default(this.config);
         };
         this.getBlockByNumber = (blockNumber) => {
             return this.api.getBlockByNumber(blockNumber, false);
@@ -27,11 +28,11 @@ class AionApiClient {
         this.getTransactionsByAddress = (address, page, size) => {
             return this.api.getTransactionsByAddress(address, page, size);
         };
-        this.validateBalanceSufficiency = (account, symbol, amount, extraParams) => {
-            return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
+        this.validateBalanceSufficiency = (account, amount, extraParams) => {
+            return this.api.validateBalanceSufficiency(account, amount, extraParams);
         };
-        this.sendTransaction = (account, symbol, to, value, data, extraParams, shouldBroadCast) => {
-            return this.api.sendTransaction(account, symbol, to, value, data, extraParams, shouldBroadCast);
+        this.sendTransaction = (account, to, value, data, extraParams, shouldBroadCast) => {
+            return this.api.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
         };
         this.sameAddress = (address1, address2) => {
             return this.api.sameAddress(address1, address2);
@@ -59,18 +60,18 @@ class AionApiClient {
         };
         let restSet;
         ['network', 'jsonrpc'].forEach(f => {
-            if (!(f in networkConfig)) {
-                throw new Error(`networkConfig miss field ${f}`);
+            if (!(f in config)) {
+                throw new Error(`config miss field ${f}`);
             }
         });
-        if (networkConfig.network === 'mainnet') {
+        if (config.network === 'mainnet') {
             restSet = network_1.default.mainnet;
         }
         else {
             restSet = network_1.default.amity;
         }
-        this.networkConfig = Object.assign(Object.assign({}, restSet), networkConfig);
-        this.api = lib_api_1.default(this.networkConfig);
+        this.config = Object.assign(Object.assign({}, restSet), config);
+        this.api = lib_api_1.default(this.config);
     }
 }
 exports.default = AionApiClient;

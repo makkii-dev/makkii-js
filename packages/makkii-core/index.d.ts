@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './src/interfaces/apiclient';
 import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './src/interfaces/keystoreClient';
 
-declare class ApiClient implements IApiClient {
+export class ApiClient implements IApiClient {
     
     coins: {
         [coin: string]: IsingleApiClient | IsingleApiFullClient;
@@ -32,9 +32,9 @@ declare class ApiClient implements IApiClient {
 
     getTransactionsByAddress: (coinType: string, address: string, page: number, size: number) => Promise<any>;
 
-    validateBalanceSufficiency: (coinType: string, account: any, symbol: string, amount: number | BigNumber) => Promise<any>;
+    validateBalanceSufficiency: (coinType: string, account: any, amount: number | BigNumber) => Promise<any>;
 
-    sendTransaction: (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (coinType: string, account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (coinType: string, address1: string, address2: string) => boolean;
 
@@ -57,7 +57,7 @@ declare class ApiClient implements IApiClient {
     getCoinPrices: (currency: string) => Promise<any>;
 }
 
-declare class KeystoreClient implements IkeystoreClient {
+export class KeystoreClient implements IkeystoreClient {
     
 
     coins: {

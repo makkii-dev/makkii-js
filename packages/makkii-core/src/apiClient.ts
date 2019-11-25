@@ -9,6 +9,7 @@ function isInstanceOfApiClient(client: object) {
         "getTransactionStatus",
         "getTransactionExplorerUrl",
         "getBalance",
+        "getNetwork",
         "getTransactionsByAddress",
         "validateBalanceSufficiency",
         "sendTransaction",
@@ -78,14 +79,14 @@ export default class ApiClient implements IApiClient {
         return coin.getTransactionsByAddress(address, page, size);
     }
 
-    validateBalanceSufficiency = (coinType: string, account: any, symbol: string, amount: number | BigNumber, extraParams?: any): Promise<any> => {
+    validateBalanceSufficiency = (coinType: string, account: any, amount: number | BigNumber, extraParams?: any): Promise<any> => {
         const coin = this.getCoin(coinType);
-        return coin.validateBalanceSufficiency(account, symbol, amount, extraParams);
+        return coin.validateBalanceSufficiency(account, amount, extraParams);
     }
 
-    sendTransaction = (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean): Promise<any> =>{
+    sendTransaction = (coinType: string, account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean): Promise<any> =>{
         const coin = this.getCoin(coinType);
-        return coin.sendTransaction(account, symbol, to, value, extraParams, data, shouldBroadCast);
+        return coin.sendTransaction(account, to, value, extraParams, data, shouldBroadCast);
     }
 
     sameAddress = (coinType: string, address1: string, address2: string): boolean => {

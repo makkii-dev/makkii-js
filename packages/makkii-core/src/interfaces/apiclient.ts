@@ -18,9 +18,9 @@ export interface IApiClient {
 
     getTransactionsByAddress: (coinType: string, address: string, page: number, size: number) => Promise<any>
 
-    validateBalanceSufficiency: (coinType: string, account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>
+    validateBalanceSufficiency: (coinType: string, account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>
 
-    sendTransaction: (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
+    sendTransaction: (coinType: string, account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
 
     sameAddress: (coinType: string, address1: string, address2: string) => boolean
 
@@ -42,8 +42,11 @@ export interface IApiClient {
 }
 
 export interface IsingleApiClient {
+    config: any;
    
     setNetwork: (options:any)=> void;
+
+    getNetwork: () => string;
    
     getBlockByNumber: (blockNumber: Number) => Promise<any>
 
@@ -57,9 +60,9 @@ export interface IsingleApiClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<any>
 
-    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>
+    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
+    sendTransaction: (account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
 
     sameAddress: (address1: string, address2: string) => boolean
 

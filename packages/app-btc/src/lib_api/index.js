@@ -15,5 +15,6 @@ export default config => {
         validateBalanceSufficiency,
         formatAddress1Line,
         sameAddress,
+        sendAll,
     };
 }

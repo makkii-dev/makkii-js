@@ -14,38 +14,39 @@ export default class TronApiClient implements IsingleApiClient {
     isTestNet: boolean;
 
 
-    networkConfig: IConfig;
+    config: IConfig;
 
     api: any;
 
-    constructor(networkConfig: IConfig) {
+    constructor(config: IConfig) {
         let restSet: {
             explorer_api?: string,
             explorer?: string,
         };
         // check
         ['network', 'trongrid_api'].forEach(f => {
-            if (!(f in networkConfig)) {
-                throw new Error(`networkConfig miss field ${f}`)
+            if (!(f in config)) {
+                throw new Error(`config miss field ${f}`)
             }
         })
 
-        if (networkConfig.network === 'mainnet') {
+        if (config.network === 'mainnet') {
             restSet = network.mainnet
         } else {
             restSet = network.shasta
         }
-        this.networkConfig = {
+        this.config = {
             ...restSet,
-            ...networkConfig,
+            ...config,
         }
-        this.api = API(this.networkConfig);
+        this.api = API(this.config);
     }
 
+    getNetwork = () => this.config.network;
 
-    setNetwork = (networkConfig: IConfig) => {
-        this.networkConfig = { ...this.networkConfig, ...networkConfig };
-        this.api = API(this.networkConfig);
+    setNetwork = (config: IConfig) => {
+        this.config = { ...this.config, ...config };
+        this.api = API(this.config);
     }
 
     getBlockByNumber = (blockNumber: Number) => {
@@ -72,12 +73,12 @@ export default class TronApiClient implements IsingleApiClient {
         return this.api.getTransactionsByAddress(address, page, size);
     }
 
-    validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber) => {
-        return this.api.validateBalanceSufficiency(account, symbol, amount);
+    validateBalanceSufficiency = (account: any, amount: number | BigNumber) => {
+        return this.api.validateBalanceSufficiency(account, amount);
     }
 
-    sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account, symbol, to, value, shouldBroadCast);
+    sendTransaction = (account: any, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
+        return this.api.sendTransaction(account, to, value, shouldBroadCast);
     }
 
     sameAddress = (address1: string, address2: string) => {

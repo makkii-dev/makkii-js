@@ -3,12 +3,19 @@ import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keysto
 import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient'
 
 
+interface IConfig {
+    network: 'mainnet' | 'shasta'
+    trongrid_api: string,
+    explorer_api?: string,
+    explorer?: string,
+}
+
 export class TronApiClient implements IsingleApiClient {
     tokenSupport: boolean;
 
-    isTestNet: boolean;
+    constructor(config: IConfig);
 
-    constructor(isTestNet: boolean);
+    config: any;
 
     getNetwork: () => "shasta" | "mainnet";
 
@@ -24,9 +31,9 @@ export class TronApiClient implements IsingleApiClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
 
-    validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 

@@ -22,12 +22,12 @@ interface IConfig {
 export default class EthApiClient implements IsingleApiFullClient {
     tokenSupport: boolean = true;
 
-    networkConfig: IConfig
+    config: IConfig
 
     api: any
 
 
-    constructor(networkConfig: IConfig ) {
+    constructor(config: IConfig ) {
         let restSet: {
             explorer_api?: {
                 provider: string,
@@ -42,26 +42,28 @@ export default class EthApiClient implements IsingleApiFullClient {
           };
           // check
           ['network', 'jsonrpc'].forEach(f=>{
-            if(!(f in networkConfig)){
-              throw new Error(`networkConfig miss field ${f}`)
+            if(!(f in config)){
+              throw new Error(`config miss field ${f}`)
             }
           })
       
-          if (networkConfig.network === 'mainnet') {
+          if (config.network === 'mainnet') {
             restSet = network.mainnet
           } else {
             restSet = network.ropsten
           }
-          this.networkConfig = {
+          this.config = {
             ...restSet,
-            ...networkConfig,
+            ...config,
           }
-          this.api = API(this.networkConfig);
+          this.api = API(this.config);
     }
 
-    setNetwork = (networkConfig: IConfig) => {
-        this.networkConfig = { ...this.networkConfig, ...networkConfig };
-        this.api = API(this.networkConfig);
+    getNetwork = () => this.config.network;
+
+    setNetwork = (config: IConfig) => {
+        this.config = { ...this.config, ...config };
+        this.api = API(this.config);
       }
 
 
@@ -89,12 +91,12 @@ export default class EthApiClient implements IsingleApiFullClient {
         return this.api.getTransactionsByAddress(address, page, size, timestamp);
     }
 
-    validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
-        return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
+    validateBalanceSufficiency = (account: any, amount: number | BigNumber, extraParams?: any) => {
+        return this.api.validateBalanceSufficiency(account, amount, extraParams);
     }
 
-    sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account, symbol, to, value, data, extraParams, shouldBroadCast);
+    sendTransaction = (account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => {
+        return this.api.sendTransaction(account,to, value, data, extraParams, shouldBroadCast);
     }
 
     sameAddress = (address1: string, address2: string) => {

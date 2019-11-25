@@ -3,7 +3,7 @@ import {validator} from "lib-common-util-js";
 
 const formatAddress1Line = address => `${address.slice(0, 12)}...${address.slice(-10)}`;
 
-function validateBalanceSufficiency(account, symbol, amount) {
+function validateBalanceSufficiency(account, amount) {
     return new Promise(resolve => {
         if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
         const balance = BigNumber(account.balance);
