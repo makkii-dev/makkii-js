@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { hexutil } from '../lib_api/node_modules/lib-common-util-js';
+import { hexutil } from 'lib-common-util-js';
 import { signByLedger } from './ledger';
 import { inputAddressFormatter } from './address';
 import { keyPair } from './keyPair';

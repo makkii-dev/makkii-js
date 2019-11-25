@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const ledger_1 = require("./ledger");
 const address_1 = require("./address");
 const keyPair_1 = require("./keyPair");

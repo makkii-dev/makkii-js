@@ -1,6 +1,6 @@
 import { ECPair, TransactionBuilder } from 'bitcoinjs-lib';
 import BigNumber from 'bignumber.js';
-import { hexutil } from '../lib_api/node_modules/lib-common-util-js';
+import { hexutil } from 'lib-common-util-js';
 import { networks } from './network';
 import { getAccountByLedger, wallet } from './ledger';
 

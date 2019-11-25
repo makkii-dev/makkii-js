@@ -1,5 +1,5 @@
 import EthereumTx from 'ethereumjs-tx';
-import { hexutil } from "../lib_api/node_modules/lib-common-util-js";
+import { hexutil } from "lib-common-util-js";
 import { wallet } from "./ledger";
 
 const KEY_MAP = [

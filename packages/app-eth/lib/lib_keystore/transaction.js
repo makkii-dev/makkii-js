@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethereumjs_tx_1 = require("ethereumjs-tx");
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const ledger_1 = require("./ledger");
 const KEY_MAP = [
     'amount',

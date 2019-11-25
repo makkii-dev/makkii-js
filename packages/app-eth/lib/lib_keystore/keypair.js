@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethereumjs_util_1 = require("ethereumjs-util");
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const ec = require('elliptic').ec('secp256k1');
 const padTo32 = (msg) => {
     while (msg.length < 32) {

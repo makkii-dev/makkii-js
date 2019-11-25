@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const nacl = require('tweetnacl');
 const blake2b = require('blake2b');
 const A0_IDENTIFIER = [0xA0];

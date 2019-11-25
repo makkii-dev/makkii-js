@@ -1,5 +1,5 @@
 import { pubToAddress ,toChecksumAddress} from 'ethereumjs-util';
-import {hexutil} from "../lib_api/node_modules/lib-common-util-js";
+import {hexutil} from "lib-common-util-js";
 
 const ec = require('elliptic').ec('secp256k1');
 

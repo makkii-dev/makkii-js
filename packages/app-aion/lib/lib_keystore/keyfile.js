@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const utils_1 = require("../utils");
 const keyPair_1 = require("./keyPair");
 const RLP = require('aion-rlp');

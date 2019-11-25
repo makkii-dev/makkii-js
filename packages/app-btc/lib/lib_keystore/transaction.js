@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("../lib_api/node_modules/lib-common-util-js");
+const lib_common_util_js_1 = require("lib-common-util-js");
 const network_1 = require("./network");
 const ledger_1 = require("./ledger");
 exports.signTransaction = (transaction, network = 'BTC') => __awaiter(void 0, void 0, void 0, function* () {
