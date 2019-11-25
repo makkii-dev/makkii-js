@@ -32,7 +32,8 @@ exports.default = config => {
             const { data = [] } = yield lib_common_util_js_1.HttpClient.get(url);
             console.log(`[${config.network} getUnspentTx resp]:`, data);
             const utxos = [];
-            yield data.forEach((tx) => __awaiter(void 0, void 0, void 0, function* () {
+            for (let i = 0; i < data.length; i += 1) {
+                const tx = data[i];
                 const rawtx = yield getRawTx(tx.txid);
                 utxos.push({
                     script: tx.scriptPubKey,
@@ -41,7 +42,7 @@ exports.default = config => {
                     index: tx.vout,
                     raw: rawtx,
                 });
-            }));
+            }
             return utxos;
         }
         catch (e) {

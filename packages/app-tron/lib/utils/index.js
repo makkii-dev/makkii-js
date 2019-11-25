@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const bs58check = require('../lib_keystore/node_modules/bs58check');
+const bs58check = require('bs58check');
 const longToByteArray = (long) => {
     let byteArray = [0, 0, 0, 0, 0, 0, 0, 0];
     for (let index = 0; index < byteArray.length; index++) {

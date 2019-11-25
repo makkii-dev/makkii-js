@@ -1,4 +1,4 @@
-const TRXValidateAddress = require("../lib/keystore/address").validateAddress;
+const TRXValidateAddress = require("../lib/lib_keystore/address").validateAddress;
 const assert = require("assert");
 const describe = require("mocha").describe;
 

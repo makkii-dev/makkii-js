@@ -10,8 +10,8 @@ export default class BtcKeystoreClient implements IsingleKeystoreFullClient {
     network: 'BTC'|'BTCTEST'|'LTC'|'LTCTEST';
 
     constructor(network: 'BTC'|'BTCTEST'|'LTC'|'LTCTEST') {
-        if(!(network in ['BTC', 'BTCTEST', 'LTC', 'LTCTEST'])){
-            throw new Error(`Unsupport network: ${network}`)
+        if(!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))){
+            throw new Error(`BtcKeystoreClient Unsupport network: ${network}`)
         }
         this.mnemonic = '';
         this.network = network;

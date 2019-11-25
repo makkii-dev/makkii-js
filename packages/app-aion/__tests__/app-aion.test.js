@@ -1,13 +1,13 @@
 const  nacl = require("tweetnacl");
-const  getAccountFromMnemonic = require("../lib/keystore/hdkey").getAccountFromMnemonic;
+const  getAccountFromMnemonic = require("../lib/lib_keystore/hdkey").getAccountFromMnemonic;
 
 const assert = require("assert");
 const describe = require("mocha").describe;
 const fs = require('fs');
 const path = require("path");
-const {keyPair} = require('../lib/keystore/keyPair');
-const {fromV3} = require('../lib/keystore/keyfile');
-const {signTransaction} = require('../lib/keystore/transaction');
+const {keyPair} = require('../lib/lib_keystore/keyPair');
+const {fromV3} = require('../lib/lib_keystore/keyfile');
+const {signTransaction} = require('../lib/lib_keystore/transaction');
 const {validator} = require('lib-common-util-js');
 
 const Mnemonic = 'transfer exhibit feel document display chalk response whisper strong walk shock ivory';

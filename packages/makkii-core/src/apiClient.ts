@@ -86,7 +86,7 @@ export default class ApiClient implements IApiClient {
 
     sendTransaction = (coinType: string, account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean): Promise<any> =>{
         const coin = this.getCoin(coinType);
-        return coin.sendTransaction(account, to, value, extraParams, data, shouldBroadCast);
+        return coin.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
     }
 
     sameAddress = (coinType: string, address1: string, address2: string): boolean => {

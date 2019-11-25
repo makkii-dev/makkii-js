@@ -37,7 +37,7 @@ export default class BtcApiClient implements IsingleApiClient {
         }else if(config.network === 'LTCTEST'){
             restSet = network.LTCTEST
         }else {
-            throw new Error(`Unsupport nework: ${config.network}`)
+            throw new Error(`BtcApiClient Unsupport nework: ${config.network}`)
         }
 
         this.config = {

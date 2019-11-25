@@ -1,4 +1,4 @@
-const validateAddress = require("../lib/keystore/address").validateAddress;
+const validateAddress = require("../lib/lib_keystore/address").validateAddress;
 const assert = require("assert");
 const describe = require("mocha").describe;
 

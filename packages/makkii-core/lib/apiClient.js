@@ -69,7 +69,7 @@ class ApiClient {
         };
         this.sendTransaction = (coinType, account, to, value, data, extraParams, shouldBroadCast) => {
             const coin = this.getCoin(coinType);
-            return coin.sendTransaction(account, to, value, extraParams, data, shouldBroadCast);
+            return coin.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
         };
         this.sameAddress = (coinType, address1, address2) => {
             const coin = this.getCoin(coinType);

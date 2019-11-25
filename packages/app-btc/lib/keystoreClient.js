@@ -108,8 +108,8 @@ class BtcKeystoreClient {
             }
             return lib_keystore_1.default.getWalletStatus();
         };
-        if (!(network in ['BTC', 'BTCTEST', 'LTC', 'LTCTEST'])) {
-            throw new Error(`Unsupport network: ${network}`);
+        if (!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))) {
+            throw new Error(`BtcKeystoreClient Unsupport network: ${network}`);
         }
         this.mnemonic = '';
         this.network = network;

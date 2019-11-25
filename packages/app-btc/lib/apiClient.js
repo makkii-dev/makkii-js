@@ -58,7 +58,7 @@ class BtcApiClient {
             restSet = network_1.default.LTCTEST;
         }
         else {
-            throw new Error(`Unsupport nework: ${config.network}`);
+            throw new Error(`BtcApiClient Unsupport nework: ${config.network}`);
         }
         this.config = Object.assign(Object.assign({}, restSet), config);
         this.api = lib_api_1.default(this.config);

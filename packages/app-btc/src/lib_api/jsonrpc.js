@@ -24,7 +24,9 @@ export default config => {
       const { data = [] } = await HttpClient.get(url);
       console.log(`[${config.network} getUnspentTx resp]:`, data);
       const utxos = [];
-      await data.forEach(async (tx) => {
+      for (let i=0; i< data.length; i+=1){
+        const tx = data[i];
+        // eslint-disable-next-line no-await-in-loop
         const rawtx = await getRawTx(tx.txid);
         utxos.push({
           script: tx.scriptPubKey,
@@ -33,7 +35,7 @@ export default config => {
           index: tx.vout,
           raw: rawtx,
         });
-      });
+      }
       return utxos;
     } catch (e) {
       throw Error(`[${config.network} getUnspentTx error]: ${e}`);
