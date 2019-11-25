@@ -66,7 +66,7 @@ export default config => {
 
   const getTransactionUrlInExplorer = (txHash, network = 'BTC') => `${config.explorer}/${txHash}`;
 
-  export {
+  return {
     sendTransaction,
     getTransactionUrlInExplorer,
   };

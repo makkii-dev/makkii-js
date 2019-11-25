@@ -194,7 +194,7 @@ export default (config) => {
     });
   }
 
-  export {
+  return {
     sendTransaction,
     getTransactionsByAddress,
     getTransactionUrlInExplorer,

@@ -58,6 +58,9 @@ exports.default = config => {
             .catch((e) => reject(e));
     });
     const getTransactionUrlInExplorer = (txHash, network = 'BTC') => `${config.explorer}/${txHash}`;
-    export { sendTransaction, getTransactionUrlInExplorer, };
+    return {
+        sendTransaction,
+        getTransactionUrlInExplorer,
+    };
 };
 //# sourceMappingURL=transaction.js.map

@@ -169,6 +169,11 @@ exports.default = (config) => {
             });
         });
     }
-    export { sendTransaction, getTransactionsByAddress, getTransactionUrlInExplorer, getTransactionStatus, };
+    return {
+        sendTransaction,
+        getTransactionsByAddress,
+        getTransactionUrlInExplorer,
+        getTransactionStatus,
+    };
 };
 //# sourceMappingURL=transaction.js.map
