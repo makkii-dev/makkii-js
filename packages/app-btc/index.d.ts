@@ -1,19 +1,19 @@
 import BigNumber from 'bignumber.js';
-import { ApiClient } from './src/interfaces/apiClient';
+import {IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystoreClient';
+import {IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient';
 
+interface IConfig {
+    network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST'
+    insight_api: string,
+    broadcast?: string,
+    explorer?: string,
+}
 
-import { keystoreClient, keystoreLedgerClient } from './src/interfaces/keystoreClient';
+export class BtcApiClient implements IsingleApiClient {
 
-export class BtcApiClient implements ApiClient {
-    tokenSupport: boolean;
-
-    isTestNet: boolean;
-
-    coin: string;
-
-    constructor(isTestNet: boolean, coin?: string);
+    constructor(config: IConfig);
     
-    coverNetWorkConfig: (network: any, remote?: any) => void;
+    setNetwork: (options: any) => void;
 
     getCurrentNetwork: () => string;
 
@@ -31,23 +31,19 @@ export class BtcApiClient implements ApiClient {
 
     validateBalanceSufficiency: (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
 
-    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 
-    formatAddress1Line: (address: string) => string;
+    
 }
 
-export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
+export class BtcKeystoreClient implements IsingleKeystoreFullClient {
     ledgerSupport: boolean;
 
     mnemonic: string;
 
-    readonly coin: string;
-
-    readonly isTestNet: boolean;
-
-    constructor(isTestNet?: boolean, coin?: string,);
+    constructor(network: 'BTC'|'BTCTEST'|'LTC'|'LTCTEST');
 
     getCurrentNetwork: () => string;
 
@@ -55,9 +51,9 @@ export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
 
     signTransaction: (tx: any) => Promise<any>;
 
-    getKey: (address_index: number) => Promise<any>;
+    getAccount: (address_index: number) => Promise<any>;
 
-    setMnemonic: (mnemonic: string, passphrase?: string) => void;
+    setMnemonic: (mnemonic: string) => void;
 
     generateMnemonic: () => string;
 
@@ -65,15 +61,15 @@ export class BtcKeystoreClient implements keystoreClient, keystoreLedgerClient {
 
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
-    recoverKeyPairBykeyFile: (file: string, password: string) => Promise<any>;
+    recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any>;
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean;
 
     validateAddress: (address: string) => Promise<any>;
 
-    getKeyFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
+    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
 
-    getKeyByLedger: (index: number) => Promise<any>;
+    getAccountByLedger: (index: number) => Promise<any>;
 
     signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any>;
 

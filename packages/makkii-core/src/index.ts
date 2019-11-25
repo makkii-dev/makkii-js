@@ -1,17 +1,4 @@
-import ApiClient from './apiClient';
-import KeystoreClient from './keystoreClient';
+export { default as ApiClient } from './apiClient';
+export { default as KeystoreClient } from './keystoreClient';
 
 
-const apiClient = () => {
-    return new ApiClient();
-}
-
-const keystoreClient = () => {
-    return new KeystoreClient();
-}
-
-
-export {
-    apiClient,
-    keystoreClient,
-}

@@ -1,75 +1,90 @@
 import BigNumber from 'bignumber.js';
-import API from './api';
-import { ApiClient } from './interfaces/apiClient';
-import { customNetwork } from './network';
+import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient';
+import API from './lib_api';
+import network from './network';
 
-export default class BtcApiClient implements ApiClient {
-    tokenSupport: boolean = true;
+interface IConfig {
+    network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST'
+    insight_api: string,
+    broadcast?: string,
+    explorer?: string,
+}
+export default class BtcApiClient implements IsingleApiClient {
 
-    isTestNet: boolean;
+    api: any;
 
-    coin: string;
+    config: IConfig;
 
-    constructor(isTestNet: boolean, coin: string = 'btc') {
-        this.isTestNet = isTestNet;
-        this.coin = coin;
-    }
 
-    coverNetWorkConfig = (network: any, remote?: any) => {
-        if (network.toString() === "[object Object]") {
-            customNetwork(network);
+    constructor(config: IConfig) {
+        let restSet: {
+            broadcast?: string,
+            explorer?: string,
+        };
+        // check
+        ['network', 'insight_api'].forEach(f => {
+            if (!(f in config)) {
+                throw new Error(`config miss field ${f}`)
+            }
+        })
+
+        if (config.network === 'BTC') {
+            restSet = network.BTC
+        } else if(config.network === 'BTCTEST'){
+            restSet = network.BTCTEST
+        }else if(config.network === 'LTC'){
+            restSet = network.LTC
+        }else if(config.network === 'LTCTEST'){
+            restSet = network.LTCTEST
+        }else {
+            throw new Error(`Unsupport nework: ${config.network}`)
         }
+
+        this.config = {
+            ...restSet,
+            ...config,
+        }
+        this.api = API(this.config);
     }
 
-    getCurrentNetwork = () => {
-        const coin_ = this.coin.toUpperCase();
-        const suffix = this.isTestNet ? 'TEST' : '';
-        return coin_ + suffix
-    }
+    setNetwork = (config: IConfig) => {
+        this.config = { ...this.config, ...config };
+        this.api = API(this.config);
+      }
 
     getBlockByNumber = (blockNumber: Number) => {
-        throw new Error(`[${this.coin}] getBlockByNumber not implemented.`);
+        throw new Error(`[${this.config.network}] getBlockByNumber not implemented.`);
     }
 
     getBlockNumber = () => {
-        throw new Error(`[${this.coin}] getBlockNumber not implemented.`);
+        throw new Error(`[${this.config.network}] getBlockNumber not implemented.`);
     }
 
     getTransactionStatus = (hash: string) => {
-        const network = this.getCurrentNetwork();
-        return API.getTransactionStatus(hash, network);
+        return this.api.getTransactionStatus(hash);
     }
 
     getTransactionExplorerUrl = (hash: any) => {
-        const network = this.getCurrentNetwork();
-        return API.getTransactionUrlInExplorer(hash, network);
+        return this.api.getTransactionUrlInExplorer(hash);
     }
 
     getBalance = (address: string) => {
-        const network = this.getCurrentNetwork();
-        return API.getBalance(address, network);
+        return this.api.getBalance(address);
     }
 
     getTransactionsByAddress = (address: string, page: number, size: number, timestamp?: number) => {
-        const network = this.getCurrentNetwork();
-        return API.getTransactionsByAddress(address, page, size, timestamp, network);
+        return this.api.getTransactionsByAddress(address, page, size, timestamp);
     }
 
     validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
-        const network = this.getCurrentNetwork();
-        return API.validateBalanceSufficiency(account, symbol, amount, extraParams);
+        return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
     }
 
     sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        const network = this.getCurrentNetwork();
-        return API.sendTransaction(account, symbol, to, value, extraParams, network, shouldBroadCast);
+        return this.api.sendTransaction(account, symbol, to, value, extraParams, shouldBroadCast);
     }
 
     sameAddress = (address1: string, address2: string) => {
-        return API.sameAddress(address1, address2);
-    }
-
-    formatAddress1Line = (address: string) => {
-        return API.formatAddress1Line(address);
+        return this.api.sameAddress(address1, address2);
     }
 }

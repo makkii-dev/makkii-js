@@ -1,58 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
+const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class BtcApiClient {
-    constructor(isTestNet, coin = 'btc') {
-        this.tokenSupport = true;
-        this.coverNetWorkConfig = (network, remote) => {
-            if (network.toString() === "[object Object]") {
-                network_1.customNetwork(network);
-            }
-        };
-        this.getCurrentNetwork = () => {
-            const coin_ = this.coin.toUpperCase();
-            const suffix = this.isTestNet ? 'TEST' : '';
-            return coin_ + suffix;
+    constructor(config) {
+        this.setNetwork = (config) => {
+            this.config = Object.assign(Object.assign({}, this.config), config);
+            this.api = lib_api_1.default(this.config);
         };
         this.getBlockByNumber = (blockNumber) => {
-            throw new Error(`[${this.coin}] getBlockByNumber not implemented.`);
+            throw new Error(`[${this.config.network}] getBlockByNumber not implemented.`);
         };
         this.getBlockNumber = () => {
-            throw new Error(`[${this.coin}] getBlockNumber not implemented.`);
+            throw new Error(`[${this.config.network}] getBlockNumber not implemented.`);
         };
         this.getTransactionStatus = (hash) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.getTransactionStatus(hash, network);
+            return this.api.getTransactionStatus(hash);
         };
         this.getTransactionExplorerUrl = (hash) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.getTransactionUrlInExplorer(hash, network);
+            return this.api.getTransactionUrlInExplorer(hash);
         };
         this.getBalance = (address) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.getBalance(address, network);
+            return this.api.getBalance(address);
         };
         this.getTransactionsByAddress = (address, page, size, timestamp) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.getTransactionsByAddress(address, page, size, timestamp, network);
+            return this.api.getTransactionsByAddress(address, page, size, timestamp);
         };
         this.validateBalanceSufficiency = (account, symbol, amount, extraParams) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.validateBalanceSufficiency(account, symbol, amount, extraParams);
+            return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
         };
         this.sendTransaction = (account, symbol, to, value, extraParams, data, shouldBroadCast) => {
-            const network = this.getCurrentNetwork();
-            return api_1.default.sendTransaction(account, symbol, to, value, extraParams, network, shouldBroadCast);
+            return this.api.sendTransaction(account, symbol, to, value, extraParams, shouldBroadCast);
         };
         this.sameAddress = (address1, address2) => {
-            return api_1.default.sameAddress(address1, address2);
+            return this.api.sameAddress(address1, address2);
         };
-        this.formatAddress1Line = (address) => {
-            return api_1.default.formatAddress1Line(address);
-        };
-        this.isTestNet = isTestNet;
-        this.coin = coin;
+        let restSet;
+        ['network', 'insight_api'].forEach(f => {
+            if (!(f in config)) {
+                throw new Error(`config miss field ${f}`);
+            }
+        });
+        if (config.network === 'BTC') {
+            restSet = network_1.default.BTC;
+        }
+        else if (config.network === 'BTCTEST') {
+            restSet = network_1.default.BTCTEST;
+        }
+        else if (config.network === 'LTC') {
+            restSet = network_1.default.LTC;
+        }
+        else if (config.network === 'LTCTEST') {
+            restSet = network_1.default.LTCTEST;
+        }
+        else {
+            throw new Error(`Unsupport nework: ${config.network}`);
+        }
+        this.config = Object.assign(Object.assign({}, restSet), config);
+        this.api = lib_api_1.default(this.config);
     }
 }
 exports.default = BtcApiClient;

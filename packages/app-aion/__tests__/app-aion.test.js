@@ -1,5 +1,5 @@
 const  nacl = require("tweetnacl");
-const  getKeyFromMnemonic = require("../lib/keystore/hdkey").getKeyFromMnemonic;
+const  getAccountFromMnemonic = require("../lib/keystore/hdkey").getAccountFromMnemonic;
 
 const assert = require("assert");
 const describe = require("mocha").describe;
@@ -14,7 +14,7 @@ const Mnemonic = 'transfer exhibit feel document display chalk response whisper 
 describe('test AION',function () {
     describe('test hdWallet', function () {
        it('test children 1', async  function () {
-           let key1 = await getKeyFromMnemonic(Mnemonic, 0);
+           let key1 = await getAccountFromMnemonic(Mnemonic, 0);
            assert.strictEqual(key1.private_key, '56fa36dfe15b15d203a944a6c9d70961ef8be16289803e6520fb6e76859e24232a7e3ea5789ee57c85814a90503eeee3430f82c8dcfb0bbb0267cdb48809ad18');
            assert.strictEqual(key1.address, '0xa0c91885a5c2e13502cb4ef41725b6aa9adbc4f14c23cb928499468eb876a981');
            assert.strictEqual(key1.public_key, '2a7e3ea5789ee57c85814a90503eeee3430f82c8dcfb0bbb0267cdb48809ad18');

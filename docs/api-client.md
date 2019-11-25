@@ -23,10 +23,10 @@ const client = apiClient(support_coin_lists);
 |sameAddress|√|√|√|√|√|
 |formatAddress1Line|√|√|√|√|√|
 |getTokenIconUrl|√| |√|||
-|fetchTokenDetail|√| |√||||
-|fetchAccountTokenTransferHistory|√| |√|||
-|fetchAccountTokens|√| |√|||
-|fetchAccountTokenBalance|√| |√|||
+|getTokenDetail|√| |√||||
+|getAccountTokenTransferHistory|√| |√|||
+|getAccountTokens|√| |√|||
+|getAccountTokenBalance|√| |√|||
 |getTopTokens|√| |√|||
 |searchTokens|√| |√|||
 

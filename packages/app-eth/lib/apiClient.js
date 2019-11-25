@@ -1,88 +1,76 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
+const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class EthApiClient {
-    constructor(isTetNet) {
+    constructor(networkConfig) {
         this.tokenSupport = true;
-        this.remoteApi = 'prod';
-        this.coverNetWorkConfig = (network, remoteApi) => {
-            if (network.toString() === "[object Object]") {
-                network_1.customNetwork(network);
-            }
-            if (remoteApi.toString() === "[object Object]") {
-                network_1.customRemote(remoteApi);
-            }
-        };
-        this.setRemoteApi = (api) => {
-            this.remoteApi = api;
-        };
-        this.getNetwork = () => {
-            return this.isTetNet ? 'mainnet' : 'ropsten';
+        this.setNetwork = (networkConfig) => {
+            this.networkConfig = Object.assign(Object.assign({}, this.networkConfig), networkConfig);
+            this.api = lib_api_1.default(this.networkConfig);
         };
         this.getBlockByNumber = (blockNumber) => {
-            const network = this.getNetwork();
-            return api_1.default.getBlockByNumber(blockNumber, false, network);
+            return this.api.getBlockByNumber(blockNumber, false);
         };
         this.getBlockNumber = () => {
-            const network = this.getNetwork();
-            return api_1.default.blockNumber(network);
+            return this.api.blockNumber(network_1.default);
         };
         this.getTransactionStatus = (hash) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionStatus(hash, network);
+            return this.api.getTransactionStatus(hash);
         };
         this.getTransactionExplorerUrl = (hash) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionUrlInExplorer(hash, network);
+            return this.api.getTransactionUrlInExplorer(hash);
         };
         this.getBalance = (address) => {
-            const network = this.getNetwork();
-            return api_1.default.getBalance(address, network);
+            return this.api.getBalance(address);
         };
         this.getTransactionsByAddress = (address, page, size, timestamp) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionsByAddress(address, page, size, timestamp, network);
+            return this.api.getTransactionsByAddress(address, page, size, timestamp);
         };
         this.validateBalanceSufficiency = (account, symbol, amount, extraParams) => {
-            return api_1.default.validateBalanceSufficiency(account, symbol, amount, extraParams);
+            return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
         };
-        this.sendTransaction = (account, symbol, to, value, extraParams, data, shouldBroadCast) => {
-            const network = this.getNetwork();
-            return api_1.default.sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast);
+        this.sendTransaction = (account, symbol, to, value, data, extraParams, shouldBroadCast) => {
+            return this.api.sendTransaction(account, symbol, to, value, data, extraParams, shouldBroadCast);
         };
         this.sameAddress = (address1, address2) => {
-            return api_1.default.sameAddress(address1, address2);
-        };
-        this.formatAddress1Line = (address) => {
-            return api_1.default.formatAddress1Line(address);
+            return this.api.sameAddress(address1, address2);
         };
         this.getTokenIconUrl = (tokenSymbol, contractAddress) => {
-            const network = this.getNetwork();
-            return api_1.default.getTokenIconUrl(tokenSymbol, contractAddress, network);
+            return this.api.getTokenIconUrl(tokenSymbol, contractAddress);
         };
-        this.fetchTokenDetail = (contractAddress, network) => {
-            const network_ = this.getNetwork();
-            return api_1.default.fetchTokenDetail(contractAddress, network || network_);
+        this.getTokenDetail = (contractAddress) => {
+            return this.api.getTokenDetail(contractAddress);
         };
-        this.fetchAccountTokenTransferHistory = (address, symbolAddress, network, page, size, timestamp) => {
-            const network_ = this.getNetwork();
-            return api_1.default.fetchAccountTokenTransferHistory(address, symbolAddress, network || network_, page, size, timestamp);
+        this.getAccountTokenTransferHistory = (address, symbolAddress, page, size, timestamp) => {
+            return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size, timestamp);
         };
-        this.fetchAccountTokens = (address, network) => {
-            throw new Error("[ETH] fetchAccountTokens not implemented.");
+        this.getAccountTokens = (address) => {
+            throw new Error("[ETH] getAccountTokens not implemented.");
         };
-        this.fetchAccountTokenBalance = (contractAddress, address, network) => {
-            const network_ = this.getNetwork();
-            return api_1.default.fetchAccountTokenBalance(contractAddress, address, network || network_);
+        this.getAccountTokenBalance = (contractAddress, address) => {
+            return this.api.getAccountTokenBalance(contractAddress, address);
         };
         this.getTopTokens = (topN) => {
-            return api_1.default.getTopTokens(topN, this.remoteApi);
+            return this.api.getTopTokens(topN);
         };
         this.searchTokens = (keyword) => {
-            return api_1.default.searchTokens(keyword, this.remoteApi);
+            return this.api.searchTokens(keyword);
         };
-        this.isTetNet = isTetNet;
+        let restSet;
+        ['network', 'jsonrpc'].forEach(f => {
+            if (!(f in networkConfig)) {
+                throw new Error(`networkConfig miss field ${f}`);
+            }
+        });
+        if (networkConfig.network === 'mainnet') {
+            restSet = network_1.default.mainnet;
+        }
+        else {
+            restSet = network_1.default.ropsten;
+        }
+        this.networkConfig = Object.assign(Object.assign({}, restSet), networkConfig);
+        this.api = lib_api_1.default(this.networkConfig);
     }
 }
 exports.default = EthApiClient;

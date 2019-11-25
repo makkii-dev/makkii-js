@@ -1,113 +1,116 @@
 import BigNumber from 'bignumber.js';
-import API from './api';
-import { ApiClient, ApiTokenClient } from './interfaces/apiClient';
-import { customNetwork, customRemote } from './network';
+import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/apiclient';
+import API from './lib_api';
+import network from './network';
 
-export default class AionApiClient implements ApiClient, ApiTokenClient {
+export interface IConfig {
+  network: 'mainnet' | 'amity';
+  jsonrpc: string;
+  explorer_api?: string;
+  explorer?: string;
+  remoteApi?: string;
+}
+
+export default class AionApiClient implements IsingleApiFullClient {
 
   tokenSupport: boolean = true;
 
-  remoteApi: string = 'prod';
+  networkConfig: IConfig;
 
-  isTestNet: boolean;
+  api: any;
 
-  constructor(isTestNet: boolean) {
-    this.isTestNet = isTestNet;
-  }
+  constructor(networkConfig: IConfig) {
+    let restSet: {
+      explorer_api?: string,
+      explorer?: string,
+      remoteApi?: string
+    };
+    // check
+    ['network', 'jsonrpc'].forEach(f=>{
+      if(!(f in networkConfig)){
+        throw new Error(`networkConfig miss field ${f}`)
+      }
+    })
 
-  setRemoteApi = (api: string) => {
-    this.remoteApi = api;
-  }
-
-  coverNetWorkConfig = (network: any, remoteApi: any) => {
-    if (network.toString() === "[object Object]") {
-      customNetwork(network);
+    if (networkConfig.network === 'mainnet') {
+      restSet = network.mainnet
+    } else {
+      restSet = network.amity
     }
-    if (remoteApi.toString() === "[object Object]") {
-      customRemote(remoteApi);
+    this.networkConfig = {
+      ...restSet,
+      ...networkConfig,
     }
+    this.api = API(this.networkConfig);
   }
 
-  getNetwork = () => {
-    return this.isTestNet ? 'mastery' : 'mainnet';
+  setNetwork = (networkConfig: IConfig) => {
+    this.networkConfig = { ...this.networkConfig, ...networkConfig };
+    this.api = API(this.networkConfig);
   }
+
 
   getBlockByNumber = (blockNumber: Number) => {
-    const network = this.getNetwork();
-    return API.getBlockByNumber(blockNumber, false, network);
+    return this.api.getBlockByNumber(blockNumber, false);
   }
 
   getBlockNumber = () => {
-    const network = this.getNetwork();
-    return API.blockNumber(network);
+    return this.api.blockNumber();
   }
 
   getTransactionStatus = (hash: string) => {
-    const network = this.getNetwork();
-    return API.getTransactionStatus(hash, network);
+    return this.api.getTransactionStatus(hash);
   }
 
   getTransactionExplorerUrl = (hash: any) => {
-    const network = this.getNetwork();
-    return API.getTransactionUrlInExplorer(hash, network);
+    return this.api.getTransactionUrlInExplorer(hash);
   }
 
   getBalance = (address: string) => {
-    const network = this.getNetwork();
-    return API.getBalance(address, network);
+    return this.api.getBalance(address);
   }
 
   getTransactionsByAddress = (address: string, page: number, size: number) => {
-    const network = this.getNetwork();
-    return API.getTransactionsByAddress(address, page, size, network);
+    return this.api.getTransactionsByAddress(address, page, size);
   }
 
   validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
-    return API.validateBalanceSufficiency(account, symbol, amount, extraParams);
+    return this.api.validateBalanceSufficiency(account, symbol, amount, extraParams);
   }
 
-  sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-    const network = this.getNetwork();
-    return API.sendTransaction(account, symbol, to, value, extraParams, data, network, shouldBroadCast);
+  sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => {
+    return this.api.sendTransaction(account, symbol, to, value, data, extraParams, shouldBroadCast);
   }
 
   sameAddress = (address1: string, address2: string) => {
-    return API.sameAddress(address1, address2);
-  }
-
-  formatAddress1Line = (address: string) => {
-    return API.formatAddress1Line(address);
+    return this.api.sameAddress(address1, address2);
   }
 
   getTokenIconUrl = (tokenSymbol: string, contractAddress: string) => {
     throw new Error('Method getTokenIconUrl not implemented.');
   }
 
-  fetchTokenDetail = (contractAddress: string, network?: string) => {
-    const network_ = this.getNetwork();
-    return API.fetchTokenDetail(contractAddress, network || network_);
+  getTokenDetail = (contractAddress: string) => {
+    return this.api.getTokenDetail(contractAddress);
   }
 
-  fetchAccountTokenTransferHistory = (address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number) => {
-    const network_ = this.getNetwork();
-    return API.fetchAccountTokenTransferHistory(address, symbolAddress, network || network_, page, size);
+  getAccountTokenTransferHistory = (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => {
+    return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size);
   }
 
-  fetchAccountTokens = (address: string, network?: string) => {
-    const network_ = this.getNetwork();
-    return API.fetchAccountTokens(address, network || network_);
+  getAccountTokens = (address: string, ) => {
+    return this.api.getAccountTokens(address);
   }
 
-  fetchAccountTokenBalance = (contractAddress: string, address: string, network?: string) => {
-    const network_ = this.getNetwork();
-    return API.fetchAccountTokenBalance(contractAddress, address, network || network_);
+  getAccountTokenBalance = (contractAddress: string, address: string) => {
+    return this.api.getAccountTokenBalance(contractAddress, address);
   }
 
   getTopTokens = (topN?: number) => {
-    return API.getTopTokens(topN, this.remoteApi);
+    return this.api.getTopTokens(topN);
   }
 
   searchTokens = (keyword: string) => {
-    return API.searchTokens(keyword, this.remoteApi);
+    return this.api.searchTokens(keyword);
   }
 }

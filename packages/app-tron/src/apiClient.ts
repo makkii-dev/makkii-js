@@ -1,25 +1,51 @@
 import BigNumber from 'bignumber.js';
-import { ApiClient } from './interfaces/apiClient';
-import API from './api';
-import { customNetwork } from './network';
+import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient'
+import API from './lib_api';
+import network from './network';
 
-export default class TronApiClient implements ApiClient {
-    tokenSupport: boolean = false;
+interface IConfig {
+    network: 'mainnet' | 'shasta'
+    trongrid_api: string,
+    explorer_api?: string,
+    explorer?: string,
+}
+export default class TronApiClient implements IsingleApiClient {
 
     isTestNet: boolean;
 
-    constructor(isTestNet: boolean) {
-        this.isTestNet = isTestNet;
-    }
 
-    coverNetWorkConfig = (network: any, remote?: any) => {
-        if (network.toString() === "[object Object]") {
-            customNetwork(network);
+    networkConfig: IConfig;
+
+    api: any;
+
+    constructor(networkConfig: IConfig) {
+        let restSet: {
+            explorer_api?: string,
+            explorer?: string,
+        };
+        // check
+        ['network', 'trongrid_api'].forEach(f => {
+            if (!(f in networkConfig)) {
+                throw new Error(`networkConfig miss field ${f}`)
+            }
+        })
+
+        if (networkConfig.network === 'mainnet') {
+            restSet = network.mainnet
+        } else {
+            restSet = network.shasta
         }
+        this.networkConfig = {
+            ...restSet,
+            ...networkConfig,
+        }
+        this.api = API(this.networkConfig);
     }
 
-    getNetwork = () => {
-        return this.isTestNet ? 'shasta' : 'mainnet';
+
+    setNetwork = (networkConfig: IConfig) => {
+        this.networkConfig = { ...this.networkConfig, ...networkConfig };
+        this.api = API(this.networkConfig);
     }
 
     getBlockByNumber = (blockNumber: Number) => {
@@ -31,41 +57,31 @@ export default class TronApiClient implements ApiClient {
     }
 
     getTransactionStatus = (hash: string) => {
-        const network = this.getNetwork();
-        return API.getTransactionStatus(hash, network);
+        return this.api.getTransactionStatus(hash);
     }
 
     getTransactionExplorerUrl = (hash: any) => {
-        const network = this.getNetwork();
-        return API.getTransactionUrlInExplorer(hash, network);
+        return this.api.getTransactionUrlInExplorer(hash);
     }
 
     getBalance = (address: string) => {
-        const network = this.getNetwork();
-        return API.getBalance(address, network);
+        return this.api.getBalance(address);
     }
 
     getTransactionsByAddress = (address: string, page: number, size: number, timestamp?: number) => {
-        const network = this.getNetwork();
-        return API.getTransactionsByAddress(address, page, size, timestamp, network);
+        return this.api.getTransactionsByAddress(address, page, size);
     }
 
-    validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => {
-        return API.validateBalanceSufficiency(account, symbol, amount);
+    validateBalanceSufficiency = (account: any, symbol: string, amount: number | BigNumber) => {
+        return this.api.validateBalanceSufficiency(account, symbol, amount);
     }
 
     sendTransaction = (account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        const network = this.getNetwork();
-        return API.sendTransaction(account, symbol, to, value, network, shouldBroadCast);
+        return this.api.sendTransaction(account, symbol, to, value, shouldBroadCast);
     }
 
     sameAddress = (address1: string, address2: string) => {
-        return API.sameAddress(address1, address2);
+        return this.api.sameAddress(address1, address2);
     }
-
-    formatAddress1Line = (address: string) => {
-        return API.formatAddress1Line(address);
-    }
-
 
 }

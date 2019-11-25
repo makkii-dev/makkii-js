@@ -5,6 +5,6 @@
     },
     "include": [
       "./src",
-      "./src/api/*.js"
+      "src/lib_api/*.js"
     ]
    }

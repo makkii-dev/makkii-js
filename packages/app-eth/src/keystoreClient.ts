@@ -1,8 +1,8 @@
 import * as bip39 from 'bip39';
-import KEYSTORE from './keystore';
-import { keystoreClient, keystoreLedgerClient } from './interfaces/keystoreClient';
+import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystoreClient'
+import KEYSTORE from './lib_keystore';
 
-export default class EthKeystoreClient implements keystoreClient, keystoreLedgerClient {
+export default class EthKeystoreClient implements IsingleKeystoreFullClient {
 
     ledgerSupport: boolean = true;
 
@@ -12,13 +12,13 @@ export default class EthKeystoreClient implements keystoreClient, keystoreLedger
         return KEYSTORE.signTransaction(tx);
     }
 
-    getKey = (address_index: number) => {
+    getAccount = (address_index: number) => {
         if (!bip39.validateMnemonic(this.mnemonic))
             throw new Error('Set Mnemonic first');
-        return KEYSTORE.getKeyFromMnemonic(this.mnemonic, address_index);
+        return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
     }
 
-    setMnemonic = (mnemonic: string, passphrase?: string) => {
+    setMnemonic = (mnemonic: string) => {
         this.mnemonic = mnemonic;
     }
 
@@ -46,8 +46,8 @@ export default class EthKeystoreClient implements keystoreClient, keystoreLedger
         throw new Error("[eth] recoverKeyPairByWIF not implemented.");
     }
 
-    recoverKeyPairBykeyFile = (file: string, password: string) => {
-        throw new Error("[eth] recoverKeyPairBykeyFile not implemented.");
+    recoverKeyPairByKeyFile = (file: string, password: string) => {
+        throw new Error("[eth] recoverKeyPairByKeyFile not implemented.");
     }
 
     validatePrivateKey = (privateKey: string | Buffer) => {
@@ -58,12 +58,12 @@ export default class EthKeystoreClient implements keystoreClient, keystoreLedger
         return KEYSTORE.validateAddress(address);
     }
 
-    getKeyFromMnemonic = (address_index: number, mnemonic: string) => {
-        return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
+    getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
+        return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
     }
 
-    getKeyByLedger = async (index: number) => {
-        return KEYSTORE.getKeyByLedger(index);
+    getAccountByLedger = async (index: number) => {
+        return KEYSTORE.getAccountByLedger(index);
     }
 
     signByLedger = (index: number, sender: string, msg: Buffer) => {

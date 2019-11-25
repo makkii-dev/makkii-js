@@ -12,29 +12,27 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
-const keystore_1 = require("./keystore");
+const lib_keystore_1 = require("./lib_keystore");
 class BtcKeystoreClient {
-    constructor(isTestNet, coin = 'btc') {
+    constructor(network) {
         this.ledgerSupport = false;
         this.getCurrentNetwork = () => {
-            const coin_ = this.coin.toUpperCase();
-            const suffix = this.isTestNet ? 'TEST' : '';
-            return coin_ + suffix;
+            return this.network;
         };
         this.checkLedgerSupport = () => {
-            return this.coin.toLowerCase() === 'btc';
+            return this.ledgerSupport;
         };
         this.signTransaction = (tx) => {
             const network = this.getCurrentNetwork();
-            return keystore_1.default.signTransaction(tx, network);
+            return lib_keystore_1.default.signTransaction(tx, network);
         };
-        this.getKey = (address_index) => {
+        this.getAccount = (address_index) => {
             if (!bip39.validateMnemonic(this.mnemonic))
                 throw new Error('Set Mnemonic first');
             const network = this.getCurrentNetwork();
-            return keystore_1.default.getKeyFromMnemonic(this.mnemonic, address_index, { network });
+            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index, { network });
         };
-        this.setMnemonic = (mnemonic, passphrase) => {
+        this.setMnemonic = (mnemonic) => {
             this.mnemonic = mnemonic;
         };
         this.generateMnemonic = () => {
@@ -45,75 +43,77 @@ class BtcKeystoreClient {
         this.recoverKeyPairByPrivateKey = (priKey, options) => {
             const network = this.getCurrentNetwork();
             try {
-                const keyPair = keystore_1.default.keyPair(priKey, Object.assign({ network }, options));
+                const keyPair = lib_keystore_1.default.keyPair(priKey, Object.assign({ network }, options));
                 if (keyPair) {
                     const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                     return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
                 }
-                return Promise.reject(new Error(`${this.coin} recover privKey failed`));
+                return Promise.reject(new Error(`${this.network} recover privKey failed`));
             }
             catch (e) {
-                return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));
+                return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
             }
         };
         this.recoverKeyPairByWIF = (WIF, options) => {
             const network = this.getCurrentNetwork();
             try {
-                const keyPair = keystore_1.default.keyPairFromWIF(WIF, Object.assign({ network }, options));
+                const keyPair = lib_keystore_1.default.keyPairFromWIF(WIF, Object.assign({ network }, options));
                 if (keyPair) {
                     const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                     return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
                 }
-                return Promise.reject(new Error(`${this.coin} recover privKey failed`));
+                return Promise.reject(new Error(`${this.network} recover privKey failed`));
             }
             catch (e) {
-                return Promise.reject(new Error(`${this.coin} recover privKey failed: ${e}`));
+                return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
             }
         };
-        this.recoverKeyPairBykeyFile = (file, password) => {
-            throw new Error(`${this.coin} recoverKeyPairBykeyFile not implemented.`);
+        this.recoverKeyPairByKeyFile = (file, password) => {
+            throw new Error(`${this.network} recoverKeyPairByKeyFile not implemented.`);
         };
         this.validatePrivateKey = (privateKey) => {
-            throw new Error(`${this.coin} validatePrivateKey not implemented.`);
+            throw new Error(`${this.network} validatePrivateKey not implemented.`);
         };
         this.validateAddress = (address) => {
             const network = this.getCurrentNetwork();
-            return keystore_1.default.validateAddress(address, network);
+            return lib_keystore_1.default.validateAddress(address, network);
         };
-        this.getKeyFromMnemonic = (address_index, mnemonic) => {
+        this.getAccountFromMnemonic = (address_index, mnemonic) => {
             const network = this.getCurrentNetwork();
-            return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index, { network });
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index, { network });
         };
-        this.getKeyByLedger = (index) => {
+        this.getAccountByLedger = (index) => {
             if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.coin} getKeyByLedger not implemented.`);
+                throw new Error(`${this.network} getAccountByLedger not implemented.`);
             }
             const network = this.getCurrentNetwork();
-            return keystore_1.default.getKeyByLedger(index, network);
+            return lib_keystore_1.default.getAccountByLedger(index, network);
         };
         this.signByLedger = (index, sender, msg) => {
             if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.coin} signByLedger not implemented.`);
+                throw new Error(`${this.network} signByLedger not implemented.`);
             }
             const network = this.getCurrentNetwork();
-            return keystore_1.default.signByLedger(index, sender, msg, network);
+            return lib_keystore_1.default.signByLedger(index, sender, msg, network);
         };
         this.setLedgerTransport = (transport) => {
             if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.coin} setLedgerTransport not implemented.`);
+                throw new Error(`${this.network} setLedgerTransport not implemented.`);
             }
-            return keystore_1.default.initWallet(transport);
+            return lib_keystore_1.default.initWallet(transport);
         };
         this.getLedgerStatus = () => {
             if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.coin} getLedgerStatus not implemented.`);
+                throw new Error(`${this.network} getLedgerStatus not implemented.`);
             }
-            return keystore_1.default.getWalletStatus();
+            return lib_keystore_1.default.getWalletStatus();
         };
+        if (!(network in ['BTC', 'BTCTEST', 'LTC', 'LTCTEST'])) {
+            throw new Error(`Unsupport network: ${network}`);
+        }
         this.mnemonic = '';
-        this.coin = coin;
-        this.isTestNet = isTestNet;
-        if (coin.toLowerCase() === 'btc') {
+        this.network = network;
+        if (network.match('BTC')) {
             this.ledgerSupport = true;
         }
     }

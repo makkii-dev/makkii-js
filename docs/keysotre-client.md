@@ -7,7 +7,7 @@ import {keystoreClient} from "makkii-coins";
 let supportCoins = ['aion', 'eth'];
 const client = keystoreClient(supportCoins);
 const getAddress = async (symbol, mnemonic, index) => { 
-    const {address} = await client.getKeyFromMnemonic(symbol, index, mnemonic);
+    const {address} = await client.getAccountFromMnemonic(symbol, index, mnemonic);
     return address;
 }
 ```
@@ -19,9 +19,9 @@ const getAddress = async (symbol, mnemonic, index) => {
 |[recoverFromKeystore](#recoverfromkeystore)|√|||||
 |[validateAddress](#validateaddress)|√|√|√|√|√|
 |[validatePrivateKey](#validateprivatekey)|√|√|√|√|√|
-|[getKey](#getkey)|√|√|√|√|√|
-|[getKeyFromMnemonic](#getkeyfrommnemonic)|√|√|√|√|√|
-|[getKeyByLedger](#getkeybyledger)|√|√|√|||
+|[getAccount](#getkey)|√|√|√|√|√|
+|[getAccountFromMnemonic](#getkeyfrommnemonic)|√|√|√|√|√|
+|[getAccountByLedger](#getkeybyledger)|√|√|√|||
 |[signByLedger](#signbyledger)|√|√|√|||
 |[setLedgerTransport](#setledgertransport)|√|√|√|||
 |[getLedgerStatus](#getledgerstatus)|√|√|√|||
@@ -96,7 +96,7 @@ client.setMnemonic(mnemonic);
   - privateKey: **String**
 - return
   - result: boolean
-#### getKey
+#### getAccount
 > first you need setMnemonic or generateMnemonic
 
 - parameters
@@ -104,8 +104,8 @@ client.setMnemonic(mnemonic);
   - index: **number** bip39 address index
 - return
   - Promise&lt;{address, index, publickey?}>
-#### getKeyFromMnemonic
-> same as getKey, but can custom mnemonic string
+#### getAccountFromMnemonic
+> same as getAccount, but can custom mnemonic string
 - parameters
   - coinType
   - index
@@ -128,12 +128,12 @@ const run = async () => {
       const transport = await Transport.create();
       client.setLedgerTransport(coin, transport);
    }
-   const {address} = await getKeyByLedger(coin, 0);
+   const {address} = await getAccountByLedger(coin, 0);
    console.log('address=>', address);   
 };
 run();
 ```
-#### getKeyByLedger
+#### getAccountByLedger
 > get key by ledger, you need set ledger transport first. [example](#ledger)
 - parameters
   - coinType

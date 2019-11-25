@@ -1,17 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api_1 = require("./api");
+const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class TronApiClient {
-    constructor(isTestNet) {
-        this.tokenSupport = false;
-        this.coverNetWorkConfig = (network, remote) => {
-            if (network.toString() === "[object Object]") {
-                network_1.customNetwork(network);
-            }
-        };
-        this.getNetwork = () => {
-            return this.isTestNet ? 'shasta' : 'mainnet';
+    constructor(networkConfig) {
+        this.setNetwork = (networkConfig) => {
+            this.networkConfig = Object.assign(Object.assign({}, this.networkConfig), networkConfig);
+            this.api = lib_api_1.default(this.networkConfig);
         };
         this.getBlockByNumber = (blockNumber) => {
             throw new Error("[tron] getBlockByNumber not implemented.");
@@ -20,35 +15,40 @@ class TronApiClient {
             throw new Error("[tron] getBlockNumber not implemented.");
         };
         this.getTransactionStatus = (hash) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionStatus(hash, network);
+            return this.api.getTransactionStatus(hash);
         };
         this.getTransactionExplorerUrl = (hash) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionUrlInExplorer(hash, network);
+            return this.api.getTransactionUrlInExplorer(hash);
         };
         this.getBalance = (address) => {
-            const network = this.getNetwork();
-            return api_1.default.getBalance(address, network);
+            return this.api.getBalance(address);
         };
         this.getTransactionsByAddress = (address, page, size, timestamp) => {
-            const network = this.getNetwork();
-            return api_1.default.getTransactionsByAddress(address, page, size, timestamp, network);
+            return this.api.getTransactionsByAddress(address, page, size);
         };
-        this.validateBalanceSufficiency = (account, symbol, amount, extraParams) => {
-            return api_1.default.validateBalanceSufficiency(account, symbol, amount);
+        this.validateBalanceSufficiency = (account, symbol, amount) => {
+            return this.api.validateBalanceSufficiency(account, symbol, amount);
         };
         this.sendTransaction = (account, symbol, to, value, extraParams, data, shouldBroadCast) => {
-            const network = this.getNetwork();
-            return api_1.default.sendTransaction(account, symbol, to, value, network, shouldBroadCast);
+            return this.api.sendTransaction(account, symbol, to, value, shouldBroadCast);
         };
         this.sameAddress = (address1, address2) => {
-            return api_1.default.sameAddress(address1, address2);
+            return this.api.sameAddress(address1, address2);
         };
-        this.formatAddress1Line = (address) => {
-            return api_1.default.formatAddress1Line(address);
-        };
-        this.isTestNet = isTestNet;
+        let restSet;
+        ['network', 'trongrid_api'].forEach(f => {
+            if (!(f in networkConfig)) {
+                throw new Error(`networkConfig miss field ${f}`);
+            }
+        });
+        if (networkConfig.network === 'mainnet') {
+            restSet = network_1.default.mainnet;
+        }
+        else {
+            restSet = network_1.default.shasta;
+        }
+        this.networkConfig = Object.assign(Object.assign({}, restSet), networkConfig);
+        this.api = lib_api_1.default(this.networkConfig);
     }
 }
 exports.default = TronApiClient;

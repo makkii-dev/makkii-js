@@ -1,8 +1,8 @@
 import * as bip39 from 'bip39';
-import { keystoreClient } from './interfaces/keystoreClient';
-import KEYSTORE from './keystore';
+import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keystoreClient'
+import KEYSTORE from './lib_keystore';
 
-export default class TronKeystoreClient implements keystoreClient {
+export default class TronKeystoreClient implements IsingleKeystoreClient {
     mnemonic: string = '';
 
     constructor() {
@@ -13,14 +13,14 @@ export default class TronKeystoreClient implements keystoreClient {
         return KEYSTORE.signTransaction(tx);
     }
 
-    getKey = (address_index: number) => {
+    getAccount = (address_index: number) => {
         if (!bip39.validateMnemonic(this.mnemonic)) {
             throw new Error('set mnemonic first')
         }
-        return KEYSTORE.getKeyFromMnemonic(this.mnemonic, address_index);
+        return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
     }
 
-    setMnemonic = (mnemonic: string, passphrase?: string) => {
+    setMnemonic = (mnemonic: string) => {
         this.mnemonic = mnemonic;
     }
 
@@ -48,8 +48,8 @@ export default class TronKeystoreClient implements keystoreClient {
         throw new Error("[tron] recoverKeyPairByWIF not implemented.");
     }
 
-    recoverKeyPairBykeyFile = (file: string, password: string) => {
-        throw new Error("[tron] recoverKeyPairBykeyFile not implemented.");
+    recoverKeyPairByKeyFile = (file: string, password: string) => {
+        throw new Error("[tron] recoverKeyPairByKeyFile not implemented.");
     }
 
     validatePrivateKey = (privateKey: string | Buffer) => {
@@ -60,8 +60,8 @@ export default class TronKeystoreClient implements keystoreClient {
         return KEYSTORE.validateAddress(address);
     }
 
-    getKeyFromMnemonic = (address_index: number, mnemonic: string) => {
-        return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
+    getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
+        return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
     }
 
 

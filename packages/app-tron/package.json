@@ -27,6 +27,7 @@
     "url": "https://github.com/chaion/react-native-makkii-core/issues"
   },
   "dependencies": {
+    "@makkii/makkii-core": "^0.0.0",
     "@tronscan/client": "^0.2.48",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",

@@ -12,20 +12,20 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
-const keystore_1 = require("./keystore");
+const lib_keystore_1 = require("./lib_keystore");
 class TronKeystoreClient {
     constructor() {
         this.mnemonic = '';
         this.signTransaction = (tx) => {
-            return keystore_1.default.signTransaction(tx);
+            return lib_keystore_1.default.signTransaction(tx);
         };
-        this.getKey = (address_index) => {
+        this.getAccount = (address_index) => {
             if (!bip39.validateMnemonic(this.mnemonic)) {
                 throw new Error('set mnemonic first');
             }
-            return keystore_1.default.getKeyFromMnemonic(this.mnemonic, address_index);
+            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
         };
-        this.setMnemonic = (mnemonic, passphrase) => {
+        this.setMnemonic = (mnemonic) => {
             this.mnemonic = mnemonic;
         };
         this.generateMnemonic = () => {
@@ -35,7 +35,7 @@ class TronKeystoreClient {
         };
         this.recoverKeyPairByPrivateKey = (priKey, options) => {
             try {
-                const keyPair = keystore_1.default.keyPair(priKey);
+                const keyPair = lib_keystore_1.default.keyPair(priKey);
                 const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                 return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
             }
@@ -46,17 +46,17 @@ class TronKeystoreClient {
         this.recoverKeyPairByWIF = (WIF, options) => {
             throw new Error("[tron] recoverKeyPairByWIF not implemented.");
         };
-        this.recoverKeyPairBykeyFile = (file, password) => {
-            throw new Error("[tron] recoverKeyPairBykeyFile not implemented.");
+        this.recoverKeyPairByKeyFile = (file, password) => {
+            throw new Error("[tron] recoverKeyPairByKeyFile not implemented.");
         };
         this.validatePrivateKey = (privateKey) => {
             throw new Error("[tron] validatePrivateKey not implemented.");
         };
         this.validateAddress = (address) => {
-            return keystore_1.default.validateAddress(address);
+            return lib_keystore_1.default.validateAddress(address);
         };
-        this.getKeyFromMnemonic = (address_index, mnemonic) => {
-            return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index);
+        this.getAccountFromMnemonic = (address_index, mnemonic) => {
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
         this.mnemonic = '';
     }

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "@makkii/makkii-core": "^0.0.0",
     "aion-rlp": "^0.0.1",
     "aion-web3-eth-abi": "1.1.5",
     "aion-web3-eth-contract": "1.1.5",

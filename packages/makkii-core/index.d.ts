@@ -32,9 +32,9 @@ declare class ApiClient implements IApiClient {
 
     getTransactionsByAddress: (coinType: string, address: string, page: number, size: number) => Promise<any>;
 
-    validateBalanceSufficiency: (coinType: string, account: any, symbol: string, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (coinType: string, account: any, symbol: string, amount: number | BigNumber) => Promise<any>;
 
-    sendTransaction: (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
 
     sameAddress: (coinType: string, address1: string, address2: string) => boolean;
 
@@ -42,13 +42,13 @@ declare class ApiClient implements IApiClient {
 
     getTokenIconUrl: (coinType: string, tokenSymbol: string, contractAddress: string) => string;
 
-    fetchTokenDetail: (coinType: string, contractAddress: string, network?: string) => Promise<any>;
+    getTokenDetail: (coinType: string, contractAddress: string) => Promise<any>;
 
-    fetchAccountTokenTransferHistory: (coinType: string, address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number) => Promise<any>;
+    getAccountTokenTransferHistory: (coinType: string, address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>;
 
-    fetchAccountTokens: (coinType: string, address: string, network?: string) => Promise<any>;
+    getAccountTokens: (coinType: string, address: string) => Promise<any>;
 
-    fetchAccountTokenBalance: (coinType: string, contractAddress: string, address: string, network?: string) => Promise<any>;
+    getAccountTokenBalance: (coinType: string, contractAddress: string, address: string) => Promise<any>;
 
     getTopTokens: (coinType: string, topN?: number) => Promise<any>;
 
@@ -72,9 +72,9 @@ declare class KeystoreClient implements IkeystoreClient {
 
     signTransaction: (coinType: string, tx: any) => Promise<any>;
 
-    getKey: (coinType: string, address_index: number) => Promise<any>;
+    getAccount: (coinType: string, address_index: number) => Promise<any>;
 
-    setMnemonic: (coinType: string, mnemonic: string, passphrase?: string) => void;
+    setMnemonic: (coinType: string, mnemonic: string) => void;
 
     generateMnemonic: (coinType: string) => string;
 
@@ -82,15 +82,15 @@ declare class KeystoreClient implements IkeystoreClient {
 
     recoverKeyPairByWIF: (coinType: string, WIF: string, options?: any) => Promise<any>;
 
-    recoverKeyPairBykeyFile: (coinType: string, file: string, password: string) => Promise<any>;
+    recoverKeyPairByKeyFile: (coinType: string, file: string, password: string) => Promise<any>;
 
     validatePrivateKey: (coinType: string, privateKey: string | Buffer) => boolean;
 
     validateAddress: (coinType: string, address: string) => Promise<any>;
 
-    getKeyFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any>;
+    getAccountFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any>;
 
-    getKeyByLedger: (coinType: string, index: number) => Promise<any>;
+    getAccountByLedger: (coinType: string, index: number) => Promise<any>;
 
     signByLedger: (coinType: string, index: number, sender: string, msg: Buffer) => Promise<any>;
 

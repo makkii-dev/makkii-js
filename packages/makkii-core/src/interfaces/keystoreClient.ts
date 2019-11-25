@@ -1,29 +1,29 @@
 export interface IsingleKeystoreClient {
     signTransaction: (tx: any) => Promise<any> 
 
-    getKey: (address_index: number) => Promise<any> 
+    getAccount: (address_index: number) => Promise<any> 
 
-    setMnemonic: (mnemonic: string, passphrase?: string) => void 
+    setMnemonic: (mnemonic: string) => void 
 
     generateMnemonic: () => string 
+
+    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<any> 
 
     recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any> 
 
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any> 
 
-    recoverKeyPairBykeyFile: (file: string, password: string) => Promise<any> 
+    recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any> 
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean 
 
     validateAddress: (address: string) => Promise<any> 
-
-    getKeyFromMnemonic: (address_index: number, mnemonic: string) => Promise<any> 
 }
 
 export interface IsingleKeystoreLedgerClient {
     readonly ledgerSupport: boolean
     
-    getKeyByLedger: (index: number) => Promise<any> 
+    getAccountByLedger: (index: number) => Promise<any> 
 
     signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any> 
 
@@ -42,9 +42,9 @@ export interface IkeystoreClient {
 
     signTransaction: (coinType: string, tx: any) => Promise<any> 
 
-    getKey: (coinType: string, address_index: number) => Promise<any> 
+    getAccount: (coinType: string, address_index: number) => Promise<any> 
 
-    setMnemonic: (coinType: string, mnemonic: string, passphrase?: string) => void 
+    setMnemonic: (coinType: string, mnemonic: string) => void 
 
     generateMnemonic: (coinType: string) => string 
 
@@ -52,15 +52,15 @@ export interface IkeystoreClient {
 
     recoverKeyPairByWIF: (coinType: string, WIF: string, options?: any) => Promise<any> 
 
-    recoverKeyPairBykeyFile: (coinType: string, file: string, password: string) => Promise<any> 
+    recoverKeyPairByKeyFile: (coinType: string, file: string, password: string) => Promise<any> 
 
     validatePrivateKey: (coinType: string, privateKey: string | Buffer) => boolean 
 
     validateAddress: (coinType: string, address: string) => Promise<any> 
 
-    getKeyFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any> 
+    getAccountFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any> 
 
-    getKeyByLedger: (coinType: string, index: number) => Promise<any> 
+    getAccountByLedger: (coinType: string, index: number) => Promise<any> 
 
     signByLedger: (coinType: string, index: number, sender: string, msg: Buffer) => Promise<any> 
 

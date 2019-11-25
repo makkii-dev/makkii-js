@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import {HttpClient} from 'lib-common-util-js';
 import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/apiclient';
 
-function isIntanceOfApiClient(client: object) {
+function isInstanceOfApiClient(client: object) {
     const map = [
         "getBlockByNumber",
         "getBlockNumber",
@@ -13,7 +13,6 @@ function isIntanceOfApiClient(client: object) {
         "validateBalanceSufficiency",
         "sendTransaction",
         "sameAddress",
-        "formatAddress1Line",
     ];
     return !map.some(i=> !(i in client));
 }
@@ -25,7 +24,7 @@ export default class ApiClient implements IApiClient {
 
 
     addCoin=(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void =>{
-        if(!isIntanceOfApiClient(client)){
+        if(!isInstanceOfApiClient(client)){
             throw new Error('not a api client!');
         }
         this.coins[coinType.toLowerCase()] = client;
@@ -84,7 +83,7 @@ export default class ApiClient implements IApiClient {
         return coin.validateBalanceSufficiency(account, symbol, amount, extraParams);
     }
 
-    sendTransaction = (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean): Promise<any> =>{
+    sendTransaction = (coinType: string, account: any, symbol: string, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean): Promise<any> =>{
         const coin = this.getCoin(coinType);
         return coin.sendTransaction(account, symbol, to, value, extraParams, data, shouldBroadCast);
     }
@@ -92,11 +91,6 @@ export default class ApiClient implements IApiClient {
     sameAddress = (coinType: string, address1: string, address2: string): boolean => {
         const coin = this.getCoin(coinType);
         return coin.sameAddress(address1, address2);
-    }
-
-    formatAddress1Line = (coinType: string, address: string): string => {
-        const coin = this.getCoin(coinType);
-        return coin.formatAddress1Line(address);
     }
 
     getTokenIconUrl = (coinType: string, tokenSymbol: string, contractAddress: string): string => {
@@ -108,36 +102,36 @@ export default class ApiClient implements IApiClient {
 
     }
 
-    fetchTokenDetail = (coinType: string, contractAddress: string, network?: string): Promise<any> => {
+    getTokenDetail = (coinType: string, contractAddress: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {
-            return coin.fetchTokenDetail(contractAddress, network);
+            return coin.getTokenDetail(contractAddress);
         }
-        throw new Error(`[${coinType}] fetchTokenDetail is not implemented.`)
+        throw new Error(`[${coinType}] getTokenDetail is not implemented.`)
     }
 
-    fetchAccountTokenTransferHistory = (coinType: string, address: string, symbolAddress: string, network?: string, page?: number, size?: number, timestamp?: number): Promise<any> => {
+    getAccountTokenTransferHistory = (coinType: string, address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {
-            return coin.fetchAccountTokenTransferHistory(address, symbolAddress, network, page, size, timestamp);
+            return coin.getAccountTokenTransferHistory(address, symbolAddress, page, size, timestamp);
         }
-        throw new Error(`[${coinType}] fetchAccountTokenTransferHistory is not implemented.`)
+        throw new Error(`[${coinType}] getAccountTokenTransferHistory is not implemented.`)
     }
 
-    fetchAccountTokens = (coinType: string, address: string, network?: string): Promise<any> => {
+    getAccountTokens = (coinType: string, address: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {
-            return coin.fetchAccountTokens(address, network);
+            return coin.getAccountTokens(address);
         }
-        throw new Error(`[${coinType}] fetchAccountTokens is not implemented.`)
+        throw new Error(`[${coinType}] getAccountTokens is not implemented.`)
     }
 
-    fetchAccountTokenBalance = (coinType: string, contractAddress: string, address: string, network?: string): Promise<any> => {
+    getAccountTokenBalance = (coinType: string, contractAddress: string, address: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {
-            return coin.fetchAccountTokenBalance(contractAddress, address, network);
+            return coin.getAccountTokenBalance(contractAddress, address);
         }
-        throw new Error(`[${coinType}] fetchAccountTokenBalance is not implemented.`)
+        throw new Error(`[${coinType}] getAccountTokenBalance is not implemented.`)
     }
 
     getTopTokens = (coinType: string, topN?: number): Promise<any> => {

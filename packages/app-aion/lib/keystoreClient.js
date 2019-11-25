@@ -12,19 +12,19 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
-const keystore_1 = require("./keystore");
+const lib_keystore_1 = require("./lib_keystore");
 class AionKeystoreClient {
     constructor() {
         this.ledgerSupport = true;
         this.signTransaction = (tx) => {
-            return keystore_1.default.signTransaction(tx);
+            return lib_keystore_1.default.signTransaction(tx);
         };
-        this.getKey = (address_index) => {
+        this.getAccount = (address_index) => {
             if (!bip39.validateMnemonic(this.mnemonic))
                 throw new Error('Set Mnemonic first');
-            return keystore_1.default.getKeyFromMnemonic(this.mnemonic, address_index);
+            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
         };
-        this.setMnemonic = (mnemonic, passphrase) => {
+        this.setMnemonic = (mnemonic) => {
             this.mnemonic = mnemonic;
         };
         this.generateMnemonic = () => {
@@ -34,7 +34,7 @@ class AionKeystoreClient {
         };
         this.recoverKeyPairByPrivateKey = (priKey, options) => {
             try {
-                const keyPair = keystore_1.default.keyPair(priKey);
+                const keyPair = lib_keystore_1.default.keyPair(priKey);
                 const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                 return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
             }
@@ -45,34 +45,34 @@ class AionKeystoreClient {
         this.recoverKeyPairByWIF = (WIF, options) => {
             throw new Error('[AION] recoverKeyPairByWIF not implemented.');
         };
-        this.recoverKeyPairBykeyFile = (file, password) => {
-            return keystore_1.default.fromV3(file, password);
+        this.recoverKeyPairByKeyFile = (file, password) => {
+            return lib_keystore_1.default.fromV3(file, password);
         };
         this.validatePrivateKey = (privateKey) => {
             try {
-                return keystore_1.default.validatePrivateKey(privateKey);
+                return lib_keystore_1.default.validatePrivateKey(privateKey);
             }
             catch (e) {
                 return false;
             }
         };
         this.validateAddress = (address) => {
-            return keystore_1.default.validateAddress(address);
+            return lib_keystore_1.default.validateAddress(address);
         };
-        this.getKeyFromMnemonic = (address_index, mnemonic) => {
-            return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index);
+        this.getAccountFromMnemonic = (address_index, mnemonic) => {
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.getKeyByLedger = (index) => {
-            return keystore_1.default.getKeyByLedger(index);
+        this.getAccountByLedger = (index) => {
+            return lib_keystore_1.default.getAccountByLedger(index);
         };
         this.signByLedger = (index, sender, msg) => {
-            return keystore_1.default.signByLedger(index, sender, msg);
+            return lib_keystore_1.default.signByLedger(index, sender, msg);
         };
         this.setLedgerTransport = (transport) => {
-            keystore_1.default.initWallet(transport);
+            lib_keystore_1.default.initWallet(transport);
         };
         this.getLedgerStatus = () => {
-            return keystore_1.default.getWalletStatus();
+            return lib_keystore_1.default.getWalletStatus();
         };
         this.mnemonic = '';
     }

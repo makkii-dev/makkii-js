@@ -21,20 +21,20 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
-const keystore_1 = require("./keystore");
+const lib_keystore_1 = require("./lib_keystore");
 class EthKeystoreClient {
     constructor() {
         this.ledgerSupport = true;
         this.mnemonic = '';
         this.signTransaction = (tx) => {
-            return keystore_1.default.signTransaction(tx);
+            return lib_keystore_1.default.signTransaction(tx);
         };
-        this.getKey = (address_index) => {
+        this.getAccount = (address_index) => {
             if (!bip39.validateMnemonic(this.mnemonic))
                 throw new Error('Set Mnemonic first');
-            return keystore_1.default.getKeyFromMnemonic(this.mnemonic, address_index);
+            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
         };
-        this.setMnemonic = (mnemonic, passphrase) => {
+        this.setMnemonic = (mnemonic) => {
             this.mnemonic = mnemonic;
         };
         this.generateMnemonic = () => {
@@ -44,7 +44,7 @@ class EthKeystoreClient {
         };
         this.recoverKeyPairByPrivateKey = (priKey, options) => {
             try {
-                const keyPair = keystore_1.default.keyPair(priKey);
+                const keyPair = lib_keystore_1.default.keyPair(priKey);
                 const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                 return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
             }
@@ -55,29 +55,29 @@ class EthKeystoreClient {
         this.recoverKeyPairByWIF = (WIF, options) => {
             throw new Error("[eth] recoverKeyPairByWIF not implemented.");
         };
-        this.recoverKeyPairBykeyFile = (file, password) => {
-            throw new Error("[eth] recoverKeyPairBykeyFile not implemented.");
+        this.recoverKeyPairByKeyFile = (file, password) => {
+            throw new Error("[eth] recoverKeyPairByKeyFile not implemented.");
         };
         this.validatePrivateKey = (privateKey) => {
             throw new Error("[eth] validatePrivateKey not implemented.");
         };
         this.validateAddress = (address) => {
-            return keystore_1.default.validateAddress(address);
+            return lib_keystore_1.default.validateAddress(address);
         };
-        this.getKeyFromMnemonic = (address_index, mnemonic) => {
-            return keystore_1.default.getKeyFromMnemonic(mnemonic, address_index);
+        this.getAccountFromMnemonic = (address_index, mnemonic) => {
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.getKeyByLedger = (index) => __awaiter(this, void 0, void 0, function* () {
-            return keystore_1.default.getKeyByLedger(index);
+        this.getAccountByLedger = (index) => __awaiter(this, void 0, void 0, function* () {
+            return lib_keystore_1.default.getAccountByLedger(index);
         });
         this.signByLedger = (index, sender, msg) => {
             throw new Error("[eth] signByLedger not implemented.");
         };
         this.setLedgerTransport = (transport) => {
-            keystore_1.default.initWallet(transport);
+            lib_keystore_1.default.initWallet(transport);
         };
         this.getLedgerStatus = () => {
-            return keystore_1.default.getWalletStatus();
+            return lib_keystore_1.default.getWalletStatus();
         };
     }
 }

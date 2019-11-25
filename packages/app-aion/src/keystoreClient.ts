@@ -1,8 +1,8 @@
 import * as bip39 from 'bip39';
-import KEYSTORE from './keystore';
-import { keystoreClient, keystoreLedgerClient } from './interfaces/keystoreClient';
+import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystoreClient'
+import KEYSTORE from './lib_keystore';
 
-export default class AionKeystoreClient implements keystoreClient, keystoreLedgerClient {
+export default class AionKeystoreClient implements IsingleKeystoreFullClient {
   ledgerSupport: boolean = true;
 
   mnemonic: string;
@@ -15,13 +15,13 @@ export default class AionKeystoreClient implements keystoreClient, keystoreLedge
     return KEYSTORE.signTransaction(tx);
   }
 
-  getKey = (address_index: number) => {
+  getAccount = (address_index: number) => {
     if (!bip39.validateMnemonic(this.mnemonic))
       throw new Error('Set Mnemonic first');
-    return KEYSTORE.getKeyFromMnemonic(this.mnemonic, address_index);
+    return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
   }
 
-  setMnemonic = (mnemonic: string, passphrase?: string) => {
+  setMnemonic = (mnemonic: string) => {
     this.mnemonic = mnemonic;
   }
 
@@ -49,7 +49,7 @@ export default class AionKeystoreClient implements keystoreClient, keystoreLedge
     throw new Error('[AION] recoverKeyPairByWIF not implemented.');
   }
 
-  recoverKeyPairBykeyFile = (file: string, password: string) => {
+  recoverKeyPairByKeyFile = (file: string, password: string) => {
     return KEYSTORE.fromV3(file, password);
   }
 
@@ -65,12 +65,12 @@ export default class AionKeystoreClient implements keystoreClient, keystoreLedge
     return KEYSTORE.validateAddress(address);
   }
 
-  getKeyFromMnemonic = (address_index: number, mnemonic: string) => {
-    return KEYSTORE.getKeyFromMnemonic(mnemonic, address_index);
+  getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
+    return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
   }
 
-  getKeyByLedger = (index: number) => {
-    return KEYSTORE.getKeyByLedger(index);
+  getAccountByLedger = (index: number) => {
+    return KEYSTORE.getAccountByLedger(index);
   }
 
   signByLedger = (index: number, sender: string, msg: Buffer) => {
