@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js';
-import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystoreClient'
-
-import {IsingleApiFullClient} from '@makkii/makkii-core/src/interfaces/apiclient'
+import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
+import {IsingleApiFullClient} from '@makkii/makkii-core/src/interfaces/api_client'
+import { AionPendingTx, AionTxObj, AionTx, validateBalanceRet, AionTxStatus, AionAccount } from '@makkii/makkii-type/src/aion';
+import { Token } from '@makkii/makkii-type';
 
 
 interface INetworkConfig {
@@ -25,41 +26,48 @@ export class AionApiClient implements IsingleApiFullClient {
 
     getNetwork: () => string;
 
-    setNetwork: (options: any) => void;
+    setNetwork: (options: INetworkConfig) => void;
 
-    setRemoteApi: (api_: any) => void;
-
+    /**
+     * return jsonrpc result eth_getBlockByNumber 
+     * see: https://github.com/aionnetwork/aion_web3/wiki/API:-web3-eth#getblock
+     */
     getBlockByNumber: (blockNumber: Number) => Promise<any>;
 
-    getBlockNumber: () => Promise<any>;
+    getBlockNumber: () => Promise<number>;
 
-    getTransactionStatus: (hash: string) => Promise<any>;
+    getTransactionStatus: (hash: string) => Promise<AionTxStatus>;
 
     getTransactionExplorerUrl: (hash: any) => string;
 
-    getBalance: (address: string) => Promise<any>;
+    /**
+     * bignumber in AION
+     */
+    getBalance: (address: string) => Promise<BigNumber>;
 
-    getTransactionsByAddress: (address: string, page: number, size: number) => Promise<any>;
+    getTransactionsByAddress: (address: string, page: number, size: number) => Promise<{[hash:string]: AionTx}>;
 
-    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: AionAccount, amount: number | BigNumber, extraParams?: any) => Promise<validateBalanceRet>;
 
-    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: AionAccount, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => 
+        Promise<{ pendingTx: AionPendingTx } | { encoded: string, txObj: AionTxObj }> ;
 
     sameAddress: (address1: string, address2: string) => boolean;
 
+    // not implemented
     getTokenIconUrl: (tokenSymbol: string, contractAddress: string) => string;
 
-    getTokenDetail: (contractAddress: string, network?: string) => Promise<any>;
+    getTokenDetail: (contractAddress: string) => Promise<Token>;
 
-    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>;
+    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<{[hash:string]: AionTx}>;
 
-    getAccountTokens: (address: string, network?: string) => Promise<any>;
+    getAccountTokens: (address: string) => Promise<{[symbol: string]: Token}>;
 
-    getAccountTokenBalance: (contractAddress: string, address: string, network?: string) => Promise<any>;
+    getAccountTokenBalance: (contractAddress: string, address: string) => Promise<BigNumber>;
 
-    getTopTokens: (topN?: number) => Promise<any>;
+    getTopTokens: (topN?: number) => Promise<Array<Token>>;
 
-    searchTokens: (keyword: string) => Promise<any>;
+    searchTokens: (keyword: string) => Promise<Array<Token>>;
 }
 
 export class AionKeystoreClient implements IsingleKeystoreFullClient {
@@ -77,6 +85,7 @@ export class AionKeystoreClient implements IsingleKeystoreFullClient {
 
     recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any>;
 
+    // not implemented
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
     recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any>;

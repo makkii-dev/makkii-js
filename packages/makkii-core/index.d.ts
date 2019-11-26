@@ -1,8 +1,8 @@
 
 
 import BigNumber from 'bignumber.js';
-import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './src/interfaces/apiclient';
-import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './src/interfaces/keystoreClient';
+import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './src/interfaces/api_client';
+import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './src/interfaces/keystore_client';
 
 export class ApiClient implements IApiClient {
     

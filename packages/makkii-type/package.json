@@ -1,38 +1,29 @@
 {
-  "name": "@makkii/makkii-core",
+  "name": "@makkii/makkii-type",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
   "license": "ISC",
-  "main": "lib/index.js",
-  "typings": "index.d.ts",
+  "main": "src/index.ts",
   "directories": {
-    "lib": "lib",
+    "src": "src",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chaion/react-native-makkii-core.git"
   },
   "scripts": {
-    "clean": "rm -rf lib",
-    "pretsc": "npm run clean",
-    "tsc": "tsc --build tsconfig.json"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/chaion/react-native-makkii-core/issues"
   },
   "dependencies": {
-    "@makkii/makkii-type": "^0.0.0",
-    "bignumber.js": "^9.0.0",
-    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
-  },
-  "devDependencies": {
-    "assert": "^2.0.0",
-    "mocha": "^6.2.2"
+    "bignumber.js": "^9.0.0"
   }
 }

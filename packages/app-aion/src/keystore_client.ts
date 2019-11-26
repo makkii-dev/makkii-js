@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39';
-import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystoreClient'
+import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
 import KEYSTORE from './lib_keystore';
 
 export default class AionKeystoreClient implements IsingleKeystoreFullClient {

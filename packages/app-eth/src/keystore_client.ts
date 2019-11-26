@@ -1,22 +1,20 @@
 import * as bip39 from 'bip39';
-import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keystoreClient'
+import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
 import KEYSTORE from './lib_keystore';
 
-export default class TronKeystoreClient implements IsingleKeystoreClient {
-    mnemonic: string = '';
+export default class EthKeystoreClient implements IsingleKeystoreFullClient {
 
-    constructor() {
-        this.mnemonic = '';
-    }
+    ledgerSupport: boolean = true;
+
+    mnemonic: string = '';
 
     signTransaction = (tx: any) => {
         return KEYSTORE.signTransaction(tx);
     }
 
     getAccount = (address_index: number) => {
-        if (!bip39.validateMnemonic(this.mnemonic)) {
-            throw new Error('set mnemonic first')
-        }
+        if (!bip39.validateMnemonic(this.mnemonic))
+            throw new Error('Set Mnemonic first');
         return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
     }
 
@@ -45,15 +43,15 @@ export default class TronKeystoreClient implements IsingleKeystoreClient {
     }
 
     recoverKeyPairByWIF = (WIF: string, options?: any) => {
-        throw new Error("[tron] recoverKeyPairByWIF not implemented.");
+        throw new Error("[eth] recoverKeyPairByWIF not implemented.");
     }
 
     recoverKeyPairByKeyFile = (file: string, password: string) => {
-        throw new Error("[tron] recoverKeyPairByKeyFile not implemented.");
+        throw new Error("[eth] recoverKeyPairByKeyFile not implemented.");
     }
 
     validatePrivateKey = (privateKey: string | Buffer) => {
-        throw new Error("[tron] validatePrivateKey not implemented.");
+        throw new Error("[eth] validatePrivateKey not implemented.");
     }
 
     validateAddress = (address: string) => {
@@ -64,5 +62,19 @@ export default class TronKeystoreClient implements IsingleKeystoreClient {
         return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
     }
 
+    getAccountByLedger = async (index: number) => {
+        return KEYSTORE.getAccountByLedger(index);
+    }
 
+    signByLedger = (index: number, sender: string, msg: Buffer) => {
+        throw new Error("[eth] signByLedger not implemented.");
+    }
+
+    setLedgerTransport = (transport: any) => {
+        KEYSTORE.initWallet(transport);
+    }
+
+    getLedgerStatus = () => {
+        return KEYSTORE.getWalletStatus();
+    }
 }

@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystoreClient'
-import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/apiclient'
+import { IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystore_client'
+import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/api_client'
+import { Token } from '@makkii/makkii-type';
 
 
 
@@ -50,7 +51,7 @@ export class EthApiClient implements IsingleApiFullClient {
 
     getTokenIconUrl: (tokenSymbol: string, contractAddress: string) => string;
 
-    getTokenDetail: (contractAddress: string) => Promise<any>;
+    getTokenDetail: (contractAddress: string) => Promise<Token>;
 
     getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>;
 
@@ -58,9 +59,9 @@ export class EthApiClient implements IsingleApiFullClient {
 
     getAccountTokenBalance: (contractAddress: string, address: string) => Promise<any>;
 
-    getTopTokens: (topN?: number) => Promise<any>;
+    getTopTokens: (topN?: number) => Promise<Array<Token>>;
 
-    searchTokens: (keyword: string) => Promise<any>;
+    searchTokens: (keyword: string) => Promise<Array<Token>>;
 }
 
 export class EthKeystoreClient implements IsingleKeystoreFullClient {

@@ -1,2 +1,2 @@
-export { default as EthApiClient } from './apiClient';
-export { default as EthKeystoreClient } from './keystoreClient';
+export { default as EthApiClient } from './api_client';
+export { default as EthKeystoreClient } from './keystore_client';

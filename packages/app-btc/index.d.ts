@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
-import {IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystoreClient';
-import {IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient';
+import {IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystore_client';
+import {IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client';
 
 interface IConfig {
     network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST'
