@@ -32,7 +32,7 @@
     "@makkii/makkii-core": "^0.0.0",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
-    "bitcoinjs-lib": "^5.1.6",
+    "bitcoinjs-lib": "^5.0.5",
     "hdkey": "^1.1.1",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
   },

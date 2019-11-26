@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ethereumjs_tx_1 = require("ethereumjs-tx");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const ledger_1 = require("./ledger");
+const EthereumTx = require('ethereumjs-tx');
 const KEY_MAP = [
     'amount',
     'nonce',
@@ -42,7 +42,7 @@ exports.signTransaction = (transaction) => __awaiter(void 0, void 0, void 0, fun
     if (data) {
         txParams = Object.assign(Object.assign({}, txParams), { data });
     }
-    const tx = new ethereumjs_tx_1.default(txParams);
+    const tx = new EthereumTx(txParams);
     if (extra_param && extra_param.type === '[ledger]') {
         const { sender, derivationIndex } = extra_param;
         const path = `44'/60'/0'/0/${derivationIndex}`;

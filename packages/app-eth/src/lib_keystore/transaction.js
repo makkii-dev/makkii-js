@@ -1,6 +1,7 @@
-import EthereumTx from 'ethereumjs-tx';
 import { hexutil } from "lib-common-util-js";
 import { wallet } from "./ledger";
+
+const EthereumTx = require('ethereumjs-tx');
 
 const KEY_MAP = [
     'amount',

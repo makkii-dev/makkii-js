@@ -26,6 +26,7 @@ exports.default = config => {
                     to,
                     private_key: account.private_key,
                     extra_param,
+                    network: config.network,
                 };
                 if (data !== undefined) {
                     tx = Object.assign(Object.assign({}, tx), { data });

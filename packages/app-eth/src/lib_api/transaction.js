@@ -32,6 +32,7 @@ export default config => {
                         to,
                         private_key: account.private_key,
                         extra_param,
+                        network: config.network,
                     };
                     if (data !== undefined) {
                         tx = { ...tx, data };
