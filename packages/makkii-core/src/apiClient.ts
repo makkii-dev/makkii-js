@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import {HttpClient} from 'lib-common-util-js';
-import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/apiclient';
+import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/api_client';
 
 function isInstanceOfApiClient(client: object) {
     const map = [

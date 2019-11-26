@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient'
+import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
 import API from './lib_api';
 import network from './network';
 

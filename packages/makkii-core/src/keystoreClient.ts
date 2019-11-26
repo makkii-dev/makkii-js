@@ -1,4 +1,4 @@
-import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './interfaces/keystoreClient';
+import { IkeystoreClient, IsingleKeystoreClient, IsingleKeystoreFullClient } from './interfaces/keystore_client';
 
 
 function isIntanceOfKeystoreClient(client: object) {

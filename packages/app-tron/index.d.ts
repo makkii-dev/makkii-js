@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keystoreClient'
-import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/apiclient'
+import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keystore_client'
+import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
 
 
 interface IConfig {

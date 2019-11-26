@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/apiclient';
+import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/api_client';
 import API from './lib_api';
 import network from './network';
 
@@ -26,8 +26,8 @@ export default class AionApiClient implements IsingleApiFullClient {
       remoteApi?: string
     };
     // check
-    ['network', 'jsonrpc'].forEach(f=>{
-      if(!(f in config)){
+    ['network', 'jsonrpc'].forEach(f => {
+      if (!(f in config)) {
         throw new Error(`config miss field ${f}`)
       }
     })
@@ -100,7 +100,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size);
   }
 
-  getAccountTokens = (address: string, ) => {
+  getAccountTokens = (address: string) => {
     return this.api.getAccountTokens(address);
   }
 

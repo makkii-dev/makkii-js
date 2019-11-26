@@ -1,2 +1,2 @@
-export { default as TronApiClient } from './apiClient';
-export { default as TronKeystoreClient } from './keystoreClient';
+export { default as TronApiClient } from './api_client';
+export { default as TronKeystoreClient } from './keystore_client';

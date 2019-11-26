@@ -73,7 +73,7 @@ export default config => {
                                 name = name.slice(0, name.indexOf('\u0000'));
                             }
                             const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
-                            resolve({ contractAddr: contractAddress, symbol, name, decimals });
+                            resolve({ contractAddr: contractAddress, symbol, name, tokenDecimal:decimals });
                         } else {
                             reject(new Error('get token detail failed'));
                         }

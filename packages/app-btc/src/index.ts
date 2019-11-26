@@ -1,2 +1,2 @@
-export { default as BtcApiClient } from './apiClient';
-export { default as BtcKeystoreClient } from './keystoreClient';
+export { default as BtcApiClient } from './api_client';
+export { default as BtcKeystoreClient } from './keystore_client';
