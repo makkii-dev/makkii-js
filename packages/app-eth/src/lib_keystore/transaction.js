@@ -49,6 +49,7 @@ export const signTransaction = async (transaction) => {
         to: hexutil.toHex(to),
         value: hexutil.toHex(amount),
         chainId: getChainId(network),
+        // https://github.com/LedgerHQ/ledgerjs/issues/43
         v: getChainId(network),
         r: "0x00",
         s: "0x00",
