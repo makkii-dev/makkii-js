@@ -1,9 +1,10 @@
 import BigNumber from "bignumber.js";
-import Contract from 'web3-eth-contract';
 import { HttpClient } from "lib-common-util-js";
 import keystore from "../lib_keystore";
 import jsonrpcClient from "./jsonrpc";
 import { ERC20ABI } from "./constants";
+
+const Contract = require('web3-eth-contract');
 
 
 export default config => {

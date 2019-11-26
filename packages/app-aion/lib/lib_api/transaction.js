@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const aion_web3_eth_contract_1 = require("aion-web3-eth-contract");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const constants_1 = require("./constants");
 const jsonrpc_1 = require("./jsonrpc");
 const lib_keystore_1 = require("../lib_keystore");
+const Contract = require('aion-web3-eth-contract');
 exports.default = (config) => {
     const { getTransactionReceipt, getTransactionCount, sendSignedTransaction } = jsonrpc_1.default(config);
     function sendNativeTx(account, to, value_, gasPrice, gasLimit, data, shouldBroadCast) {
@@ -79,7 +79,7 @@ exports.default = (config) => {
         const { tokens } = account;
         const { contractAddr, tokenDecimal } = tokens[symbol];
         console.log('tokenDecimal=>', tokenDecimal);
-        const tokenContract = new aion_web3_eth_contract_1.default(constants_1.CONTRACT_ABI, contractAddr);
+        const tokenContract = new Contract(constants_1.CONTRACT_ABI, contractAddr);
         const methodsData = tokenContract.methods
             .send(to, value
             .shiftedBy(tokenDecimal - 0)

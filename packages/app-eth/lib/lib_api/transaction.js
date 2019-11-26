@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const web3_eth_contract_1 = require("web3-eth-contract");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const lib_keystore_1 = require("../lib_keystore");
 const jsonrpc_1 = require("./jsonrpc");
 const constants_1 = require("./constants");
+const Contract = require('web3-eth-contract');
 exports.default = config => {
     const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpc_1.default(config);
     function sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast) {
@@ -76,7 +76,7 @@ exports.default = config => {
     function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, shouldBroadCast) {
         const { tokens } = account;
         const { contractAddr, tokenDecimal } = tokens[symbol];
-        const tokenContract = new web3_eth_contract_1.default(constants_1.ERC20ABI, contractAddr);
+        const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
         const methodsData = tokenContract.methods
             .transfer(to, value
             .shiftedBy(tokenDecimal - 0)

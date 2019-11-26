@@ -1,11 +1,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable radix */
 import BigNumber from 'bignumber.js';
-import Contract from 'aion-web3-eth-contract';
 import { HttpClient } from 'lib-common-util-js';
 import { CONTRACT_ABI } from './constants';
 import jsonrpcClient from './jsonrpc';
 import keystore from '../lib_keystore';
+
+const Contract = require('aion-web3-eth-contract');
 
 export default (config) => {
 

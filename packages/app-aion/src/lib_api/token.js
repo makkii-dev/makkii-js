@@ -3,6 +3,7 @@ import axios from 'axios';
 import { HttpClient, hexutil } from 'lib-common-util-js';
 import { processRequest } from './jsonrpc';
 import { CONTRACT_ABI } from './constants';
+
 const Contract = require('aion-web3-eth-contract');
 const AbiCoder = require('aion-web3-eth-abi');
 

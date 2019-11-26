@@ -3,6 +3,7 @@ import BigNumber from "bignumber.js";
 import { HttpClient, hexutil } from "lib-common-util-js";
 import { ERC20ABI } from "./constants";
 import { processRequest } from "./jsonrpc";
+
 const Contract = require('web3-eth-contract');
 const AbiCoder = require('web3-eth-abi');
 
