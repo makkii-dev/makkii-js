@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const aion_web3_eth_contract_1 = require("aion-web3-eth-contract");
-const aion_web3_eth_abi_1 = require("aion-web3-eth-abi");
 const axios_1 = require("axios");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const jsonrpc_1 = require("./jsonrpc");
 const constants_1 = require("./constants");
+const Contract = require('aion-web3-eth-contract');
+const AbiCoder = require('aion-web3-eth-abi');
 exports.default = (config) => {
     function getAccountTokens(address) {
         return new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ exports.default = (config) => {
         });
     }
     const getAccountTokenBalance = (contractAddress, address) => new Promise((resolve, reject) => {
-        const contract = new aion_web3_eth_contract_1.default(constants_1.CONTRACT_ABI);
+        const contract = new Contract(constants_1.CONTRACT_ABI);
         const requestData = jsonrpc_1.processRequest('eth_call', [
             { to: contractAddress, data: contract.methods.balanceOf(address).encodeABI() },
             'latest',
@@ -44,7 +44,7 @@ exports.default = (config) => {
         lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then((res) => {
             if (res.data.result) {
-                resolve(new bignumber_js_1.default(aion_web3_eth_abi_1.default.decodeParameter('uint128', res.data.result)));
+                resolve(new bignumber_js_1.default(AbiCoder.decodeParameter('uint128', res.data.result)));
             }
             else {
                 reject(new Error(`get account Balance failed:${res.data.error}`));
@@ -55,7 +55,7 @@ exports.default = (config) => {
         });
     });
     const getTokenDetail = (contractAddress) => new Promise((resolve, reject) => {
-        const contract = new aion_web3_eth_contract_1.default(constants_1.CONTRACT_ABI);
+        const contract = new Contract(constants_1.CONTRACT_ABI);
         const requestGetSymbol = jsonrpc_1.processRequest('eth_call', [
             { to: contractAddress, data: contract.methods.symbol().encodeABI() },
             'latest',
@@ -83,20 +83,20 @@ exports.default = (config) => {
                 let symbol;
                 let name;
                 try {
-                    symbol = aion_web3_eth_abi_1.default.decodeParameter('string', symbolRet.data.result);
+                    symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
                 }
                 catch (e) {
                     symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
                     symbol = symbol.slice(0, symbol.indexOf('\u0000'));
                 }
                 try {
-                    name = aion_web3_eth_abi_1.default.decodeParameter('string', nameRet.data.result);
+                    name = AbiCoder.decodeParameter('string', nameRet.data.result);
                 }
                 catch (e) {
                     name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
                     name = name.slice(0, name.indexOf('\u0000'));
                 }
-                const decimals = aion_web3_eth_abi_1.default.decodeParameter('uint8', decimalsRet.data.result);
+                const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
                 resolve({
                     contractAddr: contractAddress, symbol, name, decimals,
                 });

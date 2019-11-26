@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
-import Contract from 'aion-web3-eth-contract';
-import AbiCoder from 'aion-web3-eth-abi';
 import axios from 'axios';
 import { HttpClient, hexutil } from 'lib-common-util-js';
 import { processRequest } from './jsonrpc';
 import { CONTRACT_ABI } from './constants';
+const Contract = require('aion-web3-eth-contract');
+const AbiCoder = require('aion-web3-eth-abi');
 
 export default (config) => {
 

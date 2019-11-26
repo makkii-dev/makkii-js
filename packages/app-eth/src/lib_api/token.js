@@ -1,10 +1,10 @@
 import axios from 'axios';
 import BigNumber from "bignumber.js";
-import Contract from 'web3-eth-contract'
-import AbiCoder from 'web3-eth-abi';
 import { HttpClient, hexutil } from "lib-common-util-js";
 import { ERC20ABI } from "./constants";
 import { processRequest } from "./jsonrpc";
+const Contract = require('web3-eth-contract');
+const AbiCoder = require('web3-eth-abi');
 
 export default config => {
 

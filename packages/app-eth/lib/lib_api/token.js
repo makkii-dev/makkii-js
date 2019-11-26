@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const bignumber_js_1 = require("bignumber.js");
-const web3_eth_contract_1 = require("web3-eth-contract");
-const web3_eth_abi_1 = require("web3-eth-abi");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const constants_1 = require("./constants");
 const jsonrpc_1 = require("./jsonrpc");
+const Contract = require('web3-eth-contract');
+const AbiCoder = require('web3-eth-abi');
 exports.default = config => {
     const getAccountTokenBalance = (contractAddress, address) => new Promise((resolve, reject) => {
-        const contract = new web3_eth_contract_1.default(constants_1.ERC20ABI);
+        const contract = new Contract(constants_1.ERC20ABI);
         const requestData = jsonrpc_1.processRequest('eth_call', [
             { to: contractAddress, data: contract.methods.balanceOf(address).encodeABI() },
             'latest',
@@ -18,7 +18,7 @@ exports.default = config => {
         lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then(res => {
             if (res.data.result) {
-                resolve(bignumber_js_1.default(web3_eth_abi_1.default.decodeParameter('uint256', res.data.result)));
+                resolve(bignumber_js_1.default(AbiCoder.decodeParameter('uint256', res.data.result)));
             }
             else {
                 reject(new Error(`get account Balance failed:${res.data.error}`));
@@ -29,7 +29,7 @@ exports.default = config => {
         });
     });
     const getTokenDetail = (contractAddress) => new Promise((resolve, reject) => {
-        const contract = new web3_eth_contract_1.default(constants_1.ERC20ABI);
+        const contract = new Contract(constants_1.ERC20ABI);
         const requestGetSymbol = jsonrpc_1.processRequest('eth_call', [
             { to: contractAddress, data: contract.methods.symbol().encodeABI() },
             'latest',
@@ -57,20 +57,20 @@ exports.default = config => {
                 let symbol;
                 let name;
                 try {
-                    symbol = web3_eth_abi_1.default.decodeParameter('string', symbolRet.data.result);
+                    symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
                 }
                 catch (e) {
                     symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
                     symbol = symbol.slice(0, symbol.indexOf('\u0000'));
                 }
                 try {
-                    name = web3_eth_abi_1.default.decodeParameter('string', nameRet.data.result);
+                    name = AbiCoder.decodeParameter('string', nameRet.data.result);
                 }
                 catch (e) {
                     name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
                     name = name.slice(0, name.indexOf('\u0000'));
                 }
-                const decimals = web3_eth_abi_1.default.decodeParameter('uint8', decimalsRet.data.result);
+                const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
                 resolve({ contractAddr: contractAddress, symbol, name, decimals });
             }
             else {
