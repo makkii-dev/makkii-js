@@ -12,6 +12,7 @@ export default (config) => {
     getAccountTokenBalance,
     getAccountTokenTransferHistory,
     getTokenDetail,
+    getTokenIconUrl,
     getTopTokens,
     searchTokens } = tokenClient(config)
 
@@ -31,6 +32,7 @@ export default (config) => {
     getAccountTokenBalance,
     getAccountTokenTransferHistory,
     getTokenDetail,
+    getTokenIconUrl,
     getTopTokens,
     searchTokens,
   }
