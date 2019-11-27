@@ -1,24 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystore_client'
 import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/api_client'
-import { Token } from '@makkii/makkii-type';
-
-
-
-interface IConfig {
-    network: 'mainnet' | 'ropsten';
-    jsonrpc: string;
-    explorer_api?: {
-        provider: string,
-        url: string,
-        key: string,
-    };
-    explorer?: {
-        provider: string,
-        url: string,
-    };
-    remoteApi?: string;
-  }
+import { Token, validateBalanceRet, Keypair, LedgerKeypair } from '@makkii/makkii-type';
+import { EthTxStatus, EthTx, EthObj, EthAccount } from '@makkii/makkii-type/src/eth';
+import { IConfig } from './src/api_client';
 
 export class EthApiClient implements IsingleApiFullClient {
     tokenSupport: boolean;
@@ -31,21 +16,30 @@ export class EthApiClient implements IsingleApiFullClient {
 
     getNetwork: () => "mainnet" | "ropsten";
 
-    getBlockByNumber: (blockNumber: Number) => Promise<any>;
+    /**
+     * return jsonrpc response's result eth_getBlockByNumber 
+     * see: https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblockbynumber
+     */
+    getBlockByNumber: (blockNumber: string) => Promise<any>;
 
+    /**
+     * return jsonrpc response's result eth_blocknumber 
+     * see: https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_blocknumber
+     */
     getBlockNumber: () => Promise<any>;
 
-    getTransactionStatus: (hash: string) => Promise<any>;
+    getTransactionStatus: (hash: string) => Promise<EthTxStatus>;
 
     getTransactionExplorerUrl: (hash: any) => string;
 
     getBalance: (address: string) => Promise<any>;
 
-    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
+    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<{[hash:string]: EthTx}>;
 
-    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: EthAccount, amount: number | BigNumber, extraParams?: any) => Promise<validateBalanceRet>;
 
-    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: EthAccount, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) =>
+        Promise<{encoded: string, txObj: EthObj}|{pendingTx: EthTx}>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 
@@ -53,11 +47,12 @@ export class EthApiClient implements IsingleApiFullClient {
 
     getTokenDetail: (contractAddress: string) => Promise<Token>;
 
-    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>;
-
+    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<{[hash:string]: EthTx}>;
+    
+    // not implemented
     getAccountTokens: (address: string) => Promise<any>;
 
-    getAccountTokenBalance: (contractAddress: string, address: string) => Promise<any>;
+    getAccountTokenBalance: (contractAddress: string, address: string) => Promise<BigNumber>;
 
     getTopTokens: (topN?: number) => Promise<Array<Token>>;
 
@@ -72,25 +67,27 @@ export class EthKeystoreClient implements IsingleKeystoreFullClient {
 
     signTransaction: (tx: any) => Promise<any>;
 
-    getAccount: (address_index: number) => Promise<any>;
-
     setMnemonic: (mnemonic: string) => void;
 
     generateMnemonic: () => string;
 
-    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any>;
+    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<Keypair>;
 
+    // not implemented
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
+    // not implemented
     recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any>;
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean;
 
-    validateAddress: (address: string) => Promise<any>;
+    validateAddress: (address: string) => boolean;
+    
+    getAccount: (address_index: number) => Promise<Keypair&{index: number}>;
 
-    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
+    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<Keypair&{index: number}>;
 
-    getAccountByLedger: (index: number) => Promise<any>;
+    getAccountByLedger: (index: number) => Promise<LedgerKeypair>;
 
     signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any>;
 

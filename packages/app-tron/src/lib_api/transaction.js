@@ -15,7 +15,7 @@ export default config => {
     
     function sendTransaction(account, to, value, shouldBroadCast = true) {
         return new Promise((resolve, reject) => {
-            value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
+            value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
             getLatestBlock()
                 .then(block => {
                     console.log('get latest block =>', block);

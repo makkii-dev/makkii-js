@@ -16,22 +16,13 @@ export interface AionTxObj {
     gasPrice: number,
 }
 
-export interface AionTx {
-    hash: string
-    timestamp: number
-    from: string
-    to: string
-    value: BigNumber
-    status: 'CONFIRMED'| 'FAILED'
+export interface AionTx extends AionTxObj{
+    status: 'PENDING' | 'CONFIRMED' | 'FALIED'
     blockNumber: number
     fee?: number // tx gas price * gas used
 }
 
 
-export interface validateBalanceRet {
-    result: boolean
-    err?: string // error mesage
-}
 
 export interface AionTxStatus {
     status: boolean // true: comfirmed or false: failed

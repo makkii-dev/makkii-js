@@ -1,6 +1,7 @@
 import { Token } from '@makkii/makkii-type'
 import { AionAccount } from '@makkii/makkii-type/src/aion'
 import BigNumber from 'bignumber.js'
+import KEYSTORE from './lib_keystore';
 
 export default class AionAccountBuilder {
     __Tokens: { [symbol: string]: Token & { balance: BigNumber } } = {}
@@ -16,7 +17,7 @@ export default class AionAccountBuilder {
     } = { type: 'undefined' }
 
     setAddress = (address: string) => {
-        if (/^0x[A|a]0[0-9a-f]{62}$/i.test(address)) {
+        if (KEYSTORE.validateAddress(address)) {
             this.__Address = address;
             return this;
         }

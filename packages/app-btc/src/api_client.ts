@@ -3,7 +3,7 @@ import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
 import API from './lib_api';
 import network from './network';
 
-interface IConfig {
+export interface IConfig {
     network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST'
     insight_api: string,
     broadcast?: string,
@@ -54,7 +54,7 @@ export default class BtcApiClient implements IsingleApiClient {
         this.api = API(this.config);
       }
 
-    getBlockByNumber = (blockNumber: Number) => {
+    getBlockByNumber = (blockNumber: string) => {
         throw new Error(`[${this.config.network}] getBlockByNumber not implemented.`);
     }
 

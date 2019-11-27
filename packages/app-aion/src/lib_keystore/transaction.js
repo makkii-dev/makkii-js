@@ -161,6 +161,6 @@ const toAionLong = (val) => {
 
 
 const numberToHex = function (value) {
-  value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
+  value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
   return `0x${value.toString(16)}`;
 };

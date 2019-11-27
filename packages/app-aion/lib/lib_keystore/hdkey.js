@@ -61,7 +61,7 @@ function getAccountFromMnemonic(mnemonic, index) {
             };
         }
         catch (e) {
-            throw Error(`get Key AION failed: ${e}`);
+            throw new Error(`get Key AION failed: ${e}`);
         }
     });
 }

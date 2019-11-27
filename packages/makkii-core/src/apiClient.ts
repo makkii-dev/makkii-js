@@ -49,7 +49,7 @@ export default class ApiClient implements IApiClient {
         return coin;
     }
 
-    getBlockByNumber = (coinType: string, blockNumber: Number): Promise<any> => {
+    getBlockByNumber = (coinType: string, blockNumber: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         return coin.getBlockByNumber(blockNumber);
     }

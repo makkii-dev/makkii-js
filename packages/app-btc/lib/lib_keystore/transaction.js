@@ -68,6 +68,6 @@ exports.signTransaction = (transaction, network = 'BTC') => __awaiter(void 0, vo
     const tx = txb.build();
     return { encoded: tx.toHex() };
 });
-exports.estimateFeeBTC = (m, n, byte_fee) => bignumber_js_1.default(148 * m + 34 * n + 10).times(byte_fee);
-exports.estimateFeeLTC = bignumber_js_1.default(20000);
+exports.estimateFeeBTC = (m, n, byte_fee) => new bignumber_js_1.default(148 * m + 34 * n + 10).times(byte_fee);
+exports.estimateFeeLTC = new bignumber_js_1.default(20000);
 //# sourceMappingURL=transaction.js.map

@@ -6,7 +6,7 @@ import { estimateFeeBTC, estimateFeeLTC } from '../lib_keystore/transaction';
 export default config => {
   const { broadcastTransaction, getUnspentTx } = jsonrpcClient(config);
   const sendTransaction = (account, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
-    value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
+    value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
     getUnspentTx(account.address)
       .then((utxos) => {
         const { type, derivationIndex } = account;
@@ -28,7 +28,7 @@ export default config => {
           extra_param,
           utxos,
         };
-        const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(BigNumber(el.amount)), BigNumber(0));
+        const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(new BigNumber(el.amount)), new BigNumber(0));
         const fee = config.network.match(/LTC/) ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, tx.byte_fee || 10);
         keystore.signTransaction(tx, config.network)
           .then((res) => {

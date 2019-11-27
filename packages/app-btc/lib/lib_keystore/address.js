@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const Base58Prefix = {
@@ -42,5 +33,5 @@ const validateBench32 = (address, network) => {
         return false;
     }
 };
-exports.validateAddress = (address, network) => __awaiter(void 0, void 0, void 0, function* () { return validateBase58(address, network) || validateBench32(address, network); });
+exports.validateAddress = (address, network) => validateBase58(address, network) || validateBench32(address, network);
 //# sourceMappingURL=address.js.map

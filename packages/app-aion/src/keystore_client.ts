@@ -31,7 +31,7 @@ export default class AionKeystoreClient implements IsingleKeystoreFullClient {
     return mnemonic;
   }
 
-  recoverKeyPairByPrivateKey = (priKey: string, options?: any) => {
+  recoverKeyPairByPrivateKey = (priKey: string) => {
     try {
       const keyPair = KEYSTORE.keyPair(priKey);
       const {

@@ -1,18 +1,9 @@
 import BigNumber from 'bignumber.js';
 import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
 import {IsingleApiFullClient} from '@makkii/makkii-core/src/interfaces/api_client'
-import { AionPendingTx, AionTxObj, AionTx, validateBalanceRet, AionTxStatus, AionAccount } from '@makkii/makkii-type/src/aion';
-import { Token } from '@makkii/makkii-type';
-
-
-interface INetworkConfig {
-    network: 'mainnet' | 'amity'
-    jsonrpc: string,
-    explorer_api?: string,
-    explorer?: string,
-    remoteApi?: string,
-  }
-
+import { AionPendingTx, AionTxObj, AionTx, AionTxStatus, AionAccount } from '@makkii/makkii-type/src/aion';
+import { Token, Keypair, LedgerKeypair, validateBalanceRet } from '@makkii/makkii-type';
+import { IConfig } from './src/api_client';
 
 export class AionApiClient implements IsingleApiFullClient {
 
@@ -20,21 +11,25 @@ export class AionApiClient implements IsingleApiFullClient {
 
     isTestNet: boolean;
 
-    config: INetworkConfig;
+    config: IConfig;
 
-    constructor(config: INetworkConfig);
+    constructor(config: IConfig);
 
     getNetwork: () => string;
 
-    setNetwork: (options: INetworkConfig) => void;
+    setNetwork: (options: IConfig) => void;
 
     /**
-     * return jsonrpc result eth_getBlockByNumber 
+     * return jsonrpc response's result eth_getBlockByNumber 
      * see: https://github.com/aionnetwork/aion_web3/wiki/API:-web3-eth#getblock
      */
-    getBlockByNumber: (blockNumber: Number) => Promise<any>;
+    getBlockByNumber: (blockNumber: string) => Promise<any>;
 
-    getBlockNumber: () => Promise<number>;
+    /**
+     * return jsonrpc response's result eth_blockNumber 
+     * see: https://github.com/aionnetwork/aion_web3/wiki/API:-web3-eth#getBlockNumber
+     */
+    getBlockNumber: () => Promise<any>;
 
     getTransactionStatus: (hash: string) => Promise<AionTxStatus>;
 
@@ -59,7 +54,7 @@ export class AionApiClient implements IsingleApiFullClient {
 
     getTokenDetail: (contractAddress: string) => Promise<Token>;
 
-    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<{[hash:string]: AionTx}>;
+    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number) => Promise<{[hash:string]: AionTx}>;
 
     getAccountTokens: (address: string) => Promise<{[symbol: string]: Token}>;
 
@@ -83,20 +78,20 @@ export class AionKeystoreClient implements IsingleKeystoreFullClient {
 
     generateMnemonic: () => string;
 
-    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any>;
+    recoverKeyPairByPrivateKey: (priKey: string) => Promise<Keypair&{index: number}>;
 
     // not implemented
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
-    recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any>;
+    recoverKeyPairByKeyFile: (file: string, password: string) => Promise<Keypair>;
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean;
 
-    validateAddress: (address: string) => Promise<any>;
+    validateAddress: (address: string) => boolean;
 
-    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
+    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<Keypair&{index: number}>;
 
-    getAccountByLedger: (index: number) => Promise<any>;
+    getAccountByLedger: (index: number) => Promise<LedgerKeypair>;
 
     signByLedger: (index: number, sender: string, msg: Buffer) => Promise<any>;
 

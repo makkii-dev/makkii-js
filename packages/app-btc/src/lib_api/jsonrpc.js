@@ -10,9 +10,9 @@ export default config => {
       const { data } = await HttpClient.get(url);
       console.log(`[${config.network} getBalance resp]:`, data);
       const { balance } = data;
-      return BigNumber(balance);
+      return new BigNumber(balance);
     } catch (e) {
-      throw Error(`[${config.network} getBalance error]: ${e}`);
+      throw new Error(`[${config.network} getBalance error]: ${e}`);
     }
   };
 
@@ -38,7 +38,7 @@ export default config => {
       }
       return utxos;
     } catch (e) {
-      throw Error(`[${config.network} getUnspentTx error]: ${e}`);
+      throw new Error(`[${config.network} getUnspentTx error]: ${e}`);
     }
   };
 
@@ -49,7 +49,7 @@ export default config => {
       const { data = {} } = await HttpClient.get(url);
       return data.rawtx;
     } catch (e) {
-      throw Error(`[${config.network} getRawTx error]: ${e}`);
+      throw new Error(`[${config.network} getRawTx error]: ${e}`);
     }
   };
 
@@ -63,13 +63,13 @@ export default config => {
       resp = await HttpClient.post(url, payload, true);
       console.log(`[${config.network} broadcastTransaction resp]:`, resp);
     } catch (e) {
-      throw Error(`[${config.network} broadcastTransaction error]: ${e}`);
+      throw new Error(`[${config.network} broadcastTransaction error]: ${e}`);
     }
     const { data: { txid, tx } = {} } = resp || {};
     if (txid || tx) {
       return txid || tx.hash;
     }
-    throw Error(`[${config.network} broadcastTransaction error]: ${resp.data}`);
+    throw new Error(`[${config.network} broadcastTransaction error]: ${resp.data}`);
   };
 
   const getTransactionStatus = async (txId) => {
@@ -85,7 +85,7 @@ export default config => {
         timestamp: blocktime,
       };
     } catch (e) {
-      throw Error(`[${config.network} getTransactionStatus error]: ${e}`);
+      throw new Error(`[${config.network} getTransactionStatus error]: ${e}`);
     }
   };
 
@@ -114,7 +114,7 @@ export default config => {
       });
       return txs;
     } catch (e) {
-      throw Error(`[${config.network} getTransactionsByAddress error]: ${e}`);
+      throw new Error(`[${config.network} getTransactionsByAddress error]: ${e}`);
     }
   };
 

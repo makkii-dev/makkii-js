@@ -14,6 +14,6 @@ export async function getAccountFromMnemonic(mnemonic, index){
         const key = keyPair(keyPairBIP44.privateKey);
         return {private_key: key.privateKey, public_key: key.publicKey, address:key.address, index};
     }catch (e) {
-        throw Error(`get Key TRON failed: ${e}`)
+        throw new Error(`get Key TRON failed: ${e}`)
     }
 }

@@ -6,13 +6,13 @@ exports.inputAddressFormatter = (address) => {
     }
     throw new Error(`Provided address "${address}" is invalid`);
 };
-exports.validateAddress = (address) => new Promise((resolve) => {
+exports.validateAddress = (address) => {
     try {
         exports.inputAddressFormatter(address);
-        resolve(true);
+        return true;
     }
     catch (e) {
-        resolve(false);
+        return false;
     }
-});
+};
 //# sourceMappingURL=address.js.map

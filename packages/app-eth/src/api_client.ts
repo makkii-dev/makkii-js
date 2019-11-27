@@ -3,7 +3,7 @@ import {IsingleApiFullClient} from '@makkii/makkii-core/src/interfaces/api_clien
 import API from './lib_api';
 import network from './network';
 
-interface IConfig {
+export interface IConfig {
     network: 'mainnet' | 'amity';
     jsonrpc: string;
     explorer_api?: {
@@ -67,7 +67,7 @@ export default class EthApiClient implements IsingleApiFullClient {
       }
 
 
-    getBlockByNumber = (blockNumber: Number) => {
+    getBlockByNumber = (blockNumber: string) => {
         return this.api.getBlockByNumber(blockNumber, false);
     }
 

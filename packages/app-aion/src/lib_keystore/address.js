@@ -6,11 +6,11 @@ export const inputAddressFormatter = (address) => {
   throw new Error(`Provided address "${address}" is invalid`);
 };
 
-export const validateAddress = (address) => new Promise((resolve) => {
+export const validateAddress = (address) => {
   try {
     inputAddressFormatter(address);
-    resolve(true);
+    return true;
   } catch (e) {
-    resolve(false);
+    return false;
   }
-});
+}

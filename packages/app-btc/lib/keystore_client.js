@@ -119,4 +119,4 @@ class BtcKeystoreClient {
     }
 }
 exports.default = BtcKeystoreClient;
-//# sourceMappingURL=keystoreClient.js.map
+//# sourceMappingURL=keystore_client.js.map

@@ -62,6 +62,6 @@ export async function getAccountFromMnemonic(mnemonic, index) {
       private_key: keyPair_.privateKey, public_key: keyPair_.publicKey, address: keyPair_.address, index,
     };
   } catch (e) {
-    throw Error(`get Key AION failed: ${e}`);
+    throw new Error(`get Key AION failed: ${e}`);
   }
 }

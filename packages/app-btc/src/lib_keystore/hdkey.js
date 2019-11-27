@@ -22,6 +22,6 @@ export async function getAccountFromMnemonic(mnemonic, index, options) {
       private_key: key.privateKey, public_key: key.publicKey, address: key.address, index,
     };
   } catch (e) {
-    throw Error(`get Key ${options.network} failed: ${e}`);
+    throw new Error(`get Key ${options.network} failed: ${e}`);
   }
 }

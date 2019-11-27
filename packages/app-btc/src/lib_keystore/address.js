@@ -36,4 +36,4 @@ const validateBench32 = (address, network) => {
   }
 };
 // eslint-disable-next-line import/prefer-default-export
-export const validateAddress = async (address, network) => validateBase58(address, network) || validateBench32(address, network);
+export const validateAddress = (address, network) => validateBase58(address, network) || validateBench32(address, network);
