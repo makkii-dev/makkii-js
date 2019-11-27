@@ -52,7 +52,7 @@ export default class AionApiClient implements IsingleApiFullClient {
   }
 
 
-  getBlockByNumber = (blockNumber: Number) => {
+  getBlockByNumber = (blockNumber: string) => {
     return this.api.getBlockByNumber(blockNumber, false);
   }
 
@@ -96,7 +96,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getTokenDetail(contractAddress);
   }
 
-  getAccountTokenTransferHistory = (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => {
+  getAccountTokenTransferHistory = (address: string, symbolAddress: string, page?: number, size?: number) => {
     return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size);
   }
 

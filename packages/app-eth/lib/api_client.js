@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
-class AionApiClient {
+class EthApiClient {
     constructor(config) {
         this.tokenSupport = true;
         this.getNetwork = () => this.config.network;
@@ -14,7 +14,7 @@ class AionApiClient {
             return this.api.getBlockByNumber(blockNumber, false);
         };
         this.getBlockNumber = () => {
-            return this.api.blockNumber();
+            return this.api.blockNumber(network_1.default);
         };
         this.getTransactionStatus = (hash) => {
             return this.api.getTransactionStatus(hash);
@@ -25,8 +25,8 @@ class AionApiClient {
         this.getBalance = (address) => {
             return this.api.getBalance(address);
         };
-        this.getTransactionsByAddress = (address, page, size) => {
-            return this.api.getTransactionsByAddress(address, page, size);
+        this.getTransactionsByAddress = (address, page, size, timestamp) => {
+            return this.api.getTransactionsByAddress(address, page, size, timestamp);
         };
         this.validateBalanceSufficiency = (account, amount, extraParams) => {
             return this.api.validateBalanceSufficiency(account, amount, extraParams);
@@ -38,16 +38,16 @@ class AionApiClient {
             return this.api.sameAddress(address1, address2);
         };
         this.getTokenIconUrl = (tokenSymbol, contractAddress) => {
-            throw new Error('Method getTokenIconUrl not implemented.');
+            return this.api.getTokenIconUrl(tokenSymbol, contractAddress);
         };
         this.getTokenDetail = (contractAddress) => {
             return this.api.getTokenDetail(contractAddress);
         };
         this.getAccountTokenTransferHistory = (address, symbolAddress, page, size, timestamp) => {
-            return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size);
+            return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size, timestamp);
         };
         this.getAccountTokens = (address) => {
-            return this.api.getAccountTokens(address);
+            throw new Error("[ETH] getAccountTokens not implemented.");
         };
         this.getAccountTokenBalance = (contractAddress, address) => {
             return this.api.getAccountTokenBalance(contractAddress, address);
@@ -68,11 +68,11 @@ class AionApiClient {
             restSet = network_1.default.mainnet;
         }
         else {
-            restSet = network_1.default.amity;
+            restSet = network_1.default.ropsten;
         }
         this.config = Object.assign(Object.assign({}, restSet), config);
         this.api = lib_api_1.default(this.config);
     }
 }
-exports.default = AionApiClient;
-//# sourceMappingURL=apiClient.js.map
+exports.default = EthApiClient;
+//# sourceMappingURL=api_client.js.map

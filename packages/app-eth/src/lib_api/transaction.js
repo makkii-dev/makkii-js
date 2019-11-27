@@ -12,7 +12,7 @@ export default config => {
 
     function sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast) {
         return new Promise((resolve, reject) => {
-            value = BigNumber.isBigNumber(value) ? value : BigNumber(value);
+            value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
             getTransactionCount(account.address, 'latest')
                 .then(count => {
                     const { type, derivationIndex } = account;
@@ -98,7 +98,7 @@ export default config => {
             sendNativeTx(
                 account,
                 contractAddr,
-                BigNumber(0),
+                new BigNumber(0),
                 gasPrice,
                 gasLimit,
                 methodsData,
@@ -145,7 +145,7 @@ export default config => {
                             tx.timestamp = parseInt(t.timeStamp) * 1000;
                             tx.from = t.from;
                             tx.to = t.to;
-                            tx.value = BigNumber(t.value, 10).shiftedBy(-18).toNumber();
+                            tx.value = new BigNumber(t.value, 10).shiftedBy(-18).toNumber();
                             tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
                             tx.blockNumber = parseInt(t.blockNumber);
                             tx.fee = t.gasPrice * t.gasUsed * 10 ** -18;
@@ -176,7 +176,7 @@ export default config => {
                             tx.timestamp = t.timestamp * 1000;
                             tx.from = t.from;
                             tx.to = t.to;
-                            tx.value = BigNumber(t.value);
+                            tx.value = new BigNumber(t.value);
                             tx.status = t.success ? "CONFIRMED" : 'FAILED';
                             txs[tx.hash] = tx;
                         });

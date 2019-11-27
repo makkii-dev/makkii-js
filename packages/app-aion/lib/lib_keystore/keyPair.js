@@ -9,7 +9,7 @@ exports.validatePrivateKey = (priKey) => {
         priKey = Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(priKey), 'hex');
     }
     else if (!Buffer.isBuffer(priKey)) {
-        throw Error('Seed must be a buffer or a hex string');
+        throw new Error('Seed must be a buffer or a hex string');
     }
     if (priKey.length === nacl.sign.seedLength) {
         return true;
@@ -32,10 +32,10 @@ exports.keyPair = (priKey) => {
         priKey = Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(priKey), 'hex');
     }
     else if (!Buffer.isBuffer(priKey)) {
-        throw Error('Seed must be a buffer or a hex string');
+        throw new Error('Seed must be a buffer or a hex string');
     }
     if (!exports.validatePrivateKey(priKey)) {
-        throw Error('inValid privateKey');
+        throw new Error('inValid privateKey');
     }
     const keyPair_ = priKey.length === 64 ? nacl.sign.keyPair.fromSecretKey(priKey) : nacl.sign.keyPair.fromSeed(priKey);
     const privateKey = Buffer.from(keyPair_.secretKey);

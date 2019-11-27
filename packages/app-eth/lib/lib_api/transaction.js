@@ -10,7 +10,7 @@ exports.default = config => {
     const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpc_1.default(config);
     function sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast) {
         return new Promise((resolve, reject) => {
-            value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
+            value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
             getTransactionCount(account.address, 'latest')
                 .then(count => {
                 const { type, derivationIndex } = account;
@@ -85,7 +85,7 @@ exports.default = config => {
             .toString())
             .encodeABI();
         return new Promise((resolve, reject) => {
-            sendNativeTx(account, contractAddr, bignumber_js_1.default(0), gasPrice, gasLimit, methodsData, shouldBroadCast)
+            sendNativeTx(account, contractAddr, new bignumber_js_1.default(0), gasPrice, gasLimit, methodsData, shouldBroadCast)
                 .then(res => {
                 if (shouldBroadCast) {
                     const { pendingTx } = res;
@@ -125,7 +125,7 @@ exports.default = config => {
                         tx.timestamp = parseInt(t.timeStamp) * 1000;
                         tx.from = t.from;
                         tx.to = t.to;
-                        tx.value = bignumber_js_1.default(t.value, 10).shiftedBy(-18).toNumber();
+                        tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-18).toNumber();
                         tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
                         tx.blockNumber = parseInt(t.blockNumber);
                         tx.fee = t.gasPrice * t.gasUsed * Math.pow(10, -18);
@@ -154,7 +154,7 @@ exports.default = config => {
                         tx.timestamp = t.timestamp * 1000;
                         tx.from = t.from;
                         tx.to = t.to;
-                        tx.value = bignumber_js_1.default(t.value);
+                        tx.value = new bignumber_js_1.default(t.value);
                         tx.status = t.success ? "CONFIRMED" : 'FAILED';
                         txs[tx.hash] = tx;
                     });

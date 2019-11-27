@@ -19,10 +19,10 @@ exports.default = config => {
             const { data } = yield lib_common_util_js_1.HttpClient.get(url);
             console.log(`[${config.network} getBalance resp]:`, data);
             const { balance } = data;
-            return bignumber_js_1.default(balance);
+            return new bignumber_js_1.default(balance);
         }
         catch (e) {
-            throw Error(`[${config.network} getBalance error]: ${e}`);
+            throw new Error(`[${config.network} getBalance error]: ${e}`);
         }
     });
     const getUnspentTx = (address) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,7 +46,7 @@ exports.default = config => {
             return utxos;
         }
         catch (e) {
-            throw Error(`[${config.network} getUnspentTx error]: ${e}`);
+            throw new Error(`[${config.network} getUnspentTx error]: ${e}`);
         }
     });
     const getRawTx = (txhash) => __awaiter(void 0, void 0, void 0, function* () {
@@ -57,7 +57,7 @@ exports.default = config => {
             return data.rawtx;
         }
         catch (e) {
-            throw Error(`[${config.network} getRawTx error]: ${e}`);
+            throw new Error(`[${config.network} getRawTx error]: ${e}`);
         }
     });
     const broadcastTransaction = (encoded) => __awaiter(void 0, void 0, void 0, function* () {
@@ -70,13 +70,13 @@ exports.default = config => {
             console.log(`[${config.network} broadcastTransaction resp]:`, resp);
         }
         catch (e) {
-            throw Error(`[${config.network} broadcastTransaction error]: ${e}`);
+            throw new Error(`[${config.network} broadcastTransaction error]: ${e}`);
         }
         const { data: { txid, tx } = {} } = resp || {};
         if (txid || tx) {
             return txid || tx.hash;
         }
-        throw Error(`[${config.network} broadcastTransaction error]: ${resp.data}`);
+        throw new Error(`[${config.network} broadcastTransaction error]: ${resp.data}`);
     });
     const getTransactionStatus = (txId) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/tx/${txId}`;
@@ -92,7 +92,7 @@ exports.default = config => {
             };
         }
         catch (e) {
-            throw Error(`[${config.network} getTransactionStatus error]: ${e}`);
+            throw new Error(`[${config.network} getTransactionStatus error]: ${e}`);
         }
     });
     const getTransactionsByAddress = (address, page, size) => __awaiter(void 0, void 0, void 0, function* () {
@@ -120,7 +120,7 @@ exports.default = config => {
             return txs;
         }
         catch (e) {
-            throw Error(`[${config.network} getTransactionsByAddress error]: ${e}`);
+            throw new Error(`[${config.network} getTransactionsByAddress error]: ${e}`);
         }
     });
     const COIN = 100000000;

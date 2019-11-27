@@ -20,7 +20,7 @@ export default config => {
             HttpClient.post(config.jsonrpc, requestData, true)
                 .then(res => {
                     if (res.data.result) {
-                        resolve(BigNumber(AbiCoder.decodeParameter('uint256', res.data.result)));
+                        resolve(new BigNumber(AbiCoder.decodeParameter('uint256', res.data.result)));
                     } else {
                         reject(new Error(`get account Balance failed:${res.data.error}`));
                     }
@@ -103,7 +103,7 @@ export default config => {
                                 tx.timestamp = parseInt(t.timeStamp) * 1000;
                                 tx.from = t.from;
                                 tx.to = t.to;
-                                tx.value = BigNumber(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                                tx.value = new BigNumber(t.value).shiftedBy(-t.tokenDecimal).toNumber();
                                 tx.status = 'CONFIRMED';
                                 tx.blockNumber = t.blockNumber;
                                 transfers[tx.hash] = tx;
@@ -130,7 +130,7 @@ export default config => {
                             tx.timestamp = t.timeStamp * 1000;
                             tx.from = t.from;
                             tx.to = t.to;
-                            tx.value = BigNumber(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
+                            tx.value = new BigNumber(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
                             tx.status = 'CONFIRMED';
                             transfers[tx.hash] = tx;
                         });

@@ -13,15 +13,16 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
 const lib_keystore_1 = require("./lib_keystore");
-class AionKeystoreClient {
+class TronKeystoreClient {
     constructor() {
-        this.ledgerSupport = true;
+        this.mnemonic = '';
         this.signTransaction = (tx) => {
             return lib_keystore_1.default.signTransaction(tx);
         };
         this.getAccount = (address_index) => {
-            if (!bip39.validateMnemonic(this.mnemonic))
-                throw new Error('Set Mnemonic first');
+            if (!bip39.validateMnemonic(this.mnemonic)) {
+                throw new Error('set mnemonic first');
+            }
             return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
         };
         this.setMnemonic = (mnemonic) => {
@@ -43,18 +44,13 @@ class AionKeystoreClient {
             }
         };
         this.recoverKeyPairByWIF = (WIF, options) => {
-            throw new Error('[AION] recoverKeyPairByWIF not implemented.');
+            throw new Error("[tron] recoverKeyPairByWIF not implemented.");
         };
         this.recoverKeyPairByKeyFile = (file, password) => {
-            return lib_keystore_1.default.fromV3(file, password);
+            throw new Error("[tron] recoverKeyPairByKeyFile not implemented.");
         };
         this.validatePrivateKey = (privateKey) => {
-            try {
-                return lib_keystore_1.default.validatePrivateKey(privateKey);
-            }
-            catch (e) {
-                return false;
-            }
+            throw new Error("[tron] validatePrivateKey not implemented.");
         };
         this.validateAddress = (address) => {
             return lib_keystore_1.default.validateAddress(address);
@@ -62,20 +58,8 @@ class AionKeystoreClient {
         this.getAccountFromMnemonic = (address_index, mnemonic) => {
             return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.getAccountByLedger = (index) => {
-            return lib_keystore_1.default.getAccountByLedger(index);
-        };
-        this.signByLedger = (index, sender, msg) => {
-            return lib_keystore_1.default.signByLedger(index, sender, msg);
-        };
-        this.setLedgerTransport = (transport) => {
-            lib_keystore_1.default.initWallet(transport);
-        };
-        this.getLedgerStatus = () => {
-            return lib_keystore_1.default.getWalletStatus();
-        };
         this.mnemonic = '';
     }
 }
-exports.default = AionKeystoreClient;
-//# sourceMappingURL=keystoreClient.js.map
+exports.default = TronKeystoreClient;
+//# sourceMappingURL=keystore_client.js.map

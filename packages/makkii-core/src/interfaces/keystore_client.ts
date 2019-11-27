@@ -17,7 +17,7 @@ export interface IsingleKeystoreClient {
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean 
 
-    validateAddress: (address: string) => Promise<any> 
+    validateAddress: (address: string) => boolean
 }
 
 export interface IsingleKeystoreLedgerClient {
@@ -56,7 +56,7 @@ export interface IkeystoreClient {
 
     validatePrivateKey: (coinType: string, privateKey: string | Buffer) => boolean 
 
-    validateAddress: (coinType: string, address: string) => Promise<any> 
+    validateAddress: (coinType: string, address: string) => boolean
 
     getAccountFromMnemonic: (coinType: string, ddress_index: number, mnemonic: string) => Promise<any> 
 

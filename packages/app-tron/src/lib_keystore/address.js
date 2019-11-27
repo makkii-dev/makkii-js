@@ -1,6 +1,6 @@
 const bs58check = require('bs58check');
 // eslint-disable-next-line import/prefer-default-export
-export const validateAddress = async (address)=> {
+export const validateAddress = (address)=> {
    try {
        const buffer = Buffer.from(address);
        if(buffer.length!==34)

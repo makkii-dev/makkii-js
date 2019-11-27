@@ -6,7 +6,7 @@ export interface IApiClient {
 
     removeCoin: (coinType: string) =>boolean
 
-    getBlockByNumber: (coinType: string, blockNumber: Number) => Promise<any>
+    getBlockByNumber: (coinType: string, blockNumber: string) => Promise<any>
 
     getBlockNumber: (coinType: string) => Promise<any>
 
@@ -48,7 +48,7 @@ export interface IsingleApiClient {
 
     getNetwork: () => string;
    
-    getBlockByNumber: (blockNumber: Number) => Promise<any>
+    getBlockByNumber: (blockNumber: string) => Promise<any>
 
     getBlockNumber: () => Promise<any>
 

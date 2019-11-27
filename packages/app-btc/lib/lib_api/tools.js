@@ -20,12 +20,12 @@ exports.default = config => {
             resolve({ result: false, err: 'error_format_amount' });
         getUnspentTx(account.address)
             .then((utxos) => {
-            let balance = bignumber_js_1.default(0);
+            let balance = new bignumber_js_1.default(0);
             utxos.forEach((utxo) => {
-                balance = balance.plus(bignumber_js_1.default(utxo.amount));
+                balance = balance.plus(new bignumber_js_1.default(utxo.amount));
             });
             const fee = config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
-            const totalFee = bignumber_js_1.default(amount)
+            const totalFee = new bignumber_js_1.default(amount)
                 .shiftedBy(8)
                 .plus(fee);
             if (balance.isGreaterThanOrEqualTo(totalFee)) {
@@ -40,9 +40,9 @@ exports.default = config => {
     const sendAll = (address, byte_fee = 10) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const utxos = yield getUnspentTx(address);
-            let balance = bignumber_js_1.default(0);
+            let balance = new bignumber_js_1.default(0);
             utxos.forEach((utxo) => {
-                balance = balance.plus(bignumber_js_1.default(utxo.amount));
+                balance = balance.plus(new bignumber_js_1.default(utxo.amount));
             });
             return Math.max(balance
                 .minus(config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))

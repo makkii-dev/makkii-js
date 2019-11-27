@@ -14,14 +14,14 @@ function validateBalanceSufficiency(account, amount, extraParams) {
         if (!validator.validatePositiveInteger(extraParams.gasLimit))
             resolve({ result: false, err: 'error_invalid_gas_limit' });
 
-        const gasLimit = BigNumber(extraParams.gasLimit);
-        const gasPrice = BigNumber(extraParams.gasPrice);
-        const balance = BigNumber(account.balance);
-        const transferAmount = BigNumber(amount);
+        const gasLimit = new BigNumber(extraParams.gasLimit);
+        const gasPrice = new BigNumber(extraParams.gasPrice);
+        const balance = new BigNumber(account.balance);
+        const transferAmount = new BigNumber(amount);
         if (extraParams.symbol === 'ETH') {
             if (
                 transferAmount
-                    .plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)))
+                    .plus(gasPrice.multipliedBy(gasLimit).dividedBy(new BigNumber(10).pow(9)))
                     .isGreaterThan(balance)
             ) {
                 resolve({ result: false, err: 'error_insufficient_amount' });
@@ -30,7 +30,7 @@ function validateBalanceSufficiency(account, amount, extraParams) {
             if (
                 gasPrice
                     .multipliedBy(gasLimit)
-                    .dividedBy(BigNumber(10).pow(9))
+                    .dividedBy(new BigNumber(10).pow(9))
                     .isGreaterThan(balance)
             ) {
                 resolve({ result: false, err: 'error_insufficient_amount' });

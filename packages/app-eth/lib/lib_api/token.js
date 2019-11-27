@@ -18,7 +18,7 @@ exports.default = config => {
         lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then(res => {
             if (res.data.result) {
-                resolve(bignumber_js_1.default(AbiCoder.decodeParameter('uint256', res.data.result)));
+                resolve(new bignumber_js_1.default(AbiCoder.decodeParameter('uint256', res.data.result)));
             }
             else {
                 reject(new Error(`get account Balance failed:${res.data.error}`));
@@ -71,7 +71,7 @@ exports.default = config => {
                     name = name.slice(0, name.indexOf('\u0000'));
                 }
                 const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
-                resolve({ contractAddr: contractAddress, symbol, name, decimals });
+                resolve({ contractAddr: contractAddress, symbol, name, tokenDecimal: decimals });
             }
             else {
                 reject(new Error('get token detail failed'));
@@ -98,7 +98,7 @@ exports.default = config => {
                         tx.timestamp = parseInt(t.timeStamp) * 1000;
                         tx.from = t.from;
                         tx.to = t.to;
-                        tx.value = bignumber_js_1.default(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                        tx.value = new bignumber_js_1.default(t.value).shiftedBy(-t.tokenDecimal).toNumber();
                         tx.status = 'CONFIRMED';
                         tx.blockNumber = t.blockNumber;
                         transfers[tx.hash] = tx;
@@ -127,7 +127,7 @@ exports.default = config => {
                     tx.timestamp = t.timeStamp * 1000;
                     tx.from = t.from;
                     tx.to = t.to;
-                    tx.value = bignumber_js_1.default(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
+                    tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
                     tx.status = 'CONFIRMED';
                     transfers[tx.hash] = tx;
                 });

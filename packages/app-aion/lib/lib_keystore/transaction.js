@@ -113,7 +113,7 @@ const toAionLong = (val) => {
     return new rlp.AionLong(num);
 };
 const numberToHex = function (value) {
-    value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
+    value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
     return `0x${value.toString(16)}`;
 };
 //# sourceMappingURL=transaction.js.map

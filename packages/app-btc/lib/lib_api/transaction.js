@@ -7,7 +7,7 @@ const transaction_1 = require("../lib_keystore/transaction");
 exports.default = config => {
     const { broadcastTransaction, getUnspentTx } = jsonrpc_1.default(config);
     const sendTransaction = (account, to, value, _extraParams, shouldBroadCast = true) => new Promise((resolve, reject) => {
-        value = bignumber_js_1.default.isBigNumber(value) ? value : bignumber_js_1.default(value);
+        value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
         getUnspentTx(account.address)
             .then((utxos) => {
             const { type, derivationIndex } = account;
@@ -25,7 +25,7 @@ exports.default = config => {
                 extra_param,
                 utxos,
             };
-            const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(bignumber_js_1.default(el.amount)), bignumber_js_1.default(0));
+            const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(new bignumber_js_1.default(el.amount)), new bignumber_js_1.default(0));
             const fee = config.network.match(/LTC/) ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, tx.byte_fee || 10);
             lib_keystore_1.default.signTransaction(tx, config.network)
                 .then((res) => {

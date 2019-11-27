@@ -13,7 +13,7 @@ const checkBlockTag = blockTag => {
         return blockTag;
     }
     if (typeof blockTag === 'number') {
-        return `0x${bignumber_js_1.default(blockTag).toString(16)}`;
+        return `0x${new bignumber_js_1.default(blockTag).toString(16)}`;
     }
     throw new Error('invalid blockTag');
 };
@@ -67,7 +67,7 @@ exports.default = config => {
             if (res.data.error)
                 reject(res.data.error);
             else
-                resolve(bignumber_js_1.default(res.data.result).shiftedBy(-18));
+                resolve(new bignumber_js_1.default(res.data.result).shiftedBy(-18));
         });
     });
     const getTransactionCount = (address, blockTag) => new Promise((resolve, reject) => {

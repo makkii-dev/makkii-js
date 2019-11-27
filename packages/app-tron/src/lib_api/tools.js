@@ -6,8 +6,8 @@ const formatAddress1Line = address => `${address.slice(0, 12)}...${address.slice
 function validateBalanceSufficiency(account, amount) {
     return new Promise(resolve => {
         if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
-        const balance = BigNumber(account.balance);
-        const transferAmount = BigNumber(amount);
+        const balance = new BigNumber(account.balance);
+        const transferAmount = new BigNumber(amount);
         if (transferAmount.isGreaterThan(balance)) {
             resolve({ result: false, err: 'error_insufficient_amount' });
         }

@@ -1,43 +1,42 @@
 import BigNumber from 'bignumber.js';
 import { IsingleKeystoreClient } from '@makkii/makkii-core/src/interfaces/keystore_client'
 import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
-
-
-interface IConfig {
-    network: 'mainnet' | 'shasta'
-    trongrid_api: string,
-    explorer_api?: string,
-    explorer?: string,
-}
+import { TronTx, TronTxObj, TronAccount } from '@makkii/makkii-type/src/tron';
+import { validateBalanceRet, Keypair } from '@makkii/makkii-type';
+import { IConfig } from './src/api_client';
 
 export class TronApiClient implements IsingleApiClient {
     tokenSupport: boolean;
 
     constructor(config: IConfig);
 
-    config: any;
+    config: IConfig;
 
     getNetwork: () => "shasta" | "mainnet";
+    
+    setNetwork: (options: IConfig) => void;
 
-    getBlockByNumber: (blockNumber: Number) => Promise<any>;
+    // not implemented
+    getBlockByNumber: (blockNumber: string) => Promise<any>;
 
+    // not implemented
     getBlockNumber: () => Promise<any>;
 
     getTransactionStatus: (hash: string) => Promise<any>;
 
     getTransactionExplorerUrl: (hash: any) => string;
 
-    getBalance: (address: string) => Promise<any>;
+    getBalance: (address: string) => Promise<BigNumber>;
 
-    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<any>;
+    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<{[hash: string]: TronTx}>;
 
-    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>;
+    validateBalanceSufficiency: (account: TronAccount, amount: number | BigNumber, extraParams?: any) => Promise<validateBalanceRet>;
 
-    sendTransaction: (account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>;
+    sendTransaction: (account: TronAccount, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => 
+        Promise<{encoded: string, txObj: TronTxObj}|{pendingTx: TronTx}>;
 
     sameAddress: (address1: string, address2: string) => boolean;
 
-    setNetwork: (options: any) => void;
 }
 
 export class TronKeystoreClient implements IsingleKeystoreClient {
@@ -47,21 +46,23 @@ export class TronKeystoreClient implements IsingleKeystoreClient {
 
     signTransaction: (tx: any) => Promise<any>;
 
-    getAccount: (address_index: number) => Promise<any>;
-
     setMnemonic: (mnemonic: string) => void;
 
     generateMnemonic: () => string;
 
-    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<any>;
+    recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<Keypair>;
 
+    // not implemented
     recoverKeyPairByWIF: (WIF: string, options?: any) => Promise<any>;
 
+    // not implemented
     recoverKeyPairByKeyFile: (file: string, password: string) => Promise<any>;
 
     validatePrivateKey: (privateKey: string | Buffer) => boolean;
 
-    validateAddress: (address: string) => Promise<any>;
+    validateAddress: (address: string) => boolean;
 
-    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<any>;
+    getAccount: (address_index: number) => Promise<Keypair&{index: number}>;
+    
+    getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<Keypair&{index: number}>;
 }

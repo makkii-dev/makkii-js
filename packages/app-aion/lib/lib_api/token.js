@@ -22,8 +22,6 @@ exports.default = (config) => {
                             contractAddr: token.contractAddr,
                             name: token.name,
                             tokenDecimal: token.tokenDecimal,
-                            balance: new bignumber_js_1.default(0),
-                            tokenTxs: {},
                         };
                     });
                 }
@@ -98,7 +96,7 @@ exports.default = (config) => {
                 }
                 const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
                 resolve({
-                    contractAddr: contractAddress, symbol, name, decimals,
+                    contractAddr: contractAddress, symbol, name, tokenDecimal: decimals,
                 });
             }
             else {
@@ -144,7 +142,7 @@ exports.default = (config) => {
             resolve(res.data);
         })
             .catch((err) => {
-            console.log('get keystore top tokens error:', err);
+            console.log('get aion top tokens error:', err);
             reject(err);
         });
     });
@@ -156,7 +154,7 @@ exports.default = (config) => {
             resolve(res.data);
         })
             .catch((err) => {
-            console.log('search keystore token error:', err);
+            console.log('search aion token error:', err);
             reject(err);
         });
     });

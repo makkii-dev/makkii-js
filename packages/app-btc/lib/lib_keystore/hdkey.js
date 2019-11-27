@@ -27,7 +27,7 @@ function getAccountFromMnemonic(mnemonic, index, options) {
             };
         }
         catch (e) {
-            throw Error(`get Key ${options.network} failed: ${e}`);
+            throw new Error(`get Key ${options.network} failed: ${e}`);
         }
     });
 }

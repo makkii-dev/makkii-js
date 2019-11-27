@@ -9,13 +9,13 @@ export default config => {
     if (!validator.validateAmount(amount)) resolve({ result: false, err: 'error_format_amount' });
     getUnspentTx(account.address)
       .then((utxos) => {
-        let balance = BigNumber(0);
+        let balance = new BigNumber(0);
         utxos.forEach((utxo) => {
-          balance = balance.plus(BigNumber(utxo.amount));
+          balance = balance.plus(new BigNumber(utxo.amount));
         });
 
         const fee = config.network.match('LTC') ? estimateFeeLTC : estimateFeeBTC(utxos.length, 2, extraParams.byte_fee || 10);
-        const totalFee = BigNumber(amount)
+        const totalFee = new BigNumber(amount)
           .shiftedBy(8)
           .plus(fee);
         if (balance.isGreaterThanOrEqualTo(totalFee)) {
@@ -32,9 +32,9 @@ export default config => {
   const sendAll = async (address, byte_fee = 10) => {
     try {
       const utxos = await getUnspentTx(address);
-      let balance = BigNumber(0);
+      let balance = new BigNumber(0);
       utxos.forEach((utxo) => {
-        balance = balance.plus(BigNumber(utxo.amount));
+        balance = balance.plus(new BigNumber(utxo.amount));
       });
       return Math.max(
         balance

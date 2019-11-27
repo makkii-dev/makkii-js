@@ -8,8 +8,8 @@ function validateBalanceSufficiency(account, amount) {
     return new Promise(resolve => {
         if (!lib_common_util_js_1.validator.validateAmount(amount))
             resolve({ result: false, err: 'error_format_amount' });
-        const balance = bignumber_js_1.default(account.balance);
-        const transferAmount = bignumber_js_1.default(amount);
+        const balance = new bignumber_js_1.default(account.balance);
+        const transferAmount = new bignumber_js_1.default(amount);
         if (transferAmount.isGreaterThan(balance)) {
             resolve({ result: false, err: 'error_insufficient_amount' });
         }

@@ -15,7 +15,7 @@ const checkBlockTag = blockTag => {
     }
 
     if (typeof blockTag === 'number') {
-        return `0x${BigNumber(blockTag).toString(16)}`;
+        return `0x${new BigNumber(blockTag).toString(16)}`;
     }
 
     throw new Error('invalid blockTag');
@@ -72,7 +72,7 @@ export default config => {
             promise.then(res => {
                 console.log('[eth http resp] eth_getBalance', res.data);
                 if (res.data.error) reject(res.data.error);
-                else resolve(BigNumber(res.data.result).shiftedBy(-18));
+                else resolve(new BigNumber(res.data.result).shiftedBy(-18));
             });
         });
     const getTransactionCount = (address, blockTag) =>
