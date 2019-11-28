@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "doc": "typedoc --options ./typedoc.js"
   },
   "keywords": [
     "react-native"

@@ -37,3 +37,7 @@ project.xcworkspace
 lerna-debug.log
 
 
+#doc
+html
+
+
