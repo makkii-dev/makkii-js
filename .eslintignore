@@ -1,5 +1,6 @@
 coins
 utils
 lib
+*docs
 __tests__
 *.test.js

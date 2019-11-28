@@ -72,7 +72,8 @@ exports.default = config => {
         catch (e) {
             throw new Error(`[${config.network} broadcastTransaction error]: ${e}`);
         }
-        const { data: { txid, tx } = {} } = resp || {};
+        const { data = {} } = resp || {};
+        const { txid, tx } = data;
         if (txid || tx) {
             return txid || tx.hash;
         }

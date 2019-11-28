@@ -1,30 +1,17 @@
 import * as bip39 from 'bip39';
-import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
+import {IsingleKeystoreClient, IkeystoreSigner} from '@makkii/makkii-core/src/interfaces/keystore_client'
+import { IHardware } from '@makkii/makkii-core/src/interfaces/hardware';
 import KEYSTORE from './lib_keystore';
+import { EthUnsignedTx } from './type';
 
-export default class EthKeystoreClient implements IsingleKeystoreFullClient {
+export default class EthKeystoreClient implements IsingleKeystoreClient {
 
-    ledgerSupport: boolean = true;
-
-    mnemonic: string = '';
-
-    signTransaction = (tx: any) => {
-        return KEYSTORE.signTransaction(tx);
-    }
-
-    getAccount = (address_index: number) => {
-        if (!bip39.validateMnemonic(this.mnemonic))
-            throw new Error('Set Mnemonic first');
-        return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
-    }
-
-    setMnemonic = (mnemonic: string) => {
-        this.mnemonic = mnemonic;
+    signTransaction = (tx: EthUnsignedTx, signer: IkeystoreSigner, signerParam: any) => {
+        return signer.signTransaction(tx, signerParam);
     }
 
     generateMnemonic = () => {
         const mnemonic = bip39.generateMnemonic();
-        this.mnemonic = mnemonic;
         return mnemonic;
     }
 
@@ -42,14 +29,6 @@ export default class EthKeystoreClient implements IsingleKeystoreFullClient {
         }
     }
 
-    recoverKeyPairByWIF = (WIF: string, options?: any) => {
-        throw new Error("[eth] recoverKeyPairByWIF not implemented.");
-    }
-
-    recoverKeyPairByKeyFile = (file: string, password: string) => {
-        throw new Error("[eth] recoverKeyPairByKeyFile not implemented.");
-    }
-
     validatePrivateKey = (privateKey: string | Buffer) => {
         throw new Error("[eth] validatePrivateKey not implemented.");
     }
@@ -62,19 +41,7 @@ export default class EthKeystoreClient implements IsingleKeystoreFullClient {
         return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
     }
 
-    getAccountByLedger = async (index: number) => {
-        return KEYSTORE.getAccountByLedger(index);
-    }
-
-    signByLedger = (index: number, sender: string, msg: Buffer) => {
-        throw new Error("[eth] signByLedger not implemented.");
-    }
-
-    setLedgerTransport = (transport: any) => {
-        KEYSTORE.initWallet(transport);
-    }
-
-    getLedgerStatus = () => {
-        return KEYSTORE.getWalletStatus();
+    getAccountFromHardware = (address_index: number, hardware: IHardware) => {
+        return hardware.getAccount(address_index);
     }
 }

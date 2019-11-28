@@ -16,20 +16,17 @@ const lib_keystore_1 = require("./lib_keystore");
 class AionKeystoreClient {
     constructor() {
         this.ledgerSupport = true;
-        this.signTransaction = (tx) => {
-            return lib_keystore_1.default.signTransaction(tx);
+        this.signTransaction = (tx, signer, signerParams) => {
+            return signer.signTransaction(tx, signerParams);
         };
-        this.getAccount = (address_index) => {
-            if (!bip39.validateMnemonic(this.mnemonic))
-                throw new Error('Set Mnemonic first');
-            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
+        this.getAccountFromMnemonic = (address_index, mnemonic) => {
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.setMnemonic = (mnemonic) => {
-            this.mnemonic = mnemonic;
+        this.getAccountFromHardware = (index, hardware) => {
+            return hardware.getAccount(index);
         };
         this.generateMnemonic = () => {
             const mnemonic = bip39.generateMnemonic();
-            this.mnemonic = mnemonic;
             return mnemonic;
         };
         this.recoverKeyPairByPrivateKey = (priKey) => {
@@ -59,22 +56,6 @@ class AionKeystoreClient {
         this.validateAddress = (address) => {
             return lib_keystore_1.default.validateAddress(address);
         };
-        this.getAccountFromMnemonic = (address_index, mnemonic) => {
-            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
-        };
-        this.getAccountByLedger = (index) => {
-            return lib_keystore_1.default.getAccountByLedger(index);
-        };
-        this.signByLedger = (index, sender, msg) => {
-            return lib_keystore_1.default.signByLedger(index, sender, msg);
-        };
-        this.setLedgerTransport = (transport) => {
-            lib_keystore_1.default.initWallet(transport);
-        };
-        this.getLedgerStatus = () => {
-            return lib_keystore_1.default.getWalletStatus();
-        };
-        this.mnemonic = '';
     }
 }
 exports.default = AionKeystoreClient;

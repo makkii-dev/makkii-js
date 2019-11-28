@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import {IsingleApiFullClient} from '@makkii/makkii-core/src/interfaces/api_client'
+import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
 import API from './lib_api';
 import network from './network';
+import { EthUnsignedTx, EthPendingTx } from "./type";
 
 export interface IConfig {
     network: 'mainnet' | 'amity';
@@ -24,7 +26,7 @@ export default class EthApiClient implements IsingleApiFullClient {
 
     config: IConfig
 
-    api: any
+    private api: any
 
 
     constructor(config: IConfig ) {
@@ -95,14 +97,25 @@ export default class EthApiClient implements IsingleApiFullClient {
         return this.api.validateBalanceSufficiency(account, amount, extraParams);
     }
 
-    sendTransaction = (account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account,to, value, data, extraParams, shouldBroadCast);
+    sendTransaction = (unsignedTx: EthUnsignedTx, signer:IkeystoreSigner, signerParams: any): Promise<EthPendingTx> => {
+        return this.api.sendTransaction(unsignedTx, signer, signerParams)
     }
 
     sameAddress = (address1: string, address2: string) => {
         return this.api.sameAddress(address1, address2);
     }
 
+    buildTransaction = (from:string, to: string, value: BigNumber, options:{
+        gasLimit: number,
+        gasPrice: number,
+        isTransfer: boolean,
+        data?: any,
+        contractAddr?: string,
+        tokenDecimal?: number,
+    }): Promise<EthUnsignedTx> => {
+        return this.api.buildTransaction(from, to, value, options)
+    }
+    
     getTokenIconUrl = (tokenSymbol: string, contractAddress: string) => {
         return this.api.getTokenIconUrl(tokenSymbol, contractAddress);
     }

@@ -1,33 +1,26 @@
 import * as bip39 from 'bip39';
-import {IsingleKeystoreFullClient} from '@makkii/makkii-core/src/interfaces/keystore_client'
+import { IsingleKeystoreClient, IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client'
+import { IHardware } from '@makkii/makkii-core/src/interfaces/hardware'
 import KEYSTORE from './lib_keystore';
+import { AionUnsignedTx } from './type';
 
-export default class AionKeystoreClient implements IsingleKeystoreFullClient {
+export default class AionKeystoreClient implements IsingleKeystoreClient {
   ledgerSupport: boolean = true;
 
-  mnemonic: string;
-
-  constructor() {
-    this.mnemonic = '';
+  signTransaction = (tx: AionUnsignedTx, signer: IkeystoreSigner, signerParams: any) => {
+    return signer.signTransaction(tx, signerParams);
   }
 
-  signTransaction = (tx: any) => {
-    return KEYSTORE.signTransaction(tx);
+  getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
+    return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
   }
 
-  getAccount = (address_index: number) => {
-    if (!bip39.validateMnemonic(this.mnemonic))
-      throw new Error('Set Mnemonic first');
-    return KEYSTORE.getAccountFromMnemonic(this.mnemonic, address_index);
-  }
-
-  setMnemonic = (mnemonic: string) => {
-    this.mnemonic = mnemonic;
+  getAccountFromHardware = (index: number, hardware: IHardware) => {
+    return hardware.getAccount(index)
   }
 
   generateMnemonic = () => {
     const mnemonic = bip39.generateMnemonic();
-    this.mnemonic = mnemonic;
     return mnemonic;
   }
 
@@ -65,23 +58,5 @@ export default class AionKeystoreClient implements IsingleKeystoreFullClient {
     return KEYSTORE.validateAddress(address);
   }
 
-  getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
-    return KEYSTORE.getAccountFromMnemonic(mnemonic, address_index);
-  }
 
-  getAccountByLedger = (index: number) => {
-    return KEYSTORE.getAccountByLedger(index);
-  }
-
-  signByLedger = (index: number, sender: string, msg: Buffer) => {
-    return KEYSTORE.signByLedger(index, sender, msg);
-  }
-
-  setLedgerTransport = (transport: any) => {
-    KEYSTORE.initWallet(transport);
-  }
-
-  getLedgerStatus = () => {
-    return KEYSTORE.getWalletStatus();
-  }
 }

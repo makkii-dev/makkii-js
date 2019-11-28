@@ -20,6 +20,8 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    "import/extensions": "off",
+    "no-console": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/no-useless-constructor": "error",
     "no-param-reassign": [0],
@@ -40,5 +42,4 @@ module.exports = {
         "extensions": [".js",".ts",]
       }
     }
-  },
 };

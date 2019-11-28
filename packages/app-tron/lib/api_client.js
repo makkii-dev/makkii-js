@@ -30,11 +30,14 @@ class TronApiClient {
         this.validateBalanceSufficiency = (account, amount) => {
             return this.api.validateBalanceSufficiency(account, amount);
         };
-        this.sendTransaction = (account, to, value, extraParams, data, shouldBroadCast) => {
-            return this.api.sendTransaction(account, to, value, shouldBroadCast);
+        this.sendTransaction = (unsignedTx, signer, signerParams) => {
+            return this.api.sendTransaction(unsignedTx, signer, signerParams);
         };
         this.sameAddress = (address1, address2) => {
             return this.api.sameAddress(address1, address2);
+        };
+        this.buildTransaction = (from, to, value) => {
+            return this.api.buildTransaction(from, to, value);
         };
         let restSet;
         ['network', 'trongrid_api'].forEach(f => {

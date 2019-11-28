@@ -22,22 +22,12 @@ class BtcKeystoreClient {
         this.checkLedgerSupport = () => {
             return this.ledgerSupport;
         };
-        this.signTransaction = (tx) => {
+        this.signTransaction = (tx, signer, signerParam) => {
             const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.signTransaction(tx, network);
-        };
-        this.getAccount = (address_index) => {
-            if (!bip39.validateMnemonic(this.mnemonic))
-                throw new Error('Set Mnemonic first');
-            const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index, { network });
-        };
-        this.setMnemonic = (mnemonic) => {
-            this.mnemonic = mnemonic;
+            return signer.signTransaction(tx, Object.assign(Object.assign({}, signerParam), { network }));
         };
         this.generateMnemonic = () => {
             const mnemonic = bip39.generateMnemonic();
-            this.mnemonic = mnemonic;
             return mnemonic;
         };
         this.recoverKeyPairByPrivateKey = (priKey, options) => {
@@ -68,9 +58,6 @@ class BtcKeystoreClient {
                 return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
             }
         };
-        this.recoverKeyPairByKeyFile = (file, password) => {
-            throw new Error(`${this.network} recoverKeyPairByKeyFile not implemented.`);
-        };
         this.validatePrivateKey = (privateKey) => {
             throw new Error(`${this.network} validatePrivateKey not implemented.`);
         };
@@ -82,36 +69,16 @@ class BtcKeystoreClient {
             const network = this.getCurrentNetwork();
             return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index, { network });
         };
-        this.getAccountByLedger = (index) => {
+        this.getAccountFromHardware = (index, hardware) => {
             if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.network} getAccountByLedger not implemented.`);
+                throw new Error(`${this.network} getAccountFromHardware not implemented.`);
             }
             const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.getAccountByLedger(index, network);
-        };
-        this.signByLedger = (index, sender, msg) => {
-            if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.network} signByLedger not implemented.`);
-            }
-            const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.signByLedger(index, sender, msg, network);
-        };
-        this.setLedgerTransport = (transport) => {
-            if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.network} setLedgerTransport not implemented.`);
-            }
-            return lib_keystore_1.default.initWallet(transport);
-        };
-        this.getLedgerStatus = () => {
-            if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.network} getLedgerStatus not implemented.`);
-            }
-            return lib_keystore_1.default.getWalletStatus();
+            return hardware.getAccount(index, { network });
         };
         if (!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))) {
             throw new Error(`BtcKeystoreClient Unsupport network: ${network}`);
         }
-        this.mnemonic = '';
         this.network = network;
         if (network.match('BTC')) {
             this.ledgerSupport = true;

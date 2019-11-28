@@ -1,101 +1,54 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_common_util_js_1 = require("lib-common-util-js");
 const bignumber_js_1 = require("bignumber.js");
-const lib_keystore_1 = require("../lib_keystore");
 const jsonrpc_1 = require("./jsonrpc");
-const utils_1 = require("../utils");
 exports.default = config => {
     const { getTransactionById, getTransactionInfoById, getLatestBlock, broadcastTransaction, } = jsonrpc_1.default(config);
-    function sendTransaction(account, to, value, shouldBroadCast = true) {
-        return new Promise((resolve, reject) => {
-            value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
-            getLatestBlock()
-                .then(block => {
-                console.log('get latest block =>', block);
-                const latest_block = {
-                    hash: block.blockID,
-                    number: block.block_header.raw_data.number,
+    function sendTransaction(unsignedTx, signer, signerParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const signedTx = yield signer.signTransaction(unsignedTx, signerParams);
+            const broadcastRes = yield broadcastTransaction(signedTx);
+            if (broadcastRes.result) {
+                return {
+                    hash: `${signedTx.txID}`,
+                    timestamp: unsignedTx.timestamp,
+                    from: unsignedTx.owner,
+                    to: unsignedTx.to,
+                    value: unsignedTx.amount,
+                    status: 'PENDING',
                 };
-                const now = new Date().getTime();
-                const expire = now + 10 * 60 * 60 * 1000;
-                const tx = {
-                    timestamp: now,
-                    expiration: expire,
-                    to_address: to,
-                    amount: value.shiftedBy(6).toNumber(),
-                    owner_address: account.address,
-                    private_key: account.private_key,
-                    latest_block,
-                };
-                lib_keystore_1.default.signTransaction(tx)
-                    .then(signRes => {
-                    console.log('sign result =>', signRes);
-                    const signedTx = {
-                        signature: signRes.signature,
-                        txID: signRes.txID,
-                        raw_data: {
-                            contract: [
-                                {
-                                    parameter: {
-                                        value: {
-                                            amount: tx.amount,
-                                            owner_address: utils_1.base58check2HexString(tx.owner_address),
-                                            to_address: utils_1.base58check2HexString(tx.to_address),
-                                        },
-                                        type_url: 'type.googleapis.com/protocol.TransferContract',
-                                    },
-                                    type: 'TransferContract',
-                                },
-                            ],
-                            ref_block_bytes: signRes.ref_block_bytes,
-                            ref_block_hash: signRes.ref_block_hash,
-                            expiration: tx.expiration,
-                            timestamp: tx.timestamp,
-                        },
-                    };
-                    if (shouldBroadCast) {
-                        broadcastTransaction(signedTx)
-                            .then(broadcastRes => {
-                            if (broadcastRes.result) {
-                                const pendingTx = {
-                                    hash: `${signedTx.txID}`,
-                                    timestamp: now,
-                                    from: account.address,
-                                    to,
-                                    value,
-                                    status: 'PENDING',
-                                };
-                                resolve({ pendingTx, pendingTokenTx: undefined });
-                            }
-                            else {
-                                reject(new Error(`${broadcastRes}`));
-                            }
-                        })
-                            .catch(err => {
-                            console.log('keystore broadcast tx failed', err);
-                            reject(err);
-                        });
-                    }
-                    else {
-                        const txObj = {
-                            timestamp: now,
-                            from: account.address,
-                            to,
-                            value,
-                        };
-                        resolve({ encoded: signedTx, txObj });
-                    }
-                })
-                    .catch(err => {
-                    console.log('keystore sign tx failed', err);
-                    reject(err);
-                });
-            })
-                .catch(err => {
-                console.log('keystore get latest block failed.', err);
-                reject(err);
-            });
+            }
+            throw new Error('broadcast tx failed');
+        });
+    }
+    function buildTransction(from, to, value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const block = yield getLatestBlock();
+            const latest_block = {
+                hash: block.blockID,
+                number: block.block_header.raw_data.number,
+            };
+            const now = new Date().getTime();
+            const expire = now + 10 * 60 * 60 * 1000;
+            const tx = {
+                to,
+                owner: from,
+                amount: value.shiftedBy(6).toNumber(),
+                timestamp: now,
+                expiration: expire,
+                latest_block,
+            };
+            return tx;
         });
     }
     function getTransactionStatus(txHash) {
@@ -162,7 +115,8 @@ exports.default = config => {
         sendTransaction,
         getTransactionStatus,
         getTransactionUrlInExplorer,
-        getTransactionsByAddress
+        getTransactionsByAddress,
+        buildTransction
     };
 };
 //# sourceMappingURL=transaction.js.map

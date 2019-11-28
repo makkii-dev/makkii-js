@@ -1,19 +1,17 @@
 import * as bip39 from 'bip39';
-import {IsingleKeystoreFullClient } from '@makkii/makkii-core/src/interfaces/keystore_client';
+import { IsingleKeystoreClient, IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
+import { IHardware } from '@makkii/makkii-core/src/interfaces/hardware';
 import KYSTORE from './lib_keystore';
 
-export default class BtcKeystoreClient implements IsingleKeystoreFullClient {
+export default class BtcKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean = false;
 
-    mnemonic: string;
+    network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST';
 
-    network: 'BTC'|'BTCTEST'|'LTC'|'LTCTEST';
-
-    constructor(network: 'BTC'|'BTCTEST'|'LTC'|'LTCTEST') {
-        if(!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))){
+    constructor(network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST') {
+        if (!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))) {
             throw new Error(`BtcKeystoreClient Unsupport network: ${network}`)
         }
-        this.mnemonic = '';
         this.network = network;
         if (network.match('BTC')) {
             this.ledgerSupport = true
@@ -28,25 +26,13 @@ export default class BtcKeystoreClient implements IsingleKeystoreFullClient {
         return this.ledgerSupport;
     }
 
-    signTransaction = (tx: any) => {
+    signTransaction = (tx: any, signer: IkeystoreSigner, signerParam: any) => {
         const network = this.getCurrentNetwork();
-        return KYSTORE.signTransaction(tx, network);
-    }
-
-    getAccount = (address_index: number) => {
-        if (!bip39.validateMnemonic(this.mnemonic))
-            throw new Error('Set Mnemonic first');
-        const network = this.getCurrentNetwork();
-        return KYSTORE.getAccountFromMnemonic(this.mnemonic, address_index, {network})
-    }
-
-    setMnemonic = (mnemonic: string) => {
-        this.mnemonic = mnemonic;
+        return signer.signTransaction(tx, { ...signerParam, network });
     }
 
     generateMnemonic = () => {
         const mnemonic = bip39.generateMnemonic();
-        this.mnemonic = mnemonic;
         return mnemonic;
     }
 
@@ -78,10 +64,6 @@ export default class BtcKeystoreClient implements IsingleKeystoreFullClient {
         }
     }
 
-    recoverKeyPairByKeyFile = (file: string, password: string) => {
-        throw new Error(`${this.network} recoverKeyPairByKeyFile not implemented.`);
-    }
-
     validatePrivateKey = (privateKey: string | Buffer) => {
         throw new Error(`${this.network} validatePrivateKey not implemented.`);
     }
@@ -93,38 +75,14 @@ export default class BtcKeystoreClient implements IsingleKeystoreFullClient {
 
     getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
         const network = this.getCurrentNetwork();
-        return KYSTORE.getAccountFromMnemonic(mnemonic, address_index, {network});
+        return KYSTORE.getAccountFromMnemonic(mnemonic, address_index, { network });
     }
 
-    getAccountByLedger = (index: number) => {
+    getAccountFromHardware = (index: number, hardware: IHardware) => {
         if (!this.checkLedgerSupport()) {
-            throw new Error(`${this.network} getAccountByLedger not implemented.`);
+            throw new Error(`${this.network} getAccountFromHardware not implemented.`);
         }
         const network = this.getCurrentNetwork();
-        return KYSTORE.getAccountByLedger(index, network);
+        return hardware.getAccount(index, { network });
     }
-
-    signByLedger = (index: number, sender: string, msg: Buffer) => {
-        if (!this.checkLedgerSupport()) {
-            throw new Error(`${this.network} signByLedger not implemented.`);
-        }
-        const network = this.getCurrentNetwork();
-        return KYSTORE.signByLedger(index, sender, msg, network);
-    }
-
-    setLedgerTransport = (transport: any) => {
-        if (!this.checkLedgerSupport()) {
-            throw new Error(`${this.network} setLedgerTransport not implemented.`);
-        }
-        return KYSTORE.initWallet(transport);
-    }
-
-    getLedgerStatus = () => {
-        if (!this.checkLedgerSupport()) {
-            throw new Error(`${this.network} getLedgerStatus not implemented.`);
-        }
-        return KYSTORE.getWalletStatus();
-    }
-
-
 } 

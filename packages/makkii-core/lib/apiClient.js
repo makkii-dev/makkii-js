@@ -10,7 +10,7 @@ function isInstanceOfApiClient(client) {
         "getBalance",
         "getNetwork",
         "getTransactionsByAddress",
-        "validateBalanceSufficiency",
+        "buildTransaction",
         "sendTransaction",
         "sameAddress",
     ];
@@ -63,13 +63,13 @@ class ApiClient {
             const coin = this.getCoin(coinType);
             return coin.getTransactionsByAddress(address, page, size);
         };
-        this.validateBalanceSufficiency = (coinType, account, amount, extraParams) => {
+        this.buildTransction = (coinType, from, to, value, options) => {
             const coin = this.getCoin(coinType);
-            return coin.validateBalanceSufficiency(account, amount, extraParams);
+            return coin.buildTransaction(from, to, value, options);
         };
-        this.sendTransaction = (coinType, account, to, value, data, extraParams, shouldBroadCast) => {
+        this.sendTransaction = (coinType, unsignedTx, signer, signerParams) => {
             const coin = this.getCoin(coinType);
-            return coin.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
+            return coin.sendTransaction(unsignedTx, signer, signerParams);
         };
         this.sameAddress = (coinType, address1, address2) => {
             const coin = this.getCoin(coinType);

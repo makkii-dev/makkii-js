@@ -28,11 +28,8 @@ class AionApiClient {
         this.getTransactionsByAddress = (address, page, size) => {
             return this.api.getTransactionsByAddress(address, page, size);
         };
-        this.validateBalanceSufficiency = (account, amount, extraParams) => {
-            return this.api.validateBalanceSufficiency(account, amount, extraParams);
-        };
-        this.sendTransaction = (account, to, value, data, extraParams, shouldBroadCast) => {
-            return this.api.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
+        this.sendTransaction = (unsignedTx, signer, signerParams) => {
+            return this.api.sendTransaction(unsignedTx, signer, signerParams);
         };
         this.sameAddress = (address1, address2) => {
             return this.api.sameAddress(address1, address2);
@@ -57,6 +54,9 @@ class AionApiClient {
         };
         this.searchTokens = (keyword) => {
             return this.api.searchTokens(keyword);
+        };
+        this.buildTransaction = (from, to, value, options) => {
+            return this.api.buildTransaction(from, to, value, options);
         };
         let restSet;
         ['network', 'jsonrpc'].forEach(f => {

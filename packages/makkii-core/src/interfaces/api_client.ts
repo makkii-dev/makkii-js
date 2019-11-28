@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
+import { Transaction } from '../type';
+import { IkeystoreSigner } from './keystore_client';
 
 export interface IApiClient {
 
     addCoin: (coinType: string, client: IsingleApiClient | IsingleApiFullClient) => void;
 
-    removeCoin: (coinType: string) =>boolean
+    removeCoin: (coinType: string) => boolean
 
     getBlockByNumber: (coinType: string, blockNumber: string) => Promise<any>
 
@@ -18,9 +20,9 @@ export interface IApiClient {
 
     getTransactionsByAddress: (coinType: string, address: string, page: number, size: number) => Promise<any>
 
-    validateBalanceSufficiency: (coinType: string, account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>
+    buildTransction: (coinType: string, from: string, to: string, value: BigNumber, options: any) => Promise<any>
 
-    sendTransaction: (coinType: string, account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
+    sendTransaction: (coinType: string, unsignedTx: any, signer: IkeystoreSigner, signerParams: any) => Promise<any>
 
     sameAddress: (coinType: string, address1: string, address2: string) => boolean
 
@@ -43,11 +45,11 @@ export interface IApiClient {
 
 export interface IsingleApiClient {
     config: any;
-   
-    setNetwork: (options:any)=> void;
+
+    setNetwork: (options: any) => void;
 
     getNetwork: () => string;
-   
+
     getBlockByNumber: (blockNumber: string) => Promise<any>
 
     getBlockNumber: () => Promise<any>
@@ -60,11 +62,12 @@ export interface IsingleApiClient {
 
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<any>
 
-    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<any>
+    buildTransaction: (from: string, to: string, value: BigNumber, options: any) => Promise<Transaction>
 
-    sendTransaction: (account: any,to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean) => Promise<any>
+    sendTransaction: (unsignedTx: any, signer: IkeystoreSigner, signerParams: any) => Promise<any>
 
     sameAddress: (address1: string, address2: string) => boolean
+
 
 };
 
@@ -76,7 +79,7 @@ export interface IsingleApiTokenClient {
 
     getTokenDetail: (contractAddress: string) => Promise<any>
 
-    getAccountTokenTransferHistory: (address: string, symbolAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>
+    getAccountTokenTransferHistory: (address: string, cointractAddress: string, page?: number, size?: number, timestamp?: number) => Promise<any>
 
     getAccountTokens: (address: string) => Promise<any>
 
@@ -87,4 +90,4 @@ export interface IsingleApiTokenClient {
     searchTokens: (keyword: string) => Promise<any>
 }
 
-export interface IsingleApiFullClient extends IsingleApiClient, IsingleApiTokenClient {};
+export interface IsingleApiFullClient extends IsingleApiClient, IsingleApiTokenClient { };

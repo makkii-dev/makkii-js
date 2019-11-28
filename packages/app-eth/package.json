@@ -6,7 +6,7 @@
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
   "license": "ISC",
   "main": "lib/index.js",
-  "typings": "index.d.ts",
+  "typings": "lib/typings/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -30,6 +30,7 @@
     "@ledgerhq/hw-app-eth": "^4.73.7",
     "@makkii/makkii-core": "^0.0.0",
     "@makkii/makkii-type": "^0.0.0",
+    "@types/bignumber.js": "^5.0.0",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",

@@ -4,7 +4,7 @@ const ethereumjs_util_1 = require("ethereumjs-util");
 const bs58 = require('bs58');
 const ec = require('elliptic').ec('secp256k1');
 const prefix = '41';
-const padTo32 = function (msg) {
+const padTo32 = (msg) => {
     while (msg.length < 32) {
         msg = Buffer.concat([Buffer.from([0]), msg]);
     }
@@ -13,7 +13,7 @@ const padTo32 = function (msg) {
     }
     return msg;
 };
-const computeAddress = function (publicKey) {
+const computeAddress = (publicKey) => {
     if (publicKey.length === 65) {
         publicKey = publicKey.slice(1);
     }
@@ -22,14 +22,14 @@ const computeAddress = function (publicKey) {
     addressHex = prefix + addressHex;
     return addressHex;
 };
-const getBase58checkAddress = function (address) {
+const getBase58checkAddress = (address) => {
     const hash0 = ethereumjs_util_1.sha256(Buffer.from(address, 'hex'));
     const hash1 = ethereumjs_util_1.sha256(hash0);
     const checkSum = hash1.slice(0, 4);
     const addressBytes = Buffer.from(address, 'hex');
     return bs58.encode(Buffer.concat([addressBytes, checkSum]));
 };
-exports.keyPair = function (priKey) {
+exports.keyPair = (priKey) => {
     if (typeof priKey === 'string') {
         if (priKey.startsWith('0x')) {
             priKey = priKey.substring(2);

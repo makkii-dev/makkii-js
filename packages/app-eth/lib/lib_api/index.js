@@ -6,7 +6,7 @@ const transaction_1 = require("./transaction");
 const token_1 = require("./token");
 exports.default = (config) => {
     const { getBalance, getBlockByNumber, blockNumber } = jsonrpc_1.default(config);
-    const { sendTransaction, getTransactionsByAddress, getTransactionUrlInExplorer, getTransactionStatus } = transaction_1.default(config);
+    const { sendTransaction, getTransactionsByAddress, getTransactionUrlInExplorer, getTransactionStatus, buildTransaction } = transaction_1.default(config);
     const { getAccountTokens, getAccountTokenBalance, getAccountTokenTransferHistory, getTokenDetail, getTokenIconUrl, getTopTokens, searchTokens } = token_1.default(config);
     return {
         validateBalanceSufficiency: tools_1.validateBalanceSufficiency,
@@ -15,6 +15,7 @@ exports.default = (config) => {
         blockNumber,
         sameAddress: tools_1.sameAddress,
         sendTransaction,
+        buildTransaction,
         getTransactionsByAddress,
         getTransactionUrlInExplorer,
         getTransactionStatus,

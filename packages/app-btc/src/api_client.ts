@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client';
+import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
 import API from './lib_api';
 import network from './network';
+import { BtcUnsignedTx } from './type';
 
 export interface IConfig {
     network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST'
@@ -11,7 +13,7 @@ export interface IConfig {
 }
 export default class BtcApiClient implements IsingleApiClient {
 
-    api: any;
+    private api = API({});
 
     config: IConfig;
 
@@ -75,15 +77,15 @@ export default class BtcApiClient implements IsingleApiClient {
     }
 
     getTransactionsByAddress = (address: string, page: number, size: number, timestamp?: number) => {
-        return this.api.getTransactionsByAddress(address, page, size, timestamp);
+        return this.api.getTransactionsByAddress(address, page, size);
     }
 
     validateBalanceSufficiency = (account: any, amount: number | BigNumber, extraParams?: any) => {
         return this.api.validateBalanceSufficiency(account, amount, extraParams);
     }
 
-    sendTransaction = (account: any,to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account, to, value, extraParams, shouldBroadCast);
+    sendTransaction = (unsignedTx: BtcUnsignedTx, signer: IkeystoreSigner, signerParams: any) => {
+       return this.api.sendTransaction(unsignedTx, signer, signerParams)
     }
 
     sameAddress = (address1: string, address2: string) => {
@@ -92,5 +94,11 @@ export default class BtcApiClient implements IsingleApiClient {
 
     sendAll = (address:string, byte_fee:number) => {
         return this.api.sendAll(address, byte_fee);
+    }
+
+    buildTransaction = (from: string, to: string, value:BigNumber, options:{
+        byte_fee: number,
+    }): Promise<BtcUnsignedTx>=>{
+        return this.api.buildTransaction(from, to, value, options)
     }
 }

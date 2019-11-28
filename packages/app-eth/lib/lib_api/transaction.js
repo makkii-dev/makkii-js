@@ -1,113 +1,64 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
-const lib_keystore_1 = require("../lib_keystore");
 const jsonrpc_1 = require("./jsonrpc");
 const constants_1 = require("./constants");
 const Contract = require('web3-eth-contract');
 exports.default = config => {
     const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpc_1.default(config);
-    function sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast) {
-        return new Promise((resolve, reject) => {
-            value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
-            getTransactionCount(account.address, 'latest')
-                .then(count => {
-                const { type, derivationIndex } = account;
-                let extra_param = { type };
-                if (type === '[ledger]') {
-                    extra_param = Object.assign(Object.assign({}, extra_param), { derivationIndex, sender: account.address });
-                }
-                let tx = {
-                    amount: value.shiftedBy(18).toNumber(),
-                    nonce: count,
-                    gasLimit,
-                    gasPrice,
-                    to,
-                    private_key: account.private_key,
-                    extra_param,
-                    network: config.network,
-                };
-                if (data !== undefined) {
-                    tx = Object.assign(Object.assign({}, tx), { data });
-                }
-                lib_keystore_1.default.signTransaction(tx)
-                    .then(res => {
-                    const { encoded } = res;
-                    console.log('encoded keystore tx => ', encoded);
-                    if (shouldBroadCast) {
-                        sendSignedTransaction(encoded)
-                            .then(hash => {
-                            const pendingTx = {
-                                hash,
-                                from: account.address,
-                                to,
-                                value,
-                                status: 'PENDING',
-                                gasPrice
-                            };
-                            resolve({ pendingTx });
-                        })
-                            .catch(e => {
-                            console.log('send signed tx:', e);
-                            reject(e);
-                        });
-                    }
-                    else {
-                        const txObj = {
-                            from: account.address,
-                            to,
-                            value,
-                            gasPrice
-                        };
-                        resolve({ encoded, txObj });
-                    }
-                })
-                    .catch(e => {
-                    console.log('sign error:', e);
-                    reject(e);
-                });
-            })
-                .catch(err => {
-                console.log('get tx count error:', err);
-                reject(err);
-            });
+    function sendTransaction(unsignedTx, signer, signerParams) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const signedTx = yield signer.signTransaction(unsignedTx, signerParams);
+            const hash = yield sendSignedTransaction(signedTx);
+            return {
+                hash,
+                status: 'PENIDNG',
+                to: unsignedTx.to,
+                from: unsignedTx.from,
+                value: unsignedTx.value,
+                tknTo: unsignedTx.tknTo,
+                tknValue: unsignedTx.tknValue,
+                timestamp: unsignedTx.timestamp,
+                gasLimit: unsignedTx.gasLimit,
+                gasPrice: unsignedTx.gasPrice
+            };
         });
     }
-    function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, shouldBroadCast) {
-        const { tokens } = account;
-        const { contractAddr, tokenDecimal } = tokens[symbol];
-        const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
-        const methodsData = tokenContract.methods
-            .transfer(to, value
-            .shiftedBy(tokenDecimal - 0)
-            .toFixed(0)
-            .toString())
-            .encodeABI();
-        return new Promise((resolve, reject) => {
-            sendNativeTx(account, contractAddr, new bignumber_js_1.default(0), gasPrice, gasLimit, methodsData, shouldBroadCast)
-                .then(res => {
-                if (shouldBroadCast) {
-                    const { pendingTx } = res;
-                    pendingTx.tknTo = to;
-                    pendingTx.tknValue = value;
-                    resolve({ pendingTx });
-                }
-                else {
-                    resolve(res);
-                }
-            })
-                .catch(err => {
-                reject(err);
-            });
+    function buildTransaction(from, to, value, options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
+            const nonce = yield getTransactionCount(from, 'pending');
+            let data = data_;
+            if (isTransfer) {
+                const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
+                data = tokenContract.methods
+                    .send(to, value
+                    .shiftedBy(tokenDecimal - 0)
+                    .toFixed(0)
+                    .toString(), '')
+                    .encodeABI();
+            }
+            return {
+                to: isTransfer ? contractAddr : to,
+                from,
+                nonce,
+                value,
+                gasPrice,
+                gasLimit,
+                data,
+                network: config.network
+            };
         });
-    }
-    function sendTransaction(account, to, value, data, extraParams, shouldBroadCast = true) {
-        const { gasPrice, gasLimit, symbol } = extraParams;
-        if (account.symbol === symbol) {
-            return sendNativeTx(account, to, value, gasPrice, gasLimit, data, shouldBroadCast);
-        }
-        return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, shouldBroadCast);
     }
     function getTransactionsByAddress(address, page, size, timestamp) {
         const { explorer_api } = config;
@@ -176,7 +127,7 @@ exports.default = config => {
     function getTransactionStatus(txHash) {
         return new Promise((resolve, reject) => {
             getTransactionReceipt(txHash)
-                .then(receipt => {
+                .then((receipt) => {
                 if (receipt !== null) {
                     resolve({
                         status: parseInt(receipt.status, 16) === 1,
@@ -195,6 +146,7 @@ exports.default = config => {
     }
     return {
         sendTransaction,
+        buildTransaction,
         getTransactionsByAddress,
         getTransactionUrlInExplorer,
         getTransactionStatus

@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
+import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
 import API from './lib_api';
 import network from './network';
+import { TronUnsignedTx, TronPendingTx } from './type';
 
 export interface IConfig {
     network: 'mainnet' | 'shasta'
@@ -77,12 +79,16 @@ export default class TronApiClient implements IsingleApiClient {
         return this.api.validateBalanceSufficiency(account, amount);
     }
 
-    sendTransaction = (account: any, to: string, value: number | BigNumber, extraParams: any, data: any, shouldBroadCast: boolean) => {
-        return this.api.sendTransaction(account, to, value, shouldBroadCast);
+    sendTransaction = (unsignedTx: TronUnsignedTx, signer: IkeystoreSigner, signerParams: any): Promise<TronPendingTx> => {
+        return this.api.sendTransaction(unsignedTx, signer, signerParams);
     }
 
     sameAddress = (address1: string, address2: string) => {
         return this.api.sameAddress(address1, address2);
+    }
+
+    buildTransaction = (from: string, to: string, value: BigNumber): Promise<TronUnsignedTx> => {
+        return this.api.buildTransaction(from, to, value)
     }
 
 }

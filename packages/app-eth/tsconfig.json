@@ -1,10 +1,10 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-      "outDir": "./lib"
+      "outDir": "./lib",
+      "declarationDir": "./lib/typings",
     },
     "include": [
       "./src",
-      "src/lib_api/*.js"
     ]
    }

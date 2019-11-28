@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
-import {HttpClient} from 'lib-common-util-js';
+import { HttpClient } from 'lib-common-util-js';
 import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/api_client';
+import { IkeystoreSigner } from './interfaces/keystore_client';
 
 function isInstanceOfApiClient(client: object) {
     const map = [
@@ -11,21 +12,21 @@ function isInstanceOfApiClient(client: object) {
         "getBalance",
         "getNetwork",
         "getTransactionsByAddress",
-        "validateBalanceSufficiency",
+        "buildTransaction",
         "sendTransaction",
         "sameAddress",
     ];
-    return !map.some(i=> !(i in client));
+    return !map.some(i => !(i in client));
 }
 
 export default class ApiClient implements IApiClient {
-    
+
 
     coins: { [coin: string]: IsingleApiClient | IsingleApiFullClient } = {};
 
 
-    addCoin=(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void =>{
-        if(!isInstanceOfApiClient(client)){
+    addCoin = (coinType: string, client: IsingleApiClient | IsingleApiFullClient): void => {
+        if (!isInstanceOfApiClient(client)) {
             throw new Error('not a api client!');
         }
         this.coins[coinType.toLowerCase()] = client;
@@ -41,7 +42,7 @@ export default class ApiClient implements IApiClient {
     }
 
 
-    getCoin =(coinType: string) => {
+    getCoin = (coinType: string) => {
         const coin = this.coins[coinType.toLowerCase()];
         if (!coin) {
             throw new Error(`coin: [${coinType}] is not init or unsupported.`)
@@ -59,7 +60,7 @@ export default class ApiClient implements IApiClient {
         return coin.getBlockNumber();
     }
 
-    getTransactionStatus = (coinType: string, hash: string): Promise<any> =>{
+    getTransactionStatus = (coinType: string, hash: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         return coin.getTransactionStatus(hash);
     }
@@ -79,14 +80,14 @@ export default class ApiClient implements IApiClient {
         return coin.getTransactionsByAddress(address, page, size);
     }
 
-    validateBalanceSufficiency = (coinType: string, account: any, amount: number | BigNumber, extraParams?: any): Promise<any> => {
+    buildTransction = (coinType: string, from: string, to: string, value: BigNumber, options: any) => {
         const coin = this.getCoin(coinType);
-        return coin.validateBalanceSufficiency(account, amount, extraParams);
+        return coin.buildTransaction(from, to, value, options);
     }
 
-    sendTransaction = (coinType: string, account: any, to: string, value: number | BigNumber, data: any, extraParams: any, shouldBroadCast: boolean): Promise<any> =>{
+    sendTransaction = (coinType: string, unsignedTx: any, signer: IkeystoreSigner, signerParams: any): Promise<any> => {
         const coin = this.getCoin(coinType);
-        return coin.sendTransaction(account, to, value, data, extraParams, shouldBroadCast);
+        return coin.sendTransaction(unsignedTx, signer, signerParams);
     }
 
     sameAddress = (coinType: string, address1: string, address2: string): boolean => {
@@ -152,7 +153,7 @@ export default class ApiClient implements IApiClient {
     }
 
     getCoinPrices = (currency: string): Promise<any> => {
-        const cryptos = Object.keys(this.coins).map(c=>c.toUpperCase()).join(',');
+        const cryptos = Object.keys(this.coins).map(c => c.toUpperCase()).join(',');
         const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
         return HttpClient.get(url, false);
     }

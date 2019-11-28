@@ -15,25 +15,14 @@ const bip39 = require("bip39");
 const lib_keystore_1 = require("./lib_keystore");
 class TronKeystoreClient {
     constructor() {
-        this.mnemonic = '';
-        this.signTransaction = (tx) => {
-            return lib_keystore_1.default.signTransaction(tx);
-        };
-        this.getAccount = (address_index) => {
-            if (!bip39.validateMnemonic(this.mnemonic)) {
-                throw new Error('set mnemonic first');
-            }
-            return lib_keystore_1.default.getAccountFromMnemonic(this.mnemonic, address_index);
-        };
-        this.setMnemonic = (mnemonic) => {
-            this.mnemonic = mnemonic;
+        this.signTransaction = (tx, signer, signerParam) => {
+            return signer.signTransaction(tx, signerParam);
         };
         this.generateMnemonic = () => {
             const mnemonic = bip39.generateMnemonic();
-            this.mnemonic = mnemonic;
             return mnemonic;
         };
-        this.recoverKeyPairByPrivateKey = (priKey, options) => {
+        this.recoverKeyPairByPrivateKey = (priKey) => {
             try {
                 const keyPair = lib_keystore_1.default.keyPair(priKey);
                 const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
@@ -42,12 +31,6 @@ class TronKeystoreClient {
             catch (e) {
                 return Promise.reject(new Error(`recover privKey failed: ${e}`));
             }
-        };
-        this.recoverKeyPairByWIF = (WIF, options) => {
-            throw new Error("[tron] recoverKeyPairByWIF not implemented.");
-        };
-        this.recoverKeyPairByKeyFile = (file, password) => {
-            throw new Error("[tron] recoverKeyPairByKeyFile not implemented.");
         };
         this.validatePrivateKey = (privateKey) => {
             throw new Error("[tron] validatePrivateKey not implemented.");
@@ -58,7 +41,9 @@ class TronKeystoreClient {
         this.getAccountFromMnemonic = (address_index, mnemonic) => {
             return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.mnemonic = '';
+        this.getAccountFromHardware = (address_index, hardware) => {
+            throw new Error("[tron] getAccountFromHardware not implemented.");
+        };
     }
 }
 exports.default = TronKeystoreClient;

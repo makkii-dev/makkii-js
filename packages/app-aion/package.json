@@ -6,7 +6,7 @@
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
   "license": "ISC",
   "main": "lib/index.js",
-  "typings": "index.d.ts",
+  "typings": "lib/typings/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -31,6 +31,7 @@
     "@babel/runtime": "^7.5.5",
     "@makkii/makkii-core": "^0.0.0",
     "@makkii/makkii-type": "^0.0.0",
+    "@types/bignumber.js": "^5.0.0",
     "aion-rlp": "^0.0.1",
     "aion-web3-eth-abi": "1.1.5",
     "aion-web3-eth-contract": "1.1.5",
@@ -39,6 +40,7 @@
     "bip39": "^3.0.2",
     "blake2b": "^2.1.3",
     "bn.js": "^5.0.0",
+    "crypto-browserify": "^3.12.0",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
     "lib-hw-ledger-js": "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a",
     "scrypt.js": "^0.3.0",
@@ -54,9 +56,5 @@
     "@babel/register": "^7.5.5",
     "assert": "^2.0.0",
     "mocha": "^6.2.2"
-  },
-  "peerDependencies": {
-    "crypto-browserify": "^3.12.0",
-    "react-native-crypto": "^2.1.2"
   }
 }

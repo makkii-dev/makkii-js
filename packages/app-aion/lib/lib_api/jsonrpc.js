@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
@@ -27,91 +36,75 @@ exports.default = (config) => {
         }
         throw new Error('invalid blockTag');
     };
-    const getBlockByNumber = (blockNumber, fullTxs = false) => new Promise((resolve, reject) => {
+    const getBlockByNumber = (blockNumber, fullTxs = false) => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest('eth_getBlockByNumber', [blockNumber, fullTxs]);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
-        promise.then((res) => {
-            console.log('[aion http resp] eth_getBlockByNumber', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            else
-                resolve(res.data.result);
-        });
+        console.log('[aion http resp] eth_getBlockByNumber', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return res.data.result;
     });
-    const blockNumber = () => new Promise((resolve, reject) => {
+    const blockNumber = () => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest('eth_blockNumber', []);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log('[aion http req] eth_blockNumber[]');
-        promise.then((res) => {
-            console.log('[aion http resp] eth_blockNumber', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            else
-                resolve(res.data.result);
-        });
+        console.log('[aion http resp] eth_blockNumber', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return res.data.result;
     });
-    const getBalance = (address) => new Promise((resolve, reject) => {
+    const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), 'latest'];
         const requestData = exports.processRequest('eth_getBalance', params);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
-        promise.then((res) => {
-            console.log('[aion http resp] eth_getBalance', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            else
-                resolve(new bignumber_js_1.default(res.data.result).shiftedBy(-18));
-        });
+        console.log('[aion http resp] eth_getBalance', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return new bignumber_js_1.default(res.data.result).shiftedBy(-18);
     });
-    const getTransactionCount = (address, blockTag) => new Promise((resolve, reject) => {
+    const getTransactionCount = (address, blockTag) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), checkBlockTag(blockTag)];
         const requestData = exports.processRequest('eth_getTransactionCount', params);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
-        promise.then((res) => {
-            console.log('[aion http resp] eth_getTransactionCount', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            resolve(res.data.result);
-        });
+        console.log('[aion http resp] eth_getTransactionCount', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return res.data.result;
     });
-    const sendSignedTransaction = (signedTx) => new Promise((resolve, reject) => {
+    const sendSignedTransaction = (signedTx) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [signedTx];
         const requestData = exports.processRequest('eth_sendRawTransaction', params);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
-        promise.then((res) => {
-            console.log('[aion http resp] eth_sendRawTransaction', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            resolve(res.data.result);
-        });
+        console.log('[aion http resp] eth_sendRawTransaction', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return res.data.result;
     });
-    const getTransactionReceipt = (hash) => new Promise((resolve, reject) => {
+    const getTransactionReceipt = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [hash];
         const requestData = exports.processRequest('eth_getTransactionReceipt', params);
-        const promise = lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
         console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
-        promise.then((res) => {
-            console.log('[aion http resp] eth_getTransactionReceipt', res.data);
-            if (res.data.error)
-                reject(res.data.error);
-            else
-                resolve(res.data.result);
-        });
+        console.log('[aion http resp] eth_getTransactionReceipt', res.data);
+        if (res.data.error)
+            throw new Error(res.data.error);
+        return res.data.result;
     });
     return {
         blockNumber,

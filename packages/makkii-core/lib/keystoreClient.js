@@ -3,15 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function isIntanceOfKeystoreClient(client) {
     const map = [
         "signTransaction",
-        "getAccount",
-        "setMnemonic",
         "generateMnemonic",
         "recoverKeyPairByPrivateKey",
-        "recoverKeyPairByWIF",
-        "recoverKeyPairByKeyFile",
         "validatePrivateKey",
         "validateAddress",
         "getAccountFromMnemonic",
+        "getAccountFromHardware"
     ];
     return !map.some(i => !(i in client));
 }
@@ -38,17 +35,9 @@ class KeystoreClient {
             }
             return coin;
         };
-        this.signTransaction = (coinType, tx) => {
+        this.signTransaction = (coinType, tx, signer, signerParams) => {
             const coin = this.getCoin(coinType);
-            return coin.signTransaction(tx);
-        };
-        this.getAccount = (coinType, address_index) => {
-            const coin = this.getCoin(coinType);
-            return coin.getAccount(address_index);
-        };
-        this.setMnemonic = (coinType, mnemonic) => {
-            const coin = this.getCoin(coinType);
-            return coin.setMnemonic(mnemonic);
+            return coin.signTransaction(tx, signer, signerParams);
         };
         this.generateMnemonic = (coinType) => {
             const coin = this.getCoin(coinType);
@@ -57,14 +46,6 @@ class KeystoreClient {
         this.recoverKeyPairByPrivateKey = (coinType, priKey, options) => {
             const coin = this.getCoin(coinType);
             return coin.recoverKeyPairByPrivateKey(priKey, options);
-        };
-        this.recoverKeyPairByWIF = (coinType, WIF, options) => {
-            const coin = this.getCoin(coinType);
-            return coin.recoverKeyPairByWIF(WIF, options);
-        };
-        this.recoverKeyPairByKeyFile = (coinType, file, password) => {
-            const coin = this.getCoin(coinType);
-            return coin.recoverKeyPairByKeyFile(file, password);
         };
         this.validatePrivateKey = (coinType, privateKey) => {
             const coin = this.getCoin(coinType);
@@ -78,33 +59,9 @@ class KeystoreClient {
             const coin = this.getCoin(coinType);
             return coin.getAccountFromMnemonic(ddress_index, mnemonic);
         };
-        this.getAccountByLedger = (coinType, index) => {
+        this.getAccountFromHardware = (coinType, index, hardware) => {
             const coin = this.getCoin(coinType);
-            if ('ledgerSupport' in coin && !!coin.ledgerSupport) {
-                return coin.getAccountByLedger(index);
-            }
-            throw new Error(`[${coinType}] getAccountByLedger is not implemented.`);
-        };
-        this.signByLedger = (coinType, index, sender, msg) => {
-            const coin = this.getCoin(coinType);
-            if ('ledgerSupport' in coin && !!coin.ledgerSupport) {
-                return coin.signByLedger(index, sender, msg);
-            }
-            throw new Error(`[${coinType}] signByLedger is not implemented.`);
-        };
-        this.setLedgerTransport = (coinType, transport) => {
-            const coin = this.getCoin(coinType);
-            if ('ledgerSupport' in coin && !!coin.ledgerSupport) {
-                return coin.setLedgerTransport(transport);
-            }
-            throw new Error(`[${coinType}] setLedgerTransport is not implemented.`);
-        };
-        this.getLedgerStatus = (coinType) => {
-            const coin = this.getCoin(coinType);
-            if ('ledgerSupport' in coin && !!coin.ledgerSupport) {
-                return coin.getLedgerStatus();
-            }
-            throw new Error(`[${coinType}] getLedgerStatus is not implemented.`);
+            return coin.getAccountFromHardware(index, hardware);
         };
     }
 }

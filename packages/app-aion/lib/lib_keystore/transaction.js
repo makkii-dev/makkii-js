@@ -2,27 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
-const ledger_1 = require("./ledger");
 const address_1 = require("./address");
-const keyPair_1 = require("./keyPair");
-const blake2b = require('blake2b');
-const nacl = require('tweetnacl');
 const rlp = require('aion-rlp');
 const BN = require('bn.js');
-exports.signTransaction = (transaction) => new Promise((resolve, reject) => {
-    const { private_key, extra_param } = transaction;
-    let tx;
-    try {
-        tx = txInputFormatter(transaction);
-    }
-    catch (e) {
-        reject(e);
-    }
+exports.process_unsignedTx = (transaction) => {
+    const tx = txInputFormatter(transaction);
     const unsignedTransaction = {
         nonce: tx.nonce,
         to: tx.to || '0x',
         data: tx.data,
-        amount: numberToHex(tx.amount) || '0x',
+        amount: numberToHex(tx.value) || '0x',
         timestamp: tx.timestamp || Math.floor(new Date().getTime() * 1000),
         type: tx.type || 1,
         gasLimit: tx.gasLimit,
@@ -38,37 +27,8 @@ exports.signTransaction = (transaction) => new Promise((resolve, reject) => {
         toAionLong(unsignedTransaction.gasPrice),
         toAionLong(unsignedTransaction.type),
     ]);
-    if (extra_param && extra_param.type === '[ledger]') {
-        ledger_1.signByLedger(extra_param.derivationIndex, extra_param.sender, Object.values(rlpEncoded)).then(({ signature, publicKey }) => {
-            console.log('signByLedger res=>', { signature, publicKey });
-            const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(publicKey), 'hex'),
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), 'hex')]);
-            const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
-            const rawTransaction = rlp.encode(rawTx);
-            resolve({ encoded: rawTransaction.toString('hex'), signature: Buffer.from(signature).toString('hex') });
-        }).catch((e) => {
-            reject(e);
-        });
-    }
-    else {
-        let ecKey;
-        try {
-            ecKey = keyPair_1.keyPair(private_key);
-        }
-        catch (e) {
-            reject(new Error('invalid private key'));
-        }
-        const rawHash = blake2b(32).update(rlpEncoded).digest();
-        const signature = ecKey.sign(rawHash);
-        if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey))) === false) {
-            throw new Error('Could not verify signature.');
-        }
-        const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey)), signature]);
-        const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
-        const rawTransaction = rlp.encode(rawTx);
-        resolve({ encoded: rawTransaction.toString('hex'), signature: lib_common_util_js_1.hexutil.toHex(signature) });
-    }
-});
+    return rlpEncoded;
+};
 const txInputFormatter = (options) => {
     if (options.to) {
         options.to = address_1.inputAddressFormatter(options.to);
@@ -112,7 +72,7 @@ const toAionLong = (val) => {
     }
     return new rlp.AionLong(num);
 };
-const numberToHex = function (value) {
+const numberToHex = (value) => {
     value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
     return `0x${value.toString(16)}`;
 };
