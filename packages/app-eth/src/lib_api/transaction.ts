@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js";
 import { HttpClient } from "lib-common-util-js";
-import keystore from "../lib_keystore";
 import jsonrpcClient from "./jsonrpc";
 import { ERC20ABI } from "./constants";
 
