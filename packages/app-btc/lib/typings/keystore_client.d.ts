@@ -32,5 +32,5 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
         address: string;
         index: any;
     }>;
-    getAccountFromHardware: (index: number, hardware: IHardware) => any;
+    getAccountFromHardware: (index: number, hardware: IHardware) => Promise<import("@makkii/makkii-core/src/type").LedgerKeypair>;
 }

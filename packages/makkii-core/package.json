@@ -27,7 +27,6 @@
     "url": "https://github.com/chaion/react-native-makkii-core/issues"
   },
   "dependencies": {
-    "@makkii/makkii-type": "^0.0.0",
     "@types/bignumber.js": "^5.0.0",
     "bignumber.js": "^9.0.0",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"

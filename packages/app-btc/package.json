@@ -30,7 +30,6 @@
   "dependencies": {
     "@ledgerhq/hw-app-btc": "^4.73.7",
     "@makkii/makkii-core": "^0.0.0",
-    "@makkii/makkii-type": "^0.0.0",
     "@types/bignumber.js": "^5.0.0",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",

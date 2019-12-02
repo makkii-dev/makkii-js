@@ -11,7 +11,7 @@ export default class AionKeystoreClient implements IsingleKeystoreClient {
         address: any;
         index: any;
     }>;
-    getAccountFromHardware: (index: number, hardware: IHardware) => any;
+    getAccountFromHardware: (index: number, hardware: IHardware) => Promise<import("@makkii/makkii-core/src/type").LedgerKeypair>;
     generateMnemonic: () => string;
     recoverKeyPairByPrivateKey: (priKey: string) => Promise<{
         sign: (digest: any) => Buffer;

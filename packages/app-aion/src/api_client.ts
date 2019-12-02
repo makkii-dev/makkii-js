@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/api_client';
-import { AionTxObj, AionTx, AionTxStatus, AionAccount } from '@makkii/makkii-type/src/aion';
-import { Token, validateBalanceRet } from '@makkii/makkii-type';
 import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
+import { Token } from '@makkii/makkii-core/src/type'
 import API from './lib_api';
 import network from './network';
 import { AionUnsignedTx, AionPendingTx } from './type';
@@ -65,7 +64,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.blockNumber();
   }
 
-  getTransactionStatus = (hash: string): Promise<AionTxStatus> => {
+  getTransactionStatus = (hash: string) => {
     return this.api.getTransactionStatus(hash);
   }
 
@@ -77,7 +76,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getBalance(address);
   }
 
-  getTransactionsByAddress = (address: string, page: number, size: number): Promise<Map<txHash, AionTx>> => {
+  getTransactionsByAddress = (address: string, page: number, size: number) => {
     return this.api.getTransactionsByAddress(address, page, size);
   }
 
@@ -98,7 +97,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getTokenDetail(contractAddress);
   }
 
-  getAccountTokenTransferHistory = (address: string, symbolAddress: string, page?: number, size?: number): Promise<{ [hash: string]: AionTx }> => {
+  getAccountTokenTransferHistory = (address: string, symbolAddress: string, page?: number, size?: number) => {
     return this.api.getAccountTokenTransferHistory(address, symbolAddress, page, size);
   }
 
