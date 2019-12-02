@@ -3,7 +3,7 @@ declare const _default: (config: any) => {
     getBalance: (address: any) => Promise<import("bignumber.js").default>;
     validateBalanceSufficiency: typeof validateBalanceSufficiency;
     formatAddress1Line: (address: any) => string;
-    buildTransction: (from: any, to: any, value: any) => Promise<{
+    buildTransaction: (from: any, to: any, value: any) => Promise<{
         to: any;
         owner: any;
         amount: any;

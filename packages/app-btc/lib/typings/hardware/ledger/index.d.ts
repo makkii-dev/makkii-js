@@ -13,6 +13,5 @@ export default class BtcLedger implements IHardware {
     setLedgerTransport: (transport: any) => this;
     signTransaction: (transaction: BtcUnsignedTx, params: {
         derivationIndex: number;
-        network: string;
     }) => Promise<string>;
 }

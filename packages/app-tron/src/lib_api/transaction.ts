@@ -29,7 +29,7 @@ export default config => {
         throw new Error('broadcast tx failed')
     }
     
-    async function buildTransction(from, to, value) {
+    async function buildTransaction(from, to, value) {
         const block: any = await getLatestBlock();
         const latest_block = {
             hash: block.blockID,
@@ -118,7 +118,7 @@ export default config => {
         getTransactionStatus,
         getTransactionUrlInExplorer,
         getTransactionsByAddress,
-        buildTransction
+        buildTransaction
     }
 
 }

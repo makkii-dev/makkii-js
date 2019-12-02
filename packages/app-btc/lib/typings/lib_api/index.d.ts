@@ -1,25 +1,30 @@
 declare const _default: (config: any) => {
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
+        from: any;
+        to: any;
+        value: any;
+        fee: any;
         hash: any;
         status: string;
+    }>;
+    buildTransaction: (from: any, to: any, value: any, options: any) => Promise<{
         from: {
             addr: any;
             value: any;
         }[];
         to: {
             addr: any;
-            value: number;
+            value: any;
         }[];
         fee: number;
-    }>;
-    buildTransaction: (from: any, to: any, value: any, options: any) => Promise<{
-        to: any;
-        from: any;
+        to_address: any;
+        change_address: any;
         value: any;
         utxos: any[];
         byte_fee: any;
+        network: any;
     }>;
-    getTransactionUrlInExplorer: (txHash: any, network?: string) => string;
+    getTransactionUrlInExplorer: (txHash: any) => string;
     getTransactionStatus: (txId: any) => Promise<{
         status: boolean;
         blockNumber: any;

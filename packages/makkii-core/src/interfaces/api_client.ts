@@ -20,7 +20,7 @@ export interface IApiClient {
 
     getTransactionsByAddress: (coinType: string, address: string, page: number, size: number) => Promise<any>
 
-    buildTransction: (coinType: string, from: string, to: string, value: BigNumber, options: any) => Promise<any>
+    buildTransaction: (coinType: string, from: string, to: string, value: BigNumber, options: any) => Promise<any>
 
     sendTransaction: (coinType: string, unsignedTx: any, signer: IkeystoreSigner, signerParams: any) => Promise<any>
 

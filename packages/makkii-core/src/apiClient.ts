@@ -80,7 +80,7 @@ export default class ApiClient implements IApiClient {
         return coin.getTransactionsByAddress(address, page, size);
     }
 
-    buildTransction = (coinType: string, from: string, to: string, value: BigNumber, options: any) => {
+    buildTransaction = (coinType: string, from: string, to: string, value: BigNumber, options: any) => {
         const coin = this.getCoin(coinType);
         return coin.buildTransaction(from, to, value, options);
     }

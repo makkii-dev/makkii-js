@@ -9,12 +9,12 @@ export default config => {
         getTransactionStatus,
         getTransactionUrlInExplorer,
         getTransactionsByAddress,
-        buildTransction } = transactionClient(config);
+        buildTransaction } = transactionClient(config);
     return {
         getBalance,
         validateBalanceSufficiency,
         formatAddress1Line,
-        buildTransction,
+        buildTransaction,
         sameAddress,
         sendTransaction,
         getTransactionStatus,

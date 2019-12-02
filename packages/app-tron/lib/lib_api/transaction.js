@@ -31,7 +31,7 @@ exports.default = config => {
             throw new Error('broadcast tx failed');
         });
     }
-    function buildTransction(from, to, value) {
+    function buildTransaction(from, to, value) {
         return __awaiter(this, void 0, void 0, function* () {
             const block = yield getLatestBlock();
             const latest_block = {
@@ -116,7 +116,7 @@ exports.default = config => {
         getTransactionStatus,
         getTransactionUrlInExplorer,
         getTransactionsByAddress,
-        buildTransction
+        buildTransaction
     };
 };
 //# sourceMappingURL=transaction.js.map
