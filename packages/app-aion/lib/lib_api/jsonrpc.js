@@ -44,7 +44,7 @@ exports.default = (config) => {
         console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
         console.log('[aion http resp] eth_getBlockByNumber', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return res.data.result;
     });
     const blockNumber = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,7 +55,7 @@ exports.default = (config) => {
         console.log('[aion http req] eth_blockNumber[]');
         console.log('[aion http resp] eth_blockNumber', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return res.data.result;
     });
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,7 +67,7 @@ exports.default = (config) => {
         console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
         console.log('[aion http resp] eth_getBalance', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return new bignumber_js_1.default(res.data.result).shiftedBy(-18);
     });
     const getTransactionCount = (address, blockTag) => __awaiter(void 0, void 0, void 0, function* () {
@@ -79,7 +79,7 @@ exports.default = (config) => {
         console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
         console.log('[aion http resp] eth_getTransactionCount', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return res.data.result;
     });
     const sendSignedTransaction = (signedTx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -91,7 +91,7 @@ exports.default = (config) => {
         console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
         console.log('[aion http resp] eth_sendRawTransaction', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return res.data.result;
     });
     const getTransactionReceipt = (hash) => __awaiter(void 0, void 0, void 0, function* () {
@@ -103,7 +103,7 @@ exports.default = (config) => {
         console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
         console.log('[aion http resp] eth_getTransactionReceipt', res.data);
         if (res.data.error)
-            throw new Error(res.data.error);
+            throw new Error(res.data.error.message);
         return res.data.result;
     });
     return {

@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 declare const _default: (config: any) => {
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
         hash: unknown;
@@ -15,10 +16,12 @@ declare const _default: (config: any) => {
         to: any;
         from: any;
         nonce: unknown;
-        value: any;
+        value: BigNumber;
         gasPrice: any;
         gasLimit: any;
         data: any;
+        tknTo: any;
+        tknValue: BigNumber;
         network: any;
     }>;
     getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<unknown>;

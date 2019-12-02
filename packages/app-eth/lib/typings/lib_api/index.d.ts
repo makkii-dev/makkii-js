@@ -21,10 +21,12 @@ declare const _default: (config: any) => {
         to: any;
         from: any;
         nonce: unknown;
-        value: any;
+        value: import("bignumber.js").default;
         gasPrice: any;
         gasLimit: any;
         data: any;
+        tknTo: any;
+        tknValue: import("bignumber.js").default;
         network: any;
     }>;
     getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<unknown>;
