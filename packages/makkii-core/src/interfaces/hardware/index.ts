@@ -1,6 +1,5 @@
 import { LedgerKeypair } from "../../type";
 import { IkeystoreSigner } from "../keystore_client";
-import { LedgerKeypair } from "../../type";
 
 /**
  * Hardware wallet interface

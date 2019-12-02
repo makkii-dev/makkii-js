@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "postinstall": "lerna bootstrap",
+    "compile": "lerna run tsc",
     "doc": "typedoc --options ./typedoc.js"
   },
   "keywords": [
