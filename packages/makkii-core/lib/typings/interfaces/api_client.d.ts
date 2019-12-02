@@ -24,7 +24,7 @@ export interface IApiClient {
 }
 export interface IsingleApiClient {
     config: any;
-    setNetwork: (options: any) => void;
+    updateConfiguration: (options: any) => void;
     getNetwork: () => string;
     getBlockByNumber: (blockNumber: string) => Promise<any>;
     getBlockNumber: () => Promise<any>;

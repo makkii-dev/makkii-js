@@ -24,11 +24,9 @@ export interface IkeystoreSigner {
 }
 
 
-export interface IsingleKeystoreFullClient extends IsingleKeystoreClient{}
-
 export interface IkeystoreClient {
     
-    addCoin: (coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient) => void;
+    addCoin: (coinType: string, client: IsingleKeystoreClient) => void;
 
     removeCoin: (coinType: string) =>boolean
 

@@ -17,7 +17,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     private api;
     constructor(config: IConfig);
     getNetwork: () => "mainnet" | "amity";
-    setNetwork: (config: IConfig) => void;
+    updateConfiguration: (config: IConfig) => void;
     getBlockByNumber: (blockNumber: string) => any;
     getBlockNumber: () => any;
     getTransactionStatus: (hash: string) => Promise<AionTxStatus>;

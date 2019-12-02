@@ -14,7 +14,7 @@ export default class TronApiClient implements IsingleApiClient {
     api: any;
     constructor(config: IConfig);
     getNetwork: () => "mainnet" | "shasta";
-    setNetwork: (config: IConfig) => void;
+    updateConfiguration: (config: IConfig) => void;
     getBlockByNumber: (blockNumber: string) => never;
     getBlockNumber: () => never;
     getTransactionStatus: (hash: string) => any;

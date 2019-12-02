@@ -6,7 +6,7 @@ class AionApiClient {
     constructor(config) {
         this.tokenSupport = true;
         this.getNetwork = () => this.config.network;
-        this.setNetwork = (config) => {
+        this.updateConfiguration = (config) => {
             this.config = Object.assign(Object.assign({}, this.config), config);
             this.api = lib_api_1.default(this.config);
         };

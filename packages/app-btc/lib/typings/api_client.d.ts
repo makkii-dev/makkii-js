@@ -13,7 +13,7 @@ export default class BtcApiClient implements IsingleApiClient {
     config: IConfig;
     constructor(config: IConfig);
     getNetwork: () => "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
-    setNetwork: (config: IConfig) => void;
+    updateConfiguration: (config: IConfig) => void;
     getBlockByNumber: (blockNumber: string) => never;
     getBlockNumber: () => never;
     getTransactionStatus: (hash: string) => Promise<{

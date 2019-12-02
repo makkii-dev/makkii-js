@@ -22,7 +22,7 @@ export default class EthApiClient implements IsingleApiFullClient {
     private api;
     constructor(config: IConfig);
     getNetwork: () => "mainnet" | "amity";
-    setNetwork: (config: IConfig) => void;
+    updateConfiguration: (config: IConfig) => void;
     getBlockByNumber: (blockNumber: string) => any;
     getBlockNumber: () => any;
     getTransactionStatus: (hash: string) => any;

@@ -51,7 +51,7 @@ export default class BtcApiClient implements IsingleApiClient {
 
     getNetwork = () => this.config.network;
 
-    setNetwork = (config: IConfig) => {
+    updateConfiguration = (config: IConfig) => {
         this.config = { ...this.config, ...config };
         this.api = API(this.config);
       }

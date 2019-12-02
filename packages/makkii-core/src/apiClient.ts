@@ -144,6 +144,10 @@ export default class ApiClient implements IApiClient {
         throw new Error(`[${coinType}] getTopTokens is not implemented.`)
     }
 
+    /**
+     * @param coinType coin type
+     * @param keyword keyword
+     */
     searchTokens = (coinType: string, keyword: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {
