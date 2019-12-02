@@ -10,7 +10,7 @@ export interface IApiClient {
     getTransactionStatus(coinType: string, hash: string): Promise<any>;
     getTransactionExplorerUrl(coinType: string, hash: any): string;
     getTransactionsByAddress(coinType: string, address: string, page: number, size: number): Promise<any>;
-    buildTransction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>;
+    buildTransaction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>;
     sendTransaction(coinType: string, unsignedTx: any, signer: IkeystoreSigner, signerParams: any): Promise<any>;
     sameAddress(coinType: string, address1: string, address2: string): boolean;
     getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string;

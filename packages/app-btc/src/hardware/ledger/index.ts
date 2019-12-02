@@ -29,16 +29,15 @@ export default class BtcLedger implements IHardware {
         }
     };
 
-
     setLedgerTransport = (transport: any) => {
         this.hardware = new Btc(transport);
         return this;
     }
 
-    signTransaction = async (transaction: BtcUnsignedTx, params: { derivationIndex: number, network: string }): Promise<string> => {
-        const { utxos } = transaction;
+    signTransaction = async (transaction: BtcUnsignedTx, params: { derivationIndex: number }): Promise<string> => {
+        const { utxos, network } = transaction;
         const txb = process_unsignedTx(transaction, params);
-        const { derivationIndex, network } = params;
+        const { derivationIndex } = params;
         const tx = txb.buildIncomplete();
         const coinType = network.startsWith('BTC') ? 0 : 2;
         const inputs = [];

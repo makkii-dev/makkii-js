@@ -10,7 +10,7 @@ declare const _default: (config: any) => {
     getTransactionStatus: (txHash: any) => Promise<unknown>;
     getTransactionUrlInExplorer: (txHash: any) => string;
     getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<unknown>;
-    buildTransction: (from: any, to: any, value: any) => Promise<{
+    buildTransaction: (from: any, to: any, value: any) => Promise<{
         to: any;
         owner: any;
         amount: any;

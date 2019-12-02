@@ -17,8 +17,8 @@ class BtcLocalSigner {
     constructor() {
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const txb = transaction_1.process_unsignedTx(transaction, params);
-            const { utxos } = transaction;
-            const { compressed, private_key, network } = params;
+            const { utxos, network } = transaction;
+            const { compressed, private_key } = params;
             const mainnet = network_1.networks[network];
             const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), 'hex'), {
                 network: mainnet,

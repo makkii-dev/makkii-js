@@ -22,7 +22,7 @@ exports.default = config => {
             const hash = yield sendSignedTransaction(signedTx);
             return {
                 hash,
-                status: 'PENIDNG',
+                status: 'PENDING',
                 to: unsignedTx.to,
                 from: unsignedTx.from,
                 value: unsignedTx.value,
@@ -52,10 +52,12 @@ exports.default = config => {
                 to: isTransfer ? contractAddr : to,
                 from,
                 nonce,
-                value,
+                value: isTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value).shiftedBy(18),
                 gasPrice,
                 gasLimit,
                 data,
+                tknTo: isTransfer ? to : '',
+                tknValue: isTransfer ? new bignumber_js_1.default(value).shiftedBy(tokenDecimal) : new bignumber_js_1.default(0),
                 network: config.network
             };
         });

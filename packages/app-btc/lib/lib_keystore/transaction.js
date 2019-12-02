@@ -4,7 +4,7 @@ const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const bignumber_js_1 = require("bignumber.js");
 const network_1 = require("./network");
 exports.process_unsignedTx = (transaction, params) => {
-    const { utxos, value, to, from, byte_fee, } = transaction;
+    const { utxos, value, to_address, change_address, byte_fee, } = transaction;
     const { network } = params;
     const mainnet = network_1.networks[network];
     const amount = new bignumber_js_1.default(value);
@@ -21,9 +21,9 @@ exports.process_unsignedTx = (transaction, params) => {
     for (let ip = 0; ip < utxos.length; ip += 1) {
         txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
     }
-    txb.addOutput(to, amount.toNumber());
+    txb.addOutput(to_address, amount.toNumber());
     if (needChange) {
-        txb.addOutput(from, balance.minus(amount).minus(fee).toNumber());
+        txb.addOutput(change_address, balance.minus(amount).minus(fee).toNumber());
     }
     return txb;
 };

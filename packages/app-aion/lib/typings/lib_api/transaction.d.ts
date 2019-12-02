@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 declare const _default: (config: any) => {
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
         hash: any;
@@ -18,14 +19,14 @@ declare const _default: (config: any) => {
         to: any;
         from: any;
         nonce: any;
-        value: any;
+        value: BigNumber;
         gasPrice: any;
         gasLimit: any;
         timestamp: number;
         data: any;
         type: number;
         tknTo: any;
-        tknValue: any;
+        tknValue: BigNumber;
     }>;
 };
 export default _default;

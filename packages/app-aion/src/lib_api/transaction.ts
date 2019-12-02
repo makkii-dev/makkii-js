@@ -16,7 +16,7 @@ export default (config) => {
     const hash = await sendSignedTransaction(signedTx);
     return {
       hash,
-      status: 'PENIDNG',
+      status: 'PENDING',
       to: unsignedTx.to,
       from: unsignedTx.from,
       value: unsignedTx.value,
@@ -49,14 +49,14 @@ export default (config) => {
       to: isTransfer ? contractAddr : to,
       from,
       nonce,
-      value: isTransfer? new BigNumber(0): value,
+      value: isTransfer? new BigNumber(0): new BigNumber(value).shiftedBy(18),
       gasPrice,
       gasLimit,
       timestamp: new Date().getTime() * 1000,
       data,
       type: 1,
       tknTo: isTransfer? to: '',
-      tknValue: isTransfer? value: new BigNumber(0)
+      tknValue: isTransfer?  new BigNumber(value).shiftedBy(tokenDecimal): new BigNumber(0)
     }
   }
 

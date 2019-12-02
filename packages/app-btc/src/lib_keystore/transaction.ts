@@ -27,7 +27,7 @@ import { networks } from './network';
 
 export const process_unsignedTx = (transaction, params) => {
   const {
-    utxos, value, to, from, byte_fee,
+    utxos, value, to_address, change_address, byte_fee,
   } = transaction;
   const { network } = params;
   const mainnet = networks[network];
@@ -46,9 +46,9 @@ export const process_unsignedTx = (transaction, params) => {
     txb.addInput(utxos[ip].hash, utxos[ip].index, 0xffffffff, Buffer.from(utxos[ip].script, 'hex'));
   }
 
-  txb.addOutput(to, amount.toNumber());
+  txb.addOutput(to_address, amount.toNumber());
   if (needChange) {
-    txb.addOutput(from, balance.minus(amount).minus(fee).toNumber());
+    txb.addOutput(change_address, balance.minus(amount).minus(fee).toNumber());
   }
   return txb;
 }

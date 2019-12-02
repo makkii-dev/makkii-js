@@ -94,7 +94,7 @@ export interface IApiClient {
      *           this field is encoded in contract method parameters.
      * @param options common options could be: gas limit, gas price, contract address, is token transfer, data, etc.
      */
-    buildTransction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>
+    buildTransaction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>
 
     /**
      * Broadcast transaction.

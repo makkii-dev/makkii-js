@@ -9,14 +9,14 @@ declare const _default: (config: any) => {
         to: any;
         from: any;
         nonce: any;
-        value: any;
+        value: import("bignumber.js").default;
         gasPrice: any;
         gasLimit: any;
         timestamp: number;
         data: any;
         type: number;
         tknTo: any;
-        tknValue: any;
+        tknValue: import("bignumber.js").default;
     }>;
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
         hash: any;
