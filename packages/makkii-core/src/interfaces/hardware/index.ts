@@ -1,4 +1,5 @@
 import { IkeystoreSigner } from "../keystore_client";
+import { LedgerKeypair } from "../../type";
 
 /**
  * Hardware wallet interface
@@ -12,7 +13,7 @@ export interface IHardware extends IkeystoreSigner{
      * @param params additional parameters that may affect key pair generation algorithm
      * @returns key pair
      */
-    getAccount(index:number, params?:any): Promise<Keypair>
+    getAccount(index:number, params?:any): Promise<LedgerKeypair>
 
     /**
      * Get hardware wallet status.
