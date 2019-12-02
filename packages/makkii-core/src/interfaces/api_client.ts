@@ -3,7 +3,7 @@ import { Transaction } from '../type';
 import { IkeystoreSigner } from './keystore_client';
 
 /**
- * 
+ * Api client interface that manages multiple chains' api client and expose all functions.
  */
 export interface IApiClient {
 
@@ -188,6 +188,10 @@ export interface IApiClient {
     getCoinPrices(currency: string): Promise<any>
 }
 
+/**
+ * Interface that defines basic api client functions:
+ * network configuration, block, transaction, balance, etc.
+ */
 export interface IsingleApiClient {
     /**
      * Configuration property.
@@ -295,6 +299,9 @@ export interface IsingleApiClient {
 
 };
 
+/**
+ * Interface that defines token related functions.
+ */
 export interface IsingleApiTokenClient {
 
     /**
@@ -361,4 +368,7 @@ export interface IsingleApiTokenClient {
     searchTokens(keyword: string): Promise<any>
 }
 
+/**
+ * Interface that defines basic api client and token functions.
+ */
 export interface IsingleApiFullClient extends IsingleApiClient, IsingleApiTokenClient { };
