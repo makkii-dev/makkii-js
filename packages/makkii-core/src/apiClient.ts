@@ -21,9 +21,7 @@ function isInstanceOfApiClient(client: object) {
 
 export default class ApiClient implements IApiClient {
 
-
     coins: { [coin: string]: IsingleApiClient | IsingleApiFullClient } = {};
-
 
     addCoin = (coinType: string, client: IsingleApiClient | IsingleApiFullClient): void => {
         if (!isInstanceOfApiClient(client)) {
@@ -32,7 +30,6 @@ export default class ApiClient implements IApiClient {
         this.coins[coinType.toLowerCase()] = client;
     }
 
-
     removeCoin = (coinType: string): boolean => {
         if (this.coins[coinType.toLowerCase()]) {
             delete this.coins[coinType.toLowerCase()]
@@ -40,7 +37,6 @@ export default class ApiClient implements IApiClient {
         }
         return false;
     }
-
 
     getCoin = (coinType: string) => {
         const coin = this.coins[coinType.toLowerCase()];
@@ -144,10 +140,6 @@ export default class ApiClient implements IApiClient {
         throw new Error(`[${coinType}] getTopTokens is not implemented.`)
     }
 
-    /**
-     * @param coinType coin type
-     * @param keyword keyword
-     */
     searchTokens = (coinType: string, keyword: string): Promise<any> => {
         const coin = this.getCoin(coinType);
         if ('tokenSupport' in coin && !!coin.tokenSupport) {

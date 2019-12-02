@@ -2,7 +2,7 @@ import { IkeystoreClient, IsingleKeystoreClient, IkeystoreSigner } from './inter
 import { IHardware } from './interfaces/hardware';
 
 
-function isIntanceOfKeystoreClient(client: object) {
+function isInstanceOfKeystoreClient(client: object) {
     const map = [
         "signTransaction",
         "generateMnemonic",
@@ -21,7 +21,7 @@ export default class KeystoreClient implements IkeystoreClient {
     coins: { [coin: string]: IsingleKeystoreClient } = {};
 
     addCoin = (coinType: string, client: IsingleKeystoreClient) => {
-        if (!isIntanceOfKeystoreClient(client)) {
+        if (!isInstanceOfKeystoreClient(client)) {
             throw new Error('not a keystore client!');
         }
         this.coins[coinType.toLowerCase()] = client;
