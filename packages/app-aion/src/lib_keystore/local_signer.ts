@@ -25,8 +25,7 @@ export default class AionLocalSigner implements IkeystoreSigner {
             throw new Error('Could not verify signature.');
         }
         
-        const fullSignature = Buffer.concat([Buffer.from(hexutil.stripZeroXHexString(ecKey.publicKey), 'hex'),
-        Buffer.from(hexutil.stripZeroXHexString(signature), 'hex')]);
+        const fullSignature = Buffer.concat([Buffer.from(hexutil.stripZeroXHexString(ecKey.publicKey), 'hex'),signature]);
         
         const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
 

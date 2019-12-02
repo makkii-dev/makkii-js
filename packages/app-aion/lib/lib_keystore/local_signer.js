@@ -26,8 +26,7 @@ class AionLocalSigner {
             if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey))) === false) {
                 throw new Error('Could not verify signature.');
             }
-            const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(ecKey.publicKey), 'hex'),
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), 'hex')]);
+            const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(ecKey.publicKey), 'hex'), signature]);
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
             const rawTransaction = rlp.encode(rawTx);
             return `0x${rawTransaction.toString('hex')}`;
