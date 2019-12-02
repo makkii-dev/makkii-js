@@ -15,7 +15,7 @@ export default config => {
         const hash = await sendSignedTransaction(signedTx);
         return {
           hash,
-          status: 'PENIDNG',
+          status: 'PENDING',
           to: unsignedTx.to,
           from: unsignedTx.from,
           value: unsignedTx.value,

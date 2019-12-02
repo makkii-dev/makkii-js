@@ -22,7 +22,7 @@ exports.default = (config) => {
             const hash = yield sendSignedTransaction(signedTx);
             return {
                 hash,
-                status: 'PENIDNG',
+                status: 'PENDING',
                 to: unsignedTx.to,
                 from: unsignedTx.from,
                 value: unsignedTx.value,
