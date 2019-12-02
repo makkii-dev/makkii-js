@@ -10,8 +10,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run compile"
+      "pre-commit": "lint-staged; npm run compile; git add ."
     }
   },
   "lint-staged": {
