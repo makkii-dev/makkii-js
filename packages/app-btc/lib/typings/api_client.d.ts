@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client';
 import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
-import { BtcUnsignedTx } from './type';
-export interface IConfig {
+import { BtcUnsignedTx, BtcTxStatus, BtcTransaction, BtcPendingTransaction } from './type';
+export interface IBtcConfig {
     network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST';
     insight_api: string;
     broadcast?: string;
@@ -10,29 +10,17 @@ export interface IConfig {
 }
 export default class BtcApiClient implements IsingleApiClient {
     private api;
-    config: IConfig;
-    constructor(config: IConfig);
-    getNetwork: () => "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
-    updateConfiguration: (config: IConfig) => void;
+    config: IBtcConfig;
+    constructor(config: IBtcConfig);
+    getNetwork: () => string;
+    updateConfiguration: (config: IBtcConfig) => void;
     getBlockByNumber: (blockNumber: string) => never;
     getBlockNumber: () => never;
-    getTransactionStatus: (hash: string) => Promise<{
-        status: boolean;
-        blockNumber: any;
-        timestamp: any;
-    }>;
+    getTransactionStatus: (hash: string) => Promise<BtcTxStatus>;
     getTransactionExplorerUrl: (hash: any) => string;
     getBalance: (address: string) => Promise<BigNumber>;
-    getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => Promise<{}>;
-    validateBalanceSufficiency: (account: any, amount: number | BigNumber, extraParams?: any) => Promise<unknown>;
-    sendTransaction: (unsignedTx: BtcUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<{
-        from: any;
-        to: any;
-        value: any;
-        fee: any;
-        hash: any;
-        status: string;
-    }>;
+    getTransactionsByAddress: (address: string, page: number, size: number) => Promise<Map<string, BtcTransaction>>;
+    sendTransaction: (unsignedTx: BtcUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<BtcPendingTransaction>;
     sameAddress: (address1: string, address2: string) => boolean;
     sendAll: (address: string, byte_fee: number) => Promise<number>;
     buildTransaction: (from: string, to: string, value: BigNumber, options: {

@@ -6,7 +6,7 @@ const tools_1 = require("./tools");
 exports.default = config => {
     const { sendTransaction, getTransactionUrlInExplorer, buildTransaction } = transaction_1.default(config);
     const { getBalance, getTransactionStatus, getTransactionsByAddress, broadcastTransaction } = jsonrpc_1.default(config);
-    const { sendAll, validateBalanceSufficiency, sameAddress } = tools_1.default(config);
+    const { sendAll, sameAddress } = tools_1.default(config);
     return {
         sendTransaction,
         buildTransaction,
@@ -14,7 +14,6 @@ exports.default = config => {
         getTransactionStatus,
         getBalance,
         getTransactionsByAddress,
-        validateBalanceSufficiency,
         sameAddress,
         sendAll,
     };

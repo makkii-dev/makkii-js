@@ -21,3 +21,26 @@ export interface TronPendingTx {
     hash: string
     status: 'PENDING'
 }
+
+export interface TronTxStatus {
+    blockNumber: number
+    status: boolean
+}
+
+export interface TronTransaction {
+    hash: string
+    timestamp: number
+    from: string
+    to: string
+    value: BigNumber
+    blockNumber: number
+    status: 'CONFIRMED' | 'FAILED'
+}
+
+export interface TronKeypair {
+    private_key: string
+    public_key: string
+    address: string
+    index?: number
+    sign?: (hash: any)=> Buffer
+}

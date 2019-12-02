@@ -34,7 +34,10 @@ const getBase58checkAddress = (address) => {
     return bs58.encode(Buffer.concat([addressBytes, checkSum]));
 };
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * 
+ * @hidden
+ */
 export const keyPair = (priKey) => {
     if (typeof priKey === 'string') {
         if (priKey.startsWith('0x')){

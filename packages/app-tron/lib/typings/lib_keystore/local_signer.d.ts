@@ -1,7 +1,7 @@
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { TronUnsignedTx } from "../type";
 export default class TronLocalSigner implements IkeystoreSigner {
-    signTransaction: (transaction: TronUnsignedTx, parmas: {
+    signTransaction: (transaction: TronUnsignedTx, params: {
         private_key: any;
     }) => Promise<{
         signature: any;

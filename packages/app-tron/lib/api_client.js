@@ -24,11 +24,8 @@ class TronApiClient {
         this.getBalance = (address) => {
             return this.api.getBalance(address);
         };
-        this.getTransactionsByAddress = (address, page, size, timestamp) => {
+        this.getTransactionsByAddress = (address, page, size) => {
             return this.api.getTransactionsByAddress(address, page, size);
-        };
-        this.validateBalanceSufficiency = (account, amount) => {
-            return this.api.validateBalanceSufficiency(account, amount);
         };
         this.sendTransaction = (unsignedTx, signer, signerParams) => {
             return this.api.sendTransaction(unsignedTx, signer, signerParams);

@@ -35,5 +35,7 @@ const validateBench32 = (address, network) => {
     return false;
   }
 };
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * @hidden
+ */
 export const validateAddress = (address, network) => validateBase58(address, network) || validateBench32(address, network);

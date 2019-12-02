@@ -1,3 +1,6 @@
+/**
+ * @hidden
+ */
 const ERC20ABI = [
     {
         constant: true,

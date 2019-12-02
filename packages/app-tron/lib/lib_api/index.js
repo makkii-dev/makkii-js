@@ -8,8 +8,6 @@ exports.default = config => {
     const { sendTransaction, getTransactionStatus, getTransactionUrlInExplorer, getTransactionsByAddress, buildTransaction } = transaction_1.default(config);
     return {
         getBalance,
-        validateBalanceSufficiency: tools_1.validateBalanceSufficiency,
-        formatAddress1Line: tools_1.formatAddress1Line,
         buildTransaction,
         sameAddress: tools_1.sameAddress,
         sendTransaction,

@@ -32,7 +32,6 @@ declare const _default: (config: any) => {
     }>;
     getBalance: (address: any) => Promise<import("bignumber.js").default>;
     getTransactionsByAddress: (address: any, page: any, size: any) => Promise<{}>;
-    validateBalanceSufficiency: (account: any, amount: any, extraParams: any) => Promise<unknown>;
     sameAddress: (address1: any, address2: any) => boolean;
     sendAll: (address: any, byte_fee?: number) => Promise<number>;
 };

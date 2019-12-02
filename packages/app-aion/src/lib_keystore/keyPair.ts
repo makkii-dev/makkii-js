@@ -5,7 +5,9 @@ const blake2b = require('blake2b')
 
 const A0_IDENTIFIER = [0xA0];
 
-
+/** *
+ * @hidden
+ */
 export const validatePrivateKey = (priKey) => {
   if (typeof priKey === 'string') {
     priKey = Buffer.from(hexutil.stripZeroXHexString(priKey), 'hex');
@@ -28,7 +30,9 @@ function computeA0Address(publicKey) {
   addressHash.set(A0_IDENTIFIER, 0);
   return addressHash;
 }
-
+/**
+ * @hidden
+ */
 export const keyPair = (priKey) => {
   if (typeof priKey === 'string') {
     priKey = Buffer.from(hexutil.stripZeroXHexString(priKey), 'hex');

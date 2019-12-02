@@ -1,4 +1,6 @@
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * @hidden
+ */
 export const CONTRACT_ABI = [
   {
     outputs: [
