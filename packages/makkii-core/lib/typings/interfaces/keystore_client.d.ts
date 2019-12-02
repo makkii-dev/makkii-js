@@ -13,10 +13,8 @@ export interface IsingleKeystoreClient {
 export interface IkeystoreSigner {
     signTransaction: (tx: any, params: any) => Promise<SignedTx>;
 }
-export interface IsingleKeystoreFullClient extends IsingleKeystoreClient {
-}
 export interface IkeystoreClient {
-    addCoin: (coinType: string, client: IsingleKeystoreClient | IsingleKeystoreFullClient) => void;
+    addCoin: (coinType: string, client: IsingleKeystoreClient) => void;
     removeCoin: (coinType: string) => boolean;
     signTransaction: (coinType: string, tx: any, signer: IkeystoreSigner, signerParams: any) => Promise<any>;
     generateMnemonic: (coinType: string) => string;
