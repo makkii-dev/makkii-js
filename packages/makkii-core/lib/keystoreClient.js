@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function isIntanceOfKeystoreClient(client) {
+function isInstanceOfKeystoreClient(client) {
     const map = [
         "signTransaction",
         "generateMnemonic",
@@ -16,7 +16,7 @@ class KeystoreClient {
     constructor() {
         this.coins = {};
         this.addCoin = (coinType, client) => {
-            if (!isIntanceOfKeystoreClient(client)) {
+            if (!isInstanceOfKeystoreClient(client)) {
                 throw new Error('not a keystore client!');
             }
             this.coins[coinType.toLowerCase()] = client;
