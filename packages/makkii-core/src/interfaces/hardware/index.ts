@@ -1,4 +1,3 @@
-import { Keypair } from "../../type";
 import { IkeystoreSigner } from "../keystore_client";
 
 /**
@@ -13,7 +12,7 @@ export interface IHardware extends IkeystoreSigner{
      * @param params additional parameters that may affect key pair generation algorithm
      * @returns key pair
      */
-    getAccount(index:number, params?:any): Keypair
+    getAccount(index:number, params?:any): Promise<Keypair>
 
     /**
      * Get hardware wallet status.
@@ -21,4 +20,5 @@ export interface IHardware extends IkeystoreSigner{
      * @returns boolean status of connect/app status.
      */
     getHardwareStatus(): Promise<boolean>
+
 }

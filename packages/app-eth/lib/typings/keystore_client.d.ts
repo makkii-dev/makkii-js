@@ -19,5 +19,5 @@ export default class EthKeystoreClient implements IsingleKeystoreClient {
         address: string;
         index: any;
     }>;
-    getAccountFromHardware: (address_index: number, hardware: IHardware) => any;
+    getAccountFromHardware: (address_index: number, hardware: IHardware) => Promise<import("@makkii/makkii-core/src/type").LedgerKeypair>;
 }

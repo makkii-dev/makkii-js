@@ -1,4 +1,6 @@
-/* eslint-disable import/prefer-default-export */
+/** *
+ * @hidden
+ */
 export const networks = {
   BTC: {
     messagePrefix: '\x18Bitcoin Signed Message:\n',

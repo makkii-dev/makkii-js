@@ -7,9 +7,7 @@ const rlp = require('aion-rlp')
 const BN = require('bn.js')
 
 /** *
- *
- * @param {import('../type').AionUnsignedTx} transaction
- * @returns {Buffer} {encoded: hex String: signature: hex string}
+ * @hidden
  */
 export const process_unsignedTx = (transaction) => {
 

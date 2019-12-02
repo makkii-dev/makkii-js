@@ -4,7 +4,6 @@ const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class BtcApiClient {
     constructor(config) {
-        this.api = lib_api_1.default({});
         this.getNetwork = () => this.config.network;
         this.updateConfiguration = (config) => {
             this.config = Object.assign(Object.assign({}, this.config), config);
@@ -25,11 +24,8 @@ class BtcApiClient {
         this.getBalance = (address) => {
             return this.api.getBalance(address);
         };
-        this.getTransactionsByAddress = (address, page, size, timestamp) => {
+        this.getTransactionsByAddress = (address, page, size) => {
             return this.api.getTransactionsByAddress(address, page, size);
-        };
-        this.validateBalanceSufficiency = (account, amount, extraParams) => {
-            return this.api.validateBalanceSufficiency(account, amount, extraParams);
         };
         this.sendTransaction = (unsignedTx, signer, signerParams) => {
             return this.api.sendTransaction(unsignedTx, signer, signerParams);

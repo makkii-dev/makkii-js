@@ -16,9 +16,9 @@ const { buildTransferTransaction } = require('@tronscan/client/src/utils/transac
 const TronSignTransaction = require("@tronscan/client/src/utils/crypto").signTransaction;
 class TronLocalSigner {
     constructor() {
-        this.signTransaction = (transaction, parmas) => __awaiter(this, void 0, void 0, function* () {
+        this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const { expiration, timestamp, to, owner, amount, latest_block } = transaction;
-            const { private_key } = parmas;
+            const { private_key } = params;
             const tx = buildTransferTransaction('_', owner, to, amount);
             const latestBlockHash = latest_block.hash;
             const latestBlockNum = latest_block.number;

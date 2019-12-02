@@ -6,11 +6,8 @@ import {longToByteArray} from '../utils';
 const {buildTransferTransaction} = require('@tronscan/client/src/utils/transactionBuilder');
 const TronSignTransaction = require("@tronscan/client/src/utils/crypto").signTransaction;
 /** *
- *
- * @param transaction
- * @returns {Promise<any> | Promise<*>}
+ * @hidden
  */
-// eslint-disable-next-line import/prefer-default-export
 export const signTransaction = (transaction) => new Promise((resolve, reject) => {
     try {
         const {private_key, expiration, timestamp, to_address, owner_address, amount, latest_block} = transaction;

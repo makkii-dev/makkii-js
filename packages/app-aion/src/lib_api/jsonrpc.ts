@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { HttpClient } from 'lib-common-util-js';
 
-
+/**
+ * @hidden
+ */
 export const processRequest = (methodName, params) => {
   const requestData = {
     method: methodName,

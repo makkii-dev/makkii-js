@@ -14,7 +14,9 @@ const padTo32 = (msg)=>{
 };
 
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * @hidden
+ */
 export const keyPair = function(priKey) {
     if (typeof priKey === 'string') {
         if (priKey.startsWith('0x')){

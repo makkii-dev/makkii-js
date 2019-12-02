@@ -20,7 +20,9 @@ const checkBlockTag = blockTag => {
 
     throw new Error('invalid blockTag');
 };
-
+/**
+ * @hidden
+ */
 export const processRequest = (methodName, params) => {
     const requestData = {
         method: methodName,

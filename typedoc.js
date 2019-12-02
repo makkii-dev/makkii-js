@@ -14,5 +14,6 @@ module.exports = {
     mode: 'file',
     excludeNotExported: true,
     excludePrivate: true,
+    excludeExternals: true,
     hideGenerator: true
 };

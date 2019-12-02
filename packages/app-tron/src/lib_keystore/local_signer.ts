@@ -8,9 +8,15 @@ const { buildTransferTransaction } = require('@tronscan/client/src/utils/transac
 const TronSignTransaction = require("@tronscan/client/src/utils/crypto").signTransaction;
 
 export default class TronLocalSigner implements IkeystoreSigner {
-    signTransaction = async (transaction: TronUnsignedTx, parmas: { private_key }) => {
+    /**
+     * Sign transaction of tron local signer
+     * @param transaction
+     * @param params {private_key: string}
+     * @returns {any} signed tron tx
+     */
+    signTransaction = async (transaction: TronUnsignedTx, params: { private_key }) => {
         const { expiration, timestamp, to, owner, amount, latest_block } = transaction;
-        const { private_key } = parmas;
+        const { private_key } = params;
         const tx = buildTransferTransaction('_', owner, to, amount);
         const latestBlockHash = latest_block.hash;
         const latestBlockNum = latest_block.number;

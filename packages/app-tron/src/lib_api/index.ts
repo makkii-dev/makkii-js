@@ -1,10 +1,10 @@
 import transactionClient from './transaction';
 import jsonrpcClient from './jsonrpc';
-import { validateBalanceSufficiency, formatAddress1Line, sameAddress } from './tools'
+import { sameAddress } from './tools'
 
 export default config => {
     const { getBalance } = jsonrpcClient(config)
-    const { 
+    const {
         sendTransaction,
         getTransactionStatus,
         getTransactionUrlInExplorer,
@@ -12,8 +12,6 @@ export default config => {
         buildTransaction } = transactionClient(config);
     return {
         getBalance,
-        validateBalanceSufficiency,
-        formatAddress1Line,
         buildTransaction,
         sameAddress,
         sendTransaction,

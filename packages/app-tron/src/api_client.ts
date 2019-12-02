@@ -3,24 +3,31 @@ import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client'
 import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
 import API from './lib_api';
 import network from './network';
-import { TronUnsignedTx, TronPendingTx } from './type';
+import { TronUnsignedTx, TronPendingTx, TronTxStatus, TronTransaction } from './type';
 
-export interface IConfig {
+type hash = string
+export interface ITronConfig {
     network: 'mainnet' | 'shasta'
+    /**
+     *  trongrid api
+     */
     trongrid_api: string,
+    /**
+     *  explorer_api use to get transactions by address
+     */
     explorer_api?: string,
+    /**
+     *  explorer url that show transaction detail
+     */
     explorer?: string,
 }
 export default class TronApiClient implements IsingleApiClient {
 
-    isTestNet: boolean;
+    config: ITronConfig;
 
+    private api: any;
 
-    config: IConfig;
-
-    api: any;
-
-    constructor(config: IConfig) {
+    constructor(config: ITronConfig) {
         let restSet: {
             explorer_api?: string,
             explorer?: string,
@@ -44,49 +51,96 @@ export default class TronApiClient implements IsingleApiClient {
         this.api = API(this.config);
     }
 
+    /**
+     * Get network
+     * @returns nework
+     */
     getNetwork = () => this.config.network;
 
-    updateConfiguration = (config: IConfig) => {
+    /**
+     * Update tron api config
+     */
+    updateConfiguration = (config: ITronConfig) => {
         this.config = { ...this.config, ...config };
         this.api = API(this.config);
     }
 
+    /**
+     * Get block by number 
+     * 
+     * not implemented
+     */
     getBlockByNumber = (blockNumber: string) => {
         throw new Error("[tron] getBlockByNumber not implemented.");
     }
 
+    /**
+     * Get block height
+     * 
+     * not implemented
+     */
     getBlockNumber = () => {
         throw new Error("[tron] getBlockNumber not implemented.");
     }
 
-    getTransactionStatus = (hash: string) => {
+    /**
+     * Get transaction status by tx hash
+     * 
+     * @param hash tx hash
+     */
+    getTransactionStatus = (hash: string): Promise<TronTxStatus> => {
         return this.api.getTransactionStatus(hash);
     }
 
-    getTransactionExplorerUrl = (hash: any) => {
+    /**
+    * Get an explorer url showing transaction details 
+    * 
+    * @return {string} url
+    */
+    getTransactionExplorerUrl = (hash: string) => {
         return this.api.getTransactionUrlInExplorer(hash);
     }
 
-    getBalance = (address: string) => {
+    /**
+     * Get an account's balance
+     * 
+     * @param address 
+     * @return balance
+     */
+    getBalance = (address: string): Promise<BigNumber> => {
         return this.api.getBalance(address);
     }
 
-    getTransactionsByAddress = (address: string, page: number, size: number, timestamp?: number) => {
+    getTransactionsByAddress = (address: string, page: number, size: number): Promise<Map<hash, TronTransaction>> => {
         return this.api.getTransactionsByAddress(address, page, size);
     }
 
-    validateBalanceSufficiency = (account: any, amount: number | BigNumber) => {
-        return this.api.validateBalanceSufficiency(account, amount);
-    }
-
+    /**
+     * Send transaction
+     * @param unsignedTx unsigned transaction build by buildTransaction
+     * @param signer localSigner or hardware
+     * @param signerParams localSigner: {private_key} hardware:{derivationIndex} 
+     */
     sendTransaction = (unsignedTx: TronUnsignedTx, signer: IkeystoreSigner, signerParams: any): Promise<TronPendingTx> => {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);
     }
-
+    
+    /**
+     * check if two address is same
+     * 
+     * @returns {boolean}
+     */
     sameAddress = (address1: string, address2: string) => {
         return this.api.sameAddress(address1, address2);
     }
 
+    /**
+    * Build transaction 
+    * 
+    * @param from
+    * @param to
+    * @param value
+    */
     buildTransaction = (from: string, to: string, value: BigNumber): Promise<TronUnsignedTx> => {
         return this.api.buildTransaction(from, to, value)
     }

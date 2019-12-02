@@ -7,6 +7,12 @@ import { networks } from "./network";
 
 
 export default class BtcLocalSigner implements IkeystoreSigner {
+    /**
+     * Sign transaction of btc local signer
+     * @param transaction 
+     * @param params {private_key: string, compressed: boolean}
+     * @returns {string} btc signed tx
+     */
     signTransaction = async (transaction: BtcUnsignedTx, params: { private_key: string, compressed: boolean, network: string }) => {
         const txb = process_unsignedTx(transaction, params);
         const { utxos, network } = transaction;

@@ -11,7 +11,9 @@ const KEY_MAP = [
     'private_key',
 ];
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * @hidden
+ */
 export const process_unsignedTx = (transaction) =>{
     const { network, value:amount, nonce, gasLimit, gasPrice, to, data } = transaction;
     // check key;

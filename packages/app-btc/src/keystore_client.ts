@@ -2,8 +2,12 @@ import * as bip39 from 'bip39';
 import { IsingleKeystoreClient, IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
 import { IHardware } from '@makkii/makkii-core/src/interfaces/hardware';
 import KYSTORE from './lib_keystore';
+import { BtcUnsignedTx, BtcrecoverOptions, BtcKeypair } from './type';
 
 export default class BtcKeystoreClient implements IsingleKeystoreClient {
+    /**
+     * only btc btcTest support ledger
+     */
     ledgerSupport: boolean = false;
 
     network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST';
@@ -18,25 +22,49 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
         }
     }
 
+    /**
+     * Get current network 
+     * @returns {string} network
+     */
     getCurrentNetwork = () => {
         return this.network;
     }
 
+    /**
+     * Check ledger support 
+     * @returns {boolean} if support ledger
+     */
     checkLedgerSupport = () => {
         return this.ledgerSupport;
     }
 
-    signTransaction = (tx: any, signer: IkeystoreSigner, signerParam: any) => {
+    /**
+     * Sign transaction by signer
+     * @param unsignedTx unsigned transaction build by buildTransaction
+     * @param signer localSigner or hardware
+     * @param signerParam localSigner: {private_key, compressed} hardware:{derivationIndex} 
+     * @returns {string} encoded transaction
+     */
+    signTransaction = (tx: BtcUnsignedTx, signer: IkeystoreSigner, signerParam: any) => {
         const network = this.getCurrentNetwork();
         return signer.signTransaction(tx, { ...signerParam, network });
     }
 
+    /**
+     * Generate mnemonic by bip39
+     * @returns {string} 12 length of mnemonic
+     */
     generateMnemonic = () => {
         const mnemonic = bip39.generateMnemonic();
         return mnemonic;
     }
 
-    recoverKeyPairByPrivateKey = (priKey: string, options?: any) => {
+    /**
+     * Recover key pair by private key
+     * @param priKey
+     * @param options
+     */
+    recoverKeyPairByPrivateKey = (priKey: string, options?: BtcrecoverOptions): Promise<BtcKeypair> => {
         const network = this.getCurrentNetwork();
         try {
             const keyPair = KYSTORE.keyPair(priKey, { network, ...options });
@@ -50,7 +78,14 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
         }
     }
 
-    recoverKeyPairByWIF = (WIF: string, options?: any) => {
+    /**
+     * Recover key pair by wif 
+     * 
+     * @param wif wif string
+     * @param options {network: string(optional)}
+     * 
+     */
+    recoverKeyPairByWIF = (WIF: string, options?: BtcrecoverOptions): Promise<BtcKeypair> => {
         const network = this.getCurrentNetwork();
         try {
             const keyPair = KYSTORE.keyPairFromWIF(WIF, { network, ...options });
@@ -64,20 +99,43 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
         }
     }
 
+    /**
+     * Validate private key 
+     * 
+     * not implemented
+     */
     validatePrivateKey = (privateKey: string | Buffer) => {
         throw new Error(`${this.network} validatePrivateKey not implemented.`);
     }
 
+    /**
+     * Validate address 
+     * @returns {boolean}
+     */
     validateAddress = (address: string) => {
         const network = this.getCurrentNetwork();
         return KYSTORE.validateAddress(address, network);
     }
 
-    getAccountFromMnemonic = (address_index: number, mnemonic: string) => {
+    /**
+     * Get account from mnemonic 
+     * 
+     * @param address_index bip39 path index
+     * @param mnemonic
+     * 
+     */
+    getAccountFromMnemonic = (address_index: number, mnemonic: string): Promise<BtcKeypair> => {
         const network = this.getCurrentNetwork();
         return KYSTORE.getAccountFromMnemonic(mnemonic, address_index, { network });
     }
 
+    /**
+     * Get account from hardware 
+     * 
+     * @param index derivation index
+     * @param hardware
+     * 
+     */
     getAccountFromHardware = (index: number, hardware: IHardware) => {
         if (!this.checkLedgerSupport()) {
             throw new Error(`${this.network} getAccountFromHardware not implemented.`);

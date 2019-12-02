@@ -9,6 +9,11 @@ export default class BtcLedger implements IHardware {
 
     private hardware: any = {};
 
+    /**
+     * Get account of btc ledger by index
+     * @param index derivationIndex
+     * @param params {network: string}
+     */
     getAccount = async (index: number, params: { network: string }) => {
         const { network } = params;
         const coinType = network.startsWith('BTC') ? 0 : 2;
@@ -20,6 +25,10 @@ export default class BtcLedger implements IHardware {
         return { address, index, publicKey };
     }
 
+    /**
+     * Get hardware status of btc ledger
+     * @returns {Promise<boolean>}
+     */
     getHardwareStatus = async () => {
         try {
             await this.getAccount(0, { network: 'BTC' });
@@ -29,11 +38,21 @@ export default class BtcLedger implements IHardware {
         }
     };
 
+    /**
+     * Set ledger transport of btc ledger
+     * @param transport create by ledgerjs
+     */
     setLedgerTransport = (transport: any) => {
         this.hardware = new Btc(transport);
         return this;
     }
 
+    /**
+     * Sign transaction of btc ledger
+     * @param transaction
+     * @param params {derivationIndex: number}
+     * @returns btc signed tx
+     */
     signTransaction = async (transaction: BtcUnsignedTx, params: { derivationIndex: number }): Promise<string> => {
         const { utxos, network } = transaction;
         const txb = process_unsignedTx(transaction, params);
