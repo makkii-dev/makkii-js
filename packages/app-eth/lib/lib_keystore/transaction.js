@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_common_util_js_1 = require("lib-common-util-js");
+const bignumber_js_1 = require("bignumber.js");
 const EthereumTx = require('ethereumjs-tx');
 const KEY_MAP = [
-    'amount',
+    'value',
     'nonce',
     'gasLimit',
     'gasPrice',
-    'to',
-    'private_key',
+    'to'
 ];
 exports.process_unsignedTx = (transaction) => {
     const { network, value: amount, nonce, gasLimit, gasPrice, to, data } = transaction;
@@ -22,7 +22,7 @@ exports.process_unsignedTx = (transaction) => {
         gasPrice: lib_common_util_js_1.hexutil.toHex(gasPrice),
         gasLimit: lib_common_util_js_1.hexutil.toHex(gasLimit),
         to: lib_common_util_js_1.hexutil.toHex(to),
-        value: lib_common_util_js_1.hexutil.toHex(amount),
+        value: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(amount).shiftedBy(18)),
         chainId: getChainId(network),
         v: getChainId(network),
         r: "0x00",

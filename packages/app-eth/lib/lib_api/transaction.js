@@ -52,12 +52,12 @@ exports.default = config => {
                 to: isTransfer ? contractAddr : to,
                 from,
                 nonce,
-                value: isTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value).shiftedBy(18),
+                value: isTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value),
                 gasPrice,
                 gasLimit,
                 data,
                 tknTo: isTransfer ? to : '',
-                tknValue: isTransfer ? new bignumber_js_1.default(value).shiftedBy(tokenDecimal) : new bignumber_js_1.default(0),
+                tknValue: isTransfer ? new bignumber_js_1.default(value) : new bignumber_js_1.default(0),
                 network: config.network
             };
         });

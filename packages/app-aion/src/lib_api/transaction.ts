@@ -49,14 +49,14 @@ export default (config) => {
       to: isTransfer ? contractAddr : to,
       from,
       nonce,
-      value: isTransfer? new BigNumber(0): new BigNumber(value).shiftedBy(18),
+      value: isTransfer? new BigNumber(0): new BigNumber(value),
       gasPrice,
       gasLimit,
       timestamp: new Date().getTime() * 1000,
       data,
       type: 1,
       tknTo: isTransfer? to: '',
-      tknValue: isTransfer?  new BigNumber(value).shiftedBy(tokenDecimal): new BigNumber(0)
+      tknValue: isTransfer?  new BigNumber(value): new BigNumber(0)
     }
   }
 

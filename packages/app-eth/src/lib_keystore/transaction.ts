@@ -1,14 +1,14 @@
 import { hexutil } from "lib-common-util-js";
+import BigNumber from "bignumber.js";
 
 const EthereumTx = require('ethereumjs-tx');
 
 const KEY_MAP = [
-    'amount',
+    'value',
     'nonce',
     'gasLimit',
     'gasPrice',
-    'to',
-    'private_key',
+    'to'
 ];
 
 /**
@@ -29,7 +29,7 @@ export const process_unsignedTx = (transaction) =>{
         gasPrice: hexutil.toHex(gasPrice),
         gasLimit: hexutil.toHex(gasLimit),
         to: hexutil.toHex(to),
-        value: hexutil.toHex(amount),
+        value: hexutil.toHex(new BigNumber(amount).shiftedBy(18)),
         chainId: getChainId(network),
         v: getChainId(network),
         r: "0x00",

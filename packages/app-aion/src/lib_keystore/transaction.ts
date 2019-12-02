@@ -17,7 +17,7 @@ export const process_unsignedTx = (transaction) => {
     nonce: tx.nonce,
     to: tx.to || '0x',
     data: tx.data,
-    amount: numberToHex(tx.value) || '0x',
+    amount: numberToHex(new BigNumber(tx.value).shiftedBy(18)) || '0x',
     timestamp: tx.timestamp || Math.floor(new Date().getTime() * 1000),
     type: tx.type || 1,
     gasLimit: tx.gasLimit,
