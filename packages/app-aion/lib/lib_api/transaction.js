@@ -64,61 +64,51 @@ exports.default = (config) => {
         });
     }
     function getTransactionsByAddress(address, page = 0, size = 25) {
-        const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
-        console.log(`[aion req] get aion transactions by address: ${url}`);
-        return new Promise((resolve, reject) => {
-            lib_common_util_js_1.HttpClient.get(url, false)
-                .then((res) => {
-                console.log('[keystore resp] res:', res.data);
-                const { content } = res.data;
-                const txs = {};
-                content.forEach((t) => {
-                    const tx = {};
-                    const timestamp_ = `${t.transactionTimestamp}`;
-                    tx.hash = `0x${t.transactionHash}`;
-                    tx.timestamp = timestamp_.length === 16
-                        ? parseInt(timestamp_) / 1000
-                        : timestamp_.length === 13
-                            ? parseInt(timestamp_) * 1
-                            : timestamp_.length === 10
-                                ? parseInt(timestamp_) * 1000
-                                : null;
-                    tx.from = `0x${t.fromAddr}`;
-                    tx.to = `0x${t.toAddr}`;
-                    tx.value = new bignumber_js_1.default(t.value, 10).toNumber();
-                    tx.status = t.txError === '' ? 'CONFIRMED' : 'FAILED';
-                    tx.blockNumber = t.blockNumber;
-                    tx.fee = t.nrgConsumed * t.nrgPrice * Math.pow(10, -18);
-                    txs[tx.hash] = tx;
-                });
-                resolve(txs);
-            })
-                .catch((err) => {
-                reject(err);
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
+            console.log(`[aion req] get aion transactions by address: ${url}`);
+            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            console.log('[keystore resp] res:', res.data);
+            const { content } = res.data;
+            const txs = {};
+            content.forEach((t) => {
+                const tx = {};
+                const timestamp_ = `${t.transactionTimestamp}`;
+                tx.hash = `0x${t.transactionHash}`;
+                tx.timestamp = timestamp_.length === 16
+                    ? parseInt(timestamp_) / 1000
+                    : timestamp_.length === 13
+                        ? parseInt(timestamp_) * 1
+                        : timestamp_.length === 10
+                            ? parseInt(timestamp_) * 1000
+                            : null;
+                tx.from = `0x${t.fromAddr}`;
+                tx.to = `0x${t.toAddr}`;
+                tx.value = new bignumber_js_1.default(t.value, 10).toNumber();
+                tx.status = t.txError === '' ? 'CONFIRMED' : 'FAILED';
+                tx.blockNumber = t.blockNumber;
+                tx.fee = t.nrgConsumed * t.nrgPrice * Math.pow(10, -18);
+                txs[tx.hash] = tx;
             });
+            return txs;
         });
     }
     function getTransactionUrlInExplorer(txHash) {
         return `${config.explorer}/${txHash}`;
     }
     function getTransactionStatus(txHash) {
-        return new Promise((resolve, reject) => {
-            getTransactionReceipt(txHash)
-                .then((receipt) => {
-                if (receipt !== null) {
-                    resolve({
-                        status: parseInt(receipt.status, 16) === 1,
-                        blockNumber: parseInt(receipt.blockNumber, 16),
-                        gasUsed: parseInt(receipt.gasUsed, 16),
-                    });
-                }
-                else {
-                    resolve(null);
-                }
-            })
-                .catch((err) => {
-                reject(err);
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const receipt = yield getTransactionReceipt(txHash);
+                return {
+                    status: parseInt(receipt.status, 16) === 1,
+                    blockNumber: parseInt(receipt.blockNumber, 16),
+                    gasUsed: parseInt(receipt.gasUsed, 16),
+                };
+            }
+            catch (e) {
+                return null;
+            }
         });
     }
     return {

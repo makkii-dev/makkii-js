@@ -14,18 +14,18 @@ export default config => {
         const signedTx = await signer.signTransaction(unsignedTx, signerParams);
         const hash = await sendSignedTransaction(signedTx);
         return {
-          hash,
-          status: 'PENDING',
-          to: unsignedTx.to,
-          from: unsignedTx.from,
-          value: unsignedTx.value,
-          tknTo: unsignedTx.tknTo,
-          tknValue: unsignedTx.tknValue,
-          timestamp: unsignedTx.timestamp,
-          gasLimit: unsignedTx.gasLimit,
-          gasPrice: unsignedTx.gasPrice
+            hash,
+            status: 'PENDING',
+            to: unsignedTx.to,
+            from: unsignedTx.from,
+            value: unsignedTx.value,
+            tknTo: unsignedTx.tknTo,
+            tknValue: unsignedTx.tknValue,
+            timestamp: unsignedTx.timestamp,
+            gasLimit: unsignedTx.gasLimit,
+            gasPrice: unsignedTx.gasPrice
         }
-      }
+    }
 
     async function buildTransaction(from, to, value, options) {
         const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
@@ -48,79 +48,60 @@ export default config => {
             to: isTransfer ? contractAddr : to,
             from,
             nonce,
-            value: isTransfer? new BigNumber(0): new BigNumber(value),
+            value: isTransfer ? new BigNumber(0) : new BigNumber(value),
             gasPrice,
             gasLimit,
             data,
-            tknTo: isTransfer? to: '',
-            tknValue: isTransfer?  new BigNumber(value): new BigNumber(0),
+            tknTo: isTransfer ? to : '',
+            tknValue: isTransfer ? new BigNumber(value) : new BigNumber(0),
             network: config.network
         }
     }
 
 
-    function getTransactionsByAddress(address, page, size, timestamp) {
+    async function getTransactionsByAddress(address, page, size, timestamp) {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
-            console.log(`[eth http req] get transactions by address: ${url}`);
-            return new Promise((resolve, reject) => {
-                HttpClient.get(url, false).then(
-                    res => {
-                        console.log('[http resp]', res.data);
-                        const { result } = res.data;
-                        const txs = {};
-                        result.forEach(t => {
-                            const tx:any = {};
-                            tx.hash = t.hash;
-                            tx.timestamp = parseInt(t.timeStamp) * 1000;
-                            tx.from = t.from;
-                            tx.to = t.to;
-                            tx.value = new BigNumber(t.value, 10).shiftedBy(-18).toNumber();
-                            tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
-                            tx.blockNumber = parseInt(t.blockNumber);
-                            tx.fee = t.gasPrice * t.gasUsed * 10 ** -18;
-                            txs[tx.hash] = tx;
-                        });
-                        resolve(txs);
-                    },
-                    err => {
-                        console.log('[http resp] err: ', err);
-                        reject(err);
-                    },
-                );
+            console.log(`[eth getTransactionsByAddress req] : ${url}`);
+            const res = await HttpClient.get(url, false)
+            console.log('[eth getTransactionsByAddress req]', res.data);
+            const { result } = res.data;
+            const txs = {};
+            result.forEach(t => {
+                const tx: any = {};
+                tx.hash = t.hash;
+                tx.timestamp = parseInt(t.timeStamp) * 1000;
+                tx.from = t.from;
+                tx.to = t.to;
+                tx.value = new BigNumber(t.value, 10).shiftedBy(-18).toNumber();
+                tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
+                tx.blockNumber = parseInt(t.blockNumber);
+                tx.fee = t.gasPrice * t.gasUsed * 10 ** -18;
+                txs[tx.hash] = tx;
             });
+            return txs;
         }
         const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
-        console.log(`[eth http req] get transactions by address: ${url}`);
-        return new Promise((resolve, reject) => {
-            HttpClient.get(url, false).then(
-                res => {
-                    console.log('[http resp]', res.data);
-                    if (res.data.error) {
-                        reject(res.data.error);
-                    } else {
-                        const txs = {};
-                        res.data.forEach(t => {
-                            const tx:any = {};
-                            tx.hash = t.hash;
-                            tx.timestamp = t.timestamp * 1000;
-                            tx.from = t.from;
-                            tx.to = t.to;
-                            tx.value = new BigNumber(t.value);
-                            tx.status = t.success ? "CONFIRMED" : 'FAILED';
-                            txs[tx.hash] = tx;
-                        });
-                        resolve(txs);
-                    }
-                },
-                err => {
-                    console.log('[http resp] err: ', err);
-                    reject(err);
-                },
-            );
-        });
-
+        console.log(`[eth getTransactionsByAddress req] : ${url}`);
+        const res = await HttpClient.get(url, false)
+        console.log('[eth getTransactionsByAddress req]', res.data);
+        if (res.data.error) {
+            throw res.data.error;
+        } else {
+            const txs = {};
+            res.data.forEach(t => {
+                const tx: any = {};
+                tx.hash = t.hash;
+                tx.timestamp = t.timestamp * 1000;
+                tx.from = t.from;
+                tx.to = t.to;
+                tx.value = new BigNumber(t.value);
+                tx.status = t.success ? "CONFIRMED" : 'FAILED';
+                txs[tx.hash] = tx;
+            });
+            return txs;
+        }
     }
 
     function getTransactionUrlInExplorer(txHash) {
@@ -132,24 +113,17 @@ export default config => {
 
     }
 
-    function getTransactionStatus(txHash) {
-        return new Promise((resolve, reject) => {
-            getTransactionReceipt(txHash)
-                .then((receipt:any) => {
-                    if (receipt !== null) {
-                        resolve({
-                            status: parseInt(receipt.status, 16) === 1,
-                            blockNumber: parseInt(receipt.blockNumber, 16),
-                            gasUsed: parseInt(receipt.gasUsed, 16),
-                        });
-                    } else {
-                        resolve(null);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
+    async function getTransactionStatus(txHash) {
+        try {
+            const receipt = await getTransactionReceipt(txHash)
+            return {
+                status: parseInt(receipt.status, 16) === 1,
+                blockNumber: parseInt(receipt.blockNumber, 16),
+                gasUsed: parseInt(receipt.gasUsed, 16),
+            };
+        } catch (e) {
+            return null
+        }
     }
 
     return {

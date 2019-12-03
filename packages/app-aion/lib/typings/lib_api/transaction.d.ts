@@ -12,9 +12,13 @@ declare const _default: (config: any) => {
         gasLimit: any;
         gasPrice: any;
     }>;
-    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<unknown>;
+    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<{}>;
     getTransactionUrlInExplorer: (txHash: any) => string;
-    getTransactionStatus: (txHash: any) => Promise<unknown>;
+    getTransactionStatus: (txHash: any) => Promise<{
+        status: boolean;
+        blockNumber: number;
+        gasUsed: number;
+    }>;
     buildTransaction: (from: any, to: any, value: any, options: any) => Promise<{
         to: any;
         from: any;

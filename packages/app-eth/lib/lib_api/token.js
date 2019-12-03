@@ -1,6 +1,14 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = require("axios");
 const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const constants_1 = require("./constants");
@@ -28,7 +36,7 @@ exports.default = config => {
             reject(new Error(`get account Balance failed:${e}`));
         });
     });
-    const getTokenDetail = (contractAddress) => new Promise((resolve, reject) => {
+    const getTokenDetail = (contractAddress) => __awaiter(void 0, void 0, void 0, function* () {
         const contract = new Contract(constants_1.ERC20ABI);
         const requestGetSymbol = jsonrpc_1.processRequest('eth_call', [
             { to: contractAddress, data: contract.methods.symbol().encodeABI() },
@@ -47,125 +55,95 @@ exports.default = config => {
         const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
         const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
         console.log('[ETH get token detail req]:', config.jsonrpc);
-        axios_1.default
-            .all([promiseSymbol, promiseName, promiseDecimals])
-            .then(axios_1.default.spread((symbolRet, nameRet, decimalsRet) => {
-            if (symbolRet.data.result && nameRet.data.result && decimalsRet.data.result) {
-                console.log('[get token symobl resp]=>', symbolRet.data);
-                console.log('[get token name resp]=>', nameRet.data);
-                console.log('[get token decimals resp]=>', decimalsRet.data);
-                let symbol;
-                let name;
-                try {
-                    symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
-                }
-                catch (e) {
-                    symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
-                    symbol = symbol.slice(0, symbol.indexOf('\u0000'));
-                }
-                try {
-                    name = AbiCoder.decodeParameter('string', nameRet.data.result);
-                }
-                catch (e) {
-                    name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
-                    name = name.slice(0, name.indexOf('\u0000'));
-                }
-                const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
-                resolve({ contractAddr: contractAddress, symbol, name, tokenDecimal: decimals });
+        const [symbolRet, nameRet, decimalsRet] = yield Promise.all([promiseSymbol, promiseName, promiseDecimals]);
+        if (symbolRet.data.result && nameRet.data.result && decimalsRet.data.result) {
+            console.log('[get token symobl resp]=>', symbolRet.data);
+            console.log('[get token name resp]=>', nameRet.data);
+            console.log('[get token decimals resp]=>', decimalsRet.data);
+            let symbol;
+            let name;
+            try {
+                symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
             }
-            else {
-                reject(new Error('get token detail failed'));
+            catch (e) {
+                symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
+                symbol = symbol.slice(0, symbol.indexOf('\u0000'));
             }
-        }))
-            .catch(e => {
-            reject(new Error(`get token detail failed:${e}`));
-        });
+            try {
+                name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            }
+            catch (e) {
+                name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
+                name = name.slice(0, name.indexOf('\u0000'));
+            }
+            const decimals = AbiCoder.decodeParameter('uint8', decimalsRet.data.result);
+            return { contractAddr: contractAddress, symbol, name, tokenDecimal: decimals };
+        }
+        else {
+            throw new Error('get token detail failed');
+        }
     });
-    const getAccountTokenTransferHistory = (address, symbolAddress, page = 0, size = 25, timestamp) => new Promise((resolve, reject) => {
+    const getAccountTokenTransferHistory = (address, symbolAddress, page = 0, size = 25, timestamp) => __awaiter(void 0, void 0, void 0, function* () {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
             console.log(`[eth http req] get token history by address: ${url}`);
-            lib_common_util_js_1.HttpClient.get(url)
-                .then(res => {
-                const { data } = res;
-                if (data.status === '1') {
-                    const transfers = {};
-                    const { result: txs = [] } = data;
-                    txs.forEach(t => {
-                        const tx = {};
-                        tx.hash = t.hash;
-                        tx.timestamp = parseInt(t.timeStamp) * 1000;
-                        tx.from = t.from;
-                        tx.to = t.to;
-                        tx.value = new bignumber_js_1.default(t.value).shiftedBy(-t.tokenDecimal).toNumber();
-                        tx.status = 'CONFIRMED';
-                        tx.blockNumber = t.blockNumber;
-                        transfers[tx.hash] = tx;
-                    });
-                    resolve(transfers);
-                }
-                else {
-                    resolve({});
-                }
-            })
-                .catch(err => {
-                console.log('[http resp] err: ', err);
-                reject(err);
-            });
+            const res = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data } = res;
+            if (data.status === '1') {
+                const transfers = {};
+                const { result: txs = [] } = data;
+                txs.forEach(t => {
+                    const tx = {};
+                    tx.hash = t.hash;
+                    tx.timestamp = parseInt(t.timeStamp) * 1000;
+                    tx.from = t.from;
+                    tx.to = t.to;
+                    tx.value = new bignumber_js_1.default(t.value).shiftedBy(-t.tokenDecimal).toNumber();
+                    tx.status = 'CONFIRMED';
+                    tx.blockNumber = t.blockNumber;
+                    transfers[tx.hash] = tx;
+                });
+                return transfers;
+            }
+            else {
+                return {};
+            }
         }
         else {
             const url = `${explorer_api.url}/getAddressHistory/${address}?apiKey=${explorer_api.key}&token=${symbolAddress}&type=transfer&limit=${size}&timestamp=${timestamp / 1000 - 1}`;
             console.log(`[eth http req] get token history by address: ${url}`);
-            lib_common_util_js_1.HttpClient.get(url)
-                .then(res => {
-                const transfers = {};
-                const { operations: txs = [] } = res.data;
-                txs.forEach(t => {
-                    const tx = {};
-                    tx.hash = t.transactionHash;
-                    tx.timestamp = t.timeStamp * 1000;
-                    tx.from = t.from;
-                    tx.to = t.to;
-                    tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
-                    tx.status = 'CONFIRMED';
-                    transfers[tx.hash] = tx;
-                });
-                resolve(transfers);
-            })
-                .catch(err => {
-                console.log('[http resp] err: ', err);
-                reject(err);
+            const res = yield lib_common_util_js_1.HttpClient.get(url);
+            const transfers = {};
+            const { operations: txs = [] } = res.data;
+            txs.forEach(t => {
+                const tx = {};
+                tx.hash = t.transactionHash;
+                tx.timestamp = t.timeStamp * 1000;
+                tx.from = t.from;
+                tx.to = t.to;
+                tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-parseInt(t.tokenInfo.decimals)).toNumber();
+                tx.status = 'CONFIRMED';
+                transfers[tx.hash] = tx;
             });
+            return transfers;
         }
     });
     const getAccountTokens = () => Promise.resolve({});
     function getTopTokens(topN = 20) {
-        return new Promise((resolve, reject) => {
+        return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remoteApi}/token/eth/popular`;
             console.log(`get top eth tokens: ${url}`);
-            lib_common_util_js_1.HttpClient.get(url, false)
-                .then(res => {
-                resolve(res.data);
-            })
-                .catch(err => {
-                console.log('get keystore top tokens error:', err);
-                reject(err);
-            });
+            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            return res.data;
         });
     }
     function searchTokens(keyword) {
-        return new Promise((resolve, reject) => {
+        return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remoteApi}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
             console.log(`search eth token: ${url}`);
-            lib_common_util_js_1.HttpClient.get(url, false)
-                .then(res => {
-                resolve(res.data);
-            })
-                .catch(err => {
-                console.log('search keystore token error:', err);
-                reject(err);
-            });
+            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            return res.data;
         });
     }
     function getTokenIconUrl(tokenSymbol, contractAddress) {

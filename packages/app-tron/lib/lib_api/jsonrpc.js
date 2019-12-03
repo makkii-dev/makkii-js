@@ -34,6 +34,7 @@ exports.default = config => {
     });
     const getLatestBlock = () => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
+        console.log('[tron getLatestBlock req] ', url);
         const res = yield lib_common_util_js_1.HttpClient.post(url);
         console.log('[tron getLatestBlock resp] ', res.data);
         return res.data;
@@ -56,11 +57,11 @@ exports.default = config => {
     });
     const getTransactionInfoById = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/walletsolidity/gettransactioninfobyid`;
+        console.log(`[tron http req] ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.post(url, {
             value: hash,
         }, true, { 'Content-Type': 'application/json' });
-        console.log(`[tron http req] ${url}`);
-        console.log('[keystore http resp]', res.data);
+        console.log('[tron http resp]', res.data);
         return res.data;
     });
     return {

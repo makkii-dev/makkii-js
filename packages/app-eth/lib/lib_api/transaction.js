@@ -63,60 +63,50 @@ exports.default = config => {
         });
     }
     function getTransactionsByAddress(address, page, size, timestamp) {
-        const { explorer_api } = config;
-        if (explorer_api.provider === "etherscan") {
-            const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
-            console.log(`[eth http req] get transactions by address: ${url}`);
-            return new Promise((resolve, reject) => {
-                lib_common_util_js_1.HttpClient.get(url, false).then(res => {
-                    console.log('[http resp]', res.data);
-                    const { result } = res.data;
-                    const txs = {};
-                    result.forEach(t => {
-                        const tx = {};
-                        tx.hash = t.hash;
-                        tx.timestamp = parseInt(t.timeStamp) * 1000;
-                        tx.from = t.from;
-                        tx.to = t.to;
-                        tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-18).toNumber();
-                        tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
-                        tx.blockNumber = parseInt(t.blockNumber);
-                        tx.fee = t.gasPrice * t.gasUsed * Math.pow(10, -18);
-                        txs[tx.hash] = tx;
-                    });
-                    resolve(txs);
-                }, err => {
-                    console.log('[http resp] err: ', err);
-                    reject(err);
+        return __awaiter(this, void 0, void 0, function* () {
+            const { explorer_api } = config;
+            if (explorer_api.provider === "etherscan") {
+                const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
+                console.log(`[eth getTransactionsByAddress req] : ${url}`);
+                const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+                console.log('[eth getTransactionsByAddress req]', res.data);
+                const { result } = res.data;
+                const txs = {};
+                result.forEach(t => {
+                    const tx = {};
+                    tx.hash = t.hash;
+                    tx.timestamp = parseInt(t.timeStamp) * 1000;
+                    tx.from = t.from;
+                    tx.to = t.to;
+                    tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-18).toNumber();
+                    tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
+                    tx.blockNumber = parseInt(t.blockNumber);
+                    tx.fee = t.gasPrice * t.gasUsed * Math.pow(10, -18);
+                    txs[tx.hash] = tx;
                 });
-            });
-        }
-        const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
-        console.log(`[eth http req] get transactions by address: ${url}`);
-        return new Promise((resolve, reject) => {
-            lib_common_util_js_1.HttpClient.get(url, false).then(res => {
-                console.log('[http resp]', res.data);
-                if (res.data.error) {
-                    reject(res.data.error);
-                }
-                else {
-                    const txs = {};
-                    res.data.forEach(t => {
-                        const tx = {};
-                        tx.hash = t.hash;
-                        tx.timestamp = t.timestamp * 1000;
-                        tx.from = t.from;
-                        tx.to = t.to;
-                        tx.value = new bignumber_js_1.default(t.value);
-                        tx.status = t.success ? "CONFIRMED" : 'FAILED';
-                        txs[tx.hash] = tx;
-                    });
-                    resolve(txs);
-                }
-            }, err => {
-                console.log('[http resp] err: ', err);
-                reject(err);
-            });
+                return txs;
+            }
+            const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
+            console.log(`[eth getTransactionsByAddress req] : ${url}`);
+            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            console.log('[eth getTransactionsByAddress req]', res.data);
+            if (res.data.error) {
+                throw res.data.error;
+            }
+            else {
+                const txs = {};
+                res.data.forEach(t => {
+                    const tx = {};
+                    tx.hash = t.hash;
+                    tx.timestamp = t.timestamp * 1000;
+                    tx.from = t.from;
+                    tx.to = t.to;
+                    tx.value = new bignumber_js_1.default(t.value);
+                    tx.status = t.success ? "CONFIRMED" : 'FAILED';
+                    txs[tx.hash] = tx;
+                });
+                return txs;
+            }
         });
     }
     function getTransactionUrlInExplorer(txHash) {
@@ -127,23 +117,18 @@ exports.default = config => {
         return `${explorer.url}/${txHash}`;
     }
     function getTransactionStatus(txHash) {
-        return new Promise((resolve, reject) => {
-            getTransactionReceipt(txHash)
-                .then((receipt) => {
-                if (receipt !== null) {
-                    resolve({
-                        status: parseInt(receipt.status, 16) === 1,
-                        blockNumber: parseInt(receipt.blockNumber, 16),
-                        gasUsed: parseInt(receipt.gasUsed, 16),
-                    });
-                }
-                else {
-                    resolve(null);
-                }
-            })
-                .catch(err => {
-                reject(err);
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const receipt = yield getTransactionReceipt(txHash);
+                return {
+                    status: parseInt(receipt.status, 16) === 1,
+                    blockNumber: parseInt(receipt.blockNumber, 16),
+                    gasUsed: parseInt(receipt.gasUsed, 16),
+                };
+            }
+            catch (e) {
+                return null;
+            }
         });
     }
     return {
