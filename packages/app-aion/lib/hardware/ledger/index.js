@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lib_hw_ledger_js_1 = require("lib-hw-ledger-js");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const transaction_1 = require("../../lib_keystore/transaction");
-const rlp = require('aion-rlp');
+const rlp = require("aion-rlp");
 class AionLedger {
     constructor() {
         this.hardware = {};
@@ -34,11 +34,13 @@ class AionLedger {
             const rlpEncoded = transaction_1.process_unsignedTx(tx);
             const account = yield this.hardware.getAccount(index);
             const signature = yield this.hardware.sign(0 + index, rlpEncoded);
-            const fullSignature = Buffer.concat([Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(account.pubKey), 'hex'),
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), 'hex')]);
+            const fullSignature = Buffer.concat([
+                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(account.pubKey), "hex"),
+                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), "hex")
+            ]);
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
             const rawTransaction = rlp.encode(rawTx);
-            return `0x${rawTransaction.toString('hex')}`;
+            return `0x${rawTransaction.toString("hex")}`;
         });
         this.setLedgerTransport = (transport) => {
             this.hardware = new lib_hw_ledger_js_1.AionApp(transport);

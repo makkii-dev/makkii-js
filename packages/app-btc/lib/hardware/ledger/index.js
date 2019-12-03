@@ -18,17 +18,20 @@ class BtcLedger {
         this.hardware = {};
         this.getAccount = (index, params) => __awaiter(this, void 0, void 0, function* () {
             const { network } = params;
-            const coinType = network.startsWith('BTC') ? 0 : 2;
+            const coinType = network.startsWith("BTC") ? 0 : 2;
             const network_ = network_1.networks[network];
             const path = `m/49'/${coinType}'/0'/0/${index}`;
             let { publicKey } = yield this.hardware.getWalletPublicKey(path);
             publicKey = getCompressPublicKey(publicKey);
-            const { address } = bitcoinjs_lib_1.payments.p2pkh({ pubkey: Buffer.from(publicKey, 'hex'), network: network_ });
+            const { address } = bitcoinjs_lib_1.payments.p2pkh({
+                pubkey: Buffer.from(publicKey, "hex"),
+                network: network_
+            });
             return { address, index, publicKey };
         });
         this.getHardwareStatus = () => __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.getAccount(0, { network: 'BTC' });
+                yield this.getAccount(0, { network: "BTC" });
                 return true;
             }
             catch (e) {
@@ -44,19 +47,18 @@ class BtcLedger {
             const txb = transaction_1.process_unsignedTx(transaction, params);
             const { derivationIndex } = params;
             const tx = txb.buildIncomplete();
-            const coinType = network.startsWith('BTC') ? 0 : 2;
+            const coinType = network.startsWith("BTC") ? 0 : 2;
             const inputs = [];
             const paths = [];
             for (let ip = 0; ip < utxos.length; ip += 1) {
                 const preTx = this.hardware.splitTransaction(utxos[ip].raw);
-                inputs.push([
-                    preTx,
-                    utxos[ip].index,
-                ]);
+                inputs.push([preTx, utxos[ip].index]);
                 paths.push(`m/49'/${coinType}'/0'/0/${derivationIndex}`);
             }
             const tx2 = this.hardware.splitTransaction(tx.toHex());
-            const outputScriptHex = this.hardware.serializeTransactionOutputs(tx2).toString('hex');
+            const outputScriptHex = this.hardware
+                .serializeTransactionOutputs(tx2)
+                .toString("hex");
             const encoded = yield this.hardware.createPaymentTransactionNew(inputs, paths, undefined, outputScriptHex, 0, 1, false);
             return encoded;
         });
@@ -66,10 +68,10 @@ exports.default = BtcLedger;
 function getCompressPublicKey(publicKey) {
     let compressedKeyIndex;
     if (parseInt(publicKey.substring(128, 130), 16) % 2 !== 0) {
-        compressedKeyIndex = '03';
+        compressedKeyIndex = "03";
     }
     else {
-        compressedKeyIndex = '02';
+        compressedKeyIndex = "02";
     }
     return compressedKeyIndex + publicKey.substring(2, 66);
 }

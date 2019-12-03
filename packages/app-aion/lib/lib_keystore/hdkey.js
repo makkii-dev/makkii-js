@@ -12,21 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
 const utils_1 = require("../utils");
 const keyPair_1 = require("./keyPair");
-const ED25519_CURVE = 'ed25519 seed';
+const ED25519_CURVE = "ed25519 seed";
 const HARDENED_KEY_MULTIPLIER = 0x80000000;
-const getHardenedNumber = (nr) => Buffer.from(((HARDENED_KEY_MULTIPLIER | nr) >>> 0).toString(16), 'hex');
-const getMasterKeyFromSeed = (seed) => utils_1.hmacSha512(ED25519_CURVE, seed);
-const replaceDerive = (val) => val.replace("'", '');
+const getHardenedNumber = nr => Buffer.from(((HARDENED_KEY_MULTIPLIER | nr) >>> 0).toString(16), "hex");
+const getMasterKeyFromSeed = seed => utils_1.hmacSha512(ED25519_CURVE, seed);
+const replaceDerive = val => val.replace("'", "");
 const pathRegex = new RegExp("^m(/\\d+'?){3}/[0,1]/\\d+'?$");
-const isValidPath = (path) => {
+const isValidPath = path => {
     if (!pathRegex.test(path)) {
         return false;
     }
     return !path
-        .split('/')
+        .split("/")
         .slice(1)
         .map(replaceDerive)
-        .some((n) => isNaN(n));
+        .some(n => isNaN(n));
 };
 const CKDPriv = (key, index) => {
     const parentPrivateKey = key.slice(0, 32);
@@ -39,14 +39,14 @@ const CKDPriv = (key, index) => {
 };
 const derivePath = (path, seed) => {
     if (!isValidPath(path)) {
-        throw new Error('Invalid derivation path');
+        throw new Error("Invalid derivation path");
     }
     const key = getMasterKeyFromSeed(seed);
     const segments = path
-        .split('/')
+        .split("/")
         .slice(1)
         .map(replaceDerive)
-        .map((el) => parseInt(el, 10));
+        .map(el => parseInt(el, 10));
     const ret = segments.reduce((parentKey, el) => CKDPriv(parentKey, el), key);
     return keyPair_1.keyPair(ret.slice(0, 32));
 };
@@ -57,7 +57,10 @@ function getAccountFromMnemonic(mnemonic, index) {
             const seed = yield bip39.mnemonicToSeed(mnemonic);
             const keyPair_ = derivePath(path, seed);
             return {
-                private_key: keyPair_.privateKey, public_key: keyPair_.publicKey, address: keyPair_.address, index,
+                private_key: keyPair_.privateKey,
+                public_key: keyPair_.publicKey,
+                address: keyPair_.address,
+                index
             };
         }
         catch (e) {

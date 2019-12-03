@@ -37,12 +37,12 @@ class TronApiClient {
             return this.api.buildTransaction(from, to, value);
         };
         let restSet;
-        ['network', 'trongrid_api'].forEach(f => {
+        ["network", "trongrid_api"].forEach(f => {
             if (!(f in config)) {
                 throw new Error(`config miss field ${f}`);
             }
         });
-        if (config.network === 'mainnet') {
+        if (config.network === "mainnet") {
             restSet = network_1.default.mainnet;
         }
         else {

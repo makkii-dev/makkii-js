@@ -40,21 +40,21 @@ class BtcApiClient {
             return this.api.buildTransaction(from, to, value, options);
         };
         let restSet;
-        ['network', 'insight_api'].forEach(f => {
+        ["network", "insight_api"].forEach(f => {
             if (!(f in config)) {
                 throw new Error(`config miss field ${f}`);
             }
         });
-        if (config.network === 'BTC') {
+        if (config.network === "BTC") {
             restSet = network_1.default.BTC;
         }
-        else if (config.network === 'BTCTEST') {
+        else if (config.network === "BTCTEST") {
             restSet = network_1.default.BTCTEST;
         }
-        else if (config.network === 'LTC') {
+        else if (config.network === "LTC") {
             restSet = network_1.default.LTC;
         }
-        else if (config.network === 'LTCTEST') {
+        else if (config.network === "LTCTEST") {
             restSet = network_1.default.LTCTEST;
         }
         else {

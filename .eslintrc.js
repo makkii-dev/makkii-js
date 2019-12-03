@@ -17,9 +17,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: [
+    "prettier",
     '@typescript-eslint',
   ],
   rules: {
+    "prettier/prettier": "error",
+    "import/prefer-default-export":"off",
     "import/extensions": "off",
     "no-console": "off",
     "no-useless-constructor": "off",
@@ -42,4 +45,5 @@ module.exports = {
         "extensions": [".js",".ts",]
       }
     }
-};
+  }
+}

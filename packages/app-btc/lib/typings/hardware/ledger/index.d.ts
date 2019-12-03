@@ -1,5 +1,5 @@
 import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
-import { BtcUnsignedTx } from '../../type';
+import { BtcUnsignedTx } from "../../type";
 export default class BtcLedger implements IHardware {
     private hardware;
     getAccount: (index: number, params: {

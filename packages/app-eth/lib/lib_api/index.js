@@ -4,12 +4,11 @@ const tools_1 = require("./tools");
 const jsonrpc_1 = require("./jsonrpc");
 const transaction_1 = require("./transaction");
 const token_1 = require("./token");
-exports.default = (config) => {
+exports.default = config => {
     const { getBalance, getBlockByNumber, blockNumber } = jsonrpc_1.default(config);
     const { sendTransaction, getTransactionsByAddress, getTransactionUrlInExplorer, getTransactionStatus, buildTransaction } = transaction_1.default(config);
     const { getAccountTokens, getAccountTokenBalance, getAccountTokenTransferHistory, getTokenDetail, getTokenIconUrl, getTopTokens, searchTokens } = token_1.default(config);
     return {
-        validateBalanceSufficiency: tools_1.validateBalanceSufficiency,
         getBlockByNumber,
         getBalance,
         blockNumber,
@@ -25,7 +24,7 @@ exports.default = (config) => {
         getTokenDetail,
         getTokenIconUrl,
         getTopTokens,
-        searchTokens,
+        searchTokens
     };
 };
 //# sourceMappingURL=index.js.map

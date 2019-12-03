@@ -35,7 +35,7 @@ class AionApiClient {
             return this.api.sameAddress(address1, address2);
         };
         this.getTokenIconUrl = (tokenSymbol, contractAddress) => {
-            throw new Error('Method getTokenIconUrl not implemented.');
+            throw new Error("Method getTokenIconUrl not implemented.");
         };
         this.getTokenDetail = (contractAddress) => {
             return this.api.getTokenDetail(contractAddress);
@@ -59,12 +59,12 @@ class AionApiClient {
             return this.api.buildTransaction(from, to, value, options);
         };
         let restSet;
-        ['network', 'jsonrpc'].forEach(f => {
+        ["network", "jsonrpc"].forEach(f => {
             if (!(f in config)) {
                 throw new Error(`config miss field ${f}`);
             }
         });
-        if (config.network === 'mainnet') {
+        if (config.network === "mainnet") {
             restSet = network_1.default.mainnet;
         }
         else {

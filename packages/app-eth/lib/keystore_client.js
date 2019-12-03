@@ -15,6 +15,7 @@ const bip39 = require("bip39");
 const lib_keystore_1 = require("./lib_keystore");
 class EthKeystoreClient {
     constructor() {
+        this.ledgerSupport = true;
         this.signTransaction = (tx, signer, signerParam) => {
             return signer.signTransaction(tx, signerParam);
         };

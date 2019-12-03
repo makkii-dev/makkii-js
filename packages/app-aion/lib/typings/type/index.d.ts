@@ -14,7 +14,7 @@ export interface AionUnsignedTx {
 }
 export interface AionPendingTx {
     hash: string;
-    status: 'PENDING';
+    status: "PENDING";
     to: string;
     from: string;
     value: BigNumber;

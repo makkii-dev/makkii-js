@@ -36,4 +36,4 @@ declare const ERC20ABI: ({
     payable?: undefined;
     stateMutability?: undefined;
 })[];
-export { ERC20ABI, };
+export { ERC20ABI };

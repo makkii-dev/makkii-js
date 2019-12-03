@@ -6,6 +6,6 @@ const hdkey_1 = require("./hdkey");
 exports.default = {
     getAccountFromMnemonic: hdkey_1.getAccountFromMnemonic,
     keyPair: keypair_1.keyPair,
-    validateAddress: address_1.validateAddress,
+    validateAddress: address_1.validateAddress
 };
 //# sourceMappingURL=index.js.map

@@ -13,8 +13,8 @@ const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const constants_1 = require("./constants");
 const jsonrpc_1 = require("./jsonrpc");
-const Contract = require('aion-web3-eth-contract');
-exports.default = (config) => {
+const Contract = require("aion-web3-eth-contract");
+exports.default = config => {
     const { getTransactionReceipt, getTransactionCount, sendSignedTransaction } = jsonrpc_1.default(config);
     function sendTransaction(unsignedTx, signer, signerParams) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -22,7 +22,7 @@ exports.default = (config) => {
             const hash = yield sendSignedTransaction(signedTx);
             return {
                 hash,
-                status: 'PENDING',
+                status: "PENDING",
                 to: unsignedTx.to,
                 from: unsignedTx.from,
                 value: unsignedTx.value,
@@ -37,7 +37,7 @@ exports.default = (config) => {
     function buildTransaction(from, to, value, options) {
         return __awaiter(this, void 0, void 0, function* () {
             const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
-            const nonce = yield getTransactionCount(from, 'pending');
+            const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
             if (isTransfer) {
                 const tokenContract = new Contract(constants_1.CONTRACT_ABI, contractAddr);
@@ -45,7 +45,7 @@ exports.default = (config) => {
                     .send(to, value
                     .shiftedBy(tokenDecimal - 0)
                     .toFixed(0)
-                    .toString(), '')
+                    .toString(), "")
                     .encodeABI();
             }
             return {
@@ -58,7 +58,7 @@ exports.default = (config) => {
                 timestamp: new Date().getTime() * 1000,
                 data,
                 type: 1,
-                tknTo: isTransfer ? to : '',
+                tknTo: isTransfer ? to : "",
                 tknValue: isTransfer ? new bignumber_js_1.default(value) : new bignumber_js_1.default(0)
             };
         });
@@ -68,24 +68,25 @@ exports.default = (config) => {
             const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
             console.log(`[aion req] get aion transactions by address: ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
-            console.log('[keystore resp] res:', res.data);
+            console.log("[keystore resp] res:", res.data);
             const { content } = res.data;
             const txs = {};
-            content.forEach((t) => {
+            content.forEach(t => {
                 const tx = {};
                 const timestamp_ = `${t.transactionTimestamp}`;
                 tx.hash = `0x${t.transactionHash}`;
-                tx.timestamp = timestamp_.length === 16
-                    ? parseInt(timestamp_) / 1000
-                    : timestamp_.length === 13
-                        ? parseInt(timestamp_) * 1
-                        : timestamp_.length === 10
-                            ? parseInt(timestamp_) * 1000
-                            : null;
+                tx.timestamp =
+                    timestamp_.length === 16
+                        ? parseInt(timestamp_) / 1000
+                        : timestamp_.length === 13
+                            ? parseInt(timestamp_) * 1
+                            : timestamp_.length === 10
+                                ? parseInt(timestamp_) * 1000
+                                : null;
                 tx.from = `0x${t.fromAddr}`;
                 tx.to = `0x${t.toAddr}`;
                 tx.value = new bignumber_js_1.default(t.value, 10).toNumber();
-                tx.status = t.txError === '' ? 'CONFIRMED' : 'FAILED';
+                tx.status = t.txError === "" ? "CONFIRMED" : "FAILED";
                 tx.blockNumber = t.blockNumber;
                 tx.fee = t.nrgConsumed * t.nrgPrice * Math.pow(10, -18);
                 txs[tx.hash] = tx;
@@ -103,7 +104,7 @@ exports.default = (config) => {
                 return {
                     status: parseInt(receipt.status, 16) === 1,
                     blockNumber: parseInt(receipt.blockNumber, 16),
-                    gasUsed: parseInt(receipt.gasUsed, 16),
+                    gasUsed: parseInt(receipt.gasUsed, 16)
                 };
             }
             catch (e) {
@@ -116,7 +117,7 @@ exports.default = (config) => {
         getTransactionsByAddress,
         getTransactionUrlInExplorer,
         getTransactionStatus,
-        buildTransaction,
+        buildTransaction
     };
 };
 //# sourceMappingURL=transaction.js.map

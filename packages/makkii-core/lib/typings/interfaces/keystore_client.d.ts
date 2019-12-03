@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { SignedTx } from '../type';
-import { IHardware } from './hardware';
+import { SignedTx } from "../type";
+import { IHardware } from "./hardware";
 export interface IsingleKeystoreClient {
     signTransaction(tx: any, signer: IkeystoreSigner, signerParams: any): Promise<any>;
     generateMnemonic(): string;

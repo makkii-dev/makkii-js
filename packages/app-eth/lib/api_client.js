@@ -28,9 +28,6 @@ class EthApiClient {
         this.getTransactionsByAddress = (address, page, size, timestamp) => {
             return this.api.getTransactionsByAddress(address, page, size, timestamp);
         };
-        this.validateBalanceSufficiency = (account, amount, extraParams) => {
-            return this.api.validateBalanceSufficiency(account, amount, extraParams);
-        };
         this.sendTransaction = (unsignedTx, signer, signerParams) => {
             return this.api.sendTransaction(unsignedTx, signer, signerParams);
         };
@@ -62,12 +59,12 @@ class EthApiClient {
             return this.api.searchTokens(keyword);
         };
         let restSet;
-        ['network', 'jsonrpc'].forEach(f => {
+        ["network", "jsonrpc"].forEach(f => {
             if (!(f in config)) {
                 throw new Error(`config miss field ${f}`);
             }
         });
-        if (config.network === 'mainnet') {
+        if (config.network === "mainnet") {
             restSet = network_1.default.mainnet;
         }
         else {

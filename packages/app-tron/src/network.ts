@@ -9,8 +9,4 @@ export default {
         explorer_api: "https://api.shasta.tronscan.org/api",
         explorer: "https://shasta.tronscan.org/#/transaction"
     }
-}
-
-
-
-
+};

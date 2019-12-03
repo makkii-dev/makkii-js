@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const transaction_1 = require("../../lib_keystore/transaction");
 const hw_app_eth_1 = require("@ledgerhq/hw-app-eth");
+const transaction_1 = require("../../lib_keystore/transaction");
 class EthLedger {
     constructor() {
         this.hardware = {};
@@ -32,17 +32,17 @@ class EthLedger {
             const unsigned = transaction_1.process_unsignedTx(transaction);
             const { derivationIndex } = params;
             const path = `44'/60'/0'/0/${derivationIndex}`;
-            const res = yield this.hardware.signTransaction(path, unsigned.serialize().toString('hex'));
+            const res = yield this.hardware.signTransaction(path, unsigned.serialize().toString("hex"));
             const sig = {};
-            sig.r = Buffer.from(res.r, 'hex');
-            sig.s = Buffer.from(res.s, 'hex');
+            sig.r = Buffer.from(res.r, "hex");
+            sig.s = Buffer.from(res.s, "hex");
             sig.v = parseInt(res.v, 16);
             Object.assign(unsigned, sig);
             const validSig = unsigned.verifySignature();
             if (!validSig) {
-                throw new Error('sign error: invalid signature');
+                throw new Error("sign error: invalid signature");
             }
-            return `0x${unsigned.serialize().toString('hex')}`;
+            return `0x${unsigned.serialize().toString("hex")}`;
         });
         this.setLedgerTransport = (transport) => {
             this.hardware = new hw_app_eth_1.default(transport);

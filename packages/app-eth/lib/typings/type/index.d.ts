@@ -11,7 +11,7 @@ export interface EthUnsignedTx {
 }
 export interface EthPendingTx {
     hash: string;
-    status: 'PENDING';
+    status: "PENDING";
     to: string;
     from: string;
     value: BigNumber;

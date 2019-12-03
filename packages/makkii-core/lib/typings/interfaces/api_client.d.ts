@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js';
-import { Transaction } from '../type';
-import { IkeystoreSigner } from './keystore_client';
+import BigNumber from "bignumber.js";
+import { Transaction } from "../type";
+import { IkeystoreSigner } from "./keystore_client";
 export interface IApiClient {
     addCoin(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void;
     removeCoin(coinType: string): boolean;

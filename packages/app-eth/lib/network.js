@@ -24,6 +24,6 @@ exports.default = {
             provider: "etherscan",
             url: "https://api-ropsten.etherscan.io/tx"
         }
-    },
+    }
 };
 //# sourceMappingURL=network.js.map

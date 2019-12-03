@@ -3,27 +3,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const network_1 = require("./network");
 exports.keyPair = (priKey, options) => {
-    if (typeof priKey === 'string') {
-        if (priKey.startsWith('0x')) {
+    if (typeof priKey === "string") {
+        if (priKey.startsWith("0x")) {
             priKey = priKey.substring(2);
         }
-        priKey = Buffer.from(priKey, 'hex');
+        priKey = Buffer.from(priKey, "hex");
     }
     let network = network_1.networks.BTC;
     if (options && options.network) {
         network = network_1.networks[options.network];
     }
     try {
-        const key = bitcoinjs_lib_1.ECPair.fromPrivateKey(priKey, { network, compressed: options.compressed });
+        const key = bitcoinjs_lib_1.ECPair.fromPrivateKey(priKey, {
+            network,
+            compressed: options.compressed
+        });
         const { privateKey } = key;
         const { publicKey } = key;
         const { address } = bitcoinjs_lib_1.payments.p2pkh({ pubkey: key.publicKey, network });
         return {
-            privateKey: privateKey.toString('hex'),
-            publicKey: publicKey.toString('hex'),
+            privateKey: privateKey.toString("hex"),
+            publicKey: publicKey.toString("hex"),
             address,
-            sign: (hash) => key.sign(hash),
-            toWIF: () => key.toWIF(),
+            sign: hash => key.sign(hash),
+            toWIF: () => key.toWIF()
         };
     }
     catch (e) {
@@ -41,12 +44,12 @@ exports.keyPairFromWIF = (WIF, options) => {
         const { publicKey } = key;
         const { address } = bitcoinjs_lib_1.payments.p2pkh({ pubkey: key.publicKey, network });
         return {
-            privateKey: privateKey.toString('hex'),
-            publicKey: publicKey.toString('hex'),
+            privateKey: privateKey.toString("hex"),
+            publicKey: publicKey.toString("hex"),
             address,
-            sign: (hash) => key.sign(hash),
+            sign: hash => key.sign(hash),
             toWIF: () => key.toWIF(),
-            compressed: key.compressed,
+            compressed: key.compressed
         };
     }
     catch (e) {

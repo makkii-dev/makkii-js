@@ -12,7 +12,7 @@ function isInstanceOfApiClient(client) {
         "getTransactionsByAddress",
         "buildTransaction",
         "sendTransaction",
-        "sameAddress",
+        "sameAddress"
     ];
     return !map.some(i => !(i in client));
 }
@@ -21,7 +21,7 @@ class ApiClient {
         this.coins = {};
         this.addCoin = (coinType, client) => {
             if (!isInstanceOfApiClient(client)) {
-                throw new Error('not a api client!');
+                throw new Error("not a api client!");
             }
             this.coins[coinType.toLowerCase()] = client;
         };
@@ -77,55 +77,57 @@ class ApiClient {
         };
         this.getTokenIconUrl = (coinType, tokenSymbol, contractAddress) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getTokenIconUrl(tokenSymbol, contractAddress);
             }
             throw new Error(`[${coinType}] getTokenIconUrl is not implemented.`);
         };
         this.getTokenDetail = (coinType, contractAddress) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getTokenDetail(contractAddress);
             }
             throw new Error(`[${coinType}] getTokenDetail is not implemented.`);
         };
         this.getAccountTokenTransferHistory = (coinType, address, symbolAddress, page, size, timestamp) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getAccountTokenTransferHistory(address, symbolAddress, page, size, timestamp);
             }
             throw new Error(`[${coinType}] getAccountTokenTransferHistory is not implemented.`);
         };
         this.getAccountTokens = (coinType, address) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getAccountTokens(address);
             }
             throw new Error(`[${coinType}] getAccountTokens is not implemented.`);
         };
         this.getAccountTokenBalance = (coinType, contractAddress, address) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getAccountTokenBalance(contractAddress, address);
             }
             throw new Error(`[${coinType}] getAccountTokenBalance is not implemented.`);
         };
         this.getTopTokens = (coinType, topN) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.getTopTokens(topN);
             }
             throw new Error(`[${coinType}] getTopTokens is not implemented.`);
         };
         this.searchTokens = (coinType, keyword) => {
             const coin = this.getCoin(coinType);
-            if ('tokenSupport' in coin && !!coin.tokenSupport) {
+            if ("tokenSupport" in coin && !!coin.tokenSupport) {
                 return coin.searchTokens(keyword);
             }
             throw new Error(`[${coinType}] searchTokens is not implemented.`);
         };
         this.getCoinPrices = (currency) => {
-            const cryptos = Object.keys(this.coins).map(c => c.toUpperCase()).join(',');
+            const cryptos = Object.keys(this.coins)
+                .map(c => c.toUpperCase())
+                .join(",");
             const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
             return lib_common_util_js_1.HttpClient.get(url, false);
         };

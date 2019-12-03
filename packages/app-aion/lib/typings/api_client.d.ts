@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
-import { IsingleApiFullClient } from '@makkii/makkii-core/src/interfaces/api_client';
-import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
-import { Token } from '@makkii/makkii-core/src/type';
-import { AionUnsignedTx, AionPendingTx } from './type';
+import BigNumber from "bignumber.js";
+import { IsingleApiFullClient } from "@makkii/makkii-core/src/interfaces/api_client";
+import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
+import { Token } from "@makkii/makkii-core/src/type";
+import { AionUnsignedTx, AionPendingTx } from "./type";
 export interface IConfig {
-    network: 'mainnet' | 'amity';
+    network: "mainnet" | "amity";
     jsonrpc: string;
     explorer_api?: string;
     explorer?: string;

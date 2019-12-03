@@ -17,7 +17,7 @@ export interface TronPendingTx {
     value: BigNumber;
     timestamp: number;
     hash: string;
-    status: 'PENDING';
+    status: "PENDING";
 }
 export interface TronTxStatus {
     blockNumber: number;
@@ -30,7 +30,7 @@ export interface TronTransaction {
     to: string;
     value: BigNumber;
     blockNumber: number;
-    status: 'CONFIRMED' | 'FAILED';
+    status: "CONFIRMED" | "FAILED";
 }
 export interface TronKeypair {
     private_key: string;

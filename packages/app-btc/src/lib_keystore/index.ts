@@ -1,10 +1,10 @@
-import { keyPair, keyPairFromWIF } from './keypair';
-import { validateAddress } from './address';
-import { getAccountFromMnemonic } from './hdkey';
+import { keyPair, keyPairFromWIF } from "./keypair";
+import { validateAddress } from "./address";
+import { getAccountFromMnemonic } from "./hdkey";
 
 export default {
-  keyPair,
-  validateAddress,
-  getAccountFromMnemonic,
-  keyPairFromWIF
+    keyPair,
+    validateAddress,
+    getAccountFromMnemonic,
+    keyPairFromWIF
 };

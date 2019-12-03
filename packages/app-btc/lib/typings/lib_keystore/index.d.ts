@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { getAccountFromMnemonic } from './hdkey';
+import { getAccountFromMnemonic } from "./hdkey";
 declare const _default: {
     keyPair: (priKey: any, options: any) => {
         privateKey: string;

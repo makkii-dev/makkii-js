@@ -1,4 +1,4 @@
-import { sameAddress } from './tools';
+import { sameAddress } from "./tools";
 declare const _default: (config: any) => {
     getBalance: (address: any) => Promise<import("bignumber.js").default>;
     buildTransaction: (from: any, to: any, value: any) => Promise<{

@@ -1,9 +1,9 @@
-import BigNumber from 'bignumber.js';
-import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client';
-import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
-import { TronUnsignedTx, TronPendingTx, TronTxStatus, TronTransaction } from './type';
+import BigNumber from "bignumber.js";
+import { IsingleApiClient } from "@makkii/makkii-core/src/interfaces/api_client";
+import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
+import { TronUnsignedTx, TronPendingTx, TronTxStatus, TronTransaction } from "./type";
 export interface ITronConfig {
-    network: 'mainnet' | 'shasta';
+    network: "mainnet" | "shasta";
     trongrid_api: string;
     explorer_api?: string;
     explorer?: string;

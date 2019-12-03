@@ -31,7 +31,7 @@ export interface BtcTransaction {
     hash: string;
     timestamp: number;
     blockNUmber: number;
-    status: 'CONFIRMED';
+    status: "CONFIRMED";
     from: Array<{
         addr: string;
         value: number;
@@ -44,7 +44,7 @@ export interface BtcTransaction {
 }
 export interface BtcPendingTransaction {
     hash: string;
-    status: 'PENDING';
+    status: "PENDING";
     from: Array<{
         addr: string;
         value: number;

@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { IkeystoreClient, IsingleKeystoreClient, IkeystoreSigner } from './interfaces/keystore_client';
-import { IHardware } from './interfaces/hardware';
+import { IkeystoreClient, IsingleKeystoreClient, IkeystoreSigner } from "./interfaces/keystore_client";
+import { IHardware } from "./interfaces/hardware";
 export default class KeystoreClient implements IkeystoreClient {
     coins: {
         [coin: string]: IsingleKeystoreClient;

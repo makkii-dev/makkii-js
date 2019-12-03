@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { getAccountFromMnemonic } from './hdkey';
-import { toV3 } from './keyfile';
+import { getAccountFromMnemonic } from "./hdkey";
+import { toV3 } from "./keyfile";
 declare const _default: {
     getAccountFromMnemonic: typeof getAccountFromMnemonic;
     keyPair: (priKey: any) => {

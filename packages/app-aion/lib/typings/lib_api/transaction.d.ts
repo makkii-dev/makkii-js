@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import BigNumber from "bignumber.js";
 declare const _default: (config: any) => {
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
         hash: any;

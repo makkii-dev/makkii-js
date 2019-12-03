@@ -15,7 +15,7 @@ exports.default = config => {
         getBalance,
         getTransactionsByAddress,
         sameAddress,
-        sendAll,
+        sendAll
     };
 };
 //# sourceMappingURL=index.js.map

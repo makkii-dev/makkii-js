@@ -1,11 +1,11 @@
-module.exports = (api) => {
-  api.cache(true);
+module.exports = api => {
+    api.cache(true);
 
-  const presets = ["@babel/preset-env"];
-  const plugins = ["@babel/transform-runtime"];
+    const presets = ["@babel/preset-env"];
+    const plugins = ["@babel/transform-runtime"];
 
-  return {
-    presets,
-    plugins
-  };
+    return {
+        presets,
+        plugins
+    };
 };

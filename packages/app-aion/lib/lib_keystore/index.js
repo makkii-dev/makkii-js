@@ -10,6 +10,6 @@ exports.default = {
     validateAddress: address_1.validateAddress,
     fromV3: keyfile_1.fromV3,
     toV3: keyfile_1.toV3,
-    validatePrivateKey: keyPair_1.validatePrivateKey,
+    validatePrivateKey: keyPair_1.validatePrivateKey
 };
 //# sourceMappingURL=index.js.map

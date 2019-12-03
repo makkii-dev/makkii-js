@@ -40,7 +40,7 @@ exports.default = config => {
                     amount: tx.satoshis,
                     hash: tx.txid,
                     index: tx.vout,
-                    raw: rawtx,
+                    raw: rawtx
                 });
             }
             return utxos;
@@ -65,7 +65,9 @@ exports.default = config => {
         console.log(`[${config.network} broadcastTransaction req]: ${url}`);
         let resp;
         try {
-            const payload = config.network.match('TEST') ? { rawtx: encoded } : { tx: encoded };
+            const payload = config.network.match("TEST")
+                ? { rawtx: encoded }
+                : { tx: encoded };
             resp = yield lib_common_util_js_1.HttpClient.post(url, payload, true);
             console.log(`[${config.network} broadcastTransaction resp]:`, resp);
         }
@@ -89,7 +91,7 @@ exports.default = config => {
             return {
                 status: true,
                 blockNumber: blockheight,
-                timestamp: blocktime,
+                timestamp: blocktime
             };
         }
         catch (e) {
@@ -104,12 +106,12 @@ exports.default = config => {
             console.log(`[${config.network} getTransactionsByAddress resp]:`, data);
             const { txs: getTxs = [] } = data;
             const txs = {};
-            getTxs.forEach((t) => {
+            getTxs.forEach(t => {
                 const tx = {};
                 tx.hash = t.txid;
                 tx.timestamp = t.time * 1000;
                 tx.blockNumber = t.blockheight;
-                tx.status = 'CONFIRMED';
+                tx.status = "CONFIRMED";
                 const { vin, vout } = t;
                 tx.from = _aggregateItems(vin);
                 tx.to = _aggregateItems(vout);
@@ -125,7 +127,7 @@ exports.default = config => {
         }
     });
     const COIN = 100000000;
-    const _aggregateItems = (items) => {
+    const _aggregateItems = items => {
         if (!items)
             return [];
         const l = items.length;
@@ -144,12 +146,14 @@ exports.default = config => {
                 items[i].notAddr = true;
                 notAddr = true;
             }
-            if (items[i].scriptPubKey && items[i].scriptPubKey.addresses.length > 1) {
-                items[i].addr = items[i].scriptPubKey.addresses.join(',');
+            if (items[i].scriptPubKey &&
+                items[i].scriptPubKey.addresses.length > 1) {
+                items[i].addr = items[i].scriptPubKey.addresses.join(",");
                 ret.push(items[i]);
                 continue;
             }
-            const addr = items[i].addr || (items[i].scriptPubKey && items[i].scriptPubKey.addresses[0]);
+            const addr = items[i].addr ||
+                (items[i].scriptPubKey && items[i].scriptPubKey.addresses[0]);
             if (!tmp[addr]) {
                 tmp[addr] = {};
                 tmp[addr].valueSat = 0;
@@ -158,8 +162,10 @@ exports.default = config => {
                 tmp[addr].items = [];
             }
             tmp[addr].isSpent = items[i].spentTxId;
-            tmp[addr].doubleSpentTxID = tmp[addr].doubleSpentTxID || items[i].doubleSpentTxID;
-            tmp[addr].doubleSpentIndex = tmp[addr].doubleSpentIndex || items[i].doubleSpentIndex;
+            tmp[addr].doubleSpentTxID =
+                tmp[addr].doubleSpentTxID || items[i].doubleSpentTxID;
+            tmp[addr].doubleSpentIndex =
+                tmp[addr].doubleSpentIndex || items[i].doubleSpentIndex;
             tmp[addr].dbError = tmp[addr].dbError || items[i].dbError;
             tmp[addr].valueSat += Math.round(items[i].value * COIN);
             tmp[addr].items.push(items[i]);
@@ -181,7 +187,7 @@ exports.default = config => {
         getTransactionStatus,
         getTransactionsByAddress,
         getUnspentTx,
-        getRawTx,
+        getRawTx
     };
 };
 //# sourceMappingURL=jsonrpc.js.map

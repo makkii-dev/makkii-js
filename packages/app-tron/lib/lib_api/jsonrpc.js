@@ -17,11 +17,13 @@ exports.default = config => {
         const url = `${config.trongrid_api}/wallet/getaccount`;
         const hexAddress = utils_1.base58check2HexString(address);
         const body = {
-            address: hexAddress,
+            address: hexAddress
         };
         console.log(`[tron getBalance req] ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, body, true, { 'Content-Type': 'application/json' });
-        console.log('[tron getBalance resp] ', res.data);
+        const res = yield lib_common_util_js_1.HttpClient.post(url, body, true, {
+            "Content-Type": "application/json"
+        });
+        console.log("[tron getBalance resp] ", res.data);
         if (res.data.Error !== undefined) {
             throw new Error(res.data.Error);
         }
@@ -34,34 +36,36 @@ exports.default = config => {
     });
     const getLatestBlock = () => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
-        console.log('[tron getLatestBlock req] ', url);
+        console.log("[tron getLatestBlock req] ", url);
         const res = yield lib_common_util_js_1.HttpClient.post(url);
-        console.log('[tron getLatestBlock resp] ', res.data);
+        console.log("[tron getLatestBlock resp] ", res.data);
         return res.data;
     });
     const broadcastTransaction = (tx) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/wallet/broadcasttransaction`;
         console.log(`[tron broadcastTransaction req] ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, tx, true, { 'Content-Type': 'application/json' });
-        console.log('[tron broadcastTransaction resp] ', res.data);
+        const res = yield lib_common_util_js_1.HttpClient.post(url, tx, true, {
+            "Content-Type": "application/json"
+        });
+        console.log("[tron broadcastTransaction resp] ", res.data);
         return res.data;
     });
     const getTransactionById = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/walletsolidity/gettransactionbyid`;
         console.log(`[tron getTransactionById req] ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.post(url, {
-            value: hash,
-        }, true, { 'Content-Type': 'application/json' });
-        console.log('[tron getTransactionById resp]', res.data);
+            value: hash
+        }, true, { "Content-Type": "application/json" });
+        console.log("[tron getTransactionById resp]", res.data);
         return res.data;
     });
     const getTransactionInfoById = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/walletsolidity/gettransactioninfobyid`;
         console.log(`[tron http req] ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.post(url, {
-            value: hash,
-        }, true, { 'Content-Type': 'application/json' });
-        console.log('[tron http resp]', res.data);
+            value: hash
+        }, true, { "Content-Type": "application/json" });
+        console.log("[tron http resp]", res.data);
         return res.data;
     });
     return {
@@ -69,7 +73,7 @@ exports.default = config => {
         getBalance,
         getLatestBlock,
         getTransactionById,
-        getTransactionInfoById,
+        getTransactionInfoById
     };
 };
 //# sourceMappingURL=jsonrpc.js.map

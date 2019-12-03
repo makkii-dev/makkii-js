@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const bip39 = require("bip39");
 const keypair_1 = require("./keypair");
-const hdKey = require('hdkey');
+const hdKey = require("hdkey");
 function getAccountFromMnemonic(mnemonic, index) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -20,7 +20,12 @@ function getAccountFromMnemonic(mnemonic, index) {
             const node = hdKey.fromMasterSeed(seed);
             const keyPairBIP44 = node.derive(path);
             const key = keypair_1.keyPair(keyPairBIP44.privateKey);
-            return { private_key: key.privateKey, public_key: key.publicKey, address: key.address, index };
+            return {
+                private_key: key.privateKey,
+                public_key: key.publicKey,
+                address: key.address,
+                index
+            };
         }
         catch (e) {
             throw new Error(`get Key ETH failed: ${e}`);

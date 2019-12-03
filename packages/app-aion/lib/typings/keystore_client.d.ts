@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { IsingleKeystoreClient, IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
-import { IHardware } from '@makkii/makkii-core/src/interfaces/hardware';
-import { AionUnsignedTx } from './type';
+import { IsingleKeystoreClient, IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
+import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
+import { AionUnsignedTx } from "./type";
 export default class AionKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean;
     signTransaction: (tx: AionUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<any>;
@@ -19,7 +19,6 @@ export default class AionKeystoreClient implements IsingleKeystoreClient {
         public_key: string;
         address: any;
     }>;
-    recoverKeyPairByWIF: (WIF: string, options?: any) => never;
     recoverKeyPairByKeyFile: (file: string, password: string) => Promise<unknown>;
     validatePrivateKey: (privateKey: string | Buffer) => any;
     validateAddress: (address: string) => boolean;

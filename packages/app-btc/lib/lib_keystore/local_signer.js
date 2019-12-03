@@ -20,9 +20,9 @@ class BtcLocalSigner {
             const { utxos, network } = transaction;
             const { compressed, private_key } = params;
             const mainnet = network_1.networks[network];
-            const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), 'hex'), {
+            const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), "hex"), {
                 network: mainnet,
-                compressed,
+                compressed
             });
             for (let ip = 0; ip < utxos.length; ip += 1) {
                 txb.sign(ip, keyPair);

@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js';
-import { IApiClient, IsingleApiClient, IsingleApiFullClient } from './interfaces/api_client';
-import { IkeystoreSigner } from './interfaces/keystore_client';
+import BigNumber from "bignumber.js";
+import { IApiClient, IsingleApiClient, IsingleApiFullClient } from "./interfaces/api_client";
+import { IkeystoreSigner } from "./interfaces/keystore_client";
 export default class ApiClient implements IApiClient {
     coins: {
         [coin: string]: IsingleApiClient | IsingleApiFullClient;

@@ -18,11 +18,13 @@ exports.default = config => {
         try {
             const utxos = yield getUnspentTx(address);
             let balance = new bignumber_js_1.default(0);
-            utxos.forEach((utxo) => {
+            utxos.forEach(utxo => {
                 balance = balance.plus(new bignumber_js_1.default(utxo.amount));
             });
             return Math.max(balance
-                .minus(config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))
+                .minus(config.network.match("LTC")
+                ? transaction_1.estimateFeeLTC
+                : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))
                 .shiftedBy(-8)
                 .toNumber(), 0);
         }
@@ -33,7 +35,7 @@ exports.default = config => {
     const sameAddress = (address1, address2) => address1 === address2;
     return {
         sendAll,
-        sameAddress,
+        sameAddress
     };
 };
 //# sourceMappingURL=tools.js.map

@@ -3,19 +3,21 @@ import { HttpClient } from "lib-common-util-js";
 import jsonrpcClient from "./jsonrpc";
 import { ERC20ABI } from "./constants";
 
-const Contract = require('web3-eth-contract');
-
+const Contract = require("web3-eth-contract");
 
 export default config => {
-    const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpcClient(config)
-
+    const {
+        sendSignedTransaction,
+        getTransactionCount,
+        getTransactionReceipt
+    } = jsonrpcClient(config);
 
     async function sendTransaction(unsignedTx, signer, signerParams) {
         const signedTx = await signer.signTransaction(unsignedTx, signerParams);
         const hash = await sendSignedTransaction(signedTx);
         return {
             hash,
-            status: 'PENDING',
+            status: "PENDING",
             to: unsignedTx.to,
             from: unsignedTx.from,
             value: unsignedTx.value,
@@ -24,12 +26,19 @@ export default config => {
             timestamp: unsignedTx.timestamp,
             gasLimit: unsignedTx.gasLimit,
             gasPrice: unsignedTx.gasPrice
-        }
+        };
     }
 
     async function buildTransaction(from, to, value, options) {
-        const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
-        const nonce = await getTransactionCount(from, 'pending');
+        const {
+            data: data_,
+            gasLimit,
+            gasPrice,
+            contractAddr,
+            isTransfer,
+            tokenDecimal
+        } = options;
+        const nonce = await getTransactionCount(from, "pending");
         let data = data_;
         if (isTransfer) {
             const tokenContract = new Contract(ERC20ABI, contractAddr);
@@ -40,7 +49,7 @@ export default config => {
                         .shiftedBy(tokenDecimal - 0)
                         .toFixed(0)
                         .toString(),
-                    '',
+                    ""
                 )
                 .encodeABI();
         }
@@ -52,20 +61,19 @@ export default config => {
             gasPrice,
             gasLimit,
             data,
-            tknTo: isTransfer ? to : '',
+            tknTo: isTransfer ? to : "",
             tknValue: isTransfer ? new BigNumber(value) : new BigNumber(0),
             network: config.network
-        }
+        };
     }
-
 
     async function getTransactionsByAddress(address, page, size, timestamp) {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
             console.log(`[eth getTransactionsByAddress req] : ${url}`);
-            const res = await HttpClient.get(url, false)
-            console.log('[eth getTransactionsByAddress req]', res.data);
+            const res = await HttpClient.get(url, false);
+            console.log("[eth getTransactionsByAddress req]", res.data);
             const { result } = res.data;
             const txs = {};
             result.forEach(t => {
@@ -75,17 +83,21 @@ export default config => {
                 tx.from = t.from;
                 tx.to = t.to;
                 tx.value = new BigNumber(t.value, 10).shiftedBy(-18).toNumber();
-                tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
+                tx.status = t.isError === "0" ? "CONFIRMED" : "FAILED";
                 tx.blockNumber = parseInt(t.blockNumber);
                 tx.fee = t.gasPrice * t.gasUsed * 10 ** -18;
                 txs[tx.hash] = tx;
             });
             return txs;
         }
-        const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
+        const url = `${
+            explorer_api.url
+        }/getAddressTransactions/${address}?apiKey=${
+            config.ethplorerApiKey
+        }&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
         console.log(`[eth getTransactionsByAddress req] : ${url}`);
-        const res = await HttpClient.get(url, false)
-        console.log('[eth getTransactionsByAddress req]', res.data);
+        const res = await HttpClient.get(url, false);
+        console.log("[eth getTransactionsByAddress req]", res.data);
         if (res.data.error) {
             throw res.data.error;
         } else {
@@ -97,7 +109,7 @@ export default config => {
                 tx.from = t.from;
                 tx.to = t.to;
                 tx.value = new BigNumber(t.value);
-                tx.status = t.success ? "CONFIRMED" : 'FAILED';
+                tx.status = t.success ? "CONFIRMED" : "FAILED";
                 txs[tx.hash] = tx;
             });
             return txs;
@@ -107,22 +119,21 @@ export default config => {
     function getTransactionUrlInExplorer(txHash) {
         const { explorer } = config;
         if (explorer.provider === "etherscan") {
-            return `${explorer.url}/${txHash}`
+            return `${explorer.url}/${txHash}`;
         }
         return `${explorer.url}/${txHash}`;
-
     }
 
     async function getTransactionStatus(txHash) {
         try {
-            const receipt = await getTransactionReceipt(txHash)
+            const receipt = await getTransactionReceipt(txHash);
             return {
                 status: parseInt(receipt.status, 16) === 1,
                 blockNumber: parseInt(receipt.blockNumber, 16),
-                gasUsed: parseInt(receipt.gasUsed, 16),
+                gasUsed: parseInt(receipt.gasUsed, 16)
             };
         } catch (e) {
-            return null
+            return null;
         }
     }
 
@@ -132,5 +143,5 @@ export default config => {
         getTransactionsByAddress,
         getTransactionUrlInExplorer,
         getTransactionStatus
-    }
-}
+    };
+};

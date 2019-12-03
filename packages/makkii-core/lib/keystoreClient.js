@@ -17,7 +17,7 @@ class KeystoreClient {
         this.coins = {};
         this.addCoin = (coinType, client) => {
             if (!isInstanceOfKeystoreClient(client)) {
-                throw new Error('not a keystore client!');
+                throw new Error("not a keystore client!");
             }
             this.coins[coinType.toLowerCase()] = client;
         };

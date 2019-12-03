@@ -16,9 +16,9 @@ class EthLocalSinger {
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const unsigned = transaction_1.process_unsignedTx(transaction);
             const { private_key } = params;
-            const privateKey = Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), 'hex');
+            const privateKey = Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), "hex");
             unsigned.sign(privateKey);
-            return `0x${unsigned.serialize().toString('hex')}`;
+            return `0x${unsigned.serialize().toString("hex")}`;
         });
     }
 }

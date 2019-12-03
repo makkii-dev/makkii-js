@@ -2,15 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_common_util_js_1 = require("lib-common-util-js");
 const bignumber_js_1 = require("bignumber.js");
-const EthereumTx = require('ethereumjs-tx');
-const KEY_MAP = [
-    'value',
-    'nonce',
-    'gasLimit',
-    'gasPrice',
-    'to'
-];
-exports.process_unsignedTx = (transaction) => {
+const EthereumTx = require("ethereumjs-tx");
+const KEY_MAP = ["value", "nonce", "gasLimit", "gasPrice", "to"];
+exports.process_unsignedTx = transaction => {
     const { network, value: amount, nonce, gasLimit, gasPrice, to, data } = transaction;
     KEY_MAP.forEach(k => {
         if (!transaction.hasOwnProperty(k)) {
@@ -26,7 +20,7 @@ exports.process_unsignedTx = (transaction) => {
         chainId: getChainId(network),
         v: getChainId(network),
         r: "0x00",
-        s: "0x00",
+        s: "0x00"
     };
     if (data) {
         txParams = Object.assign(Object.assign({}, txParams), { data });
@@ -34,20 +28,20 @@ exports.process_unsignedTx = (transaction) => {
     const tx = new EthereumTx(txParams);
     return tx;
 };
-const getChainId = (network) => {
-    if (network.toLowerCase() === 'morden') {
+const getChainId = network => {
+    if (network.toLowerCase() === "morden") {
         return 2;
     }
-    if (network.toLowerCase() === 'ropsten') {
+    if (network.toLowerCase() === "ropsten") {
         return 3;
     }
-    if (network.toLowerCase() === 'rinkeby') {
+    if (network.toLowerCase() === "rinkeby") {
         return 4;
     }
-    if (network.toLowerCase() === 'goerli') {
+    if (network.toLowerCase() === "goerli") {
         return 5;
     }
-    if (network.toLowerCase() === 'kovan') {
+    if (network.toLowerCase() === "kovan") {
         return 42;
     }
     return 1;

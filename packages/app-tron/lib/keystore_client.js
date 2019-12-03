@@ -41,7 +41,7 @@ class TronKeystoreClient {
         this.getAccountFromMnemonic = (address_index, mnemonic) => {
             return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.getAccountFromHardware = (address_index, hardware) => {
+        this.getAccountFromHardware = (_address_index, hardware) => {
             throw new Error("[tron] getAccountFromHardware not implemented.");
         };
     }

@@ -4,43 +4,43 @@ import BigNumber from "bignumber.js";
  * Aion unsigned transaction interface
  */
 export interface AionUnsignedTx {
-    to: string
-    from: string
-    nonce: string
-    value: BigNumber
-    gasPrice: number
-    gasLimit: number
-    timestamp: number
-    data?: any
-    type?: number   
+    to: string;
+    from: string;
+    nonce: string;
+    value: BigNumber;
+    gasPrice: number;
+    gasLimit: number;
+    timestamp: number;
+    data?: any;
+    type?: number;
     /**
      * token transfer to
      */
-    tknTo?: string
+    tknTo?: string;
     /**
      * token transfer value
      */
-    tknValue?: BigNumber 
+    tknValue?: BigNumber;
 }
 
 /**
  * Aion pending transaction
  */
 export interface AionPendingTx {
-    hash: string
-    status: 'PENDING'
-    to: string
-    from: string
-    value: BigNumber
+    hash: string;
+    status: "PENDING";
+    to: string;
+    from: string;
+    value: BigNumber;
     /**
      * token transfer to
      */
-    tknTo?: string
+    tknTo?: string;
     /**
      * token transfer value
      */
-    tknValue?: BigNumber
-    timestamp: number
-    gasPrice: number
-    gasLimit: number
+    tknValue?: BigNumber;
+    timestamp: number;
+    gasPrice: number;
+    gasLimit: number;
 }

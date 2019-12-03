@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import BigNumber from "bignumber.js";
 export declare const processRequest: (methodName: any, params: any) => string;
 declare const _default: (config: any) => {
     blockNumber: () => Promise<any>;

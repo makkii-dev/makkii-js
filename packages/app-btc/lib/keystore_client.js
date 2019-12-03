@@ -67,7 +67,9 @@ class BtcKeystoreClient {
         };
         this.getAccountFromMnemonic = (address_index, mnemonic) => {
             const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index, { network });
+            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index, {
+                network
+            });
         };
         this.getAccountFromHardware = (index, hardware) => {
             if (!this.checkLedgerSupport()) {
@@ -76,11 +78,11 @@ class BtcKeystoreClient {
             const network = this.getCurrentNetwork();
             return hardware.getAccount(index, { network });
         };
-        if (!(['BTC', 'BTCTEST', 'LTC', 'LTCTEST'].includes(network))) {
+        if (!["BTC", "BTCTEST", "LTC", "LTCTEST"].includes(network)) {
             throw new Error(`BtcKeystoreClient Unsupport network: ${network}`);
         }
         this.network = network;
-        if (network.match('BTC')) {
+        if (network.match("BTC")) {
             this.ledgerSupport = true;
         }
     }

@@ -1,9 +1,9 @@
-import BigNumber from 'bignumber.js';
-import { IsingleApiClient } from '@makkii/makkii-core/src/interfaces/api_client';
-import { IkeystoreSigner } from '@makkii/makkii-core/src/interfaces/keystore_client';
-import { BtcUnsignedTx, BtcTxStatus, BtcTransaction, BtcPendingTransaction } from './type';
+import BigNumber from "bignumber.js";
+import { IsingleApiClient } from "@makkii/makkii-core/src/interfaces/api_client";
+import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
+import { BtcUnsignedTx, BtcTxStatus, BtcTransaction, BtcPendingTransaction } from "./type";
 export interface IBtcConfig {
-    network: 'BTC' | 'BTCTEST' | 'LTC' | 'LTCTEST';
+    network: "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
     insight_api: string;
     broadcast?: string;
     explorer?: string;

@@ -5,13 +5,13 @@ const Base58Prefix = {
     BTC: [0x00, 0x05],
     BTCTEST: [0x6f, 0xc4],
     LTC: [0x30, 0x32],
-    LTCTEST: [0x6f, 0xc4, 0x3a],
+    LTCTEST: [0x6f, 0xc4, 0x3a]
 };
 const Bench32prefix = {
-    BTC: 'bc',
-    BTCTEST: 'tb',
-    LTC: 'ltc',
-    LTCTEST: 'tltc',
+    BTC: "bc",
+    BTCTEST: "tb",
+    LTC: "ltc",
+    LTCTEST: "tltc"
 };
 const validateBase58 = (address, network) => {
     try {

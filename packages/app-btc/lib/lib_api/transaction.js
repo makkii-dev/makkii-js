@@ -24,21 +24,29 @@ exports.default = config => {
             value,
             fee,
             hash: txId,
-            status: 'PENDING',
+            status: "PENDING"
         };
     });
-    const getTransactionUrlInExplorer = (txHash) => `${config.explorer}/${txHash}`;
+    const getTransactionUrlInExplorer = txHash => `${config.explorer}/${txHash}`;
     const buildTransaction = (from, to, value, options) => __awaiter(void 0, void 0, void 0, function* () {
         const { byte_fee } = options;
         value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
         const utxos = yield getUnspentTx(from);
         const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(new bignumber_js_1.default(el.amount)), new bignumber_js_1.default(0));
-        const fee = config.network.match('LTC') ? transaction_1.estimateFeeLTC : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10);
-        const vout = [
-            { addr: to, value: value.toNumber() },
-        ];
-        if (valueIn.toNumber() > value.shiftedBy(8).toNumber() + fee.toNumber()) {
-            vout.push({ addr: from, value: valueIn.minus(value.shiftedBy(8)).minus(fee).shiftedBy(-8).toNumber() });
+        const fee = config.network.match("LTC")
+            ? transaction_1.estimateFeeLTC
+            : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10);
+        const vout = [{ addr: to, value: value.toNumber() }];
+        if (valueIn.toNumber() >
+            value.shiftedBy(8).toNumber() + fee.toNumber()) {
+            vout.push({
+                addr: from,
+                value: valueIn
+                    .minus(value.shiftedBy(8))
+                    .minus(fee)
+                    .shiftedBy(-8)
+                    .toNumber()
+            });
         }
         return {
             from: [{ addr: from, value: valueIn.shiftedBy(-8).toNumber() }],
@@ -55,7 +63,7 @@ exports.default = config => {
     return {
         sendTransaction,
         buildTransaction,
-        getTransactionUrlInExplorer,
+        getTransactionUrlInExplorer
     };
 };
 //# sourceMappingURL=transaction.js.map

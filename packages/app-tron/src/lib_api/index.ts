@@ -1,15 +1,16 @@
-import transactionClient from './transaction';
-import jsonrpcClient from './jsonrpc';
-import { sameAddress } from './tools'
+import transactionClient from "./transaction";
+import jsonrpcClient from "./jsonrpc";
+import { sameAddress } from "./tools";
 
 export default config => {
-    const { getBalance } = jsonrpcClient(config)
+    const { getBalance } = jsonrpcClient(config);
     const {
         sendTransaction,
         getTransactionStatus,
         getTransactionUrlInExplorer,
         getTransactionsByAddress,
-        buildTransaction } = transactionClient(config);
+        buildTransaction
+    } = transactionClient(config);
     return {
         getBalance,
         buildTransaction,
@@ -19,4 +20,4 @@ export default config => {
         getTransactionUrlInExplorer,
         getTransactionsByAddress
     };
-}
+};

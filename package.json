@@ -6,17 +6,18 @@
   "scripts": {
     "postinstall": "lerna bootstrap",
     "compile": "lerna run tsc",
+    "lint": "eslint packages/**/*.{ts,js} --fix",
     "doc": "typedoc --options ./typedoc.js"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged; npm run compile; git add ."
+      "pre-commit": "lint-staged && npm run compile && git add ."
     }
   },
   "lint-staged": {
     "src/**/*.{ts}": [
-        "eslint --fix",
-        "git add"
+      "eslint --fix",
+      "git add"
     ]
   },
   "keywords": [
@@ -36,11 +37,13 @@
     "@typescript-eslint/parser": "^2.7.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
     "husky": "^3.1.0",
     "lerna": "^3.18.3",
     "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
     "tslint": "^5.20.1",
     "typedoc": "^0.15.3",
     "typescript": "^3.7.2"

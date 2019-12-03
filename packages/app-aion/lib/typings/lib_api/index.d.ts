@@ -1,6 +1,5 @@
-import { validateBalanceSufficiency, sameAddress } from './tools';
+import { sameAddress } from "./tools";
 declare const _default: (config: any) => {
-    validateBalanceSufficiency: typeof validateBalanceSufficiency;
     getBlockByNumber: (blockNumber: any, fullTxs?: boolean) => Promise<any>;
     getBalance: (address: any) => Promise<import("bignumber.js").default>;
     blockNumber: () => Promise<any>;

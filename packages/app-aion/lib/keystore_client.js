@@ -32,15 +32,12 @@ class AionKeystoreClient {
         this.recoverKeyPairByPrivateKey = (priKey) => {
             try {
                 const keyPair = lib_keystore_1.default.keyPair(priKey);
-                const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-                return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+                const { privateKey, publicKey, address } = keyPair, rest = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, rest));
             }
             catch (e) {
                 return Promise.reject(new Error(`recover privKey failed: ${e}`));
             }
-        };
-        this.recoverKeyPairByWIF = (WIF, options) => {
-            throw new Error('[AION] recoverKeyPairByWIF not implemented.');
         };
         this.recoverKeyPairByKeyFile = (file, password) => {
             return lib_keystore_1.default.fromV3(file, password);

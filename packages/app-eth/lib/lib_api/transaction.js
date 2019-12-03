@@ -13,7 +13,7 @@ const bignumber_js_1 = require("bignumber.js");
 const lib_common_util_js_1 = require("lib-common-util-js");
 const jsonrpc_1 = require("./jsonrpc");
 const constants_1 = require("./constants");
-const Contract = require('web3-eth-contract');
+const Contract = require("web3-eth-contract");
 exports.default = config => {
     const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpc_1.default(config);
     function sendTransaction(unsignedTx, signer, signerParams) {
@@ -22,7 +22,7 @@ exports.default = config => {
             const hash = yield sendSignedTransaction(signedTx);
             return {
                 hash,
-                status: 'PENDING',
+                status: "PENDING",
                 to: unsignedTx.to,
                 from: unsignedTx.from,
                 value: unsignedTx.value,
@@ -37,7 +37,7 @@ exports.default = config => {
     function buildTransaction(from, to, value, options) {
         return __awaiter(this, void 0, void 0, function* () {
             const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
-            const nonce = yield getTransactionCount(from, 'pending');
+            const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
             if (isTransfer) {
                 const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
@@ -45,7 +45,7 @@ exports.default = config => {
                     .send(to, value
                     .shiftedBy(tokenDecimal - 0)
                     .toFixed(0)
-                    .toString(), '')
+                    .toString(), "")
                     .encodeABI();
             }
             return {
@@ -56,7 +56,7 @@ exports.default = config => {
                 gasPrice,
                 gasLimit,
                 data,
-                tknTo: isTransfer ? to : '',
+                tknTo: isTransfer ? to : "",
                 tknValue: isTransfer ? new bignumber_js_1.default(value) : new bignumber_js_1.default(0),
                 network: config.network
             };
@@ -69,7 +69,7 @@ exports.default = config => {
                 const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
                 console.log(`[eth getTransactionsByAddress req] : ${url}`);
                 const res = yield lib_common_util_js_1.HttpClient.get(url, false);
-                console.log('[eth getTransactionsByAddress req]', res.data);
+                console.log("[eth getTransactionsByAddress req]", res.data);
                 const { result } = res.data;
                 const txs = {};
                 result.forEach(t => {
@@ -79,7 +79,7 @@ exports.default = config => {
                     tx.from = t.from;
                     tx.to = t.to;
                     tx.value = new bignumber_js_1.default(t.value, 10).shiftedBy(-18).toNumber();
-                    tx.status = t.isError === '0' ? 'CONFIRMED' : 'FAILED';
+                    tx.status = t.isError === "0" ? "CONFIRMED" : "FAILED";
                     tx.blockNumber = parseInt(t.blockNumber);
                     tx.fee = t.gasPrice * t.gasUsed * Math.pow(10, -18);
                     txs[tx.hash] = tx;
@@ -89,7 +89,7 @@ exports.default = config => {
             const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
             console.log(`[eth getTransactionsByAddress req] : ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
-            console.log('[eth getTransactionsByAddress req]', res.data);
+            console.log("[eth getTransactionsByAddress req]", res.data);
             if (res.data.error) {
                 throw res.data.error;
             }
@@ -102,7 +102,7 @@ exports.default = config => {
                     tx.from = t.from;
                     tx.to = t.to;
                     tx.value = new bignumber_js_1.default(t.value);
-                    tx.status = t.success ? "CONFIRMED" : 'FAILED';
+                    tx.status = t.success ? "CONFIRMED" : "FAILED";
                     txs[tx.hash] = tx;
                 });
                 return txs;
@@ -123,7 +123,7 @@ exports.default = config => {
                 return {
                     status: parseInt(receipt.status, 16) === 1,
                     blockNumber: parseInt(receipt.blockNumber, 16),
-                    gasUsed: parseInt(receipt.gasUsed, 16),
+                    gasUsed: parseInt(receipt.gasUsed, 16)
                 };
             }
             catch (e) {
