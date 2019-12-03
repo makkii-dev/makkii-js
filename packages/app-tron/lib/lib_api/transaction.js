@@ -52,59 +52,49 @@ exports.default = config => {
         });
     }
     function getTransactionStatus(txHash) {
-        return new Promise((resolve, reject) => {
-            getTransactionInfoById(txHash)
-                .then(res => {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const res = yield getTransactionInfoById(txHash);
                 const { blockNumber } = res;
-                getTransactionById(txHash)
-                    .then(tx => {
-                    if (tx.ret !== undefined &&
-                        tx.ret instanceof Array &&
-                        tx.ret.length > 0 &&
-                        tx.ret[0].contractRet !== undefined) {
-                        resolve({
-                            blockNumber,
-                            status: tx.ret[0].contractRet === 'SUCCESS',
-                        });
-                        return;
-                    }
-                    resolve(undefined);
-                })
-                    .catch(err => {
-                    reject(err);
-                });
-            })
-                .catch(err => {
-                reject(err);
-            });
+                const tx = yield getTransactionById(txHash);
+                if (tx.ret !== undefined &&
+                    tx.ret instanceof Array &&
+                    tx.ret.length > 0 &&
+                    tx.ret[0].contractRet !== undefined) {
+                    return {
+                        blockNumber,
+                        status: tx.ret[0].contractRet === 'SUCCESS',
+                    };
+                }
+                return null;
+            }
+            catch (e) {
+                return null;
+            }
         });
     }
     function getTransactionsByAddress(address, page = 0, size = 25) {
-        const url = `${config.explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page * size}&address=${address}`;
-        console.log(`[tron req] get tron txs by address: ${url}`);
-        return new Promise((resolve, reject) => {
-            lib_common_util_js_1.HttpClient.get(url, false)
-                .then(res => {
-                const { data } = res.data;
-                const txs = {};
-                data.forEach(t => {
-                    if (t.tokenName === '_') {
-                        const tx = {};
-                        tx.hash = `${t.transactionHash}`;
-                        tx.timestamp = t.timestamp;
-                        tx.from = t.transferFromAddress;
-                        tx.to = t.transferToAddress;
-                        tx.value = new bignumber_js_1.default(t.amount, 10).shiftedBy(-6).toNumber();
-                        tx.blockNumber = t.block;
-                        tx.status = t.confirmed ? 'CONFIRMED' : 'FAILED';
-                        txs[tx.hash] = tx;
-                    }
-                });
-                resolve(txs);
-            })
-                .catch(err => {
-                reject(err);
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `${config.explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page * size}&address=${address}`;
+            console.log(`[tron getTransactionsByAddress req] ${url}`);
+            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            console.log(`[tron getTransactionsByAddress resp]`, res.data);
+            const { data } = res.data;
+            const txs = {};
+            data.forEach(t => {
+                if (t.tokenName === '_') {
+                    const tx = {};
+                    tx.hash = `${t.transactionHash}`;
+                    tx.timestamp = t.timestamp;
+                    tx.from = t.transferFromAddress;
+                    tx.to = t.transferToAddress;
+                    tx.value = new bignumber_js_1.default(t.amount, 10).shiftedBy(-6).toNumber();
+                    tx.blockNumber = t.block;
+                    tx.status = t.confirmed ? 'CONFIRMED' : 'FAILED';
+                    txs[tx.hash] = tx;
+                }
             });
+            return txs;
         });
     }
     function getTransactionUrlInExplorer(txHash) {

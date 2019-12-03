@@ -24,6 +24,7 @@ export default config => {
 
     const getLatestBlock = async () => {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
+        console.log('[tron getLatestBlock req] ', url);
         const res = await HttpClient.post(url);
         console.log('[tron getLatestBlock resp] ', res.data);
         return res.data;
@@ -54,6 +55,7 @@ export default config => {
 
     const getTransactionInfoById = async (hash) => {
         const url = `${config.trongrid_api}/walletsolidity/gettransactioninfobyid`;
+        console.log(`[tron http req] ${url}`);
         const res = await HttpClient.post(
             url,
             {
@@ -62,8 +64,7 @@ export default config => {
             true,
             { 'Content-Type': 'application/json' },
         );
-        console.log(`[tron http req] ${url}`);
-        console.log('[keystore http resp]', res.data);
+        console.log('[tron http resp]', res.data);
         return res.data;
     };
 

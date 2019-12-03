@@ -93,7 +93,7 @@ exports.default = config => {
             };
         }
         catch (e) {
-            throw new Error(`[${config.network} getTransactionStatus error]: ${e}`);
+            return null;
         }
     });
     const getTransactionsByAddress = (address, page, size) => __awaiter(void 0, void 0, void 0, function* () {

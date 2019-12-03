@@ -5,7 +5,19 @@
   "description": "",
   "scripts": {
     "postinstall": "lerna bootstrap",
+    "compile": "lerna run tsc",
     "doc": "typedoc --options ./typedoc.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged; npm run compile; git add ."
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts}": [
+        "eslint --fix",
+        "git add"
+    ]
   },
   "keywords": [
     "react-native"
@@ -26,7 +38,9 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",
+    "husky": "^3.1.0",
     "lerna": "^3.18.3",
+    "lint-staged": "^9.5.0",
     "tslint": "^5.20.1",
     "typedoc": "^0.15.3",
     "typescript": "^3.7.2"

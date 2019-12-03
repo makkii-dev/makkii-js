@@ -86,7 +86,7 @@ export default config => {
         timestamp: blocktime,
       };
     } catch (e) {
-      throw new Error(`[${config.network} getTransactionStatus error]: ${e}`);
+      return null
     }
   };
 

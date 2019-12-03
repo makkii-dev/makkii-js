@@ -30,14 +30,23 @@ declare const _default: (config: any) => {
         gasLimit: any;
         gasPrice: any;
     }>;
-    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<unknown>;
+    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<{}>;
     getTransactionUrlInExplorer: (txHash: any) => string;
-    getTransactionStatus: (txHash: any) => Promise<unknown>;
-    getAccountTokens: (address: any) => Promise<unknown>;
-    getAccountTokenBalance: (contractAddress: any, address: any) => Promise<unknown>;
-    getAccountTokenTransferHistory: (address: any, symbolAddress: any, page?: number, size?: number) => Promise<unknown>;
-    getTokenDetail: (contractAddress: any) => Promise<unknown>;
-    getTopTokens: (topN?: number) => Promise<unknown>;
-    searchTokens: (keyword: any) => Promise<unknown>;
+    getTransactionStatus: (txHash: any) => Promise<{
+        status: boolean;
+        blockNumber: number;
+        gasUsed: number;
+    }>;
+    getAccountTokens: (address: any) => Promise<{}>;
+    getAccountTokenBalance: (contractAddress: any, address: any) => Promise<import("bignumber.js").default>;
+    getAccountTokenTransferHistory: (address: any, symbolAddress: any, page?: number, size?: number) => Promise<{}>;
+    getTokenDetail: (contractAddress: any) => Promise<{
+        contractAddr: any;
+        symbol: any;
+        name: any;
+        tokenDecimal: any;
+    }>;
+    getTopTokens: (topN?: number) => Promise<any>;
+    searchTokens: (keyword: any) => Promise<any>;
 };
 export default _default;

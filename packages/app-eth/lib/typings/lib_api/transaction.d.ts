@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 declare const _default: (config: any) => {
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
-        hash: unknown;
+        hash: any;
         status: string;
         to: any;
         from: any;
@@ -15,7 +15,7 @@ declare const _default: (config: any) => {
     buildTransaction: (from: any, to: any, value: any, options: any) => Promise<{
         to: any;
         from: any;
-        nonce: unknown;
+        nonce: any;
         value: BigNumber;
         gasPrice: any;
         gasLimit: any;
@@ -24,8 +24,12 @@ declare const _default: (config: any) => {
         tknValue: BigNumber;
         network: any;
     }>;
-    getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<unknown>;
+    getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<{}>;
     getTransactionUrlInExplorer: (txHash: any) => string;
-    getTransactionStatus: (txHash: any) => Promise<unknown>;
+    getTransactionStatus: (txHash: any) => Promise<{
+        status: boolean;
+        blockNumber: number;
+        gasUsed: number;
+    }>;
 };
 export default _default;

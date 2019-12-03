@@ -21,8 +21,11 @@ declare const _default: (config: any) => {
         value: any;
         status: string;
     }>;
-    getTransactionStatus: (txHash: any) => Promise<unknown>;
+    getTransactionStatus: (txHash: any) => Promise<{
+        blockNumber: any;
+        status: boolean;
+    }>;
     getTransactionUrlInExplorer: (txHash: any) => string;
-    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<unknown>;
+    getTransactionsByAddress: (address: any, page?: number, size?: number) => Promise<{}>;
 };
 export default _default;

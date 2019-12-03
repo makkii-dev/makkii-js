@@ -1,12 +1,12 @@
 import { validateBalanceSufficiency, sameAddress } from './tools';
 declare const _default: (config: any) => {
     validateBalanceSufficiency: typeof validateBalanceSufficiency;
-    getBlockByNumber: (blockNumber: any, fullTxs?: boolean) => Promise<unknown>;
-    getBalance: (address: any) => Promise<unknown>;
-    blockNumber: () => Promise<unknown>;
+    getBlockByNumber: (blockNumber: any, fullTxs?: boolean) => Promise<any>;
+    getBalance: (address: any) => Promise<import("bignumber.js").default>;
+    blockNumber: () => Promise<any>;
     sameAddress: typeof sameAddress;
     sendTransaction: (unsignedTx: any, signer: any, signerParams: any) => Promise<{
-        hash: unknown;
+        hash: any;
         status: string;
         to: any;
         from: any;
@@ -20,7 +20,7 @@ declare const _default: (config: any) => {
     buildTransaction: (from: any, to: any, value: any, options: any) => Promise<{
         to: any;
         from: any;
-        nonce: unknown;
+        nonce: any;
         value: import("bignumber.js").default;
         gasPrice: any;
         gasLimit: any;
@@ -29,15 +29,24 @@ declare const _default: (config: any) => {
         tknValue: import("bignumber.js").default;
         network: any;
     }>;
-    getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<unknown>;
+    getTransactionsByAddress: (address: any, page: any, size: any, timestamp: any) => Promise<{}>;
     getTransactionUrlInExplorer: (txHash: any) => string;
-    getTransactionStatus: (txHash: any) => Promise<unknown>;
+    getTransactionStatus: (txHash: any) => Promise<{
+        status: boolean;
+        blockNumber: number;
+        gasUsed: number;
+    }>;
     getAccountTokens: () => Promise<{}>;
     getAccountTokenBalance: (contractAddress: any, address: any) => Promise<unknown>;
-    getAccountTokenTransferHistory: (address: any, symbolAddress: any, page: number, size: number, timestamp: any) => Promise<unknown>;
-    getTokenDetail: (contractAddress: any) => Promise<unknown>;
+    getAccountTokenTransferHistory: (address: any, symbolAddress: any, page: number, size: number, timestamp: any) => Promise<{}>;
+    getTokenDetail: (contractAddress: any) => Promise<{
+        contractAddr: any;
+        symbol: any;
+        name: any;
+        tokenDecimal: any;
+    }>;
     getTokenIconUrl: (tokenSymbol: any, contractAddress: any) => string;
-    getTopTokens: (topN?: number) => Promise<unknown>;
-    searchTokens: (keyword: any) => Promise<unknown>;
+    getTopTokens: (topN?: number) => Promise<any>;
+    searchTokens: (keyword: any) => Promise<any>;
 };
 export default _default;

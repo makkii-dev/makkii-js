@@ -1,6 +1,7 @@
 import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import { EthUnsignedTx } from "../../type";
 import { process_unsignedTx } from "../../lib_keystore/transaction";
+import Eth from '@ledgerhq/hw-app-eth';
 
 /**
  * Ethereum ledger client that implements IHardware interface
@@ -48,6 +49,12 @@ export default class EthLedger implements IHardware {
             throw new Error('sign error: invalid signature')
         }
         return `0x${unsigned.serialize().toString('hex')}`
+    }
+
+   
+    setLedgerTransport = (transport: any) => {
+        this.hardware = new Eth(transport);
+        return this;
     }
 
 }
