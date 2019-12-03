@@ -1,6 +1,8 @@
+const packageJson = require("./package");
+
 module.exports = {
     readme: "README.md",
-    name: "makkiijs",
+    name: `${packageJson.name} v${packageJson.version}`,
     includes: "packages",
     exclude: [
         "html/**",
@@ -9,6 +11,34 @@ module.exports = {
         "packages/**/src/lib_api/*.js",
         "packages/**/src/lib_keystore/*.js",
         "**/babel.config.js"
+    ],
+    toc: [
+        "ApiClient",
+        "KeystoreClient",
+        "AionApiClient",
+        "AionKeystoreClient",
+        "AionLedger",
+        "AionLocalSigner",
+        "BtcApiClient",
+        "BtcKeystoreClient",
+        "BtcLedger",
+        "BtcLocalSigner",
+        "EthApiClient",
+        "EthKeystoreClient",
+        "EthLedger",
+        "EthLocalSinger",
+        "TronApiClient",
+        "TronKeystoreClient",
+        "TronLocalSigner"
+    ],
+    categorizeByGroup: true,
+    categoryOrder: [
+        "Api Client",
+        "Keystore Client",
+        "Api",
+        "Keystore",
+        "Hardware",
+        "*"
     ],
     ignoreCompilerErrors: true,
     out: "./html",
