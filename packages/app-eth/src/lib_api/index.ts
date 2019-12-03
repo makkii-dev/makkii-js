@@ -1,4 +1,4 @@
-import { validateBalanceSufficiency, sameAddress } from './tools';
+import { sameAddress } from './tools';
 import jsonrpcClient from './jsonrpc';
 import transactionClient from './transaction';
 import tokenClient from './token';
@@ -19,7 +19,6 @@ export default (config) => {
 
 
   return {
-    validateBalanceSufficiency,
     getBlockByNumber,
     getBalance,
     blockNumber,

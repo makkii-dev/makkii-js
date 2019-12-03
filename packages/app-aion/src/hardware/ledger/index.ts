@@ -39,8 +39,8 @@ export default class AionLedger implements IHardware {
     /**
      * Sign transaction
      * 
-     * @param tx transaction object to sign
-     * @param params parameters object.example: { index: 1 }
+     * @param tx AionUnsignedTx transaction object to sign
+     * @param params parameters object, example: { index: 1 }
      * @return Promise of transaction hash string
      */
     signTransaction = async (tx: AionUnsignedTx, params: { index: number }): Promise<string> => {

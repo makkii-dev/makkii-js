@@ -34,6 +34,13 @@ export default class EthLedger implements IHardware {
         }
     }
 
+    /**
+     * Sign transaction
+     * 
+     * @param tx transaction object to sign
+     * @param params parameters object, example: { derivationIndex: 1 }
+     * @return Promise of transaction hash string
+     */
     signTransaction = async (transaction: EthUnsignedTx, params: {derivationIndex:number}): Promise<string> => {
         const unsigned = process_unsignedTx(transaction);
         const {derivationIndex} = params;
@@ -50,8 +57,13 @@ export default class EthLedger implements IHardware {
         }
         return `0x${unsigned.serialize().toString('hex')}`
     }
-
    
+    /**
+     * Set ledger transport.
+     * 
+     * @param transport. valid ledger transport implementation, 
+     * refer to https://github.com/LedgerHQ/ledgerjs/tree/master/packages/hw-transport
+     */
     setLedgerTransport = (transport: any) => {
         this.hardware = new Eth(transport);
         return this;

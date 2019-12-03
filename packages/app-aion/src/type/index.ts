@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 
 /**
- * Aion signed transaction interface
+ * Aion unsigned transaction interface
  */
 export interface AionUnsignedTx {
     to: string
@@ -23,6 +23,9 @@ export interface AionUnsignedTx {
     tknValue?: BigNumber 
 }
 
+/**
+ * Aion pending transaction
+ */
 export interface AionPendingTx {
     hash: string
     status: 'PENDING'
