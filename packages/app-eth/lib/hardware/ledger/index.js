@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const transaction_1 = require("../../lib_keystore/transaction");
+const hw_app_eth_1 = require("@ledgerhq/hw-app-eth");
 class EthLedger {
     constructor() {
         this.hardware = {};
@@ -43,6 +44,10 @@ class EthLedger {
             }
             return `0x${unsigned.serialize().toString('hex')}`;
         });
+        this.setLedgerTransport = (transport) => {
+            this.hardware = new hw_app_eth_1.default(transport);
+            return this;
+        };
     }
 }
 exports.default = EthLedger;

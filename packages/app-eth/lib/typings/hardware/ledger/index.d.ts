@@ -11,4 +11,5 @@ export default class EthLedger implements IHardware {
     signTransaction: (transaction: EthUnsignedTx, params: {
         derivationIndex: number;
     }) => Promise<string>;
+    setLedgerTransport: (transport: any) => this;
 }

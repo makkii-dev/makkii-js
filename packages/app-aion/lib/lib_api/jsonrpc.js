@@ -38,10 +38,10 @@ exports.default = (config) => {
     };
     const getBlockByNumber = (blockNumber, fullTxs = false) => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest('eth_getBlockByNumber', [blockNumber, fullTxs]);
+        console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
         console.log('[aion http resp] eth_getBlockByNumber', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
@@ -49,10 +49,10 @@ exports.default = (config) => {
     });
     const blockNumber = () => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest('eth_blockNumber', []);
+        console.log('[aion http req] eth_blockNumber[]');
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log('[aion http req] eth_blockNumber[]');
         console.log('[aion http resp] eth_blockNumber', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
@@ -61,10 +61,10 @@ exports.default = (config) => {
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), 'latest'];
         const requestData = exports.processRequest('eth_getBalance', params);
+        console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
         console.log('[aion http resp] eth_getBalance', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
@@ -73,10 +73,10 @@ exports.default = (config) => {
     const getTransactionCount = (address, blockTag) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), checkBlockTag(blockTag)];
         const requestData = exports.processRequest('eth_getTransactionCount', params);
+        console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
         console.log('[aion http resp] eth_getTransactionCount', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
@@ -85,10 +85,10 @@ exports.default = (config) => {
     const sendSignedTransaction = (signedTx) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [signedTx];
         const requestData = exports.processRequest('eth_sendRawTransaction', params);
+        console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
         console.log('[aion http resp] eth_sendRawTransaction', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
@@ -97,10 +97,10 @@ exports.default = (config) => {
     const getTransactionReceipt = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [hash];
         const requestData = exports.processRequest('eth_getTransactionReceipt', params);
+        console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             'Content-Type': 'application/json',
         });
-        console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
         console.log('[aion http resp] eth_getTransactionReceipt', res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);

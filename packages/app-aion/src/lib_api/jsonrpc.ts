@@ -39,10 +39,10 @@ export default (config) => {
 
   const getBlockByNumber = async (blockNumber /* hex string */, fullTxs = false) => {
     const requestData = processRequest('eth_getBlockByNumber', [blockNumber, fullTxs]);
+    console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log(`[aion http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
     console.log('[aion http resp] eth_getBlockByNumber', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return res.data.result;
@@ -50,10 +50,10 @@ export default (config) => {
 
   const blockNumber = async () => {
     const requestData = processRequest('eth_blockNumber', []);
+    console.log('[aion http req] eth_blockNumber[]');
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log('[aion http req] eth_blockNumber[]');
     console.log('[aion http resp] eth_blockNumber', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return res.data.result;
@@ -62,10 +62,10 @@ export default (config) => {
   const getBalance = async (address) => {
     const params = [address.toLowerCase(), 'latest'];
     const requestData = processRequest('eth_getBalance', params);
+    console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log(`[aion http req] eth_getBalance[${address}, 'latest']`);
     console.log('[aion http resp] eth_getBalance', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return new BigNumber(res.data.result).shiftedBy(-18);
@@ -74,10 +74,10 @@ export default (config) => {
   const getTransactionCount = async (address, blockTag) => {
     const params = [address.toLowerCase(), checkBlockTag(blockTag)];
     const requestData = processRequest('eth_getTransactionCount', params);
+    console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log(`[aion http req] eth_getTransactionCount[${address}, ${blockTag}]`);
     console.log('[aion http resp] eth_getTransactionCount', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return res.data.result;
@@ -86,10 +86,10 @@ export default (config) => {
   const sendSignedTransaction = async (signedTx) => {
     const params = [signedTx];
     const requestData = processRequest('eth_sendRawTransaction', params);
+    console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log(`[aion http req] eth_sendRawTransaction[${signedTx}]`);
     console.log('[aion http resp] eth_sendRawTransaction', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return res.data.result;
@@ -98,10 +98,10 @@ export default (config) => {
   const getTransactionReceipt = async (hash) => {
     const params = [hash];
     const requestData = processRequest('eth_getTransactionReceipt', params);
+    console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
     const res = await HttpClient.post(config.jsonrpc, requestData, true, {
       'Content-Type': 'application/json',
     });
-    console.log(`[aion http req] eth_getTransactionReceipt[${hash}]`);
     console.log('[aion http resp] eth_getTransactionReceipt', res.data);
     if (res.data.error) throw new Error(res.data.error.message);
     return res.data.result;
