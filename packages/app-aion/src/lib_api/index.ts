@@ -3,7 +3,6 @@ import jsonrpcClient from './jsonrpc';
 import transactionClient from './transaction';
 import tokenClient from './token';
 
-
 export default (config) => {
   const { getBalance, getBlockByNumber, blockNumber } = jsonrpcClient(config);
   const { sendTransaction, getTransactionsByAddress, getTransactionUrlInExplorer, getTransactionStatus, buildTransaction } = transactionClient(config);

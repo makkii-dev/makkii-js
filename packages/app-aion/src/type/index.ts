@@ -1,5 +1,8 @@
 import BigNumber from "bignumber.js";
 
+/**
+ * Aion signed transaction interface
+ */
 export interface AionUnsignedTx {
     to: string
     from: string
@@ -10,7 +13,13 @@ export interface AionUnsignedTx {
     timestamp: number
     data?: any
     type?: number   
+    /**
+     * token transfer to
+     */
     tknTo?: string
+    /**
+     * token transfer value
+     */
     tknValue?: BigNumber 
 }
 
@@ -20,7 +29,13 @@ export interface AionPendingTx {
     to: string
     from: string
     value: BigNumber
+    /**
+     * token transfer to
+     */
     tknTo?: string
+    /**
+     * token transfer value
+     */
     tknValue?: BigNumber
     timestamp: number
     gasPrice: number

@@ -6,15 +6,29 @@ import API from './lib_api';
 import network from './network';
 import { AionUnsignedTx, AionPendingTx } from './type';
 
+/**
+ * Aion configuration interface
+ */
 export interface IConfig {
   network: 'mainnet' | 'amity';
-  jsonrpc: string;
+  jsonrpc: string
+  /**
+   * api endpoint that used to query transaction information
+   */
   explorer_api?: string;
+  /**
+   * transaction page base url
+   */
   explorer?: string;
+  /**
+   * app server endpoint that provides token, icons, etc.
+   */
   remoteApi?: string;
 }
 
-type txHash = string;
+/**
+ * Aion api client that implement IsingleApiFullClient
+ */
 export default class AionApiClient implements IsingleApiFullClient {
 
   tokenSupport: boolean = true;
@@ -48,6 +62,9 @@ export default class AionApiClient implements IsingleApiFullClient {
     this.api = API(this.config);
   }
 
+  /**
+   * Get network name: mainnet, amity and mastery.
+   */
   getNetwork = () => this.config.network;
 
   updateConfiguration = (config: IConfig) => {
@@ -55,15 +72,32 @@ export default class AionApiClient implements IsingleApiFullClient {
     this.api = API(this.config);
   }
 
-
+  /**
+   * Get block by number, block information doesn't contains transaction details
+   * 
+   * @param blockNumber block number's hex string
+   * @returns eth_getBlockNumber response's result
+   */
   getBlockByNumber = (blockNumber: string) => {
     return this.api.getBlockByNumber(blockNumber, false);
   }
 
+  /**
+   * Get latest block number
+   * 
+   * @returns eth_getBlockNumber response's result
+   */
   getBlockNumber = () => {
     return this.api.blockNumber();
   }
 
+  /**
+   * Get transaction status.
+   * 
+   * @param hash transaction hash
+   * @returns if eth_getTransactionReceipt is null, returns null; 
+   *          else return object { status: true/false, blockNumber: intger, gasUsed: integer }
+   */
   getTransactionStatus = (hash: string) => {
     return this.api.getTransactionStatus(hash);
   }
@@ -76,6 +110,22 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getBalance(address);
   }
 
+  /**
+   * Get transactions by the given address
+   * 
+   * @param address account address
+   * @param page page number
+   * @param size page size
+   * @returns array of object structure which contains:
+   *          hash: string, with prefix 0x
+   *          timestamp: milli-seconds from 1970
+   *          from: sender
+   *          to: receiver
+   *          value: transfer amount
+   *          status: 'CONFIRMED' or 'FAILED'
+   *          blockNumber: hex string
+   *          fee: integer
+   */
   getTransactionsByAddress = (address: string, page: number, size: number) => {
     return this.api.getTransactionsByAddress(address, page, size);
   }
@@ -88,7 +138,9 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.sameAddress(address1, address2);
   }
 
-  // not implemented
+  /**
+   * throw not implementated error
+   */
   getTokenIconUrl = (tokenSymbol: string, contractAddress: string) => {
     throw new Error('Method getTokenIconUrl not implemented.');
   }
@@ -105,12 +157,6 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.getAccountTokens(address);
   }
 
-  /**
-   * Get account token balance of aion api client
-   * @param {string} contractAddress contract address
-   * @param {string} address account address
-   * @returns promise account token balance
-   */
   getAccountTokenBalance = (contractAddress: string, address: string): Promise<BigNumber> => {
     return this.api.getAccountTokenBalance(contractAddress, address);
   }
@@ -123,6 +169,19 @@ export default class AionApiClient implements IsingleApiFullClient {
     return this.api.searchTokens(keyword);
   }
 
+  /**
+   * TODO: not general enough.
+   * Build transaction
+   * 
+   * options parameters contains: gasLimit, gasPrice, isTransfer, data(optional), contractAddr(optional), tokenDecimal(optional).
+   * if isTransfer is true, transaction value is zero and transaction to is token contract creation address, 
+   * to parameter is encoded in data.
+   * 
+   * @param from transaction sender
+   * @param to amount receiver
+   * @param value amount value
+   * @param options extra parameters
+   */
   buildTransaction = (from: string, to: string, value: BigNumber, options: {
     gasLimit: number,
     gasPrice: number,

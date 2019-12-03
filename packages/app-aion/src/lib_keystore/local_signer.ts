@@ -8,8 +8,18 @@ const blake2b = require('blake2b')
 const nacl = require('tweetnacl')
 const rlp = require('aion-rlp')
 
+/**
+ * Aion's signer using private key, implements IkeystoreSigner.
+ */
 export default class AionLocalSigner implements IkeystoreSigner {
 
+    /**
+     * Sign transaction
+     * 
+     * @param tx AionUnsginedTx transaction object to sign.
+     * @param params parameters object, example: { private_key: '' }}
+     * @returns transaction hash string
+     */
     signTransaction = async (tx: AionUnsignedTx, params: { private_key: string }): Promise<string> => {
         const { private_key } = params;
         const rlpEncoded = process_unsignedTx(tx);

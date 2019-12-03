@@ -2,10 +2,22 @@ import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import { EthUnsignedTx } from "../../type";
 import { process_unsignedTx } from "../../lib_keystore/transaction";
 
+/**
+ * Ethereum ledger client that implements IHardware interface
+ * 
+ * User should call getHardwareStatus() first to check ledger and app status,
+ * then decide whether to call other functions.
+ */
 export default class EthLedger implements IHardware {
    
     private hardware: any = {}
 
+    /**
+     * Get ethereum account from eth ledger app
+     * 
+     * @param index index path in hd wallet
+     * @returns account { address: '', index: 1, publicKey: '' }
+     */
     getAccount = async (index: number) => {
         const path = `44'/60'/0'/0/${index}`;
         const { address, publicKey } = await this.hardware.getAddress(path, false);

@@ -6,10 +6,22 @@ import { process_unsignedTx } from '../../lib_keystore/transaction';
 
 const rlp = require('aion-rlp')
 
+/**
+ * Aion ledger client, implements IHardware interface.
+ * 
+ * User should call getHardwareStatus() first to check ledger and app status,
+ * then decide whether to call other functions.
+ */
 export default class AionLedger implements IHardware {
 
     private hardware: any = {}
 
+    /**
+     * Get aion account from ledger app
+     * 
+     * @param index index path in hd wallet
+     * @returns account, exmaple: { address: "0xa0...", index: 1 }
+     */
     getAccount = async (index: number) => {
         const { address } = await this.hardware.getAccount(index);
         return { address, index };
@@ -24,6 +36,13 @@ export default class AionLedger implements IHardware {
         }
     };
 
+    /**
+     * Sign transaction
+     * 
+     * @param tx transaction object to sign
+     * @param params parameters object.example: { index: 1 }
+     * @return Promise of transaction hash string
+     */
     signTransaction = async (tx: AionUnsignedTx, params: { index: number }): Promise<string> => {
         const { index } = params;
         const rlpEncoded = process_unsignedTx(tx);
@@ -38,10 +57,15 @@ export default class AionLedger implements IHardware {
         return `0x${rawTransaction.toString('hex')}`
     }
 
+    /**
+     * Set ledger transport.
+     * 
+     * @param transport. valid ledger transport implementation, 
+     * refer to https://github.com/LedgerHQ/ledgerjs/tree/master/packages/hw-transport
+     */
     setLedgerTransport = (transport: any) => {
         this.hardware = new AionApp(transport);
         return this;
     }
-
 
 }
