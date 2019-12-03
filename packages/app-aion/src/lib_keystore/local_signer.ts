@@ -10,6 +10,7 @@ const rlp = require("aion-rlp");
 
 /**
  * Aion's signer using private key, implements IkeystoreSigner.
+ * @category Local signer
  */
 export default class AionLocalSigner implements IkeystoreSigner {
     /**

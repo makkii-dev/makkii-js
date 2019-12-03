@@ -5,8 +5,11 @@ import {
 } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import KYSTORE from "./lib_keystore";
-import { BtcUnsignedTx, BtcrecoverOptions, BtcKeypair } from "./type";
+import { BtcUnsignedTx, BtcKeypair } from "./type";
 
+/**
+ * @category Keystore Client
+ */
 export default class BtcKeystoreClient implements IsingleKeystoreClient {
     /**
      * only btc btcTest support ledger
@@ -70,10 +73,11 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
      * Recover key pair by private key
      * @param priKey
      * @param options
+     * - **compressed** *boolean* whether to compress public key
      */
     recoverKeyPairByPrivateKey = (
         priKey: string,
-        options?: BtcrecoverOptions
+        options?: any
     ): Promise<BtcKeypair> => {
         const network = this.getCurrentNetwork();
         try {
@@ -101,18 +105,13 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
      * Recover key pair by wif
      *
      * @param wif wif string
-     * @param options {network: string(optional)}
      *
      */
-    recoverKeyPairByWIF = (
-        WIF: string,
-        options?: BtcrecoverOptions
-    ): Promise<BtcKeypair> => {
+    recoverKeyPairByWIF = (WIF: string): Promise<BtcKeypair> => {
         const network = this.getCurrentNetwork();
         try {
             const keyPair = KYSTORE.keyPairFromWIF(WIF, {
-                network,
-                ...options
+                network
             });
             if (keyPair) {
                 const { privateKey, publicKey, address, ...reset } = keyPair;

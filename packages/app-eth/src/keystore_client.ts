@@ -10,6 +10,7 @@ import { EthUnsignedTx } from "./type";
 
 /**
  * Ethereum keystore client that implements IsingleKeystoreClient
+ * @category Keystore Client
  */
 export default class EthKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean = true;

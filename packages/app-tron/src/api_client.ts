@@ -11,6 +11,10 @@ import {
 } from "./type";
 
 type hash = string;
+
+/**
+ * @category Coin TRON
+ */
 export interface ITronConfig {
     network: "mainnet" | "shasta";
     /**
@@ -26,7 +30,13 @@ export interface ITronConfig {
      */
     explorer?: string;
 }
+/**
+ * Tron api client that implement IsingleApiClient
+ * @category Api Client
+ */
 export default class TronApiClient implements IsingleApiClient {
+    symbol: string = "TRX";
+
     config: ITronConfig;
 
     private api: any;
@@ -58,6 +68,9 @@ export default class TronApiClient implements IsingleApiClient {
     /**
      * Get network
      * @returns nework
+     * ```
+     * mainnet|shasta
+     * ```
      */
     getNetwork = () => this.config.network;
 
@@ -127,7 +140,10 @@ export default class TronApiClient implements IsingleApiClient {
      * Send transaction
      * @param unsignedTx unsigned transaction build by buildTransaction
      * @param signer localSigner or hardware
-     * @param signerParams localSigner: {private_key} hardware:{derivationIndex}
+     * @param signerParams
+     * ```
+     * localSigner: {private_key} hardware:{derivationIndex}
+     * ```
      */
     sendTransaction = (
         unsignedTx: TronUnsignedTx,

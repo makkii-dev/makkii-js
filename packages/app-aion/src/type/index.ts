@@ -2,6 +2,7 @@ import BigNumber from "bignumber.js";
 
 /**
  * Aion unsigned transaction interface
+ * @category Coin AION
  */
 export interface AionUnsignedTx {
     to: string;
@@ -25,6 +26,7 @@ export interface AionUnsignedTx {
 
 /**
  * Aion pending transaction
+ * @category Coin AION
  */
 export interface AionPendingTx {
     hash: string;

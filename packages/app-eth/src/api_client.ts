@@ -8,8 +8,9 @@ import { EthUnsignedTx, EthPendingTx } from "./type";
 
 /**
  * Ethereum configuration interface
+ * @category Coin ETH
  */
-export interface IConfig {
+export interface IEthConfig {
     network: "mainnet" | "ropsten";
     jsonrpc: string;
     /**
@@ -47,15 +48,18 @@ export interface IConfig {
 
 /**
  * Ethereum api client that implements IsingleApiFullClient
+ * @category Api Client
  */
 export default class EthApiClient implements IsingleApiFullClient {
+    symbol: string = "ETH";
+
     tokenSupport: boolean = true;
 
-    config: IConfig;
+    config: IEthConfig;
 
     private api: any;
 
-    constructor(config: IConfig) {
+    constructor(config: IEthConfig) {
         let restSet: {
             explorer_api?: {
                 provider: string;
@@ -92,7 +96,7 @@ export default class EthApiClient implements IsingleApiFullClient {
      */
     getNetwork = () => this.config.network;
 
-    updateConfiguration = (config: IConfig) => {
+    updateConfiguration = (config: IEthConfig) => {
         this.config = { ...this.config, ...config };
         this.api = API(this.config);
     };
@@ -120,10 +124,13 @@ export default class EthApiClient implements IsingleApiFullClient {
      * Get transaction status.
      *
      * @param hash transaction hash
-     * @returns if eth_getTransactionReceipt is null, returns null;
-     *          else return object { status: true/false, blockNumber: intger, gasUsed: integer }
+     * @returns
+     * ```
+     * if eth_getTransactionReceipt is null, returns null;
+     * else return object { status: true/false, blockNumber: intger, gasUsed: integer }
+     * ```
      */
-    getTransactionStatus = (hash: string) => {
+    getTransactionStatus = (hash: string): Promise<any> => {
         return this.api.getTransactionStatus(hash);
     };
 
@@ -142,15 +149,15 @@ export default class EthApiClient implements IsingleApiFullClient {
      * @param page page number
      * @param size page size
      * @param timestamp earlier than this timestamp
-     * @returns array of object structure which contains:
-     *          hash: string, with prefix 0x
-     *          timestamp: milli-seconds from 1970
-     *          from: sender
-     *          to: receiver
-     *          value: transfer amount
-     *          status: 'CONFIRMED' or 'FAILED'
-     *          blockNumber: hex string
-     *          fee: integer
+     * @returns array of object structure which contains:<br>
+     * - **hash**: string, with prefix 0x
+     * - **timestamp**: milli-seconds from 1970
+     * - **from**: sender
+     * - **to**: receiver
+     * - **value**: transfer amount
+     * - **status**: 'CONFIRMED' or 'FAILED'
+     * - **blockNumber**: hex string
+     * - **fee**: integer
      */
     getTransactionsByAddress = (
         address: string,
@@ -166,6 +173,15 @@ export default class EthApiClient implements IsingleApiFullClient {
         );
     };
 
+    /**
+     * Send transaction
+     * @param unsignedTx unsigned transaction build by buildTransaction
+     * @param signer localSigner or hardware
+     * @param signerParams
+     * ```
+     * localSigner: {private_key} hardware:{derivationIndex}
+     * ```
+     */
     sendTransaction = (
         unsignedTx: EthUnsignedTx,
         signer: IkeystoreSigner,
@@ -174,7 +190,7 @@ export default class EthApiClient implements IsingleApiFullClient {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);
     };
 
-    sameAddress = (address1: string, address2: string) => {
+    sameAddress = (address1: string, address2: string): boolean => {
         return this.api.sameAddress(address1, address2);
     };
 
@@ -229,6 +245,11 @@ export default class EthApiClient implements IsingleApiFullClient {
         return this.api.getAccountTokenBalance(contractAddress, address);
     };
 
+    /**
+     * Get top tokens
+     *
+     * @param topN default 20
+     */
     getTopTokens = (topN?: number): Promise<Array<Token>> => {
         return this.api.getTopTokens(topN);
     };

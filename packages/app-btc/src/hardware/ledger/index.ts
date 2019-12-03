@@ -5,6 +5,9 @@ import { networks } from "../../lib_keystore/network";
 import { BtcUnsignedTx } from "../../type";
 import { process_unsignedTx } from "../../lib_keystore/transaction";
 
+/**
+ * @category Hardware
+ */
 export default class BtcLedger implements IHardware {
     private hardware: any = {};
 

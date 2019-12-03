@@ -47,15 +47,19 @@ class BtcApiClient {
         });
         if (config.network === "BTC") {
             restSet = network_1.default.BTC;
+            this.symbol = "BTC";
         }
         else if (config.network === "BTCTEST") {
             restSet = network_1.default.BTCTEST;
+            this.symbol = "BTC";
         }
         else if (config.network === "LTC") {
             restSet = network_1.default.LTC;
+            this.symbol = "LTC";
         }
         else if (config.network === "LTCTEST") {
             restSet = network_1.default.LTCTEST;
+            this.symbol = "LTC";
         }
         else {
             throw new Error(`BtcApiClient Unsupport nework: ${config.network}`);

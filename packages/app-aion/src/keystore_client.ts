@@ -9,6 +9,7 @@ import { AionUnsignedTx } from "./type";
 
 /**
  * Aion keystore client that implements IsingleKeystoreClient interface
+ * @category Keystore Client
  */
 export default class AionKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean = true;

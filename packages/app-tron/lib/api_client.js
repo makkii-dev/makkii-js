@@ -4,6 +4,7 @@ const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class TronApiClient {
     constructor(config) {
+        this.symbol = "TRX";
         this.getNetwork = () => this.config.network;
         this.updateConfiguration = (config) => {
             this.config = Object.assign(Object.assign({}, this.config), config);

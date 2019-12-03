@@ -1,9 +1,10 @@
 import BigNumber from "bignumber.js";
-import { Transaction } from "../type";
+import { Transaction, CoinPrice } from "../type";
 import { IkeystoreSigner } from "./keystore_client";
 
 /**
  * Api client interface that manages multiple chains' api client and expose all functions.
+ * @category Api
  */
 export interface IApiClient {
     /**
@@ -216,14 +217,20 @@ export interface IApiClient {
     searchTokens(coinType: string, keyword: string): Promise<any>;
 
     /**
-     * TODO:
+     * Get coin prices
+     *
+     * @param currency fiat currency
+     *
+     * @returns array of coin price
      */
-    getCoinPrices(currency: string): Promise<any>;
+    getCoinPrices(currency: string): Promise<Array<CoinPrice>>;
 }
 
 /**
  * Interface that defines basic api client functions:
  * network configuration, block, transaction, balance, etc.
+ *
+ * @category Api
  */
 export interface IsingleApiClient {
     /**
@@ -231,6 +238,10 @@ export interface IsingleApiClient {
      */
     config: any;
 
+    /**
+     * Coin symbol eg: 'AION', 'BTC' ...
+     */
+    readonly symbol: string;
     /**
      * Update configuration.
      *
@@ -346,6 +357,8 @@ export interface IsingleApiClient {
 
 /**
  * Interface that defines token related functions.
+ *
+ * @category Api
  */
 export interface IsingleApiTokenClient {
     /**
@@ -423,6 +436,7 @@ export interface IsingleApiTokenClient {
 
 /**
  * Interface that defines basic api client and token functions.
+ * @category Api
  */
 export interface IsingleApiFullClient
     extends IsingleApiClient,

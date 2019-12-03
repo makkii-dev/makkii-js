@@ -7,6 +7,9 @@ import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import KEYSTORE from "./lib_keystore";
 import { TronUnsignedTx, TronKeypair } from "./type";
 
+/**
+ * @category Keystore Client
+ */
 export default class TronKeystoreClient implements IsingleKeystoreClient {
     /**
      * Sign transaction by signer

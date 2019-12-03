@@ -4,6 +4,7 @@ const lib_api_1 = require("./lib_api");
 const network_1 = require("./network");
 class AionApiClient {
     constructor(config) {
+        this.symbol = "AION";
         this.tokenSupport = true;
         this.getNetwork = () => this.config.network;
         this.updateConfiguration = (config) => {

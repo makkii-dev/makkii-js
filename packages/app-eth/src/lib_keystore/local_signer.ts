@@ -5,6 +5,7 @@ import { process_unsignedTx } from "./transaction";
 
 /**
  * Ethereum's signer using private key, implements IkeystoreSigner.
+ * @category Local signer
  */
 export default class EthLocalSinger implements IkeystoreSigner {
     /**

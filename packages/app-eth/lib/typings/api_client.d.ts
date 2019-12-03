@@ -3,7 +3,7 @@ import { IsingleApiFullClient } from "@makkii/makkii-core/src/interfaces/api_cli
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { Token } from "@makkii/makkii-core/src/type";
 import { EthUnsignedTx, EthPendingTx } from "./type";
-export interface IConfig {
+export interface IEthConfig {
     network: "mainnet" | "ropsten";
     jsonrpc: string;
     explorer_api?: {
@@ -18,20 +18,21 @@ export interface IConfig {
     remoteApi?: string;
 }
 export default class EthApiClient implements IsingleApiFullClient {
+    symbol: string;
     tokenSupport: boolean;
-    config: IConfig;
+    config: IEthConfig;
     private api;
-    constructor(config: IConfig);
+    constructor(config: IEthConfig);
     getNetwork: () => "mainnet" | "ropsten";
-    updateConfiguration: (config: IConfig) => void;
+    updateConfiguration: (config: IEthConfig) => void;
     getBlockByNumber: (blockNumber: string) => any;
     getBlockNumber: () => any;
-    getTransactionStatus: (hash: string) => any;
+    getTransactionStatus: (hash: string) => Promise<any>;
     getTransactionExplorerUrl: (hash: any) => any;
     getBalance: (address: string) => any;
     getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => any;
     sendTransaction: (unsignedTx: EthUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<EthPendingTx>;
-    sameAddress: (address1: string, address2: string) => any;
+    sameAddress: (address1: string, address2: string) => boolean;
     buildTransaction: (from: string, to: string, value: BigNumber, options: {
         gasLimit: number;
         gasPrice: number;

@@ -9,6 +9,7 @@ export interface ITronConfig {
     explorer?: string;
 }
 export default class TronApiClient implements IsingleApiClient {
+    symbol: string;
     config: ITronConfig;
     private api;
     constructor(config: ITronConfig);

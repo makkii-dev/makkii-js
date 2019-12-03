@@ -16,7 +16,7 @@ exports.keyPair = (priKey, options) => {
     try {
         const key = bitcoinjs_lib_1.ECPair.fromPrivateKey(priKey, {
             network,
-            compressed: options.compressed
+            compressed: options.compressed === undefined ? true : options.compressed
         });
         const { privateKey } = key;
         const { publicKey } = key;

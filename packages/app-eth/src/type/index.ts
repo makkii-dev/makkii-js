@@ -2,6 +2,7 @@ import BigNumber from "bignumber.js";
 
 /**
  * Ethereum unsigned transaction
+ * @category Coin ETH
  */
 export interface EthUnsignedTx {
     to: string;
@@ -16,6 +17,7 @@ export interface EthUnsignedTx {
 
 /**
  * Ethereum pending transaction
+ * @category Coin ETH
  */
 export interface EthPendingTx {
     hash: string;

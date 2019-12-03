@@ -9,6 +9,7 @@ export interface IBtcConfig {
     explorer?: string;
 }
 export default class BtcApiClient implements IsingleApiClient {
+    symbol: string;
     private api;
     config: IBtcConfig;
     constructor(config: IBtcConfig);
@@ -17,7 +18,7 @@ export default class BtcApiClient implements IsingleApiClient {
     getBlockByNumber: (blockNumber: string) => never;
     getBlockNumber: () => never;
     getTransactionStatus: (hash: string) => Promise<BtcTxStatus>;
-    getTransactionExplorerUrl: (hash: any) => string;
+    getTransactionExplorerUrl: (hash: string) => string;
     getBalance: (address: string) => Promise<BigNumber>;
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<Map<string, BtcTransaction>>;
     sendTransaction: (unsignedTx: BtcUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<BtcPendingTransaction>;

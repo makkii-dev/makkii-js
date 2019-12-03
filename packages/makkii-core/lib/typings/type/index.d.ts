@@ -1,5 +1,10 @@
 export declare type SignedTx = any;
 export declare type Transaction = any;
+export interface CoinPrice {
+    crypto: string;
+    fiat: string;
+    price: number;
+}
 export interface Token {
     symbol: string;
     contractAddr: string;

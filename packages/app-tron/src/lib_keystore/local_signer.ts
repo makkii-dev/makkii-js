@@ -9,7 +9,9 @@ const {
 } = require("@tronscan/client/src/utils/transactionBuilder");
 const TronSignTransaction = require("@tronscan/client/src/utils/crypto")
     .signTransaction;
-
+/**
+ * @category Local signer
+ */
 export default class TronLocalSigner implements IkeystoreSigner {
     /**
      * Sign transaction of tron local signer

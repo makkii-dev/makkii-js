@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { Transaction } from "../type";
+import { Transaction, CoinPrice } from "../type";
 import { IkeystoreSigner } from "./keystore_client";
 export interface IApiClient {
     addCoin(coinType: string, client: IsingleApiClient | IsingleApiFullClient): void;
@@ -20,10 +20,11 @@ export interface IApiClient {
     getAccountTokenBalance(coinType: string, contractAddress: string, address: string): Promise<any>;
     getTopTokens(coinType: string, topN?: number): Promise<any>;
     searchTokens(coinType: string, keyword: string): Promise<any>;
-    getCoinPrices(currency: string): Promise<any>;
+    getCoinPrices(currency: string): Promise<Array<CoinPrice>>;
 }
 export interface IsingleApiClient {
     config: any;
+    readonly symbol: string;
     updateConfiguration(config: any): void;
     getNetwork(): string;
     getBlockByNumber(blockNumber: string): Promise<any>;

@@ -18,6 +18,9 @@ function isInstanceOfKeystoreClient(client: object) {
     return !map.some(i => !(i in client));
 }
 
+/**
+ * @category Keystore Client
+ */
 export default class KeystoreClient implements IkeystoreClient {
     coins: { [coin: string]: IsingleKeystoreClient } = {};
 

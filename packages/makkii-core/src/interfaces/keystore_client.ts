@@ -3,6 +3,8 @@ import { IHardware } from "./hardware";
 
 /**
  * Interface that handle key store operations.
+ *
+ * @category Keystore
  */
 export interface IsingleKeystoreClient {
     /**
@@ -75,6 +77,8 @@ export interface IsingleKeystoreClient {
 
 /**
  * Interface for sign transaction.
+ *
+ * @category Keystore
  */
 export interface IkeystoreSigner {
     /**
@@ -89,6 +93,8 @@ export interface IkeystoreSigner {
 
 /**
  * Keystore interface that manages multiple keystore clients and expose all functions.
+ *
+ * @category Keystore
  */
 export interface IkeystoreClient {
     /**

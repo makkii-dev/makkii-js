@@ -3,6 +3,7 @@ import { IkeystoreSigner } from "../keystore_client";
 
 /**
  * Hardware wallet interface
+ * @category Hardware
  */
 export interface IHardware extends IkeystoreSigner {
     /**

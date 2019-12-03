@@ -55,10 +55,6 @@ export interface BtcPendingTransaction {
     }>;
     fee: number;
 }
-export interface BtcrecoverOptions {
-    network?: string;
-    compressed?: boolean;
-}
 export interface BtcKeypair {
     private_key: string;
     public_key: string;

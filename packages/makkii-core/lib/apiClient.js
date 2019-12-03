@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_common_util_js_1 = require("lib-common-util-js");
 function isInstanceOfApiClient(client) {
@@ -124,13 +133,14 @@ class ApiClient {
             }
             throw new Error(`[${coinType}] searchTokens is not implemented.`);
         };
-        this.getCoinPrices = (currency) => {
+        this.getCoinPrices = (currency) => __awaiter(this, void 0, void 0, function* () {
             const cryptos = Object.keys(this.coins)
-                .map(c => c.toUpperCase())
+                .map(c => this.coins[c].symbol)
                 .join(",");
             const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
-            return lib_common_util_js_1.HttpClient.get(url, false);
-        };
+            const { data } = yield lib_common_util_js_1.HttpClient.get(url, false);
+            return data;
+        });
     }
 }
 exports.default = ApiClient;

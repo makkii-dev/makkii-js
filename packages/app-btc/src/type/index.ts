@@ -1,5 +1,8 @@
 import BigNumber from "bignumber.js";
 
+/**
+ * @category Coin BTC
+ */
 export interface BtcUnsignedTx {
     to: Array<{ addr: string; value: number }>;
     from: Array<{ addr: string; value: number }>;
@@ -17,6 +20,9 @@ export interface BtcUnsignedTx {
     network: string;
 }
 
+/**
+ * @category Coin BTC
+ */
 export interface BtcTxStatus {
     /**
      * transaction status(true: CONFIRMED; false: not found)
@@ -32,6 +38,9 @@ export interface BtcTxStatus {
     timestamp?: number;
 }
 
+/**
+ * @category Coin BTC
+ */
 export interface BtcTransaction {
     hash: string;
     timestamp: number;
@@ -48,6 +57,9 @@ export interface BtcTransaction {
     fee: number;
 }
 
+/**
+ * @category Coin BTC
+ */
 export interface BtcPendingTransaction {
     hash: string;
     status: "PENDING";
@@ -62,11 +74,9 @@ export interface BtcPendingTransaction {
     fee: number;
 }
 
-export interface BtcrecoverOptions {
-    network?: string;
-    compressed?: boolean;
-}
-
+/**
+ * @category Coin BTC
+ */
 export interface BtcKeypair {
     private_key: string;
     public_key: string;

@@ -1,5 +1,8 @@
 import BigNumber from "bignumber.js";
 
+/**
+ * @category Coin TRON
+ */
 export interface TronUnsignedTx {
     to: string;
     owner: string;
@@ -12,6 +15,9 @@ export interface TronUnsignedTx {
     };
 }
 
+/**
+ * @category Coin TRON
+ */
 export interface TronPendingTx {
     to: string;
     from: string;
@@ -21,11 +27,17 @@ export interface TronPendingTx {
     status: "PENDING";
 }
 
+/**
+ * @category Coin TRON
+ */
 export interface TronTxStatus {
     blockNumber: number;
     status: boolean;
 }
 
+/**
+ * @category Coin TRON
+ */
 export interface TronTransaction {
     hash: string;
     timestamp: number;
@@ -36,6 +48,9 @@ export interface TronTransaction {
     status: "CONFIRMED" | "FAILED";
 }
 
+/**
+ * @category Coin TRON
+ */
 export interface TronKeypair {
     private_key: string;
     public_key: string;

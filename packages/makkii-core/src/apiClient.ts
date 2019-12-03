@@ -23,6 +23,10 @@ function isInstanceOfApiClient(client: object) {
     return !map.some(i => !(i in client));
 }
 
+/**
+ * Refer to interface [[IApiClient]]
+ * @category Api Client
+ */
 export default class ApiClient implements IApiClient {
     coins: { [coin: string]: IsingleApiClient | IsingleApiFullClient } = {};
 
@@ -204,11 +208,12 @@ export default class ApiClient implements IApiClient {
         throw new Error(`[${coinType}] searchTokens is not implemented.`);
     };
 
-    getCoinPrices = (currency: string): Promise<any> => {
+    getCoinPrices = async (currency: string): Promise<any> => {
         const cryptos = Object.keys(this.coins)
-            .map(c => c.toUpperCase())
+            .map(c => this.coins[c].symbol)
             .join(",");
         const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
-        return HttpClient.get(url, false);
+        const { data } = await HttpClient.get(url, false);
+        return data;
     };
 }

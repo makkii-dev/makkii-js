@@ -3,7 +3,7 @@ import { IsingleApiFullClient } from "@makkii/makkii-core/src/interfaces/api_cli
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { Token } from "@makkii/makkii-core/src/type";
 import { AionUnsignedTx, AionPendingTx } from "./type";
-export interface IConfig {
+export interface IAionConfig {
     network: "mainnet" | "amity";
     jsonrpc: string;
     explorer_api?: string;
@@ -11,12 +11,13 @@ export interface IConfig {
     remoteApi?: string;
 }
 export default class AionApiClient implements IsingleApiFullClient {
+    symbol: string;
     tokenSupport: boolean;
-    config: IConfig;
+    config: IAionConfig;
     private api;
-    constructor(config: IConfig);
+    constructor(config: IAionConfig);
     getNetwork: () => "mainnet" | "amity";
-    updateConfiguration: (config: IConfig) => void;
+    updateConfiguration: (config: IAionConfig) => void;
     getBlockByNumber: (blockNumber: string) => any;
     getBlockNumber: () => any;
     getTransactionStatus: (hash: string) => any;

@@ -10,6 +10,9 @@ import {
     BtcPendingTransaction
 } from "./type";
 
+/**
+ * @category Coin BTC
+ */
 export interface IBtcConfig {
     network: "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
     /**
@@ -25,7 +28,14 @@ export interface IBtcConfig {
      */
     explorer?: string;
 }
+
+/**
+ * BTC api client that implement IsingleApiClient
+ * @category Api Client
+ */
 export default class BtcApiClient implements IsingleApiClient {
+    symbol: string;
+
     private api: any;
 
     /**
@@ -48,12 +58,16 @@ export default class BtcApiClient implements IsingleApiClient {
 
         if (config.network === "BTC") {
             restSet = network.BTC;
+            this.symbol = "BTC";
         } else if (config.network === "BTCTEST") {
             restSet = network.BTCTEST;
+            this.symbol = "BTC";
         } else if (config.network === "LTC") {
             restSet = network.LTC;
+            this.symbol = "LTC";
         } else if (config.network === "LTCTEST") {
             restSet = network.LTCTEST;
+            this.symbol = "LTC";
         } else {
             throw new Error(`BtcApiClient Unsupport nework: ${config.network}`);
         }
@@ -120,7 +134,7 @@ export default class BtcApiClient implements IsingleApiClient {
      *
      * @return {string} url
      */
-    getTransactionExplorerUrl = (hash: any): string => {
+    getTransactionExplorerUrl = (hash: string): string => {
         return this.api.getTransactionUrlInExplorer(hash);
     };
 
@@ -151,7 +165,10 @@ export default class BtcApiClient implements IsingleApiClient {
      * Send transaction
      * @param unsignedTx unsigned transaction build by buildTransaction
      * @param signer localSigner or hardware
-     * @param signerParams localSigner: {private_key, compressed} hardware:{derivationIndex}
+     * @param signerParams
+     * ```
+     * localSigner: {private_key, compressed} hardware:{derivationIndex}
+     * ```
      */
     sendTransaction = (
         unsignedTx: BtcUnsignedTx,

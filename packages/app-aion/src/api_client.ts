@@ -8,8 +8,9 @@ import { AionUnsignedTx, AionPendingTx } from "./type";
 
 /**
  * Aion configuration interface
+ * @category Coin AION
  */
-export interface IConfig {
+export interface IAionConfig {
     network: "mainnet" | "amity";
     jsonrpc: string;
     /**
@@ -28,15 +29,19 @@ export interface IConfig {
 
 /**
  * Aion api client that implement IsingleApiFullClient
+ *
+ * @category Api Client
  */
 export default class AionApiClient implements IsingleApiFullClient {
+    symbol: string = "AION";
+
     tokenSupport: boolean = true;
 
-    config: IConfig;
+    config: IAionConfig;
 
     private api: any;
 
-    constructor(config: IConfig) {
+    constructor(config: IAionConfig) {
         let restSet: {
             explorer_api?: string;
             explorer?: string;
@@ -66,7 +71,7 @@ export default class AionApiClient implements IsingleApiFullClient {
      */
     getNetwork = () => this.config.network;
 
-    updateConfiguration = (config: IConfig) => {
+    updateConfiguration = (config: IAionConfig) => {
         this.config = { ...this.config, ...config };
         this.api = API(this.config);
     };
@@ -133,6 +138,15 @@ export default class AionApiClient implements IsingleApiFullClient {
         return this.api.getTransactionsByAddress(address, page, size);
     };
 
+    /**
+     * Send transaction
+     * @param unsignedTx unsigned transaction build by buildTransaction
+     * @param signer localSigner or hardware
+     * @param signerParams
+     * ```
+     * localSigner: {private_key} hardware:{derivationIndex}
+     * ```
+     */
     sendTransaction = (
         unsignedTx: AionUnsignedTx,
         signer: IkeystoreSigner,

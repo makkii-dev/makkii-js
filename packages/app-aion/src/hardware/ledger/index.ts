@@ -11,6 +11,7 @@ const rlp = require("aion-rlp");
  *
  * User should call getHardwareStatus() first to check ledger and app status,
  * then decide whether to call other functions.
+ * @category Hardware
  */
 export default class AionLedger implements IHardware {
     private hardware: any = {};

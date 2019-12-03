@@ -17,7 +17,8 @@ export const keyPair = (priKey, options) => {
     try {
         const key = ECPair.fromPrivateKey(priKey, {
             network,
-            compressed: options.compressed
+            compressed:
+                options.compressed === undefined ? true : options.compressed
         });
         const { privateKey } = key;
         const { publicKey } = key;

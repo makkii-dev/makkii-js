@@ -44,10 +44,12 @@ class BtcKeystoreClient {
                 return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
             }
         };
-        this.recoverKeyPairByWIF = (WIF, options) => {
+        this.recoverKeyPairByWIF = (WIF) => {
             const network = this.getCurrentNetwork();
             try {
-                const keyPair = lib_keystore_1.default.keyPairFromWIF(WIF, Object.assign({ network }, options));
+                const keyPair = lib_keystore_1.default.keyPairFromWIF(WIF, {
+                    network
+                });
                 if (keyPair) {
                     const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
                     return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));

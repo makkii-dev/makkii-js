@@ -4,7 +4,9 @@ import { hexutil } from "lib-common-util-js";
 import { BtcUnsignedTx } from "../type";
 import { process_unsignedTx } from "./transaction";
 import { networks } from "./network";
-
+/**
+ * @category Local signer
+ */
 export default class BtcLocalSigner implements IkeystoreSigner {
     /**
      * Sign transaction of btc local signer
