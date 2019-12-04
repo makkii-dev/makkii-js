@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-tron",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "> TODO: description",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
@@ -28,7 +28,7 @@
     "url": "https://github.com/chaion/react-native-makkii-core/issues"
   },
   "dependencies": {
-    "@makkii/makkii-core": "^0.0.0",
+    "@makkii/makkii-core": "^0.1.0",
     "@tronscan/client": "^0.2.48",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
