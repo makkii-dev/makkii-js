@@ -33,3 +33,35 @@ let supportCoins = ['aion', 'eth'];
 const api = apiClient(supportCoins, isTestNet);
 ```
 see [API Reference](/docs/api-client.md)
+
+# Basic gist
+```js
+import {}
+
+```
+
+# Contributing
+Please read our contribution guidelines before getting started.  
+**You need to have a recent [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed.**  
+**You also need to install [lerna](https://github.com/lerna/lerna) globally**
+## Install dependencies
+```bash
+yarn
+```
+## Build
+```bash
+yarn compile
+```
+## Lint
+```bash
+yarn lint
+```
+## Run Tests
+```bash
+lerna run test
+```
+## Build document
+```bash
+yarn doc
+```
+ **It will generate html files in folder './html'**

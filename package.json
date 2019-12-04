@@ -10,7 +10,7 @@
   "scripts": {
     "postinstall": "lerna bootstrap",
     "compile": "lerna run tsc",
-    "lint": "eslint packages/**/*.{ts,js} --fix",
+    "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
     "doc": "typedoc --options ./typedoc.js"
   },
   "husky": {
@@ -19,7 +19,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts}": [
+    "packages/**/src/**/*.{js,ts}": [
       "eslint --fix",
       "git add"
     ]
