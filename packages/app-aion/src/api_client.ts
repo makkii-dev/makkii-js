@@ -209,8 +209,8 @@ export default class AionApiClient implements IsingleApiFullClient {
      * TODO: not general enough.
      * Build transaction
      *
-     * options parameters contains: gasLimit, gasPrice, isTransfer, data(optional), contractAddr(optional), tokenDecimal(optional).
-     * if isTransfer is true, transaction value is zero and transaction to is token contract creation address,
+     * options parameters contains: gasLimit, gasPrice, isTokenTransfer, data(optional), contractAddr(optional), tokenDecimal(optional).
+     * if isTokenTransfer is true, transaction value is zero and transaction to is token contract creation address,
      * to parameter is encoded in data.
      *
      * @param from transaction sender
@@ -225,7 +225,7 @@ export default class AionApiClient implements IsingleApiFullClient {
         options: {
             gasLimit: number;
             gasPrice: number;
-            isTransfer: boolean; // is token transfer
+            isTokenTransfer: boolean; // is token transfer
             data?: any;
             contractAddr?: string;
             tokenDecimal?: number;

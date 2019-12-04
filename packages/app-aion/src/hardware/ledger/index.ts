@@ -66,7 +66,7 @@ export default class AionLedger implements IHardware {
      * Set ledger transport.
      *
      * @param transport. valid ledger transport implementation,
-     * refer to https://github.com/LedgerHQ/ledgerjs/tree/master/packages/hw-transport
+     * refer to ledger [hw-transport](https://github.com/LedgerHQ/ledgerjs/tree/master/packages/hw-transport)
      */
     setLedgerTransport = (transport: any) => {
         this.hardware = new AionApp(transport);

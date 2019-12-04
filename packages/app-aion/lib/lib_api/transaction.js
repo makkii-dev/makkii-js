@@ -36,10 +36,10 @@ exports.default = config => {
     }
     function buildTransaction(from, to, value, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data: data_, gasLimit, gasPrice, contractAddr, isTransfer, tokenDecimal } = options;
+            const { data: data_, gasLimit, gasPrice, contractAddr, isTokenTransfer, tokenDecimal } = options;
             const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
-            if (isTransfer) {
+            if (isTokenTransfer) {
                 const tokenContract = new Contract(constants_1.CONTRACT_ABI, contractAddr);
                 data = tokenContract.methods
                     .send(to, value
@@ -49,17 +49,17 @@ exports.default = config => {
                     .encodeABI();
             }
             return {
-                to: isTransfer ? contractAddr : to,
+                to: isTokenTransfer ? contractAddr : to,
                 from,
                 nonce,
-                value: isTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value),
+                value: isTokenTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value),
                 gasPrice,
                 gasLimit,
                 timestamp: new Date().getTime() * 1000,
                 data,
                 type: 1,
-                tknTo: isTransfer ? to : "",
-                tknValue: isTransfer ? new bignumber_js_1.default(value) : new bignumber_js_1.default(0)
+                tknTo: isTokenTransfer ? to : "",
+                tknValue: isTokenTransfer ? new bignumber_js_1.default(value) : new bignumber_js_1.default(0)
             };
         });
     }

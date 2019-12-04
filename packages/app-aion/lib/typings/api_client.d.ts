@@ -38,7 +38,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     buildTransaction: (from: string, to: string, value: BigNumber, options: {
         gasLimit: number;
         gasPrice: number;
-        isTransfer: boolean;
+        isTokenTransfer: boolean;
         data?: any;
         contractAddr?: string;
         tokenDecimal?: number;

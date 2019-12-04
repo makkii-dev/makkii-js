@@ -54,5 +54,6 @@
     "@babel/register": "^7.5.5",
     "assert": "^2.0.0",
     "mocha": "^6.2.2"
-  }
+  },
+  "gitHead": "11ea148c8eeb064c5736edc485ba962436ec81ff"
 }

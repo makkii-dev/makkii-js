@@ -11,7 +11,8 @@
     "postinstall": "lerna bootstrap",
     "compile": "lerna run tsc",
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
-    "doc": "typedoc --options ./typedoc.js"
+    "doc": "typedoc --options ./typedoc.js",
+    "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish"
   },
   "husky": {
     "hooks": {

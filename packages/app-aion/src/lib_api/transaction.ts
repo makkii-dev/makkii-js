@@ -37,12 +37,12 @@ export default config => {
             gasLimit,
             gasPrice,
             contractAddr,
-            isTransfer,
+            isTokenTransfer,
             tokenDecimal
         } = options;
         const nonce = await getTransactionCount(from, "pending");
         let data = data_;
-        if (isTransfer) {
+        if (isTokenTransfer) {
             const tokenContract = new Contract(CONTRACT_ABI, contractAddr);
             data = tokenContract.methods
                 .send(
@@ -56,17 +56,17 @@ export default config => {
                 .encodeABI();
         }
         return {
-            to: isTransfer ? contractAddr : to,
+            to: isTokenTransfer ? contractAddr : to,
             from,
             nonce,
-            value: isTransfer ? new BigNumber(0) : new BigNumber(value),
+            value: isTokenTransfer ? new BigNumber(0) : new BigNumber(value),
             gasPrice,
             gasLimit,
             timestamp: new Date().getTime() * 1000,
             data,
             type: 1,
-            tknTo: isTransfer ? to : "",
-            tknValue: isTransfer ? new BigNumber(value) : new BigNumber(0)
+            tknTo: isTokenTransfer ? to : "",
+            tknValue: isTokenTransfer ? new BigNumber(value) : new BigNumber(0)
         };
     }
 

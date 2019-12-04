@@ -201,7 +201,7 @@ export default class EthApiClient implements IsingleApiFullClient {
         options: {
             gasLimit: number;
             gasPrice: number;
-            isTransfer: boolean;
+            isTokenTransfer: boolean;
             data?: any;
             contractAddr?: string;
             tokenDecimal?: number;

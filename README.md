@@ -1,52 +1,160 @@
-Makkii Coins is a javascript library that implements crypto currency wallet functionality for several blockchains.
-Developers can build different application on different platform based on this library.
+[![Makkii Telegram](https://img.shields.io/badge/Telegram-Makkii-yellow.svg?style=flat)](https://web.telegram.org/#/im?p=@AionChina)
 
-### Supported Blockchains
-We support Aion, Bitcoin, Litecoin, Ethereum and Tron.
+Welcome to Makkii's Javascript Libraries.
+
+Makkiijs is a javascript library which provides:
+
+* [@makkii/makkii-core](./packages/makkii-core) generic interfaces
+* [@makkii/app-aion](./packages/app-aion) aion application client
+* [@makkii/app-btc](./packages/app-btc) bitcoin application client
+* [@makkii/app-eth](./packages/app-eth) ethereum application client
+* [@makkii/app-tron](./packages/app-tron) tron application client
+
+# Support APIs
+For detailed Api documentation, please refer to [Makkiijs API References]().
+### IApiClient
+| Method | Aion | BTC | ETH | LTC | TRON |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|getBlockByNumber|√|√|√|√|√|
+|getBlockNumber|√|√|√|√|√|
+|getCoinPrices|√|√|√|√|√|
+|getBalance|√|√|√|√|√|
+|getTransactionsByAddress|√|√|√|√|√|
+|getTransactionStatus|√|√|√|√|√|
+|getTransactionExplorerUrl|√|√|√|√|√|
+|buildTransaction|√|√|√|√|√|
+|sendTransaction|√|√|√|(only support LocalSigner)|(only support LocalSigner)|
+|getTokenIconUrl|| |√|||
+|getTokenDetail|√| |√||||
+|getAccountTokenTransferHistory|√| |√|||
+|getAccountTokens|√| |√|||
+|getAccountTokenBalance|√| |√|||
+|getTopTokens|√| |√|||
+|searchTokens|√| |√|||
+|sameAddress|√|√|√|√|√|
+
+### IKeystoreClient
+| method | Aion | BTC | ETH | LTC | TRON |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|generateMnemonic|√|√|√|√|√|
+|getAccountFromMnemonic|√|√|√|√|√|
+|getAccountFromHardware|√|√|√|||
+|recoverKeyPairByPrivateKey|√|√|√|√|√|
+|signTransaction|√|√|√|(only support LocalSigner)|(only support LocalSigner)|
+|validateAddress|√|√|√|√|√|
+|validatePrivateKey|√|√|√|√|√|
 
 # Installation
+### From Github
 ```bash
-yarn add https://github.com/chaion/makkii-coins
+$ yarn add https://github.com/chaion/makkii-coins
 ```
-
-# Usage
-## Keystore Api
-##### initialize keystore client
-```javascript
-import { keystoreClient } from 'makkii-coins';
-
-// initialize keystore client.
-let isTestNet = false;
-let supportCoins = ['aion', 'eth'];
-const keystore = keystoreClient(supportCoins, isTestNet);
+### From NPM
 ```
-see [API Reference](/docs/keysotre-client.md)
-
-## Wallet Api
-##### initialize api client
-```javascript
-import { apiClient } from 'makkii-coins';
-
-// initialize api client.
-let isTestNet = false;
-let supportCoins = ['aion', 'eth'];
-const api = apiClient(supportCoins, isTestNet);
+$ npm install @makkii/makkii-core
+$ npm install @makkii/app-<coin symbol>
 ```
-see [API Reference](/docs/api-client.md)
+# Basic Usage
+## Single coin support
+```typescript
+import { AionApiClient, AionKeystoreClient, AionLocalSigner } from '@makkii/app-aion';
 
-# Basic gist
-```js
-import {}
+const api_client = new AionApiClient({
+    network: 'mainnet',
+    jsonrpc: '***'
+});
+api_client.getBalance('0x...')
+    .then(console.log)
+    .catch(error=>console.log(error));
+const keystore_client = new AionKeystoreClient();
+api_client.buildTransaction(
+    '0x...', // from address
+    '0x...', // to address
+    0, // amount
+    {
+        gasPrice: 10,
+        gasLimit: 21000,
+        isTokenTransfer: false
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction(unsignedTx, new AionLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+
+```
+## Multiple coin support
+```typescript
+import { ApiClient, KeystoreClient } from '@makkii/makkii-core';
+import { AionApiClient, AionKeystoreClient, AionLocalSigner } from '@makkii/app-aion';
+import { BtcApiClient, BtcKeystoreClient } from '@makkii/app-btc';
+
+// api client usage
+const api_client = new ApiClient();
+api_client.addCoin('aion', new AionApiClient({
+    network: 'mainnet',
+    jsonrpc: '***'
+}));
+api_client.addCoin('btc', new BtcApiClient({
+    network: 'BTC',
+    insight_api: '***'
+}));
+api_client.getBalance('aion', '0x...')
+    .then(console.log)
+    .catch(error=>console.log(error));
+
+// keystore client usage
+const keystore_client = new KeystoreClient();
+keystore_client.addCoin('aion', new AionKeystoreClient());
+keystore_client.addCoin('btc', new BtcKeystoreClient('BTC'));
+
+api_client.buildTransaction(
+    'aion', 
+    '0x...', // from address
+    '0x...', // to address
+    0, // amount
+    {
+        gasPrice: 10,
+        gasLimit: 21000,
+        isTokenTransfer: false
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction('aion', unsignedTx, new AionLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+```
+## Hardware Wallet Support
+Aion ledger implementation replies on ledger [hw-transport](https://github.com/LedgerHQ/ledgerjs/tree/master/packages/hw-transport) interface
+```typescript
+import Transport from '@ledgerhq/hw-transport-u2f';
+import { AionLedger } from '@makkii/app-aion';
+
+const aion_ledger = new AionLedger();
+Transport.create().then(function(transport) {
+    aion_ledger.setLedgerTransport(transport);
+    aion_ledger.getHardwareStatus().then(status=> {
+        if (status) {
+            aion_ledger.getAccount(0).then(account => {
+                console.log(account.address);
+                console.log(account.index);
+            });
+        }
+    });
+})
 
 ```
 
 # Contributing
-Please read our contribution guidelines before getting started.  
 **You need to have a recent [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed.**  
-**You also need to install [lerna](https://github.com/lerna/lerna) globally**
+**You also need to install [lerna](https://github.com/lerna/lerna) globally.**
 ## Install dependencies
 ```bash
-yarn
+$ lerna bootstrap
 ```
 ## Build
 ```bash
@@ -60,8 +168,23 @@ yarn lint
 ```bash
 lerna run test
 ```
-## Build document
+## Build Document
 ```bash
 yarn doc
 ```
  **It will generate html files in folder './html'**
+
+## Deploy
+* Make sure you have right in Chaion org on NPM
+* Login NPM
+```bash
+$ npm login
+$ npm whoami
+```
+* Publish to npm repository
+```bash
+$ yarn publish
+```
+* Tag and release with change logs
+
+If you want to contribute new coins, please refer to [Add Coin Guideline](./docs/ADD_COIN_GUIDE.md)
