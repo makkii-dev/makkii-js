@@ -8,7 +8,7 @@ export interface IAionConfig {
     jsonrpc: string;
     explorer_api?: string;
     explorer?: string;
-    remoteApi?: string;
+    remote_api?: string;
 }
 export default class AionApiClient implements IsingleApiFullClient {
     symbol: string;

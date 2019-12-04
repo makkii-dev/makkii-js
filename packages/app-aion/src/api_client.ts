@@ -24,7 +24,7 @@ export interface IAionConfig {
     /**
      * app server endpoint that provides token, icons, etc.
      */
-    remoteApi?: string;
+    remote_api?: string;
 }
 
 /**
@@ -45,7 +45,7 @@ export default class AionApiClient implements IsingleApiFullClient {
         let restSet: {
             explorer_api?: string;
             explorer?: string;
-            remoteApi?: string;
+            remote_api?: string;
         };
         // check
         ["network", "jsonrpc"].forEach(f => {

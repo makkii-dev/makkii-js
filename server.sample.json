@@ -5,34 +5,36 @@
         "mainnet": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
           "explorer_api": "https://mainnet-api.theoan.com",
-          "explorer": "https://mainnet.theoan.com/#/transaction"
+          "explorer": "https://mainnet.theoan.com/#/transaction",
+          "remote_api": "https://www.chaion.net/makkii"
         },
-        "mastery": {
+        "amity": {
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mastery/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
-          "explorer_api": "https://mastery-api.theoan.com",
-          "explorer": "https://mastery.theoan.com/#/transaction"
+          "explorer_api": "https://amity-api.theoan.com",
+          "explorer": "https://amity.theoan.com/#/transaction",
+          "remote_api": "http://45.118.132.89:8080"
         }
       }
     },
     "btc": {
       "networks": {
         "BTC": {
-          "jsonrpc": "https://insight.bitpay.com/api",
+          "insight_api": "https://insight.bitpay.com/api",
           "explorer": "https://insight.bitpay.com/tx",
           "broadcast": "https://api.blockcypher.com/v1/btc/main/txs/push?token=718a0597d85f48259c457136eecb80da"
         },
         "BTCTEST": {
-          "jsonrpc": "https://test-insight.bitpay.com/api",
+          "insight_api": "https://test-insight.bitpay.com/api",
           "explorer": "https://test-insight.bitpay.com/tx/",
           "broadcast": "https://test-insight.bitpay.com/api/tx/send"
         },
         "LTC": {
-          "jsonrpc": "https://insight.litecore.io/api",
+          "insight_api": "https://insight.litecore.io/api",
           "explorer": "https://insight.litecore.io/tx",
           "broadcast": "https://api.blockcypher.com/v1/ltc/main/txs/push?token=718a0597d85f48259c457136eecb80da"
         },
         "LTCTEST": {
-          "jsonrpc": "https://testnet.litecore.io/api",
+          "insight_api": "https://testnet.litecore.io/api",
           "explorer": "https://testnet.litecore.io/tx",
           "broadcast": "https://insight.litecore.io/api/tx/send"
         }
@@ -44,58 +46,57 @@
           "jsonrpc": "https://mainnet.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
           "explorer_api": {
             "provider": "ethplorer",
-            "url": "http://api.ethplorer.io"
+            "url": "http://api.ethplorer.io",
+            "key": "freekey"
           },
           "explorer": {
             "provider": "etherchain",
             "url" : "https://www.etherchain.org/tx"
-          }
+          },
+          "remote_api": "https://www.chaion.net/makkii"
         },
         "ropsten": {
           "jsonrpc": "https://ropsten.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
           "explorer_api": {
             "provider": "etherscan",
-            "url": "https://api-ropsten.etherscan.io/api"
+            "url": "https://api-ropsten.etherscan.io/api",
+            "key": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2"
           },
           "explorer": {
             "provider": "etherscan",
-            "url": "https://api-ropsten.etherscan.io/tx"
-          }
+            "url": "https://api-ropsten.etherscan.io/tx",
+            "key": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2"
+          },
+          "remote_api": "http://45.118.132.89:8080"
         },
         "pokket": {
           "jsonrpc": "http://45.118.132.89:8080/pokketchain",
           "explorer_api": {
             "provider": "etherscan",
-            "url": "https://api-ropsten.etherscan.io/api"
+            "url": "https://api-ropsten.etherscan.io/api",
+            "key": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2"
           },
           "explorer": {
             "provider": "etherscan",
             "url": "https://api-ropsten.etherscan.io/tx"
-          }
+          },
+          "remote_api": "http://45.118.132.89:8080"
         }
-      },
-      "etherscanApikey": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2",
-      "ethplorerApiKey": "freekey"
+      }
     },
     "trx": {
       "networks": {
         "mainnet": {
-          "jsonrpc": "https://api.trongrid.io",
+          "trongird_api": "https://api.trongrid.io",
           "explorer_api": "https://apilist.tronscan.org/api",
           "explorer": "https://tronscan.org/#/transaction"
         },
         "shasta": {
-          "jsonrpc": "https://api.shasta.trongrid.io",
+          "trongird_api": "https://api.shasta.trongrid.io",
           "explorer_api": "https://api.shasta.tronscan.org/api",
           "explorer": "https://shasta.tronscan.org/#/transaction"
         }
       }
-    }
-  },
-  "api": {
-    "remote": {
-      "dev": "http://45.118.132.89:8080",
-      "prod": "https://www.chaion.net/makkii"
     }
   }
 }

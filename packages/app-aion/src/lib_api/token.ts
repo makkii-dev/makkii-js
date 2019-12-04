@@ -145,14 +145,14 @@ export default config => {
     }
 
     const getTopTokens = async (topN = 20) => {
-        const url = `${config.remoteApi}/token/aion?offset=0&size=${topN}`;
+        const url = `${config.remote_api}/token/aion?offset=0&size=${topN}`;
         console.log(`get top aion tokens: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;
     };
 
     const searchTokens = async keyword => {
-        const url = `${config.remoteApi}/token/aion/search?keyword=${keyword}`;
+        const url = `${config.remote_api}/token/aion/search?keyword=${keyword}`;
         console.log(`search aion token: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;

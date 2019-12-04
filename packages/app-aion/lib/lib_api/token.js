@@ -136,13 +136,13 @@ exports.default = config => {
         });
     }
     const getTopTokens = (topN = 20) => __awaiter(void 0, void 0, void 0, function* () {
-        const url = `${config.remoteApi}/token/aion?offset=0&size=${topN}`;
+        const url = `${config.remote_api}/token/aion?offset=0&size=${topN}`;
         console.log(`get top aion tokens: ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.get(url, false);
         return res.data;
     });
     const searchTokens = (keyword) => __awaiter(void 0, void 0, void 0, function* () {
-        const url = `${config.remoteApi}/token/aion/search?keyword=${keyword}`;
+        const url = `${config.remote_api}/token/aion/search?keyword=${keyword}`;
         console.log(`search aion token: ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.get(url, false);
         return res.data;

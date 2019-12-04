@@ -43,7 +43,7 @@ export interface IEthConfig {
     /**
      * app server endpoint that provides token, icons, etc.
      */
-    remoteApi?: string;
+    remote_api?: string;
 }
 
 /**
@@ -70,7 +70,7 @@ export default class EthApiClient implements IsingleApiFullClient {
                 provider: string;
                 url: string;
             };
-            remoteApi?: string;
+            remote_api?: string;
         };
         // check
         ["network", "jsonrpc"].forEach(f => {

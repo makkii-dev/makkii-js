@@ -171,21 +171,21 @@ export default config => {
     const getAccountTokens = () => Promise.resolve({});
 
     async function getTopTokens(topN = 20) {
-        const url = `${config.remoteApi}/token/eth/popular`;
+        const url = `${config.remote_api}/token/eth/popular`;
         console.log(`get top eth tokens: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;
     }
 
     async function searchTokens(keyword) {
-        const url = `${config.remoteApi}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
+        const url = `${config.remote_api}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
         console.log(`search eth token: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;
     }
 
     function getTokenIconUrl(tokenSymbol, contractAddress) {
-        return `${config.remoteApi}/token/eth/img?contractAddress=${contractAddress}`;
+        return `${config.remote_api}/token/eth/img?contractAddress=${contractAddress}`;
     }
 
     return {

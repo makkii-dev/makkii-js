@@ -15,7 +15,7 @@ export interface IEthConfig {
         provider: string;
         url: string;
     };
-    remoteApi?: string;
+    remote_api?: string;
 }
 export default class EthApiClient implements IsingleApiFullClient {
     symbol: string;
