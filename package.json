@@ -1,8 +1,12 @@
 {
+  "private": true,
   "name": "makkii-coins",
   "title": "makkii-coins",
   "version": "1.0.0",
   "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "postinstall": "lerna bootstrap",
     "compile": "lerna run tsc",

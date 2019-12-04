@@ -29,7 +29,6 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^4.73.7",
     "@makkii/makkii-core": "^0.0.0",
-    "@types/bignumber.js": "^5.0.0",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
