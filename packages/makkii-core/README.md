@@ -1,30 +1,57 @@
 # `makkii-core`
 
-> TODO: description
+Generic interfaces
+
+## Installation
+
+```bash
+$ npm install @makkii/makkii-core
+```
 
 ## Usage
 
-```js
-import { apiClient, keystoreClient } from '@makkii/makkii-core';
-import { AionApiClient, AionKeystoreClient } from '@makkii/app-aion';
+```typescript
+import { ApiClient, KeystoreClient } from '@makkii/makkii-core';
+import { AionApiClient, AionKeystoreClient, AionLedger} from '@makkii/app-aion';
 import { BtcApiClient, BtcKeystoreClient } from '@makkii/app-btc';
 
+// api client usage
+const api_client = new ApiClient();
+api_client.addCoin('aion', new AionApiClient({
+    network: 'mainnet',
+    jsonrpc: '***'
+}));
+api_client.addCoin('btc', new BtcApiClient({
+    network: 'BTC',
+    insight_api: '***'
+}));
+api_client.getBalance('aion', '0x...')
+    .then(console.log)
+    .catch(error=>console.log(error));
 
-const client1 = apiClient();
-client1.addCoin('aion', new AionApiClient(isTestNet));
-client1.addCoin('btc', new BtcApiClient(isTestNet, 'btc'));
+// keystore client usage
+const keystore_client = new KeystoreClient();
+keystore_client.addCoin('aion', new AionKeystoreClient());
+keystore_client.addCoin('btc', new BtcKeystoreClient('BTC'));
 
-const client2 = keystoreClient();
-client2.addCoin('aion', new AionKeystoreClient());
-client2.addCoin('btc', new BtcKeystoreClient(isTestNet, 'btc'));
-
-const geBalance = async (coinType, balance) => {
-    const balance = await client1.getBalance(coinType, balance);
-    return balance;
-}
+api_client.buildTransaction(
+    'aion', 
+    '0x...', // from address
+    '0x...', // to address
+    0, // amount
+    {
+        gasPrice: 10,
+        gasLimit: 21000,
+        isTokenTransfer: false
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction('aion', unsignedTx, new AionLedger(), {
+        index: 0 
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
 ```
-
-if you want to learn more, please see [api-client guide](../../docs/api-client.md) and [keysote-client guide](../../docs/keysotre-client.md).
 
 ## API
 
@@ -32,11 +59,827 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
 
 #### Table of Contents
 
--   [KeystoreClient](#keystoreclient)
--   [ApiClient](#apiclient)
+-   [IHardware](#ihardware)
+    -   [getAccount](#getaccount)
+        -   [Parameters](#parameters)
+    -   [getHardwareStatus](#gethardwarestatus)
+-   [CoinPrice](#coinprice)
+    -   [Examples](#examples)
+-   [IApiClient](#iapiclient)
+    -   [addCoin](#addcoin)
+        -   [Parameters](#parameters-1)
+    -   [removeCoin](#removecoin)
+        -   [Parameters](#parameters-2)
+    -   [getBlockByNumber](#getblockbynumber)
+        -   [Parameters](#parameters-3)
+    -   [getBlockNumber](#getblocknumber)
+        -   [Parameters](#parameters-4)
+    -   [getBalance](#getbalance)
+        -   [Parameters](#parameters-5)
+    -   [getTransactionStatus](#gettransactionstatus)
+        -   [Parameters](#parameters-6)
+    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
+        -   [Parameters](#parameters-7)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress)
+        -   [Parameters](#parameters-8)
+    -   [buildTransaction](#buildtransaction)
+        -   [Parameters](#parameters-9)
+    -   [sendTransaction](#sendtransaction)
+        -   [Parameters](#parameters-10)
+    -   [sameAddress](#sameaddress)
+        -   [Parameters](#parameters-11)
+    -   [getTokenIconUrl](#gettokeniconurl)
+        -   [Parameters](#parameters-12)
+    -   [getTokenDetail](#gettokendetail)
+        -   [Parameters](#parameters-13)
+    -   [getAccountTokenTransferHistory](#getaccounttokentransferhistory)
+        -   [Parameters](#parameters-14)
+    -   [getAccountTokens](#getaccounttokens)
+        -   [Parameters](#parameters-15)
+    -   [getAccountTokenBalance](#getaccounttokenbalance)
+        -   [Parameters](#parameters-16)
+    -   [getTopTokens](#gettoptokens)
+        -   [Parameters](#parameters-17)
+    -   [searchTokens](#searchtokens)
+        -   [Parameters](#parameters-18)
+    -   [getCoinPrices](#getcoinprices)
+        -   [Parameters](#parameters-19)
+-   [IsingleKeystoreClient](#isinglekeystoreclient)
+    -   [signTransaction](#signtransaction)
+        -   [Parameters](#parameters-20)
+    -   [generateMnemonic](#generatemnemonic)
+    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
+        -   [Parameters](#parameters-21)
+    -   [getAccountFromHardware](#getaccountfromhardware)
+        -   [Parameters](#parameters-22)
+    -   [recoverKeyPairByPrivateKey](#recoverkeypairbyprivatekey)
+        -   [Parameters](#parameters-23)
+    -   [validatePrivateKey](#validateprivatekey)
+        -   [Parameters](#parameters-24)
+    -   [validateAddress](#validateaddress)
+        -   [Parameters](#parameters-25)
+-   [Token](#token)
+-   [Keypair](#keypair)
+-   [LedgerKeypair](#ledgerkeypair)
+-   [IkeystoreSigner](#ikeystoresigner)
+    -   [signTransaction](#signtransaction-1)
+        -   [Parameters](#parameters-26)
+-   [IkeystoreClient](#ikeystoreclient)
+    -   [addCoin](#addcoin-1)
+        -   [Parameters](#parameters-27)
+    -   [removeCoin](#removecoin-1)
+        -   [Parameters](#parameters-28)
+    -   [signTransaction](#signtransaction-2)
+        -   [Parameters](#parameters-29)
+    -   [generateMnemonic](#generatemnemonic-1)
+        -   [Parameters](#parameters-30)
+    -   [recoverKeyPairByPrivateKey](#recoverkeypairbyprivatekey-1)
+        -   [Parameters](#parameters-31)
+    -   [validatePrivateKey](#validateprivatekey-1)
+        -   [Parameters](#parameters-32)
+    -   [validateAddress](#validateaddress-1)
+        -   [Parameters](#parameters-33)
+    -   [getAccountFromMnemonic](#getaccountfrommnemonic-1)
+        -   [Parameters](#parameters-34)
+    -   [getAccountFromHardware](#getaccountfromhardware-1)
+        -   [Parameters](#parameters-35)
+-   [IsingleApiClient](#isingleapiclient)
+    -   [config](#config)
+    -   [symbol](#symbol)
+    -   [updateConfiguration](#updateconfiguration)
+        -   [Parameters](#parameters-36)
+    -   [getNetwork](#getnetwork)
+    -   [getBlockByNumber](#getblockbynumber-1)
+        -   [Parameters](#parameters-37)
+    -   [getBlockNumber](#getblocknumber-1)
+    -   [getTransactionStatus](#gettransactionstatus-1)
+        -   [Parameters](#parameters-38)
+    -   [getTransactionExplorerUrl](#gettransactionexplorerurl-1)
+        -   [Parameters](#parameters-39)
+    -   [getBalance](#getbalance-1)
+        -   [Parameters](#parameters-40)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress-1)
+        -   [Parameters](#parameters-41)
+    -   [buildTransaction](#buildtransaction-1)
+        -   [Parameters](#parameters-42)
+    -   [sendTransaction](#sendtransaction-1)
+        -   [Parameters](#parameters-43)
+    -   [sameAddress](#sameaddress-1)
+        -   [Parameters](#parameters-44)
+-   [IsingleApiTokenClient](#isingleapitokenclient)
+    -   [tokenSupport](#tokensupport)
+    -   [getTokenIconUrl](#gettokeniconurl-1)
+        -   [Parameters](#parameters-45)
+    -   [getTokenDetail](#gettokendetail-1)
+        -   [Parameters](#parameters-46)
+    -   [getAccountTokenTransferHistory](#getaccounttokentransferhistory-1)
+        -   [Parameters](#parameters-47)
+    -   [getAccountTokens](#getaccounttokens-1)
+        -   [Parameters](#parameters-48)
+    -   [getAccountTokenBalance](#getaccounttokenbalance-1)
+        -   [Parameters](#parameters-49)
+    -   [getTopTokens](#gettoptokens-1)
+        -   [Parameters](#parameters-50)
+    -   [searchTokens](#searchtokens-1)
+        -   [Parameters](#parameters-51)
+-   [IsingleApiFullClient](#isingleapifullclient)
 
-### KeystoreClient
+### IHardware
 
-### ApiClient
+**Extends IkeystoreSigner**
 
-Refer to interface \[[IApiClient]]
+Hardware wallet interface
+
+#### getAccount
+
+Get account from hardware wallet.
+
+##### Parameters
+
+-   `index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** index path in hd wallet
+-   `params` **any?** additional parameters that may affect key pair generation algorithm
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[LedgerKeypair](#ledgerkeypair)>** key pair
+
+#### getHardwareStatus
+
+Get hardware wallet status.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)>** boolean status of connect/app status.
+
+### CoinPrice
+
+#### Examples
+
+```javascript
+{"crypto":"AION","fiat":"USD","price":0.06133475939999999}
+```
+
+### IApiClient
+
+Api client interface that manages multiple chains' api client and expose all functions.
+
+#### addCoin
+
+Register an api client.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a key name for the added api client, you will specify the coinType for other operations.
+-   `client` **([IsingleApiClient](#isingleapiclient) \| [IsingleApiFullClient](#isingleapifullclient))** api client that implements IsingleApiClient or IsingleApiFullClient
+
+Returns **void** 
+
+#### removeCoin
+
+Remove a registered api client
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** api client key name
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if remove api client successfully
+
+#### getBlockByNumber
+
+Get block information by the given block number
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `blockNumber` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** block number. integer or hex string depends on kernel rpc implementation.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** depends on different chains' block structure
+
+#### getBlockNumber
+
+Get latest block number of the given chain
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** latest block number whose type should be biginteger or hex string
+
+#### getBalance
+
+Get balance of the given account
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account's public address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** balance in hex string or biginteger
+
+#### getTransactionStatus
+
+Get transation status
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `hash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** transaction hash
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction status, depends on different api client's implementation
+
+#### getTransactionExplorerUrl
+
+Get web page url that can display transaction details.
+
+The url should be able to access from web browser by plain HTTP GET request.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `hash` **any** transaction hash
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** web page url that display transaction details
+
+#### getTransactionsByAddress
+
+Get the given account's recent transactions by page.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account's public address
+-   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** page number
+-   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** how mnay transactions to get in this page
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### buildTransaction
+
+Build up transaction object to sign.
+transaction nonce should be encapsulated into transaction object.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `from` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** transaction sender
+-   `to` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** amount receiver. this field isn't alway transaction's to field.
+              if the transaction is a token transfer, transaction to field is token contract address,
+              this field is encoded in contract method parameters.
+-   `value` **BigNumber** amount value. this field isn't alwasy transaction's value field.
+              if the transaction is a token transfer, transaction value field is zero,
+              this field is encoded in contract method parameters.
+-   `options` **any** common options could be: gas limit, gas price, contract address, is token transfer, data, etc.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### sendTransaction
+
+Broadcast transaction.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `unsignedTx` **any** unsigned transaction object. User can call buildTransaction to get unsigned transaction.
+-   `signer` **[IkeystoreSigner](#ikeystoresigner)** implementation of IkeystoreSigner
+-   `signerParams` **any** sign parameters for differernt implementation IkeystoreSigner
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction hash
+
+#### sameAddress
+
+Check if two address are the same account.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address1` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** first address to compare
+-   `address2` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** second address to compare
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if two address are the same account.
+
+#### getTokenIconUrl
+
+Get token icon url.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `tokenSymbol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token symbol
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token creation contract address
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token icon url
+
+#### getTokenDetail
+
+Get token details. In general token details contains: contractAddress, symbol, name, tokenDecimals
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token contract address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** toke details
+
+#### getAccountTokenTransferHistory
+
+Get token transfer history of the given account.
+For pagination, user could use combination of page + size or timestamp + size.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+-   `symbolAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token contract address
+-   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** page number
+-   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** number of transfer records in this page
+-   `timestamp` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** get transfer records earlier than this timestamp
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getAccountTokens
+
+Get tokens whose balance > 0 for the given account.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getAccountTokenBalance
+
+Get token balance of the given account
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token contract address
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getTopTokens
+
+Get top tokens.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `topN` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** number of tokens to get
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### searchTokens
+
+Search token by keyword.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `keyword` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** keyword
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getCoinPrices
+
+Get coin prices
+
+##### Parameters
+
+-   `currency` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** fiat currency
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[CoinPrice](#coinprice)>>** array of coin price
+
+### IsingleKeystoreClient
+
+Interface that handle key store operations.
+
+#### signTransaction
+
+Sign transaction.
+
+##### Parameters
+
+-   `tx` **any** transaction object
+-   `signer` **[IkeystoreSigner](#ikeystoresigner)** singer that implement \[[IkeystoreSigner]] interface
+-   `signerParams` **any** sign parameters
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** signed transaction
+
+#### generateMnemonic
+
+Randomly generate 12 words mnemonic.
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 12 words mnemonic
+
+#### getAccountFromMnemonic
+
+Get specified account from mnemonic phrase
+
+##### Parameters
+
+-   `address_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** address index in hierachy determinist wallet
+-   `mnemonic` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** mnemonic phrase
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** account
+
+#### getAccountFromHardware
+
+Get account from hardware wallet.
+
+##### Parameters
+
+-   `index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** indexPath in hardwallet wallet
+-   `hardware` **[IHardware](#ihardware)** harware wallet that implements IHardware interface
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** account
+
+#### recoverKeyPairByPrivateKey
+
+Recover account from private key.
+
+##### Parameters
+
+-   `priKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** private key
+-   `options` **any?** options that affect recovery algorithm
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** key pair
+
+#### validatePrivateKey
+
+Check if private key is valid.
+
+##### Parameters
+
+-   `privateKey` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Buffer](https://nodejs.org/api/buffer.html))** private key
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if private key is valid
+
+#### validateAddress
+
+Check if address is valid.
+
+##### Parameters
+
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** address to validate
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if address is valid.
+
+### Token
+
+token
+
+### Keypair
+
+Key pair
+
+### LedgerKeypair
+
+Ledger key pair
+
+### IkeystoreSigner
+
+Interface for sign transaction.
+
+#### signTransaction
+
+Sign transaction.
+
+##### Parameters
+
+-   `tx` **any** transaction object to sign
+-   `params` **any** sign parameters such as private key or index path
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;SignedTx>** signed transaction
+
+### IkeystoreClient
+
+Keystore interface that manages multiple keystore clients and expose all functions.
+
+#### addCoin
+
+Register keystore client.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a key name for the added keystore client, you will specify the coinType for other operations.
+-   `client` **[IsingleKeystoreClient](#isinglekeystoreclient)** 
+
+Returns **void** 
+
+#### removeCoin
+
+Remove a registered keystore client
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** keystore client key name
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if remoe keystore client successfully.
+
+#### signTransaction
+
+Sign transaction.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `tx` **any** transaction object to sign
+-   `signer` **[IkeystoreSigner](#ikeystoresigner)** signer that implement \[[IkeystoreSigner]] interface
+-   `signerParams` **any** sign parameters
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** signed transaction
+
+#### generateMnemonic
+
+Randomly generate 12 words mnemonic phrases.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 12 words mnemonic phrases
+
+#### recoverKeyPairByPrivateKey
+
+Recover key pair from private key
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `priKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** private key
+-   `options` **any?** options required by recovery algorithm
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** recovered account
+
+#### validatePrivateKey
+
+Check if private key is valid.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `privateKey` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Buffer](https://nodejs.org/api/buffer.html))** private key
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if private key is valid.
+
+#### validateAddress
+
+Check if an address is valid
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** address to be validated
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if an address is valid.
+
+#### getAccountFromMnemonic
+
+Get specified account from mnemonic phrase
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `ddress_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `mnemonic` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** mnemonic phrase
+-   `address_index`  address index in hierachy determinist wallet
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** account
+
+#### getAccountFromHardware
+
+Get account from hardware wallet.
+
+##### Parameters
+
+-   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
+-   `index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** indexPath in hardwallet wallet
+-   `hardware` **[IHardware](#ihardware)** harware wallet that implements IHardware interface
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** account
+
+### IsingleApiClient
+
+Interface that defines basic api client functions:
+network configuration, block, transaction, balance, etc.
+
+#### config
+
+Configuration property.
+
+Type: any
+
+#### symbol
+
+Coin symbol eg: 'AION', 'BTC' ...
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+#### updateConfiguration
+
+Update configuration.
+
+##### Parameters
+
+-   `config` **any** configuration
+
+Returns **void** 
+
+#### getNetwork
+
+get network name.
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** network name
+
+#### getBlockByNumber
+
+Get block information by the given block number
+
+##### Parameters
+
+-   `blockNumber` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** block number. integer or hex string depends on kernel rpc implementation.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** depends on different chains' block structure
+
+#### getBlockNumber
+
+Get latest block number of the given chain
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** latest block number whose type should be biginteger or hex string
+
+#### getTransactionStatus
+
+Get transation status
+
+##### Parameters
+
+-   `hash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** transaction hash
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction status, depends on different api client's implementation
+
+#### getTransactionExplorerUrl
+
+Get web page url that can display transaction details.
+
+The url should be able to access from web browser by plain HTTP GET request.
+
+##### Parameters
+
+-   `hash` **any** transaction hash
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** web page url that display transaction details
+
+#### getBalance
+
+Get balance of the given account
+
+##### Parameters
+
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account's public address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** balance in hex string or biginteger
+
+#### getTransactionsByAddress
+
+Get the given account's recent transactions by page.
+
+##### Parameters
+
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account's public address
+-   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** page number
+-   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** how mnay transactions to get in this page
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### buildTransaction
+
+Build up transaction object to sign.
+transaction nonce should be encapsulated into transaction object.
+
+##### Parameters
+
+-   `from` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** transaction sender
+-   `to` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** amount receiver. this field isn't alway transaction's to field.
+              if the transaction is a token transfer, transaction to field is token contract address,
+              this field is encoded in contract method parameters.
+-   `value` **BigNumber** amount value. this field isn't alwasy transaction's value field.
+              if the transaction is a token transfer, transaction value field is zero,
+              this field is encoded in contract method parameters.
+-   `options` **any** common options could be: gas limit, gas price, contract address, is token transfer, data, etc.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Transaction>** 
+
+#### sendTransaction
+
+Broadcast transaction.
+
+##### Parameters
+
+-   `unsignedTx` **any** unsigned transaction object. User can call \[[buildTransaction]] to get unsigned transaction.
+-   `signer` **[IkeystoreSigner](#ikeystoresigner)** implementation of IkeystoreSigner
+-   `signerParams` **any** sign parameters for differernt implementation IkeystoreSigner
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction hash
+
+#### sameAddress
+
+Check if two address are the same account.
+
+##### Parameters
+
+-   `address1` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** first address to compare
+-   `address2` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** second address to compare
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if two address are the same account.
+
+### IsingleApiTokenClient
+
+Interface that defines token related functions.
+
+#### tokenSupport
+
+is token supported
+
+Type: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)
+
+#### getTokenIconUrl
+
+Get token icon url.
+
+##### Parameters
+
+-   `tokenSymbol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token symbol
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token creation contract address
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token icon url
+
+#### getTokenDetail
+
+Get token details. In general token details contains: contractAddress, symbol, name, tokenDecimals
+
+##### Parameters
+
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token contract address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** toke details
+
+#### getAccountTokenTransferHistory
+
+Get token transfer history of the given account.
+For pagination, user could use combination of page + size or timestamp + size.
+
+##### Parameters
+
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+-   `cointractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional, page number
+-   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional, number of transfer records in this page
+-   `timestamp` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional, get transfer records earlier than this timestamp
+-   `symbolAddress`  token contract address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getAccountTokens
+
+Get tokens whose balance > 0 for the given account.
+
+##### Parameters
+
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getAccountTokenBalance
+
+Get token balance of the given account
+
+##### Parameters
+
+-   `contractAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** token contract address
+-   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** account address
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### getTopTokens
+
+Get top tokens.
+
+##### Parameters
+
+-   `topN` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** number of tokens to get
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+#### searchTokens
+
+Search token by keyword.
+
+##### Parameters
+
+-   `keyword` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** keyword
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** 
+
+### IsingleApiFullClient
+
+**Extends IsingleApiClient, IsingleApiTokenClient**
+
+Interface that defines basic api client and token functions.

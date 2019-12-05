@@ -2,6 +2,7 @@ import { ECPair, payments } from "bitcoinjs-lib";
 import { networks } from "./network";
 /**
  * @hidden
+ * @private
  */
 export const keyPair = (priKey, options) => {
     if (typeof priKey === "string") {
@@ -36,6 +37,7 @@ export const keyPair = (priKey, options) => {
 };
 /**
  * @hidden
+ * @private
  */
 export const keyPairFromWIF = (WIF, options) => {
     let network = networks.BTC;

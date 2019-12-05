@@ -14,6 +14,9 @@ import {
  * @category Coin BTC
  */
 export interface IBtcConfig {
+    /**
+     * Network name
+     */
     network: "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
     /**
      * bitcoin reset api: https://github.com/bitpay/insight-api/tree/v0.4.3
@@ -44,6 +47,11 @@ export default class BtcApiClient implements IsingleApiClient {
      */
     config: IBtcConfig;
 
+    /**
+     * BTC-like api client
+     *
+     * @param config
+     */
     constructor(config: IBtcConfig) {
         let restSet: {
             broadcast?: string;

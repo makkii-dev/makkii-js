@@ -1,35 +1,50 @@
 # `@makkii/app-btc`
 
-> TODO: description
+Bitcoin-like(such as Bitcoin, Litecoin, etc) application client:
 
-## install
+-   Support Legacy address, prefix with 1
+-   Support both mainnet and testnet
+-   BIP39 Path m/49'/`coinType`'/0'/0/`index`
+      For example, bitcoin's 1st account: m/49'/0'/0'/0/1
+-   Support get account from WIF private key
+
+This library uses some services:
+
+-   [bitpay insight-api](https://github.com/bitpay/insight-api/tree/v0.4.3) - pass in [BtcApiClient](#btcapiclient) constructor, used to get balance, broadcast tranaction, etc.
+-   Transaction Explorer - [bitpay insight-ui](https://github.com/bitpay/insight)
+
+## Installation
 
 ```bash
-npm install @makkii/app-btc
+$ npm install @makkii/app-btc
 ```
 
 ## Usage
 
-```js
-import {BtcApiClient, BtcKeystoreClient} from '@makkii/app-btc'
-const isTestNet = false;
-// btc
-const apiClient = new BtcApiClient(isTestNet, 'btc');
-const keystoreClient = new BtcKeystoreClient(isTestNet, 'btc');
-/*
-    // or ltc
-    const apiClient = new BtcApiClient(isTestNet, 'ltc');
-    const keystoreClient = new BtcKeystoreClient(isTestNet, 'ltc');
-*/
-// API
-const getBalance = aysnc (address) => {
-    const balance = await apiClient.getBalance(address);
-    return balance;
-}
-// 
-```
+```javascript
+import {BtcApiClient, BtcKeystoreClient, BtcLocalSigner} from '@makkii/app-btc'
 
-if you want to learn more, please see [api-client guide](../../docs/api-client.md) and [keysote-client guide](../../docs/keysotre-client.md).
+const api_client = new BtcApiClient({ network: 'BTC', insight_api: '***' });
+api_client.getBalance('1ADeU4oeRSCTPn8GpZ2g6RXwDKsCuSjSbQ')
+    .then(console.log)
+    .catch(error=>console.log(error));
+
+const keystore_client = new BtcKeystoreClient('BTC');
+api_client.buildTransaction(
+    '1ADeU4oeRSCTPn8GpZ2g6RXwDKsCuSjSbQ', // from address
+    '147SwRQdpCfj5p8PnfsXV2SsVVpVcz3aPq', // to address
+    0, // amount
+    {
+        byte_fee: 10,
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction(unsignedTx, new BtcLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+```
 
 ## API
 
@@ -37,55 +52,77 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
 
 #### Table of Contents
 
+-   [BtcLocalSigner](#btclocalsigner)
+    -   [signTransaction](#signtransaction)
+        -   [Parameters](#parameters)
 -   [BtcKeystoreClient](#btckeystoreclient)
-    -   [Parameters](#parameters)
+    -   [Parameters](#parameters-1)
     -   [ledgerSupport](#ledgersupport)
     -   [getCurrentNetwork](#getcurrentnetwork)
     -   [checkLedgerSupport](#checkledgersupport)
-    -   [signTransaction](#signtransaction)
-        -   [Parameters](#parameters-1)
+    -   [signTransaction](#signtransaction-1)
+        -   [Parameters](#parameters-2)
     -   [generateMnemonic](#generatemnemonic)
     -   [recoverKeyPairByPrivateKey](#recoverkeypairbyprivatekey)
-        -   [Parameters](#parameters-2)
-    -   [recoverKeyPairByWIF](#recoverkeypairbywif)
         -   [Parameters](#parameters-3)
-    -   [validatePrivateKey](#validateprivatekey)
+    -   [recoverKeyPairByWIF](#recoverkeypairbywif)
         -   [Parameters](#parameters-4)
-    -   [validateAddress](#validateaddress)
+    -   [validatePrivateKey](#validateprivatekey)
         -   [Parameters](#parameters-5)
-    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
+    -   [validateAddress](#validateaddress)
         -   [Parameters](#parameters-6)
-    -   [getAccountFromHardware](#getaccountfromhardware)
+    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
         -   [Parameters](#parameters-7)
+    -   [getAccountFromHardware](#getaccountfromhardware)
+        -   [Parameters](#parameters-8)
 -   [IBtcConfig](#ibtcconfig)
+    -   [network](#network)
     -   [insight_api](#insight_api)
     -   [broadcast](#broadcast)
     -   [explorer](#explorer)
+-   [BtcUnsignedTx](#btcunsignedtx)
 -   [BtcApiClient](#btcapiclient)
-    -   [Parameters](#parameters-8)
+    -   [Parameters](#parameters-9)
     -   [config](#config)
     -   [getNetwork](#getnetwork)
     -   [updateConfiguration](#updateconfiguration)
-        -   [Parameters](#parameters-9)
-    -   [getBlockByNumber](#getblockbynumber)
         -   [Parameters](#parameters-10)
+    -   [getBlockByNumber](#getblockbynumber)
+        -   [Parameters](#parameters-11)
     -   [getBlockNumber](#getblocknumber)
     -   [getTransactionStatus](#gettransactionstatus)
-        -   [Parameters](#parameters-11)
-    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-12)
-    -   [getBalance](#getbalance)
+    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-13)
-    -   [getTransactionsByAddress](#gettransactionsbyaddress)
+    -   [getBalance](#getbalance)
         -   [Parameters](#parameters-14)
-    -   [sendTransaction](#sendtransaction)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-15)
-    -   [sameAddress](#sameaddress)
+    -   [sendTransaction](#sendtransaction)
         -   [Parameters](#parameters-16)
-    -   [sendAll](#sendall)
+    -   [sameAddress](#sameaddress)
         -   [Parameters](#parameters-17)
-    -   [buildTransaction](#buildtransaction)
+    -   [sendAll](#sendall)
         -   [Parameters](#parameters-18)
+    -   [buildTransaction](#buildtransaction)
+        -   [Parameters](#parameters-19)
+-   [BtcTxStatus](#btctxstatus)
+-   [BtcTransaction](#btctransaction)
+-   [BtcPendingTransaction](#btcpendingtransaction)
+-   [BtcKeypair](#btckeypair)
+
+### BtcLocalSigner
+
+#### signTransaction
+
+Sign transaction of btc local signer
+
+##### Parameters
+
+-   `transaction` **[BtcUnsignedTx](#btcunsignedtx)** 
+-   `params` **{private_key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), compressed: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean), network: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}** {private_key: string, compressed: boolean}
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** btc signed tx
 
 ### BtcKeystoreClient
 
@@ -115,7 +152,7 @@ Sign transaction by signer
 
 ##### Parameters
 
--   `tx` **BtcUnsignedTx** 
+-   `tx` **[BtcUnsignedTx](#btcunsignedtx)** 
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParam` **any** localSigner: {private_key, compressed} hardware:{derivationIndex}
 -   `unsignedTx`  unsigned transaction build by buildTransaction
@@ -137,7 +174,7 @@ Recover key pair by private key
 -   `priKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `options` **any?** **compressed** _boolean_ whether to compress public key
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcKeypair>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcKeypair](#btckeypair)>** 
 
 #### recoverKeyPairByWIF
 
@@ -148,7 +185,7 @@ Recover key pair by wif
 -   `WIF` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `wif`  wif string
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcKeypair>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcKeypair](#btckeypair)>** 
 
 #### validatePrivateKey
 
@@ -179,7 +216,7 @@ Get account from mnemonic
 -   `address_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** bip39 path index
 -   `mnemonic` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcKeypair>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcKeypair](#btckeypair)>** 
 
 #### getAccountFromHardware
 
@@ -191,6 +228,12 @@ Get account from hardware
 -   `hardware` **IHardware** 
 
 ### IBtcConfig
+
+#### network
+
+Network name
+
+Type: (`"BTC"` \| `"BTCTEST"` \| `"LTC"` \| `"LTCTEST"`)
 
 #### insight_api
 
@@ -209,6 +252,19 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 bitcoin explorer url to show tx detail
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+### BtcUnsignedTx
+
+BTC unsigned transaction.
+
+-   to: Array&lt;{ addr: string; value: number }>;
+-   from: Array&lt;{ addr: string; value: number }>;
+-   value: BigNumber;
+-   utxos: Array&lt;{ hash: string; index: number; script: string; raw: string; amount: number; }>;
+-   change_address: string;
+-   to_address: string;
+-   byte_fee: number;
+-   network: string;
 
 ### BtcApiClient
 
@@ -262,7 +318,7 @@ Get transaction status by tx id
 
 -   `hash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** transaction id
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcTxStatus>** transaction status
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcTxStatus](#btctxstatus)>** transaction status
 
 #### getTransactionExplorerUrl
 
@@ -294,7 +350,7 @@ Get transactions by address
 -   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 -   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), BtcTransaction>>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [BtcTransaction](#btctransaction)>>** 
 
 #### sendTransaction
 
@@ -302,11 +358,11 @@ Send transaction
 
 ##### Parameters
 
--   `unsignedTx` **BtcUnsignedTx** unsigned transaction build by buildTransaction
+-   `unsignedTx` **[BtcUnsignedTx](#btcunsignedtx)** unsigned transaction build by buildTransaction
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key, compressed} hardware:{derivationIndex}
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcPendingTransaction>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcPendingTransaction](#btcpendingtransaction)>** 
 
 #### sameAddress
 
@@ -341,4 +397,46 @@ Build transaction
 -   `value` **BigNumber** 
 -   `options` **{byte_fee: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)}** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;BtcUnsignedTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcUnsignedTx](#btcunsignedtx)>** 
+
+### BtcTxStatus
+
+BTC transaction status
+
+-   status: boolean;
+-   blockNumber?: number;
+-   timestamp?: number;
+
+### BtcTransaction
+
+BTC transaction
+
+-   hash: string;
+-   timestamp: number;
+-   blockNUmber: number;
+-   status: "CONFIRMED";
+-   from: Array&lt;{ addr: string; value: number; }>;
+-   to: Array&lt;{ addr: string; value: number; }>;
+-   fee: number;
+
+### BtcPendingTransaction
+
+BTC pending transaction.
+
+-   hash: string;
+-   status: "PENDING";
+-   from: Array&lt;{ addr: string; value: number; }>;
+-   to: Array&lt;{ addr: string; value: number; }>;
+-   fee: number;
+
+### BtcKeypair
+
+BTC key pair.
+
+-   private_key: string;
+-   public_key: string;
+-   address: string;
+-   index?: number;
+-   compressed?: boolean;
+-   sign?: (hash: any) => Buffer;
+-   toWIF?: () => string;

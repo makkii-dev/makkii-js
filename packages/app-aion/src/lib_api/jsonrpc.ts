@@ -3,6 +3,7 @@ import { HttpClient } from "lib-common-util-js";
 
 /**
  * @hidden
+ * @private
  */
 export const processRequest = (methodName, params) => {
     const requestData = {

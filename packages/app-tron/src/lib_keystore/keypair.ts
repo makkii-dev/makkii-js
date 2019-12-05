@@ -36,6 +36,7 @@ const getBase58checkAddress = address => {
 /**
  *
  * @hidden
+ * @private
  */
 export const keyPair = priKey => {
     if (typeof priKey === "string") {

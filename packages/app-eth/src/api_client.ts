@@ -11,33 +11,32 @@ import { EthUnsignedTx, EthPendingTx } from "./type";
  * @category Coin ETH
  */
 export interface IEthConfig {
+    /**
+     * Network name
+     */
     network: "mainnet" | "ropsten";
+    /**
+     * JsonRPC endpoint
+     */
     jsonrpc: string;
     /**
      * api endpoint that used to query transaction information
      */
     explorer_api?: {
-        /**
-         * api provider. currently supported values are: 'etherscan' and 'ethplorer'
-         */
+        // api provider. currently supported values are: 'etherscan' and 'ethplorer'
         provider: string;
-        /**
-         * api base url
-         */
+        // api base url
         url: string;
-        /**
-         * api access key
-         */
+        // api access key
         key: string;
     };
+    /**
+     * Transaction explorer page
+     */
     explorer?: {
-        /**
-         * explorer url provider. currently supported values are: 'etherscan' and 'ethplorer'
-         */
+        // explorer url provider. currently supported values are: 'etherscan' and 'ethplorer'
         provider: string;
-        /**
-         * explorer base url
-         */
+        // explorer base url
         url: string;
     };
     /**
@@ -59,6 +58,11 @@ export default class EthApiClient implements IsingleApiFullClient {
 
     private api: any;
 
+    /**
+     * Ethereum api client.
+     *
+     * @param config
+     */
     constructor(config: IEthConfig) {
         let restSet: {
             explorer_api?: {

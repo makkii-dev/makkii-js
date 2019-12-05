@@ -1,29 +1,54 @@
 # `@makkii/app-eth`
 
-> TODO: description
+Ethereum application client.
 
-## install
+This library uses some third-party service:
+
+-   Web3 JsonRPC - you can pass in jsonrpc in [EthApiClient](#ethapiclient) Constructor
+-   Explorer Api - To get transaction history, token history, we have two solutions:
+    -   `http://api.ethplorer.io`
+    -   `http://api.etherscan.io/api`
+-   Transaction Explorer - To show transaction detail page:
+    -   `https://www.etherchain.org/tx/<txHash>`
+    -   `https://api.etherscan.io/tx/<txHash>`
+-   Remote Api - we setup our own server to provide token list and icons.
+
+## Installation
 
 ```bash
-npm install @makkii/app-eth
+$ npm install @makkii/app-eth
 ```
 
 ## Usage
 
-```js
-import {EthApiClient, EthKeystoreClient} from '@makkii/app-eth'
-const isTestNet = false;
-const apiClient = new EthApiClient(isTestNet);
-const keystoreClient = new EthKeystoreClient();
-// API
-const getBalance = aysnc (address) => {
-    const balance = await apiClient.getBalance(address);
-    return balance;
-}
-// 
-```
+```javascript
+import { EthApiClient, EthKeystoreClient, EthLocalSigner } from '@makkii/app-eth';
 
-if you want to learn more, please see [api-client guide](../../docs/api-client.md) and [keysote-client guide](../../docs/keysotre-client.md).
+const api_client = new EthApiClient({
+    network: 'mainnet',
+    jsonrpc: '***'
+});
+api_client.getBalance('0x...')
+    .then(console.log)
+    .catch(error=>console.log(error));
+const keystore_client = new EthKeystoreClient();
+api_client.buildTransaction(
+    '0x...', // from address
+    '0x...', // to address
+    0, // amount
+    {
+        gasPrice: 10,
+        gasLimit: 21000,
+        isTokenTransfer: false
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction(unsignedTx, new EthLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+```
 
 ## API
 
@@ -31,73 +56,80 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
 
 #### Table of Contents
 
--   [provider](#provider)
--   [url](#url)
--   [key](#key)
--   [provider](#provider-1)
--   [url](#url-1)
+-   [EthLocalSinger](#ethlocalsinger)
+    -   [signTransaction](#signtransaction)
+        -   [Parameters](#parameters)
 -   [IEthConfig](#iethconfig)
+    -   [network](#network)
+    -   [jsonrpc](#jsonrpc)
     -   [explorer_api](#explorer_api)
+    -   [explorer](#explorer)
     -   [remote_api](#remote_api)
 -   [EthKeystoreClient](#ethkeystoreclient)
     -   [validatePrivateKey](#validateprivatekey)
-        -   [Parameters](#parameters)
-    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
         -   [Parameters](#parameters-1)
+    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
+        -   [Parameters](#parameters-2)
+-   [EthUnsignedTx](#ethunsignedtx)
+-   [EthPendingTx](#ethpendingtx)
 -   [EthApiClient](#ethapiclient)
-    -   [Parameters](#parameters-2)
+    -   [Parameters](#parameters-3)
     -   [getNetwork](#getnetwork)
     -   [getBlockByNumber](#getblockbynumber)
-        -   [Parameters](#parameters-3)
+        -   [Parameters](#parameters-4)
     -   [getBlockNumber](#getblocknumber)
     -   [getTransactionStatus](#gettransactionstatus)
-        -   [Parameters](#parameters-4)
-    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-5)
-    -   [sendTransaction](#sendtransaction)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-6)
-    -   [getTopTokens](#gettoptokens)
+    -   [sendTransaction](#sendtransaction)
         -   [Parameters](#parameters-7)
+    -   [getTopTokens](#gettoptokens)
+        -   [Parameters](#parameters-8)
 
-### provider
+### EthLocalSinger
 
-api provider. currently supported values are: 'etherscan' and 'ethplorer'
+Ethereum's signer using private key, implements IkeystoreSigner.
 
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+#### signTransaction
 
-### url
+Sign transaction
 
-api base url
+##### Parameters
 
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+-   `transaction` **[EthUnsignedTx](#ethunsignedtx)** 
+-   `params` **{private_key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}** parameters object, example: { private_key: '' }}
+-   `tx`  EthUnsignedTx transaction object to sign.
 
-### key
-
-api access key
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
-### provider
-
-explorer url provider. currently supported values are: 'etherscan' and 'ethplorer'
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
-
-### url
-
-explorer base url
-
-Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** transaction hash string
 
 ### IEthConfig
 
 Ethereum configuration interface
+
+#### network
+
+Network name
+
+Type: (`"mainnet"` \| `"ropsten"`)
+
+#### jsonrpc
+
+JsonRPC endpoint
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### explorer_api
 
 api endpoint that used to query transaction information
 
 Type: {provider: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), url: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}
+
+#### explorer
+
+Transaction explorer page
+
+Type: {provider: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), url: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}
 
 #### remote_api
 
@@ -127,6 +159,33 @@ Get account from mnemonic
 -   `mnemonic` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** mnemonic phrase
 
 Returns **any** account object: { private_key: '', public_key: '', address: '', index: '' }
+
+### EthUnsignedTx
+
+Ethereum unsigned transaction
+
+-   to: string;
+-   from: string;
+-   nonce: string;
+-   value: BigNumber;
+-   gasPrice: number;
+-   gasLimit: number;
+-   data?: any;
+-   network: string;
+
+### EthPendingTx
+
+Ethereum pending transaction
+
+-   hash: string;
+-   status: "PENDING";
+-   to: string;
+-   from: string;
+-   value: BigNumber;
+-   tknTo?: string;
+-   tknValue: BigNumber;
+-   gasPrice: number;
+-   gasLimit: number;
 
 ### EthApiClient
 
@@ -193,11 +252,11 @@ Send transaction
 
 ##### Parameters
 
--   `unsignedTx` **EthUnsignedTx** unsigned transaction build by buildTransaction
+-   `unsignedTx` **[EthUnsignedTx](#ethunsignedtx)** unsigned transaction build by buildTransaction
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key} hardware:{derivationIndex}
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EthPendingTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[EthPendingTx](#ethpendingtx)>** 
 
 #### getTopTokens
 

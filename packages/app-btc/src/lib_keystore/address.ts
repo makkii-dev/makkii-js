@@ -35,6 +35,7 @@ const validateBench32 = (address, network) => {
 };
 /**
  * @hidden
+ * @private
  */
 export const validateAddress = (address, network) =>
     validateBase58(address, network) || validateBench32(address, network);

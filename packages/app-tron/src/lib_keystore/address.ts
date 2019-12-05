@@ -1,6 +1,7 @@
 const bs58check = require("bs58check");
 /**
  * @hidden
+ * @private
  */
 export const validateAddress = address => {
     try {

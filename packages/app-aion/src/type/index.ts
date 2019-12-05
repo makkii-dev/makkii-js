@@ -2,6 +2,19 @@ import BigNumber from "bignumber.js";
 
 /**
  * Aion unsigned transaction interface
+ *
+ * - to: string;
+ * - from: string;
+ * - nonce: string;
+ * - value: BigNumber;
+ * - gasPrice: number;
+ * - gasLimit: number;
+ * - timestamp: number;
+ * - data?: any;
+ * - type?: number;
+ * - tknTo?: string;
+ * - tknValue?: BigNumber;
+ *
  * @category Coin AION
  */
 export interface AionUnsignedTx {
@@ -14,18 +27,24 @@ export interface AionUnsignedTx {
     timestamp: number;
     data?: any;
     type?: number;
-    /**
-     * token transfer to
-     */
     tknTo?: string;
-    /**
-     * token transfer value
-     */
     tknValue?: BigNumber;
 }
 
 /**
  * Aion pending transaction
+ *
+ * - hash: string;
+ * - status: "PENDING";
+ * - to: string;
+ * - from: string;
+ * - value: BigNumber;
+ * - tknTo?: string;
+ * - tknValue?: BigNumber;
+ * - timestamp: number;
+ * - gasPrice: number;
+ * - gasLimit: number;
+ *
  * @category Coin AION
  */
 export interface AionPendingTx {
@@ -34,13 +53,7 @@ export interface AionPendingTx {
     to: string;
     from: string;
     value: BigNumber;
-    /**
-     * token transfer to
-     */
     tknTo?: string;
-    /**
-     * token transfer value
-     */
     tknValue?: BigNumber;
     timestamp: number;
     gasPrice: number;

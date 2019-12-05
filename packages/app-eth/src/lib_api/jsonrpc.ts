@@ -22,6 +22,7 @@ const checkBlockTag = blockTag => {
 };
 /**
  * @hidden
+ * @private
  */
 export const processRequest = (methodName, params) => {
     const requestData = {

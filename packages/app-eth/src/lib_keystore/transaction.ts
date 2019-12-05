@@ -7,6 +7,7 @@ const KEY_MAP = ["value", "nonce", "gasLimit", "gasPrice", "to"];
 
 /**
  * @hidden
+ * @private
  */
 export const process_unsignedTx = transaction => {
     const {

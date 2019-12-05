@@ -8,6 +8,7 @@ const BN = require("bn.js");
 
 /** *
  * @hidden
+ * @private
  */
 export const process_unsignedTx = transaction => {
     const tx = txInputFormatter(transaction);

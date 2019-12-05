@@ -9,6 +9,7 @@ const TronSignTransaction = require("@tronscan/client/src/utils/crypto")
     .signTransaction;
 /** *
  * @hidden
+ * @private
  */
 export const signTransaction = transaction =>
     new Promise((resolve, reject) => {

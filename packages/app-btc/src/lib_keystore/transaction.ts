@@ -4,6 +4,7 @@ import { networks } from "./network";
 
 /** *
  * @hidden
+ * @private
  */
 export const process_unsignedTx = (transaction, params) => {
     const { utxos, value, to_address, change_address, byte_fee } = transaction;
@@ -46,10 +47,12 @@ export const process_unsignedTx = (transaction, params) => {
 };
 /**
  * @hidden
+ * @private
  */
 export const estimateFeeBTC = (m, n, byte_fee) =>
     new BigNumber(148 * m + 34 * n + 10).times(byte_fee);
 /**
  * @hidden
+ * @private
  */
 export const estimateFeeLTC = new BigNumber(20000);

@@ -36,8 +36,7 @@ project.xcworkspace
 #lerna
 lerna-debug.log
 
-
 #doc
 html
 
-
+*.tar.gz

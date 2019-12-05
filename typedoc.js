@@ -13,6 +13,10 @@ module.exports = {
         "**/babel.config.js"
     ],
     toc: [
+        "IApiClient",
+        "IkeystoreClient",
+        "IHardware",
+        "IkeystoreSigner",
         "ApiClient",
         "KeystoreClient",
         "AionApiClient",

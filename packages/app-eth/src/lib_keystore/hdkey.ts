@@ -4,6 +4,7 @@ import { keyPair } from "./keypair";
 const hdKey = require("hdkey");
 /**
  * @hidden
+ * @private
  */
 export async function getAccountFromMnemonic(mnemonic, index) {
     try {

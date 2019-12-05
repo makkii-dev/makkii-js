@@ -2,6 +2,15 @@ import BigNumber from "bignumber.js";
 
 /**
  * Ethereum unsigned transaction
+ * - to: string;
+ * - from: string;
+ * - nonce: string;
+ * - value: BigNumber;
+ * - gasPrice: number;
+ * - gasLimit: number;
+ * - data?: any;
+ * - network: string;
+ *
  * @category Coin ETH
  */
 export interface EthUnsignedTx {
@@ -17,6 +26,16 @@ export interface EthUnsignedTx {
 
 /**
  * Ethereum pending transaction
+ * - hash: string;
+ * - status: "PENDING";
+ * - to: string;
+ * - from: string;
+ * - value: BigNumber;
+ * - tknTo?: string;
+ * - tknValue: BigNumber;
+ * - gasPrice: number;
+ * - gasLimit: number;
+ *
  * @category Coin ETH
  */
 export interface EthPendingTx {
@@ -25,13 +44,7 @@ export interface EthPendingTx {
     to: string;
     from: string;
     value: BigNumber;
-    /**
-     * token transfer to
-     */
     tknTo?: string;
-    /**
-     * token transfer value
-     */
     tknValue: BigNumber;
     gasPrice: number;
     gasLimit: number;

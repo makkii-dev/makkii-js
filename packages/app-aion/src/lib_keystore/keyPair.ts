@@ -7,6 +7,7 @@ const A0_IDENTIFIER = [0xa0];
 
 /** *
  * @hidden
+ * @private
  */
 export const validatePrivateKey = priKey => {
     if (typeof priKey === "string") {
@@ -35,6 +36,7 @@ function computeA0Address(publicKey) {
 }
 /**
  * @hidden
+ * @private
  */
 export const keyPair = priKey => {
     if (typeof priKey === "string") {

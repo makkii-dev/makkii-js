@@ -1,8 +1,14 @@
 # `@makkii/app-aion`
 
-> TODO: description
+Aion application client.
+This library uses some third-party service:
 
-## install
+-   Web3 JsonRPC - you can pass in jsonrpc in [AionApiClient](#aionapiclient) Constructor
+-   Explorer Api - we use <https://mainnet-api.theoan.com> to get transaction history, token history. 
+-   Transaction Explorer - we use [https://mainnet.theoan.com/#/transaction/`txHash`](https://mainnet.theoan.com/#/transaction/`txHash`) to show transaction detail page.
+-   Remote Api - we setup our own server to provide token list and icons.
+
+## Installation
 
 ```bash
 npm install @makkii/app-aion
@@ -10,20 +16,34 @@ npm install @makkii/app-aion
 
 ## Usage
 
-```js
-import {AionApiClient, AionKeystoreClient} from '@makkii/app-aion'
-const isTestNet = false;
-const apiClient = new AionApiClient(isTestNet);
-const keystoreClient = new AionKeystoreClient();
-// API
-const getBalance = aysnc (address) => {
-    const balance = await apiClient.getBalance(address);
-    return balance;
-}
-// 
-```
+```typescript
+import { AionApiClient, AionKeystoreClient, AionLocalSigner } from '@makkii/app-aion';
 
-if you want to learn more, please see [api-client guide](../../docs/api-client.md) and [keysote-client guide](../../docs/keysotre-client.md).
+const api_client = new AionApiClient({
+    network: 'mainnet',
+    jsonrpc: '***'
+});
+api_client.getBalance('0x...')
+    .then(console.log)
+    .catch(error=>console.log(error));
+const keystore_client = new AionKeystoreClient();
+api_client.buildTransaction(
+    '0x...', // from address
+    '0x...', // to address
+    0, // amount
+    {
+        gasPrice: 10,
+        gasLimit: 21000,
+        isTokenTransfer: false
+    }
+).then(function(unsignedTx) {
+    keystore_client.signTransaction(unsignedTx, new AionLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+```
 
 ## API
 
@@ -32,6 +52,8 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
 #### Table of Contents
 
 -   [IAionConfig](#iaionconfig)
+    -   [network](#network)
+    -   [jsonrpc](#jsonrpc)
     -   [explorer_api](#explorer_api)
     -   [explorer](#explorer)
     -   [remote_api](#remote_api)
@@ -46,26 +68,43 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
         -   [Parameters](#parameters-3)
     -   [validateAddress](#validateaddress)
         -   [Parameters](#parameters-4)
+-   [AionLocalSigner](#aionlocalsigner)
+    -   [signTransaction](#signtransaction)
+        -   [Parameters](#parameters-5)
+-   [AionUnsignedTx](#aionunsignedtx)
 -   [AionApiClient](#aionapiclient)
-    -   [Parameters](#parameters-5)
+    -   [Parameters](#parameters-6)
     -   [getNetwork](#getnetwork)
     -   [getBlockByNumber](#getblockbynumber)
-        -   [Parameters](#parameters-6)
+        -   [Parameters](#parameters-7)
     -   [getBlockNumber](#getblocknumber)
     -   [getTransactionStatus](#gettransactionstatus)
-        -   [Parameters](#parameters-7)
-    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-8)
-    -   [sendTransaction](#sendtransaction)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-9)
-    -   [getTokenIconUrl](#gettokeniconurl)
+    -   [sendTransaction](#sendtransaction)
         -   [Parameters](#parameters-10)
-    -   [buildTransaction](#buildtransaction)
+    -   [getTokenIconUrl](#gettokeniconurl)
         -   [Parameters](#parameters-11)
+    -   [buildTransaction](#buildtransaction)
+        -   [Parameters](#parameters-12)
+-   [AionPendingTx](#aionpendingtx)
 
 ### IAionConfig
 
 Aion configuration interface
+
+#### network
+
+Network name
+
+Type: (`"mainnet"` \| `"amity"`)
+
+#### jsonrpc
+
+Json RPC endpoint
+
+Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 #### explorer_api
 
@@ -140,6 +179,37 @@ Check if address is valid
 
 -   `address` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** address to be validated
 
+### AionLocalSigner
+
+Aion's signer using private key, implements IkeystoreSigner.
+
+#### signTransaction
+
+Sign transaction
+
+##### Parameters
+
+-   `tx` **[AionUnsignedTx](#aionunsignedtx)** AionUnsginedTx transaction object to sign.
+-   `params` **{private_key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}** parameters object, example: { private_key: '' }}
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** transaction hash string
+
+### AionUnsignedTx
+
+Aion unsigned transaction interface
+
+-   to: string;
+-   from: string;
+-   nonce: string;
+-   value: BigNumber;
+-   gasPrice: number;
+-   gasLimit: number;
+-   timestamp: number;
+-   data?: any;
+-   type?: number;
+-   tknTo?: string;
+-   tknValue?: BigNumber;
+
 ### AionApiClient
 
 Aion api client that implement IsingleApiFullClient
@@ -205,11 +275,11 @@ Send transaction
 
 ##### Parameters
 
--   `unsignedTx` **AionUnsignedTx** unsigned transaction build by buildTransaction
+-   `unsignedTx` **[AionUnsignedTx](#aionunsignedtx)** unsigned transaction build by buildTransaction
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key} hardware:{derivationIndex}
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;AionPendingTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[AionPendingTx](#aionpendingtx)>** 
 
 #### getTokenIconUrl
 
@@ -236,4 +306,19 @@ to parameter is encoded in data.
 -   `value` **BigNumber** amount value
 -   `options` **{gasLimit: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number), gasPrice: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number), isTokenTransfer: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean), data: any?, contractAddr: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?, tokenDecimal: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?}** extra parameters
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;AionUnsignedTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[AionUnsignedTx](#aionunsignedtx)>** 
+
+### AionPendingTx
+
+Aion pending transaction
+
+-   hash: string;
+-   status: "PENDING";
+-   to: string;
+-   from: string;
+-   value: BigNumber;
+-   tknTo?: string;
+-   tknValue?: BigNumber;
+-   timestamp: number;
+-   gasPrice: number;
+-   gasLimit: number;

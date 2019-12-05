@@ -15,6 +15,7 @@ const padTo32 = msg => {
 
 /**
  * @hidden
+ * @private
  */
 export const keyPair = priKey => {
     if (typeof priKey === "string") {

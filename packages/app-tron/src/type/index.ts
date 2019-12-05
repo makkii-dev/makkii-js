@@ -1,6 +1,15 @@
 import BigNumber from "bignumber.js";
 
 /**
+ * Tron unsigned transaction
+ *
+ * - to: string;
+ * - owner: string;
+ * - amount: BigNumber;
+ * - timestamp: number;
+ * - expiration: number;
+ * - latest_block: { hash: string; number: string; };
+ *
  * @category Coin TRON
  */
 export interface TronUnsignedTx {
@@ -16,6 +25,15 @@ export interface TronUnsignedTx {
 }
 
 /**
+ * Tron pending transaction
+ *
+ * - to: string;
+ * - from: string;
+ * - value: BigNumber;
+ * - timestamp: number;
+ * - hash: string;
+ * - status: "PENDING";
+ *
  * @category Coin TRON
  */
 export interface TronPendingTx {
@@ -28,6 +46,11 @@ export interface TronPendingTx {
 }
 
 /**
+ * Tron transaction status
+ *
+ * - blockNumber: number;
+ * - status: boolean;
+ *
  * @category Coin TRON
  */
 export interface TronTxStatus {
@@ -36,6 +59,16 @@ export interface TronTxStatus {
 }
 
 /**
+ * Tron transaction
+ *
+ * - hash: string;
+ * - timestamp: number;
+ * - from: string;
+ * - to: string;
+ * - value: BigNumber;
+ * - blockNumber: number;
+ * - status: "CONFIRMED" | "FAILED";
+ *
  * @category Coin TRON
  */
 export interface TronTransaction {
@@ -49,6 +82,13 @@ export interface TronTransaction {
 }
 
 /**
+ * Tron key pair
+ *
+ * - private_key: string;
+ * - public_key: string;
+ * - address: string;
+ * - index?: number;
+ * - sign?: (hash: any) => Buffer;
  * @category Coin TRON
  */
 export interface TronKeypair {

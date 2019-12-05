@@ -16,6 +16,9 @@ type hash = string;
  * @category Coin TRON
  */
 export interface ITronConfig {
+    /**
+     * Network name.
+     */
     network: "mainnet" | "shasta";
     /**
      *  trongrid api
@@ -41,6 +44,11 @@ export default class TronApiClient implements IsingleApiClient {
 
     private api: any;
 
+    /**
+     * Tron api client constructor
+     *
+     * @param config
+     */
     constructor(config: ITronConfig) {
         let restSet: {
             explorer_api?: string;

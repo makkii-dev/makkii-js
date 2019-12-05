@@ -2,3 +2,4 @@ lib
 *docs
 __tests__
 *.test.js
+scripts/*

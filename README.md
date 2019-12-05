@@ -4,14 +4,14 @@ Welcome to Makkii's Javascript Libraries.
 
 Makkiijs is a javascript library which provides:
 
-* [@makkii/makkii-core](./packages/makkii-core) generic interfaces
-* [@makkii/app-aion](./packages/app-aion) aion application client
-* [@makkii/app-btc](./packages/app-btc) bitcoin application client
-* [@makkii/app-eth](./packages/app-eth) ethereum application client
-* [@makkii/app-tron](./packages/app-tron) tron application client
+* [@makkii/makkii-core](https://github.com/chaion/makkiijs/tree/master/packages/makkii-core) generic interfaces
+* [@makkii/app-aion](https://github.com/chaion/makkiijs/tree/master/packages/app-aion) aion application client
+* [@makkii/app-btc](https://github.com/chaion/makkiijs/tree/master/packages/app-btc) bitcoin application client
+* [@makkii/app-eth](https://github.com/chaion/makkiijs/tree/master/packages/app-eth) ethereum application client
+* [@makkii/app-tron](https://github.com/chaion/makkiijs/tree/master/packages/app-tron) tron application client
 
 # Support APIs
-For detailed Api documentation, please refer to [Makkiijs API References]().
+For detailed Api documentation, please refer to [Makkiijs API References](http://45.118.132.89/makkiijs_apidoc/).
 ### IApiClient
 | Method | Aion | BTC | ETH | LTC | TRON |
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -47,7 +47,7 @@ For detailed Api documentation, please refer to [Makkiijs API References]().
 # Installation
 ### From Github
 ```bash
-$ yarn add https://github.com/chaion/makkii-coins
+$ yarn add https://github.com/chaion/makkiijs
 ```
 ### From NPM
 ```
@@ -172,7 +172,8 @@ lerna run test
 ```bash
 yarn doc
 ```
- **It will generate html files in folder './html'**
+ **It will generate all API references documentation in folder './html'**  
+ **This will automatically generate Api section in README.md under all packages.**
 
 ## Deploy
 * Make sure you have right in Chaion org on NPM

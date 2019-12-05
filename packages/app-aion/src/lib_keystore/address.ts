@@ -1,5 +1,6 @@
 /**
  * @hidden
+ * @private
  */
 export const inputAddressFormatter = address => {
     if (/^(0x)?[A|a]0[0-9a-f]{62}$/i.test(address)) {
@@ -9,6 +10,7 @@ export const inputAddressFormatter = address => {
 };
 /**
  * @hidden
+ * @private
  */
 export const validateAddress = address => {
     try {

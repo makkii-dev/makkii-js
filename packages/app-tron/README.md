@@ -1,29 +1,44 @@
 # `@makkii/app-tron`
 
-> TODO: description
+Tron application client.
 
-## install
+This library uses some third-party service:
+
+-   Tron Grid API - you can pass in api endpoint in [TronApiClient](#tronapiclient) Constructor
+-   Explorer Api - To get transaction history, token history, we use `https://apilist.tronscan.org/api`
+-   Transaction Explorer - To show transaction detail page, we use `https://tronscan.org/#/transaction`
+
+## Installation
 
 ```bash
-npm install @makkii/app-tron
+$ npm install @makkii/app-tron
 ```
 
 ## Usage
 
-```js
-import {TronApiClient, TronKeystoreClient} from '@makkii/app-tron'
-const isTestNet = false;
-const apiClient = new TronApiClient(isTestNet);
-const keystoreClient = new TronKeystoreClient();
-// API
-const getBalance = aysnc (address) => {
-    const balance = await apiClient.getBalance(address);
-    return balance;
-}
-// 
-```
+```javascript
+import { TronApiClient, TronKeystoreClient, TronLocalSigner } from '@makkii/app-eth';
 
-if you want to learn more, please see [api-client guide](../../docs/api-client.md) and [keysote-client guide](../../docs/keysotre-client.md).
+const api_client = new TronApiClient({
+    network: 'mainnet',
+    trongrid_api: 'https://api.trongrid.io'
+});
+api_client.getBalance('TCwypatGAoUhhQCnhuk3hEx8XPJYZ8Wfup')
+    .then(console.log)
+    .catch(error=>console.log(error));
+const keystore_client = new TronKeystoreClient();
+api_client.buildTransaction(
+    'TCwypatGAoUhhQCnhuk3hEx8XPJYZ8Wfup', // from address
+    'TJuJxDPeqbGT8epGAUcZSuMSxy5SC7aYfT', // to address
+    0, // amount
+).then(function(unsignedTx) {
+    keystore_client.signTransaction(unsignedTx, new TronLocalSigner(), {
+        private_key: '***'
+    }).then(function(signedTx) {
+        console.log(signedTx);
+    });
+});
+```
 
 ## API
 
@@ -45,30 +60,39 @@ if you want to learn more, please see [api-client guide](../../docs/api-client.m
         -   [Parameters](#parameters-4)
     -   [getAccountFromHardware](#getaccountfromhardware)
         -   [Parameters](#parameters-5)
+-   [TronUnsignedTx](#tronunsignedtx)
+-   [TronLocalSigner](#tronlocalsigner)
+    -   [signTransaction](#signtransaction-1)
+        -   [Parameters](#parameters-6)
 -   [ITronConfig](#itronconfig)
+    -   [network](#network)
     -   [trongrid_api](#trongrid_api)
     -   [explorer_api](#explorer_api)
     -   [explorer](#explorer)
+-   [TronPendingTx](#tronpendingtx)
 -   [TronApiClient](#tronapiclient)
-    -   [Parameters](#parameters-6)
+    -   [Parameters](#parameters-7)
     -   [getNetwork](#getnetwork)
     -   [updateConfiguration](#updateconfiguration)
-        -   [Parameters](#parameters-7)
-    -   [getBlockByNumber](#getblockbynumber)
         -   [Parameters](#parameters-8)
+    -   [getBlockByNumber](#getblockbynumber)
+        -   [Parameters](#parameters-9)
     -   [getBlockNumber](#getblocknumber)
     -   [getTransactionStatus](#gettransactionstatus)
-        -   [Parameters](#parameters-9)
-    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-10)
-    -   [getBalance](#getbalance)
+    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-11)
-    -   [sendTransaction](#sendtransaction)
+    -   [getBalance](#getbalance)
         -   [Parameters](#parameters-12)
-    -   [sameAddress](#sameaddress)
+    -   [sendTransaction](#sendtransaction)
         -   [Parameters](#parameters-13)
-    -   [buildTransaction](#buildtransaction)
+    -   [sameAddress](#sameaddress)
         -   [Parameters](#parameters-14)
+    -   [buildTransaction](#buildtransaction)
+        -   [Parameters](#parameters-15)
+-   [TronTxStatus](#trontxstatus)
+-   [TronTransaction](#trontransaction)
+-   [TronKeypair](#tronkeypair)
 
 ### TronKeystoreClient
 
@@ -78,7 +102,7 @@ Sign transaction by signer
 
 ##### Parameters
 
--   `tx` **TronUnsignedTx** 
+-   `tx` **[TronUnsignedTx](#tronunsignedtx)** 
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParam` **any** localSigner: {private_key} hardware:{derivationIndex}
 -   `unsignedTx`  unsigned transaction build by buildTransaction
@@ -99,7 +123,7 @@ Recover key pair by private key
 
 -   `priKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;TronKeypair>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronKeypair](#tronkeypair)>** 
 
 #### validatePrivateKey
 
@@ -130,7 +154,7 @@ Get account from mnemonic
 -   `address_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** bip39 path index
 -   `mnemonic` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;TronKeypair>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronKeypair](#tronkeypair)>** 
 
 #### getAccountFromHardware
 
@@ -143,7 +167,37 @@ not implemented
 -   `_address_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 -   `hardware` **IHardware** 
 
+### TronUnsignedTx
+
+Tron unsigned transaction
+
+-   to: string;
+-   owner: string;
+-   amount: BigNumber;
+-   timestamp: number;
+-   expiration: number;
+-   latest_block: { hash: string; number: string; };
+
+### TronLocalSigner
+
+#### signTransaction
+
+Sign transaction of tron local signer
+
+##### Parameters
+
+-   `transaction` **[TronUnsignedTx](#tronunsignedtx)** 
+-   `params` **{}** {private_key: string}
+
+Returns **any** signed tron tx
+
 ### ITronConfig
+
+#### network
+
+Network name.
+
+Type: (`"mainnet"` \| `"shasta"`)
 
 #### trongrid_api
 
@@ -162,6 +216,17 @@ Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 explorer url that show transaction detail
 
 Type: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+### TronPendingTx
+
+Tron pending transaction
+
+-   to: string;
+-   from: string;
+-   value: BigNumber;
+-   timestamp: number;
+-   hash: string;
+-   status: "PENDING";
 
 ### TronApiClient
 
@@ -209,7 +274,7 @@ Get transaction status by tx hash
 
 -   `hash` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** tx hash
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;TronTxStatus>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronTxStatus](#trontxstatus)>** 
 
 #### getTransactionExplorerUrl
 
@@ -237,11 +302,11 @@ Send transaction
 
 ##### Parameters
 
--   `unsignedTx` **TronUnsignedTx** unsigned transaction build by buildTransaction
+-   `unsignedTx` **[TronUnsignedTx](#tronunsignedtx)** unsigned transaction build by buildTransaction
 -   `signer` **IkeystoreSigner** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key} hardware:{derivationIndex}
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;TronPendingTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronPendingTx](#tronpendingtx)>** 
 
 #### sameAddress
 
@@ -264,4 +329,33 @@ Build transaction
 -   `to` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `value` **BigNumber** 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;TronUnsignedTx>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronUnsignedTx](#tronunsignedtx)>** 
+
+### TronTxStatus
+
+Tron transaction status
+
+-   blockNumber: number;
+-   status: boolean;
+
+### TronTransaction
+
+Tron transaction
+
+-   hash: string;
+-   timestamp: number;
+-   from: string;
+-   to: string;
+-   value: BigNumber;
+-   blockNumber: number;
+-   status: "CONFIRMED" | "FAILED";
+
+### TronKeypair
+
+Tron key pair
+
+-   private_key: string;
+-   public_key: string;
+-   address: string;
+-   index?: number;
+-   sign?: (hash: any) => Buffer;

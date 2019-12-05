@@ -11,7 +11,13 @@ import { AionUnsignedTx, AionPendingTx } from "./type";
  * @category Coin AION
  */
 export interface IAionConfig {
+    /**
+     * Network name
+     */
     network: "mainnet" | "amity";
+    /**
+     * Json RPC endpoint
+     */
     jsonrpc: string;
     /**
      * api endpoint that used to query transaction information
@@ -41,6 +47,11 @@ export default class AionApiClient implements IsingleApiFullClient {
 
     private api: any;
 
+    /**
+     * AionApiClient contructor
+     *
+     * @param config
+     */
     constructor(config: IAionConfig) {
         let restSet: {
             explorer_api?: string;

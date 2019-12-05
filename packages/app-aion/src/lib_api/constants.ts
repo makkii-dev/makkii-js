@@ -1,5 +1,6 @@
 /**
  * @hidden
+ * @private
  */
 export const CONTRACT_ABI = [
     {

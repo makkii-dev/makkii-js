@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "makkii-coins",
-  "title": "makkii-coins",
+  "name": "makkiijs",
+  "title": "makkiijs",
   "version": "1.0.0",
   "description": "",
   "workspaces": [
@@ -12,7 +12,8 @@
     "compile": "lerna run tsc",
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
     "doc": "typedoc --options ./typedoc.js && lerna run doc",
-    "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish"
+    "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish",
+    "deploy_apidoc": "cross-env RELEVANT_PATH=makkiijs_apidoc node ./scripts/deploy.js"
   },
   "husky": {
     "hooks": {
@@ -40,6 +41,7 @@
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "cross-env": "^6.0.3",
     "documentation": "^12.1.4",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
@@ -49,9 +51,11 @@
     "husky": "^3.1.0",
     "lerna": "^3.18.3",
     "lint-staged": "^9.5.0",
+    "node-ssh": "^6.0.0",
     "prettier": "^1.19.1",
+    "prompt": "^1.0.0",
     "tslint": "^5.20.1",
-    "typedoc": "^0.14.2",
+    "typedoc": "^0.15.3",
     "typescript": "^3.7.2"
   }
 }

@@ -1,5 +1,6 @@
 /** *
  * @hidden
+ * @private
  */
 export const networks = {
     BTC: {
