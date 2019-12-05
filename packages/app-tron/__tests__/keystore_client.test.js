@@ -6,7 +6,7 @@ const mnemonic = 'transfer exhibit feel document display chalk response whisper 
 const client = new TronKeystoreClient();
 const signer = new TronLocalSigner();
 
-describe('Eth Keystore Client function test', function () {
+describe('Tron Keystore Client function test', function () {
     it('Test generateMnemonic', function () {
         const mnemonic_ = client.generateMnemonic();
         assert.strictEqual(mnemonic_.split(' ').length, 12);

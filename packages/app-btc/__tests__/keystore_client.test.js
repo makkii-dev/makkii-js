@@ -7,7 +7,7 @@ const mnemonic = 'transfer exhibit feel document display chalk response whisper 
 const client = new BtcKeystoreClient('BTC');
 const signer = new BtcLocalSigner();
 
-describe('BTC Keystore Clinet function test', function () {
+describe('BTC Keystore Client function test', function () {
     it('Test generateMnemonic', function () {
         const mnemonic_ = client.generateMnemonic();
         assert.strictEqual(mnemonic_.split(' ').length, 12);
