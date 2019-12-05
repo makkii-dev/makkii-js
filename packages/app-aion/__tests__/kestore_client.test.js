@@ -44,6 +44,7 @@ describe('AION Keystore Client function test', function () {
         assert.strictEqual('56fa36dfe15b15d203a944a6c9d70961ef8be16289803e6520fb6e76859e24232a7e3ea5789ee57c85814a90503eeee3430f82c8dcfb0bbb0267cdb48809ad18', private_key);
     })
     it('Test recover keypair from keyfile', async function(){
+        this.timeout(5000);
         const content = fs.readFileSync(path.resolve(__dirname, './UTC--2018-11-08T02-57-21.335Z--a05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf'));
         const {address} = await client.recoverKeyPairByKeyFile(content, 'password');
         assert.strictEqual(address, '0xa05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf');

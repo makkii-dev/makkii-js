@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:12.7.0
+      - image: circleci/node:10.16.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -39,3 +39,5 @@ jobs:
       - store_artifacts:
           path: test-results.xml
           prefix: tests
+      - store_test_results:
+          path: test-results.xm
