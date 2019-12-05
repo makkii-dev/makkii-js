@@ -22,7 +22,8 @@
     "clean": "rm -rf lib",
     "pretsc": "npm run clean",
     "tsc": "tsc --build tsconfig.json",
-    "test": "mocha __tests__/*.js"
+    "test": "mocha __tests__/*.js",
+    "doc": "../../scripts/doc.sh"
   },
   "bugs": {
     "url": "https://github.com/chaion/react-native-makkii-core/issues"

@@ -11,7 +11,7 @@
     "postinstall": "lerna bootstrap",
     "compile": "lerna run tsc",
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
-    "doc": "typedoc --options ./typedoc.js",
+    "doc": "typedoc --options ./typedoc.js && lerna run doc",
     "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish"
   },
   "husky": {
@@ -40,6 +40,7 @@
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "documentation": "^12.1.4",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
