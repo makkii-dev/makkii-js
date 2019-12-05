@@ -40,3 +40,6 @@ lerna-debug.log
 html
 
 *.tar.gz
+
+#mocha
+test-results.xml

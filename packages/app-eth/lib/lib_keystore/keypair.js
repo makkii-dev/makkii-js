@@ -28,10 +28,8 @@ exports.keyPair = priKey => {
         padTo32(Buffer.from(bip32pubKey[0].toArray())),
         padTo32(Buffer.from(bip32pubKey[1].toArray()))
     ]);
-    console.log("get keystore public");
     let address = `0x${ethereumjs_util_1.pubToAddress(publicKey).toString("hex")}`;
     address = ethereumjs_util_1.toChecksumAddress(address);
-    console.log("get keystore address");
     return {
         privateKey: key.getPrivate("hex"),
         publicKey: lib_common_util_js_1.hexutil.toHex(publicKey),

@@ -1,0 +1,6 @@
+packages/app-aion/__tests__
+packages/app-btc/__tests__
+packages/app-eth/__tests__
+packages/app-tron/__tests__
+--require @babel/register
+--reporter mocha-circleci-reporter

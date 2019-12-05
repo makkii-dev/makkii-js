@@ -35,10 +35,8 @@ export const keyPair = priKey => {
         padTo32(Buffer.from(bip32pubKey[0].toArray())),
         padTo32(Buffer.from(bip32pubKey[1].toArray()))
     ]);
-    console.log("get keystore public");
     let address = `0x${pubToAddress(publicKey).toString("hex")}`;
     address = toChecksumAddress(address);
-    console.log("get keystore address");
     return {
         privateKey: key.getPrivate("hex"),
         publicKey: hexutil.toHex(publicKey),

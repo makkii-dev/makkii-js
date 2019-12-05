@@ -1,7 +1,7 @@
 {
   "name": "@makkii/app-eth",
   "version": "0.1.0",
-  "description": "> TODO: description",
+  "description": "Ethereum application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
   "license": "ISC",
@@ -40,10 +40,6 @@
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
     "web3-eth-abi": "^1.2.4",
     "web3-eth-contract": "^1.2.4"
-  },
-  "devDependencies": {
-    "assert": "^2.0.0",
-    "mocha": "^6.2.2"
   },
   "gitHead": "11ea148c8eeb064c5736edc485ba962436ec81ff"
 }

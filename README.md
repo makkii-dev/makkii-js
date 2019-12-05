@@ -1,4 +1,5 @@
 [![Makkii Telegram](https://img.shields.io/badge/Telegram-Makkii-yellow.svg?style=flat)](https://web.telegram.org/#/im?p=@AionChina)
+[![CircleCI](https://circleci.com/gh/chaion/makkiijs.svg?style=svg)](https://circleci.com/gh/chaion/makkiijs)
 
 Welcome to Makkii's Javascript Libraries.
 
@@ -166,7 +167,7 @@ yarn lint
 ```
 ## Run Tests
 ```bash
-lerna run test
+yarn test
 ```
 ## Build Document
 ```bash

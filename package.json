@@ -13,7 +13,8 @@
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
     "doc": "typedoc --options ./typedoc.js && lerna run doc",
     "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish",
-    "deploy_apidoc": "cross-env RELEVANT_PATH=makkiijs_apidoc node ./scripts/deploy.js"
+    "deploy_apidoc": "cross-env RELEVANT_PATH=makkiijs_apidoc node ./scripts/deploy.js",
+    "test": "mocha --opts mocha.opts"
   },
   "husky": {
     "hooks": {
@@ -36,11 +37,21 @@
   "license": "Apache-2.0",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.5.5"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "assert": "^2.0.0",
     "cross-env": "^6.0.3",
     "documentation": "^12.1.4",
     "eslint": "^6.6.0",
@@ -51,6 +62,8 @@
     "husky": "^3.1.0",
     "lerna": "^3.18.3",
     "lint-staged": "^9.5.0",
+    "mocha": "^6.2.2",
+    "mocha-circleci-reporter": "^0.0.3",
     "node-ssh": "^6.0.0",
     "prettier": "^1.19.1",
     "prompt": "^1.0.0",

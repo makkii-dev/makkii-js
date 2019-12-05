@@ -1,7 +1,7 @@
 {
   "name": "@makkii/app-aion",
   "version": "0.1.0",
-  "description": "> TODO: description",
+  "description": "Aion application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
   "license": "ISC",
@@ -22,14 +22,12 @@
     "clean": "rm -rf lib",
     "pretsc": "npm run clean",
     "tsc": "tsc --build tsconfig.json",
-    "test": "npm run tsc &&mocha __tests__/*.js --require @babel/register",
     "doc": "../../scripts/doc.sh"
   },
   "bugs": {
     "url": "https://github.com/chaion/react-native-makkii-core/issues"
   },
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
     "@makkii/makkii-core": "^0.1.0",
     "aion-rlp": "^0.0.1",
     "aion-web3-eth-abi": "^1.2.6-beta.6",
@@ -44,17 +42,6 @@
     "lib-hw-ledger-js": "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a",
     "scrypt.js": "^0.3.0",
     "tweetnacl": "^1.0.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
-    "assert": "^2.0.0",
-    "mocha": "^6.2.2"
   },
   "gitHead": "11ea148c8eeb064c5736edc485ba962436ec81ff"
 }
