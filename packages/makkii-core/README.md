@@ -336,7 +336,7 @@ Broadcast transaction.
 
 -   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
 -   `unsignedTx` **any** unsigned transaction object. User can call buildTransaction to get unsigned transaction.
--   `signer` **[IkeystoreSigner](#ikeystoresigner)** implementation of IkeystoreSigner
+-   `signer` **T** implementation of IkeystoreSigner
 -   `signerParams` **any** sign parameters for differernt implementation IkeystoreSigner
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction hash
@@ -458,7 +458,7 @@ Sign transaction.
 ##### Parameters
 
 -   `tx` **any** transaction object
--   `signer` **[IkeystoreSigner](#ikeystoresigner)** singer that implement \[[IkeystoreSigner]] interface
+-   `signer` **T** singer that implement \[[IkeystoreSigner]] interface
 -   `signerParams` **any** sign parameters
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** signed transaction
@@ -582,7 +582,7 @@ Sign transaction.
 
 -   `coinType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** coin type name you specified in addCoin
 -   `tx` **any** transaction object to sign
--   `signer` **[IkeystoreSigner](#ikeystoresigner)** signer that implement \[[IkeystoreSigner]] interface
+-   `signer` **T** signer that implement \[[IkeystoreSigner]] interface
 -   `signerParams` **any** sign parameters
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** signed transaction
@@ -774,7 +774,7 @@ Broadcast transaction.
 ##### Parameters
 
 -   `unsignedTx` **any** unsigned transaction object. User can call \[[buildTransaction]] to get unsigned transaction.
--   `signer` **[IkeystoreSigner](#ikeystoresigner)** implementation of IkeystoreSigner
+-   `signer` **T** implementation of IkeystoreSigner
 -   `signerParams` **any** sign parameters for differernt implementation IkeystoreSigner
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** transaction hash

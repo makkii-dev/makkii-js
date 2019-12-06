@@ -178,9 +178,9 @@ export default class BtcApiClient implements IsingleApiClient {
      * localSigner: {private_key, compressed} hardware:{derivationIndex}
      * ```
      */
-    sendTransaction = (
+    sendTransaction = <T extends IkeystoreSigner>(
         unsignedTx: BtcUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<BtcPendingTransaction> => {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);

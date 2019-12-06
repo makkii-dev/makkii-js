@@ -8,7 +8,7 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
     constructor(network: "BTC" | "BTCTEST" | "LTC" | "LTCTEST");
     getCurrentNetwork: () => "BTC" | "BTCTEST" | "LTC" | "LTCTEST";
     checkLedgerSupport: () => boolean;
-    signTransaction: (tx: BtcUnsignedTx, signer: IkeystoreSigner, signerParam: any) => Promise<any>;
+    signTransaction: <T extends IkeystoreSigner>(tx: BtcUnsignedTx, signer: T, signerParam: any) => Promise<string>;
     generateMnemonic: () => string;
     recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<BtcKeypair>;
     recoverKeyPairByWIF: (WIF: string) => Promise<BtcKeypair>;

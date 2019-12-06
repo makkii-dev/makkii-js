@@ -3,7 +3,7 @@ import { IsingleKeystoreClient, IkeystoreSigner } from "@makkii/makkii-core/src/
 import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import { TronUnsignedTx, TronKeypair } from "./type";
 export default class TronKeystoreClient implements IsingleKeystoreClient {
-    signTransaction: (tx: TronUnsignedTx, signer: IkeystoreSigner, signerParam: any) => Promise<any>;
+    signTransaction: <T extends IkeystoreSigner>(tx: TronUnsignedTx, signer: T, signerParam: any) => Promise<any>;
     generateMnemonic: () => string;
     recoverKeyPairByPrivateKey: (priKey: string) => Promise<TronKeypair>;
     validatePrivateKey: (privateKey: string | Buffer) => never;

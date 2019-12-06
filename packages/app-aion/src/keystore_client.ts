@@ -14,9 +14,9 @@ import { AionUnsignedTx } from "./type";
 export default class AionKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean = true;
 
-    signTransaction = (
+    signTransaction = <T extends IkeystoreSigner>(
         tx: AionUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ) => {
         return signer.signTransaction(tx, signerParams);

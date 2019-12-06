@@ -4,7 +4,7 @@ import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import { AionUnsignedTx } from "./type";
 export default class AionKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean;
-    signTransaction: (tx: AionUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<any>;
+    signTransaction: <T extends IkeystoreSigner>(tx: AionUnsignedTx, signer: T, signerParams: any) => Promise<any>;
     getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<{
         private_key: string;
         public_key: string;

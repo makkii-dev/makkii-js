@@ -15,9 +15,9 @@ import { EthUnsignedTx } from "./type";
 export default class EthKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean = true;
 
-    signTransaction = (
+    signTransaction = <T extends IkeystoreSigner>(
         tx: EthUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParam: any
     ) => {
         return signer.signTransaction(tx, signerParam);

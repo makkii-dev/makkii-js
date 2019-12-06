@@ -259,7 +259,7 @@ Get transactions by the given address
 -   `page` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** page number
 -   `size` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** page size
 
-Returns **any** array of object structure which contains:
+Returns **any** map of object structure which contains: key is hash
          hash: string, with prefix 0x
          timestamp: milli-seconds from 1970
          from: sender
@@ -276,7 +276,7 @@ Send transaction
 ##### Parameters
 
 -   `unsignedTx` **[AionUnsignedTx](#aionunsignedtx)** unsigned transaction build by buildTransaction
--   `signer` **IkeystoreSigner** localSigner or hardware
+-   `signer` **T** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key} hardware:{derivationIndex}
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[AionPendingTx](#aionpendingtx)>** 

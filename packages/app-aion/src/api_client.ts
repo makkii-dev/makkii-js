@@ -158,9 +158,9 @@ export default class AionApiClient implements IsingleApiFullClient {
      * localSigner: {private_key} hardware:{derivationIndex}
      * ```
      */
-    sendTransaction = (
+    sendTransaction = <T extends IkeystoreSigner>(
         unsignedTx: AionUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<AionPendingTx> => {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);

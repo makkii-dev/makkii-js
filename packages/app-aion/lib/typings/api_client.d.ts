@@ -24,7 +24,7 @@ export default class AionApiClient implements IsingleApiFullClient {
     getTransactionExplorerUrl: (hash: any) => string;
     getBalance: (address: string) => Promise<BigNumber>;
     getTransactionsByAddress: (address: string, page: number, size: number) => any;
-    sendTransaction: (unsignedTx: AionUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<AionPendingTx>;
+    sendTransaction: <T extends IkeystoreSigner>(unsignedTx: AionUnsignedTx, signer: T, signerParams: any) => Promise<AionPendingTx>;
     sameAddress: (address1: string, address2: string) => boolean;
     getTokenIconUrl: (tokenSymbol: string, contractAddress: string) => never;
     getTokenDetail: (contractAddress: string) => Promise<Token>;

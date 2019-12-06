@@ -49,13 +49,13 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
      * @param unsignedTx unsigned transaction build by buildTransaction
      * @param signer localSigner or hardware
      * @param signerParam localSigner: {private_key, compressed} hardware:{derivationIndex}
-     * @returns {string} encoded transaction
+     * @returns encoded transaction
      */
-    signTransaction = (
+    signTransaction = <T extends IkeystoreSigner>(
         tx: BtcUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParam: any
-    ) => {
+    ): Promise<string> => {
         const network = this.getCurrentNetwork();
         return signer.signTransaction(tx, { ...signerParam, network });
     };

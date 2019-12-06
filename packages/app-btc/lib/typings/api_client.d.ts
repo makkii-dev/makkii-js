@@ -21,7 +21,7 @@ export default class BtcApiClient implements IsingleApiClient {
     getTransactionExplorerUrl: (hash: string) => string;
     getBalance: (address: string) => Promise<BigNumber>;
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<Map<string, BtcTransaction>>;
-    sendTransaction: (unsignedTx: BtcUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<BtcPendingTransaction>;
+    sendTransaction: <T extends IkeystoreSigner>(unsignedTx: BtcUnsignedTx, signer: T, signerParams: any) => Promise<BtcPendingTransaction>;
     sameAddress: (address1: string, address2: string) => boolean;
     sendAll: (address: string, byte_fee: number) => Promise<number>;
     buildTransaction: (from: string, to: string, value: BigNumber, options: {

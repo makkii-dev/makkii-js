@@ -153,9 +153,9 @@ export default class TronApiClient implements IsingleApiClient {
      * localSigner: {private_key} hardware:{derivationIndex}
      * ```
      */
-    sendTransaction = (
+    sendTransaction = <T extends IkeystoreSigner>(
         unsignedTx: TronUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<TronPendingTx> => {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);

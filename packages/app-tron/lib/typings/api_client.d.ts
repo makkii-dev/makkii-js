@@ -21,7 +21,7 @@ export default class TronApiClient implements IsingleApiClient {
     getTransactionExplorerUrl: (hash: string) => any;
     getBalance: (address: string) => Promise<BigNumber>;
     getTransactionsByAddress: (address: string, page: number, size: number) => Promise<Map<string, TronTransaction>>;
-    sendTransaction: (unsignedTx: TronUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<TronPendingTx>;
+    sendTransaction: <T extends IkeystoreSigner>(unsignedTx: TronUnsignedTx, signer: T, signerParams: any) => Promise<TronPendingTx>;
     sameAddress: (address1: string, address2: string) => any;
     buildTransaction: (from: string, to: string, value: BigNumber) => Promise<TronUnsignedTx>;
 }

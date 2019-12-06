@@ -8,7 +8,7 @@ export default class KeystoreClient implements IkeystoreClient {
     addCoin: (coinType: string, client: IsingleKeystoreClient) => void;
     removeCoin: (coinType: string) => boolean;
     getCoin: (coinType: string) => IsingleKeystoreClient;
-    signTransaction: (coinType: string, tx: any, signer: IkeystoreSigner, signerParams: any) => Promise<any>;
+    signTransaction: <T extends IkeystoreSigner>(coinType: string, tx: any, signer: T, signerParams: any) => Promise<any>;
     generateMnemonic: (coinType: string) => string;
     recoverKeyPairByPrivateKey: (coinType: string, priKey: string, options?: any) => Promise<any>;
     validatePrivateKey: (coinType: string, privateKey: string | Buffer) => boolean;

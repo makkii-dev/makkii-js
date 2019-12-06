@@ -105,10 +105,10 @@ export default class ApiClient implements IApiClient {
         return coin.buildTransaction(from, to, value, options);
     };
 
-    sendTransaction = (
+    sendTransaction = <T extends IkeystoreSigner>(
         coinType: string,
         unsignedTx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<any> => {
         const coin = this.getCoin(coinType);

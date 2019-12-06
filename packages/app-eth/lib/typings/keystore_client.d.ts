@@ -5,7 +5,7 @@ import { LedgerKeypair, Keypair } from "@makkii/makkii-core/src/type/index";
 import { EthUnsignedTx } from "./type";
 export default class EthKeystoreClient implements IsingleKeystoreClient {
     ledgerSupport: boolean;
-    signTransaction: (tx: EthUnsignedTx, signer: IkeystoreSigner, signerParam: any) => Promise<any>;
+    signTransaction: <T extends IkeystoreSigner>(tx: EthUnsignedTx, signer: T, signerParam: any) => Promise<any>;
     generateMnemonic: () => string;
     recoverKeyPairByPrivateKey: (priKey: string, options?: any) => Promise<Keypair>;
     validatePrivateKey: (privateKey: string | Buffer) => never;

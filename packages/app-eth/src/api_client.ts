@@ -186,9 +186,9 @@ export default class EthApiClient implements IsingleApiFullClient {
      * localSigner: {private_key} hardware:{derivationIndex}
      * ```
      */
-    sendTransaction = (
+    sendTransaction = <T extends IkeystoreSigner>(
         unsignedTx: EthUnsignedTx,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<EthPendingTx> => {
         return this.api.sendTransaction(unsignedTx, signer, signerParams);

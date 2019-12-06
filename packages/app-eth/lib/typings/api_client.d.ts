@@ -31,7 +31,7 @@ export default class EthApiClient implements IsingleApiFullClient {
     getTransactionExplorerUrl: (hash: any) => any;
     getBalance: (address: string) => any;
     getTransactionsByAddress: (address: string, page: number, size: number, timestamp?: number) => any;
-    sendTransaction: (unsignedTx: EthUnsignedTx, signer: IkeystoreSigner, signerParams: any) => Promise<EthPendingTx>;
+    sendTransaction: <T extends IkeystoreSigner>(unsignedTx: EthUnsignedTx, signer: T, signerParams: any) => Promise<EthPendingTx>;
     sameAddress: (address1: string, address2: string) => boolean;
     buildTransaction: (from: string, to: string, value: BigNumber, options: {
         gasLimit: number;

@@ -15,9 +15,9 @@ export interface IsingleKeystoreClient {
      * @param signerParams sign parameters
      * @returns signed transaction
      */
-    signTransaction(
+    signTransaction<T extends IkeystoreSigner>(
         tx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<any>;
 
@@ -121,10 +121,10 @@ export interface IkeystoreClient {
      * @param signerParams sign parameters
      * @returns signed transaction
      */
-    signTransaction(
+    signTransaction<T extends IkeystoreSigner>(
         coinType: string,
         tx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<any>;
 

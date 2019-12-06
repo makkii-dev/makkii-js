@@ -47,10 +47,10 @@ export default class KeystoreClient implements IkeystoreClient {
         return coin;
     };
 
-    signTransaction = (
+    signTransaction = <T extends IkeystoreSigner>(
         coinType: string,
         tx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ) => {
         const coin = this.getCoin(coinType);

@@ -103,11 +103,11 @@ Sign transaction by signer
 ##### Parameters
 
 -   `tx` **[TronUnsignedTx](#tronunsignedtx)** 
--   `signer` **IkeystoreSigner** localSigner or hardware
+-   `signer` **T** localSigner or hardware
 -   `signerParam` **any** localSigner: {private_key} hardware:{derivationIndex}
 -   `unsignedTx`  unsigned transaction build by buildTransaction
 
-Returns **any** encoded transaction
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** encoded transaction
 
 #### generateMnemonic
 
@@ -303,7 +303,7 @@ Send transaction
 ##### Parameters
 
 -   `unsignedTx` **[TronUnsignedTx](#tronunsignedtx)** unsigned transaction build by buildTransaction
--   `signer` **IkeystoreSigner** localSigner or hardware
+-   `signer` **T** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key} hardware:{derivationIndex}
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[TronPendingTx](#tronpendingtx)>** 

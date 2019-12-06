@@ -119,10 +119,10 @@ export interface IApiClient {
      * @param signerParams sign parameters for differernt implementation IkeystoreSigner
      * @returns transaction hash
      */
-    sendTransaction(
+    sendTransaction<T extends IkeystoreSigner>(
         coinType: string,
         unsignedTx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<any>;
 
@@ -339,9 +339,9 @@ export interface IsingleApiClient {
      * @param signerParams sign parameters for differernt implementation IkeystoreSigner
      * @returns transaction hash
      */
-    sendTransaction(
+    sendTransaction<T extends IkeystoreSigner>(
         unsignedTx: any,
-        signer: IkeystoreSigner,
+        signer: T,
         signerParams: any
     ): Promise<any>;
 

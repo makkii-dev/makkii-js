@@ -153,11 +153,11 @@ Sign transaction by signer
 ##### Parameters
 
 -   `tx` **[BtcUnsignedTx](#btcunsignedtx)** 
--   `signer` **IkeystoreSigner** localSigner or hardware
+-   `signer` **T** localSigner or hardware
 -   `signerParam` **any** localSigner: {private_key, compressed} hardware:{derivationIndex}
 -   `unsignedTx`  unsigned transaction build by buildTransaction
 
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** encoded transaction
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** encoded transaction
 
 #### generateMnemonic
 
@@ -359,7 +359,7 @@ Send transaction
 ##### Parameters
 
 -   `unsignedTx` **[BtcUnsignedTx](#btcunsignedtx)** unsigned transaction build by buildTransaction
--   `signer` **IkeystoreSigner** localSigner or hardware
+-   `signer` **T** localSigner or hardware
 -   `signerParams` **any**     localSigner: {private_key, compressed} hardware:{derivationIndex}
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BtcPendingTransaction](#btcpendingtransaction)>** 

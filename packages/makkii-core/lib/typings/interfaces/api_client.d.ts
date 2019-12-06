@@ -11,7 +11,7 @@ export interface IApiClient {
     getTransactionExplorerUrl(coinType: string, hash: any): string;
     getTransactionsByAddress(coinType: string, address: string, page: number, size: number): Promise<any>;
     buildTransaction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>;
-    sendTransaction(coinType: string, unsignedTx: any, signer: IkeystoreSigner, signerParams: any): Promise<any>;
+    sendTransaction<T extends IkeystoreSigner>(coinType: string, unsignedTx: any, signer: T, signerParams: any): Promise<any>;
     sameAddress(coinType: string, address1: string, address2: string): boolean;
     getTokenIconUrl(coinType: string, tokenSymbol: string, contractAddress: string): string;
     getTokenDetail(coinType: string, contractAddress: string): Promise<any>;
@@ -34,7 +34,7 @@ export interface IsingleApiClient {
     getBalance(address: string): Promise<any>;
     getTransactionsByAddress(address: string, page: number, size: number): Promise<any>;
     buildTransaction(from: string, to: string, value: BigNumber, options: any): Promise<Transaction>;
-    sendTransaction(unsignedTx: any, signer: IkeystoreSigner, signerParams: any): Promise<any>;
+    sendTransaction<T extends IkeystoreSigner>(unsignedTx: any, signer: T, signerParams: any): Promise<any>;
     sameAddress(address1: string, address2: string): boolean;
 }
 export interface IsingleApiTokenClient {
