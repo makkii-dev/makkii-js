@@ -36,4 +36,8 @@ jobs:
       # run tests!
       - run: yarn compile
       - run: yarn test
-      - run: if [[ -e test-results.xml ]]; then cp test-results.xml $CIRCLE_TEST_REPORTS/test-results.xml; fi
+      - store_artifacts:
+          path: test-results.xml
+          destination: tests
+      - store_test_results:
+          path: test-results.xml

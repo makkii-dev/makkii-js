@@ -86,7 +86,7 @@ exports.default = config => {
                 });
                 return txs;
             }
-            const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${config.ethplorerApiKey}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
+            const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${explorer_api.key}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
             console.log(`[eth getTransactionsByAddress req] : ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
             console.log("[eth getTransactionsByAddress req]", res.data);

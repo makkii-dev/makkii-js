@@ -131,7 +131,7 @@ export default class AionApiClient implements IsingleApiFullClient {
      * @param address account address
      * @param page page number
      * @param size page size
-     * @returns array of object structure which contains:
+     * @returns map of object structure which contains: key is hash
      *          hash: string, with prefix 0x
      *          timestamp: milli-seconds from 1970
      *          from: sender

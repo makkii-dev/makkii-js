@@ -33,6 +33,7 @@ exports.default = config => {
     }
     function buildTransaction(from, to, value) {
         return __awaiter(this, void 0, void 0, function* () {
+            value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
             const block = yield getLatestBlock();
             const latest_block = {
                 hash: block.blockID,

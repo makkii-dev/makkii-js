@@ -93,7 +93,7 @@ export default config => {
         const url = `${
             explorer_api.url
         }/getAddressTransactions/${address}?apiKey=${
-            config.ethplorerApiKey
+            explorer_api.key
         }&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
         console.log(`[eth getTransactionsByAddress req] : ${url}`);
         const res = await HttpClient.get(url, false);

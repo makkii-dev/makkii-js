@@ -27,6 +27,7 @@ export default config => {
     }
 
     async function buildTransaction(from, to, value) {
+        value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
         const block: any = await getLatestBlock();
         const latest_block = {
             hash: block.blockID,

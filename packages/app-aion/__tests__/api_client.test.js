@@ -9,7 +9,8 @@ const client = new AionApiClient({
     jsonrpc: 'https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780'
 });
 
-const testAddress = '0xa00983f07c11ee9160a64dd3ba3dc3d1f88332a2869f25725f56cbd0be32ef7a'
+const testAddress = '0xa048630fff033d214b36879e62231cc77d81f45d348f6590d268b9b8cabb88a9';
+const tokenAddress = '0xa07406a455df4ca89c7157ce24201690720986f93e79524284e3eb69ef459bd8';
 const TIME_OUT = 20*1000;
 describe('AION Api Client function test', function () {
     it('Test get block by number', async function(){
@@ -38,13 +39,57 @@ describe('AION Api Client function test', function () {
     it('Test get Transaction by address', async function(){
         this.timeout(TIME_OUT);
         const txs = await client.getTransactionsByAddress(testAddress, 0, 10);
-        return expect(Object.keys(txs).length).greaterThan(0)
+        expect(Object.keys(txs).length>=0).ok()
     })
     it('Test same address', function(){
-        const address2 = '0xa00983f07c11ee9160a64dd3ba3dc3d1f88332a2869f25725f56cbd0be32ef7A'
+        const address2 = '0xa048630fff033d214b36879e62231cc77d81f45d348f6590d268b9b8cabb88a9'
         const address3 = '0xa00983f07c11ee9160a64dd3ba3dc3d1f88332a2869f25725f56cbd0be32ef7b'
         expect(client.sameAddress(testAddress, address2)).equal(true);
         expect(client.sameAddress(testAddress, address3)).equal(false);
+    })
+    it('Test get Token detail', async function(){
+        this.timeout(TIME_OUT);
+        const token = await client.getTokenDetail(tokenAddress);
+        expect(token).keys([
+            'symbol',
+            'name',
+            'tokenDecimal'
+        ])
+    })
+    it('Test get Account token balance', async function(){
+        this.timeout(TIME_OUT);
+        const balance = await client.getAccountTokenBalance(tokenAddress, testAddress);
+        expect(balance.toNumber()).greaterThan(0)
+    })
+    it('Test get account Tokens', async function(){
+        this.timeout(TIME_OUT);
+        const tokens = await client.getAccountTokens(testAddress);
+        expect(Object.keys(tokens).length>=0).ok()
+    })
+    it('Test get token transfer history', async function(){
+        this.timeout(TIME_OUT);
+        const history = await client.getAccountTokenTransferHistory(testAddress, tokenAddress, 0, 10);
+        expect(Object.keys(history).length>=0).ok()
+    })
+    it('Test get Top tokens', async function(){
+        this.timeout(TIME_OUT);
+        const tokens = await client.getTopTokens(20);
+        expect(Object.keys(tokens).length).above(0)
+    })
+    it('Test serach tokens', async function(){
+        this.timeout(TIME_OUT);
+        const tokens = await client.searchTokens('m');
+        expect(Object.keys(tokens).length).above(0)
+    })
+    it('Test build Transaction', async function(){
+        this.timeout(TIME_OUT);
+        const tx = await client.buildTransaction(testAddress, tokenAddress, 0, {gasLimit: 21000, gasPrice: 10**10, isTokenTransfer: false})
+        expect(tx).keys([
+            'from',
+            'to',
+            'nonce',
+            'value',
+        ])
     })
 
 })
