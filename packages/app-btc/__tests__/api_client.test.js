@@ -2,7 +2,7 @@ const assert = require('assert');
 const describe = require('mocha').describe;
 const expect = require('expect.js');
 
-const { BtcApiClient } = require('../lib/index');
+const { BtcApiClient, BtcLocalSigner } = require('../lib/index');
 
 const client = new BtcApiClient({
     network: 'BTCTEST',
@@ -45,4 +45,10 @@ describe('BTC Api client function test', function(){
             'to',
         ])
     })
+    // it('Test send Transaction', async function(){
+    //     this.timeout(TIME_OUT)
+    //     const tx = await client.buildTransaction('n4cCJdqoxwG71nXfCJFarz8uBvR6XRoQQ7', 'msCcgT96NVK3qYn1QSQSNxFeFgujVv2rku', 0.00001, {byte_fee:10});
+    //     const pendingtx = await client.sendTransaction(tx, new BtcLocalSigner(), {private_key: 'b355a5d352cb05d7314a3ec6bf2b68468e8e93bb2f8825be1f0325a5882ae6e7'})
+    //     expect(pendingtx).keys(['hash'])
+    // })
 })

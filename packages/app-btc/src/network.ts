@@ -6,9 +6,9 @@ export default {
             "https://api.blockcypher.com/v1/btc/main/txs/push?token=718a0597d85f48259c457136eecb80da"
     },
     BTCTEST: {
-        insight_api: "https://test-insight.bitpay.com/api",
+        insight_api: "http://172.104.190.127:3001/api",
         explorer: "https://test-insight.bitpay.com/tx/",
-        broadcast: "https://test-insight.bitpay.com/api/tx/send"
+        broadcast: "http://172.104.190.127:3001/api/tx/send"
     },
     LTC: {
         insight_api: "https://insight.litecore.io/api",

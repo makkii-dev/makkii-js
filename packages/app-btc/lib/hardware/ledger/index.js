@@ -44,7 +44,7 @@ class BtcLedger {
         };
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const { utxos, network } = transaction;
-            const txb = transaction_1.process_unsignedTx(transaction, params);
+            const txb = transaction_1.process_unsignedTx(transaction);
             const { derivationIndex } = params;
             const tx = txb.buildIncomplete();
             const coinType = network.startsWith("BTC") ? 0 : 2;

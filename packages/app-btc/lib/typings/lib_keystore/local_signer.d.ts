@@ -4,6 +4,5 @@ export default class BtcLocalSigner implements IkeystoreSigner {
     signTransaction: (transaction: BtcUnsignedTx, params: {
         private_key: string;
         compressed: boolean;
-        network: string;
     }) => Promise<string>;
 }

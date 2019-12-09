@@ -15,12 +15,12 @@ const TronSignTransaction = require("@tronscan/client/src/utils/crypto")
 export default class TronLocalSigner implements IkeystoreSigner {
     /**
      * Sign transaction of tron local signer
-     * @param transaction
+     * @param TronUnsignedTx
      * @param params {private_key: string}
      * @returns {any} signed tron tx
      */
     signTransaction = async (
-        transaction: TronUnsignedTx,
+        unsignedTx: TronUnsignedTx,
         params: { private_key }
     ) => {
         const {
@@ -30,7 +30,8 @@ export default class TronLocalSigner implements IkeystoreSigner {
             owner,
             amount,
             latest_block
-        } = transaction;
+        } = unsignedTx;
+        console.log("unsignedTx++++++++++=>", unsignedTx);
         const { private_key } = params;
         const tx = buildTransferTransaction("_", owner, to, amount);
         const latestBlockHash = latest_block.hash;
@@ -72,11 +73,11 @@ export default class TronLocalSigner implements IkeystoreSigner {
                     {
                         parameter: {
                             value: {
-                                amount: tx.amount,
+                                amount: unsignedTx.amount,
                                 owner_address: base58check2HexString(
-                                    tx.owner_address
+                                    unsignedTx.owner
                                 ),
-                                to_address: base58check2HexString(tx.to_address)
+                                to_address: base58check2HexString(unsignedTx.to)
                             },
                             type_url:
                                 "type.googleapis.com/protocol.TransferContract"
@@ -86,8 +87,8 @@ export default class TronLocalSigner implements IkeystoreSigner {
                 ],
                 ref_block_bytes,
                 ref_block_hash,
-                expiration: transaction.expiration,
-                timestamp: transaction.timestamp
+                expiration: unsignedTx.expiration,
+                timestamp: unsignedTx.timestamp
             }
         };
         return signedTx;

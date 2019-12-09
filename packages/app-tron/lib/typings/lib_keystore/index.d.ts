@@ -8,6 +8,5 @@ declare const _default: {
         sign: (hash: any) => any;
     };
     validateAddress: (address: any) => boolean;
-    signTransaction: (transaction: any) => Promise<unknown>;
 };
 export default _default;

@@ -30,6 +30,7 @@ export default config => {
     }
 
     async function buildTransaction(from, to, value, options) {
+        value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
         const {
             data: data_,
             gasLimit,
@@ -43,13 +44,12 @@ export default config => {
         if (isTokenTransfer) {
             const tokenContract = new Contract(ERC20ABI, contractAddr);
             data = tokenContract.methods
-                .send(
+                .transfer(
                     to,
                     value
                         .shiftedBy(tokenDecimal - 0)
                         .toFixed(0)
-                        .toString(),
-                    ""
+                        .toString()
                 )
                 .encodeABI();
         }

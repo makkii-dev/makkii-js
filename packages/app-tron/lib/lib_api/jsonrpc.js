@@ -38,7 +38,6 @@ exports.default = config => {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
         console.log("[tron getLatestBlock req] ", url);
         const res = yield lib_common_util_js_1.HttpClient.post(url);
-        console.log("[tron getLatestBlock resp] ", res.data);
         return res.data;
     });
     const broadcastTransaction = (tx) => __awaiter(void 0, void 0, void 0, function* () {

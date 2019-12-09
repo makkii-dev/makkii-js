@@ -17,8 +17,9 @@ const TronSignTransaction = require("@tronscan/client/src/utils/crypto")
     .signTransaction;
 class TronLocalSigner {
     constructor() {
-        this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
-            const { expiration, timestamp, to, owner, amount, latest_block } = transaction;
+        this.signTransaction = (unsignedTx, params) => __awaiter(this, void 0, void 0, function* () {
+            const { expiration, timestamp, to, owner, amount, latest_block } = unsignedTx;
+            console.log("unsignedTx++++++++++=>", unsignedTx);
             const { private_key } = params;
             const tx = buildTransferTransaction("_", owner, to, amount);
             const latestBlockHash = latest_block.hash;
@@ -51,9 +52,9 @@ class TronLocalSigner {
                         {
                             parameter: {
                                 value: {
-                                    amount: tx.amount,
-                                    owner_address: utils_1.base58check2HexString(tx.owner_address),
-                                    to_address: utils_1.base58check2HexString(tx.to_address)
+                                    amount: unsignedTx.amount,
+                                    owner_address: utils_1.base58check2HexString(unsignedTx.owner),
+                                    to_address: utils_1.base58check2HexString(unsignedTx.to)
                                 },
                                 type_url: "type.googleapis.com/protocol.TransferContract"
                             },
@@ -62,8 +63,8 @@ class TronLocalSigner {
                     ],
                     ref_block_bytes,
                     ref_block_hash,
-                    expiration: transaction.expiration,
-                    timestamp: transaction.timestamp
+                    expiration: unsignedTx.expiration,
+                    timestamp: unsignedTx.timestamp
                 }
             };
             return signedTx;

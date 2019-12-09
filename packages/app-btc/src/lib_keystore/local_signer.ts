@@ -16,9 +16,9 @@ export default class BtcLocalSigner implements IkeystoreSigner {
      */
     signTransaction = async (
         transaction: BtcUnsignedTx,
-        params: { private_key: string; compressed: boolean; network: string }
+        params: { private_key: string; compressed: boolean }
     ) => {
-        const txb = process_unsignedTx(transaction, params);
+        const txb = process_unsignedTx(transaction);
         const { utxos, network } = transaction;
         const { compressed, private_key } = params;
         const mainnet = networks[network];

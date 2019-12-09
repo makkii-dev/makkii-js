@@ -29,7 +29,7 @@ exports.default = config => {
     });
     const getTransactionUrlInExplorer = txHash => `${config.explorer}/${txHash}`;
     const buildTransaction = (from, to, value, options) => __awaiter(void 0, void 0, void 0, function* () {
-        const { byte_fee } = options;
+        const { byte_fee = 10 } = options;
         value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
         const utxos = yield getUnspentTx(from);
         const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(new bignumber_js_1.default(el.amount)), new bignumber_js_1.default(0));

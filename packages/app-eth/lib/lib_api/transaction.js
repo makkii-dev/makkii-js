@@ -36,16 +36,17 @@ exports.default = config => {
     }
     function buildTransaction(from, to, value, options) {
         return __awaiter(this, void 0, void 0, function* () {
+            value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
             const { data: data_, gasLimit, gasPrice, contractAddr, isTokenTransfer, tokenDecimal } = options;
             const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
             if (isTokenTransfer) {
                 const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
                 data = tokenContract.methods
-                    .send(to, value
+                    .transfer(to, value
                     .shiftedBy(tokenDecimal - 0)
                     .toFixed(0)
-                    .toString(), "")
+                    .toString())
                     .encodeABI();
             }
             return {

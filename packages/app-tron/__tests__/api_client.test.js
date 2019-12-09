@@ -2,7 +2,7 @@ const assert = require('assert');
 const describe = require('mocha').describe;
 const expect = require('expect.js');
 
-const { TronApiClient } = require('../lib/index');
+const { TronApiClient, TronLocalSigner } = require('../lib/index');
 
 const client = new TronApiClient({
     network: 'mainnet',
@@ -40,4 +40,14 @@ describe('Tron Api client function test', function(){
             'to',
         ])
     })
+    // it('Test send Transaction', async function(){
+    //     this.timeout(TIME_OUT)
+    //     const client_ = new TronApiClient({
+    //         network: 'shasta',
+    //         trongrid_api: 'https://api.shasta.trongrid.io'
+    //     })
+    //     const tx = await client_.buildTransaction('TCc69tdDpX5QgVYQ1x4CU77L2qxXAozbn4', 'TYacVxYVJ9JKiGuhuYwKqi8Z6kpooioXsD', 0.0001);
+    //     const pendingtx = await client_.sendTransaction(tx, new TronLocalSigner(), {private_key: 'c7b29d349ae090e4e29a9f1a54ea47d3442a78dcb9893d077cded673390b3055'})
+    //     expect(pendingtx).keys(['hash'])
+    // })
 })

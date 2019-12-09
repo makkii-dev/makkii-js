@@ -27,7 +27,6 @@ export default config => {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
         console.log("[tron getLatestBlock req] ", url);
         const res = await HttpClient.post(url);
-        console.log("[tron getLatestBlock resp] ", res.data);
         return res.data;
     };
 

@@ -23,7 +23,7 @@ export default config => {
         `${config.explorer}/${txHash}`;
 
     const buildTransaction = async (from, to, value, options) => {
-        const { byte_fee } = options;
+        const { byte_fee = 10 } = options;
         value = BigNumber.isBigNumber(value) ? value : new BigNumber(value);
         const utxos = await getUnspentTx(from);
         const valueIn = utxos.reduce(

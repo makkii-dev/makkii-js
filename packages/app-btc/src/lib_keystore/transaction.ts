@@ -6,11 +6,17 @@ import { networks } from "./network";
  * @hidden
  * @private
  */
-export const process_unsignedTx = (transaction, params) => {
-    const { utxos, value, to_address, change_address, byte_fee } = transaction;
-    const { network } = params;
+export const process_unsignedTx = transaction => {
+    const {
+        utxos,
+        value,
+        to_address,
+        change_address,
+        byte_fee,
+        network
+    } = transaction;
     const mainnet = networks[network];
-    const amount = new BigNumber(value);
+    const amount = new BigNumber(value).shiftedBy(8);
     const fee =
         network === "BTC" || network === "BTCTEST"
             ? estimateFeeBTC(utxos.length, 2, byte_fee || 10)
