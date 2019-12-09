@@ -22,7 +22,6 @@ declare const _default: (config: any) => {
         value: any;
         utxos: any[];
         byte_fee: any;
-        network: any;
     }>;
     getTransactionUrlInExplorer: (txHash: any) => string;
     getTransactionStatus: (txId: any) => Promise<{

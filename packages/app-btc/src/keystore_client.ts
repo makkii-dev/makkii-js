@@ -180,7 +180,6 @@ export default class BtcKeystoreClient implements IsingleKeystoreClient {
                 `${this.network} getAccountFromHardware not implemented.`
             );
         }
-        const network = this.getCurrentNetwork();
-        return hardware.getAccount(index, { network });
+        return hardware.getAccount(index);
     };
 }

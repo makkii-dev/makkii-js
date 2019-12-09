@@ -11,15 +11,20 @@ import { process_unsignedTx } from "../../lib_keystore/transaction";
 export default class BtcLedger implements IHardware {
     private hardware: any = {};
 
+    private network: string;
+
+    constructor(network) {
+        this.network = network;
+    }
+
     /**
      * Get account of btc ledger by index
      * @param index derivationIndex
      * @param params {network: string}
      */
-    getAccount = async (index: number, params: { network: string }) => {
-        const { network } = params;
-        const coinType = network.startsWith("BTC") ? 0 : 2;
-        const network_ = networks[network];
+    getAccount = async (index: number) => {
+        const coinType = 0;
+        const network_ = networks[this.network];
         const path = `m/49'/${coinType}'/0'/0/${index}`;
         let { publicKey } = await this.hardware.getWalletPublicKey(path);
         publicKey = getCompressPublicKey(publicKey);
@@ -36,7 +41,7 @@ export default class BtcLedger implements IHardware {
      */
     getHardwareStatus = async () => {
         try {
-            await this.getAccount(0, { network: "BTC" });
+            await this.getAccount(0);
             return true;
         } catch (e) {
             return false;
@@ -62,11 +67,11 @@ export default class BtcLedger implements IHardware {
         transaction: BtcUnsignedTx,
         params: { derivationIndex: number }
     ): Promise<string> => {
-        const { utxos, network } = transaction;
+        const { utxos } = transaction;
         const txb = process_unsignedTx(transaction);
         const { derivationIndex } = params;
         const tx = txb.buildIncomplete();
-        const coinType = network.startsWith("BTC") ? 0 : 2;
+        const coinType = 0;
         const inputs = [];
         const paths = [];
         for (let ip = 0; ip < utxos.length; ip += 1) {

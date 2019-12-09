@@ -55,8 +55,7 @@ export default config => {
             change_address: from,
             value,
             utxos,
-            byte_fee,
-            network: config.network
+            byte_fee
         };
     };
 

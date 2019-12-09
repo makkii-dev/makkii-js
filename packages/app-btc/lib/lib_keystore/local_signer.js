@@ -14,14 +14,14 @@ const lib_common_util_js_1 = require("lib-common-util-js");
 const transaction_1 = require("./transaction");
 const network_1 = require("./network");
 class BtcLocalSigner {
-    constructor() {
+    constructor(network) {
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const txb = transaction_1.process_unsignedTx(transaction);
-            const { utxos, network } = transaction;
+            const { utxos } = transaction;
             const { compressed, private_key } = params;
-            const mainnet = network_1.networks[network];
+            const network_ = network_1.networks[this.network];
             const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), "hex"), {
-                network: mainnet,
+                network: network_,
                 compressed
             });
             for (let ip = 0; ip < utxos.length; ip += 1) {
@@ -30,6 +30,7 @@ class BtcLocalSigner {
             const tx = txb.build();
             return tx.toHex();
         });
+        this.network = network;
     }
 }
 exports.default = BtcLocalSigner;

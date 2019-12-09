@@ -8,6 +8,17 @@ import { networks } from "./network";
  * @category Local signer
  */
 export default class BtcLocalSigner implements IkeystoreSigner {
+    private network: string;
+
+    /**
+     * constructor.
+     *
+     * @param network
+     */
+    constructor(network) {
+        this.network = network;
+    }
+
     /**
      * Sign transaction of btc local signer
      * @param transaction
@@ -19,14 +30,14 @@ export default class BtcLocalSigner implements IkeystoreSigner {
         params: { private_key: string; compressed: boolean }
     ) => {
         const txb = process_unsignedTx(transaction);
-        const { utxos, network } = transaction;
+        const { utxos } = transaction;
         const { compressed, private_key } = params;
-        const mainnet = networks[network];
+        const network_ = networks[this.network];
 
         const keyPair = ECPair.fromPrivateKey(
             Buffer.from(hexutil.removeLeadingZeroX(private_key), "hex"),
             {
-                network: mainnet,
+                network: network_,
                 compressed
             }
         );

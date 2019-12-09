@@ -5,7 +5,7 @@ const { BtcKeystoreClient, BtcLocalSigner } = require('../lib/index');
 
 const mnemonic = 'transfer exhibit feel document display chalk response whisper strong walk shock ivory';
 const client = new BtcKeystoreClient('BTC');
-const signer = new BtcLocalSigner();
+const signer = new BtcLocalSigner('BTC');
 
 describe('BTC Keystore Client function test', function () {
     it('Test generateMnemonic', function () {

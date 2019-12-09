@@ -77,8 +77,7 @@ class BtcKeystoreClient {
             if (!this.checkLedgerSupport()) {
                 throw new Error(`${this.network} getAccountFromHardware not implemented.`);
             }
-            const network = this.getCurrentNetwork();
-            return hardware.getAccount(index, { network });
+            return hardware.getAccount(index);
         };
         if (!["BTC", "BTCTEST", "LTC", "LTCTEST"].includes(network)) {
             throw new Error(`BtcKeystoreClient Unsupport network: ${network}`);

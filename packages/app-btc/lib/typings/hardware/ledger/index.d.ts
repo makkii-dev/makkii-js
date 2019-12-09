@@ -2,9 +2,9 @@ import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
 import { BtcUnsignedTx } from "../../type";
 export default class BtcLedger implements IHardware {
     private hardware;
-    getAccount: (index: number, params: {
-        network: string;
-    }) => Promise<{
+    private network;
+    constructor(network: any);
+    getAccount: (index: number) => Promise<{
         address: string;
         index: number;
         publicKey: any;

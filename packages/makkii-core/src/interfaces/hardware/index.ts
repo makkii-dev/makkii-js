@@ -10,14 +10,14 @@ export interface IHardware extends IkeystoreSigner {
      * Get account from hardware wallet.
      *
      * @param index index path in hd wallet
-     * @param params additional parameters that may affect key pair generation algorithm
      * @returns key pair
      */
-    getAccount(index: number, params?: any): Promise<LedgerKeypair>;
+    getAccount(index: number): Promise<LedgerKeypair>;
 
     /**
      * Get hardware wallet status.
      *
+     * @param params additional parameters that may affect hardware status
      * @returns boolean status of connect/app status.
      */
     getHardwareStatus(): Promise<boolean>;
