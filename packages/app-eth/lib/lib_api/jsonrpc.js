@@ -41,11 +41,11 @@ exports.default = config => {
             blockNumber,
             fullTxs
         ]);
-        console.log(`[eth http req] eth_getBlockByNumber[${blockNumber},${fullTxs}]`);
+        console.log("[ETH req] get block by number req:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_getBlockByNumber", res.data);
+        console.log("[ETH resp] get block by number resp:", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else
@@ -53,11 +53,11 @@ exports.default = config => {
     });
     const blockNumber = () => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest("eth_blockNumber", []);
-        console.log("[eth http req] eth_blockNumber[]");
+        console.log("[ETH req] get blockNumber:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_blockNumber", res.data);
+        console.log("[ETH resp] get blockNUmber:", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else
@@ -66,11 +66,11 @@ exports.default = config => {
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), "latest"];
         const requestData = exports.processRequest("eth_getBalance", params);
-        console.log(`[eth http req] eth_getBalance[${address},  'latest']`);
+        console.log("[ETH req] get balance:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_getBalance", res.data);
+        console.log("[ETH resp] get blockNUmber:", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else
@@ -79,11 +79,11 @@ exports.default = config => {
     const getTransactionCount = (address, blockTag) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [address.toLowerCase(), checkBlockTag(blockTag)];
         const requestData = exports.processRequest("eth_getTransactionCount", params);
-        console.log(`[eth http req] eth_getTransactionCount[${address}, ${blockTag}]`);
+        console.log("[ETH req] get nonce:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_getTransactionCount", res.data);
+        console.log("[ETH resp] get nonce", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else
@@ -92,11 +92,11 @@ exports.default = config => {
     const sendSignedTransaction = (signedTx) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [signedTx];
         const requestData = exports.processRequest("eth_sendRawTransaction", params);
-        console.log(`[eth http req] eth_sendRawTransaction[${signedTx}]`);
+        console.log("[ETH req] broadcast:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_sendRawTransaction ", res.data);
+        console.log("[ETH resp] broadcast:", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else
@@ -105,11 +105,11 @@ exports.default = config => {
     const getTransactionReceipt = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const params = [hash];
         const requestData = exports.processRequest("eth_getTransactionReceipt", params);
-        console.log(`[eth http req] eth_getTransactionReceipt[${hash}]`);
+        console.log("[ETH req] get transaction receipt:", requestData);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
-        console.log("[eth http resp] eth_getTransactionReceipt", res.data);
+        console.log("[ETH resp] get transaction receipt", res.data);
         if (res.data.error)
             throw new Error(res.data.error.message);
         else

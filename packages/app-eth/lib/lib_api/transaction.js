@@ -68,9 +68,8 @@ exports.default = config => {
             const { explorer_api } = config;
             if (explorer_api.provider === "etherscan") {
                 const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
-                console.log(`[eth getTransactionsByAddress req] : ${url}`);
+                console.log(`[ETH req] get transaction By address : ${url}`);
                 const res = yield lib_common_util_js_1.HttpClient.get(url, false);
-                console.log("[eth getTransactionsByAddress req]", res.data);
                 const { result } = res.data;
                 const txs = {};
                 result.forEach(t => {
@@ -88,9 +87,8 @@ exports.default = config => {
                 return txs;
             }
             const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${explorer_api.key}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
-            console.log(`[eth getTransactionsByAddress req] : ${url}`);
+            console.log(`[ETH req] get transaction By address : ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
-            console.log("[eth getTransactionsByAddress req]", res.data);
             if (res.data.error) {
                 throw res.data.error;
             }

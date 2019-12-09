@@ -44,12 +44,12 @@ exports.default = config => {
             },
             "latest"
         ]);
-        console.log("[AION get token balance req]:", config.jsonrpc);
+        console.log("[AION req] get token balance:", address);
         const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true);
         if (res.data.result) {
             return new bignumber_js_1.default(AbiCoder.decodeParameter("uint128", res.data.result));
         }
-        throw new Error(`get account Balance failed:${res.data.error}`);
+        throw new Error(`[AION error] get token failed:${res.data.error}`);
     });
     const getTokenDetail = (contractAddress) => __awaiter(void 0, void 0, void 0, function* () {
         const contract = new Contract(constants_1.CONTRACT_ABI);
@@ -75,7 +75,7 @@ exports.default = config => {
         const promiseSymbol = lib_common_util_js_1.HttpClient.post(url, requestGetSymbol, true);
         const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
         const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
-        console.log("[AION get token detail req]:", config.jsonrpc);
+        console.log("[AION req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = yield Promise.all([
             promiseSymbol,
             promiseName,
@@ -84,9 +84,9 @@ exports.default = config => {
         if (symbolRet.data.result &&
             nameRet.data.result &&
             decimalsRet.data.result) {
-            console.log("[get token symobl resp]=>", symbolRet.data);
-            console.log("[get token name resp]=>", nameRet.data);
-            console.log("[get token decimals resp]=>", decimalsRet.data);
+            console.log("[AION resp] get token symobl:", symbolRet.data);
+            console.log("[AION resp] get token name", nameRet.data);
+            console.log("[AION resp] get token decimals", decimalsRet.data);
             let symbol;
             let name;
             try {
@@ -111,12 +111,12 @@ exports.default = config => {
                 tokenDecimal: decimals
             };
         }
-        throw new Error("get token detail failed");
+        throw new Error("[AION error] get token detail failed");
     });
     function getAccountTokenTransferHistory(address, symbolAddress, page = 0, size = 25) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
-            console.log(`get account token transactions: ${url}`);
+            console.log(`[AION req] get account token transactions: ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url);
             const { content = [] } = res.data;
             const txs = {};
@@ -137,14 +137,16 @@ exports.default = config => {
     }
     const getTopTokens = (topN = 20) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.remote_api}/token/aion?offset=0&size=${topN}`;
-        console.log(`get top aion tokens: ${url}`);
+        console.log(`[AION req] get top aion tokens: ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+        console.log(`[AION resp] get top aion tokens:`, res.data);
         return res.data;
     });
     const searchTokens = (keyword) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.remote_api}/token/aion/search?keyword=${keyword}`;
-        console.log(`search aion token: ${url}`);
+        console.log(`[AION req] search aion token: ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+        console.log(`[AION resp] search aion token:`, res.data);
         return res.data;
     });
     return {

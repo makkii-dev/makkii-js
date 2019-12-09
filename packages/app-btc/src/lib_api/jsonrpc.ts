@@ -4,10 +4,10 @@ import { HttpClient } from "lib-common-util-js";
 export default config => {
     const getBalance = async address => {
         const url = `${config.insight_api}/addr/${address}`;
-        console.log(`[${config.network} getBalance req]: ${url}`);
+        console.log(`[${config.network} req] getBalance: ${url}`);
         try {
             const { data } = await HttpClient.get(url);
-            console.log(`[${config.network} getBalance resp]:`, data);
+            console.log(`[${config.network} resp] getBalance:`, data);
             const { balance } = data;
             return new BigNumber(balance);
         } catch (e) {
@@ -17,10 +17,10 @@ export default config => {
 
     const getUnspentTx = async address => {
         const url = `${config.insight_api}/addr/${address}/utxo`;
-        console.log(`[${config.network} getUnspentTx req]: ${url}`);
+        console.log(`[${config.network} req] getUnspentTx: ${url}`);
         try {
             const { data = [] } = await HttpClient.get(url);
-            console.log(`[${config.network} getUnspentTx resp]:`, data);
+            console.log(`[${config.network} resp] getUnspentTx:`, data);
             const utxos = [];
             for (let i = 0; i < data.length; i += 1) {
                 const tx = data[i];
@@ -36,34 +36,34 @@ export default config => {
             }
             return utxos;
         } catch (e) {
-            throw new Error(`[${config.network} getUnspentTx error]: ${e}`);
+            throw new Error(`[${config.network} error] getUnspentTx: ${e}`);
         }
     };
 
     const getRawTx = async txhash => {
         const url = `${config.insight_api}/rawtx/${txhash}`;
-        console.log(`[${config.network} getRawTx req]: ${url}`);
+        console.log(`[${config.network} req] getRawTx: ${url}`);
         try {
             const { data = {} } = await HttpClient.get(url);
             return data.rawtx;
         } catch (e) {
-            throw new Error(`[${config.network} getRawTx error]: ${e}`);
+            throw new Error(`[${config.network} error] getRawTx: ${e}`);
         }
     };
 
     const broadcastTransaction = async encoded => {
         const url = `${config.broadcast}`;
-        console.log(`[${config.network} broadcastTransaction req]: ${url}`);
+        console.log(`[${config.network} req] broadcastTransaction: ${url}`);
         let resp;
         try {
             const payload = config.network.match("TEST")
                 ? { rawtx: encoded }
                 : { tx: encoded };
             resp = await HttpClient.post(url, payload, true);
-            console.log(`[${config.network} broadcastTransaction resp]:`, resp);
+            console.log(`[${config.network} resp] broadcastTransaction:`, resp);
         } catch (e) {
             throw new Error(
-                `[${config.network} broadcastTransaction error]: ${e}`
+                `[${config.network} error] broadcastTransaction: ${e}`
             );
         }
         const { data = {} } = resp || {};
@@ -72,16 +72,16 @@ export default config => {
             return txid || tx.hash;
         }
         throw new Error(
-            `[${config.network} broadcastTransaction error]: ${resp.data}`
+            `[${config.network}  error] broadcastTransaction: ${resp.data}`
         );
     };
 
     const getTransactionStatus = async txId => {
         const url = `${config.insight_api}/tx/${txId}`;
-        console.log(`[${config.network} getTransactionStatus req]: ${url}`);
+        console.log(`[${config.network} req] getTransactionStatus: ${url}`);
         try {
             const { data } = await HttpClient.get(url);
-            console.log(`[${config.network} getTransactionStatus resp]:`, data);
+            console.log(`[${config.network} resp] getTransactionStatus:`, data);
             const { blockheight, blocktime } = data;
             return {
                 status: true,
@@ -95,11 +95,11 @@ export default config => {
 
     const getTransactionsByAddress = async (address, page, size) => {
         const url = `${config.insight_api}/txs/?address=${address}&pageNum=${page}`;
-        console.log(`[${config.network} getTransactionsByAddress req]: ${url}`);
+        console.log(`[${config.network} req] getTransactionsByAddress: ${url}`);
         try {
             const { data } = await HttpClient.get(url);
             console.log(
-                `[${config.network} getTransactionsByAddress resp]:`,
+                `[${config.network} resp] getTransactionsByAddress:`,
                 data
             );
             const { txs: getTxs = [] } = data;
@@ -121,7 +121,7 @@ export default config => {
             return txs;
         } catch (e) {
             throw new Error(
-                `[${config.network} getTransactionsByAddress error]: ${e}`
+                `[${config.network} error] getTransactionsByAddress: ${e}`
             );
         }
     };

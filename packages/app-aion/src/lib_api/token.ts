@@ -36,7 +36,7 @@ export default config => {
             },
             "latest"
         ]);
-        console.log("[AION get token balance req]:", config.jsonrpc);
+        console.log("[AION req] get token balance:", address);
 
         const res = await HttpClient.post(config.jsonrpc, requestData, true);
         if (res.data.result) {
@@ -44,7 +44,7 @@ export default config => {
                 AbiCoder.decodeParameter("uint128", res.data.result)
             );
         }
-        throw new Error(`get account Balance failed:${res.data.error}`);
+        throw new Error(`[AION error] get token failed:${res.data.error}`);
     };
 
     const getTokenDetail = async contractAddress => {
@@ -71,7 +71,7 @@ export default config => {
         const promiseSymbol = HttpClient.post(url, requestGetSymbol, true);
         const promiseName = HttpClient.post(url, requestGetName, true);
         const promiseDecimals = HttpClient.post(url, requestGetDecimals, true);
-        console.log("[AION get token detail req]:", config.jsonrpc);
+        console.log("[AION req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = await Promise.all([
             promiseSymbol,
             promiseName,
@@ -82,9 +82,9 @@ export default config => {
             nameRet.data.result &&
             decimalsRet.data.result
         ) {
-            console.log("[get token symobl resp]=>", symbolRet.data);
-            console.log("[get token name resp]=>", nameRet.data);
-            console.log("[get token decimals resp]=>", decimalsRet.data);
+            console.log("[AION resp] get token symobl:", symbolRet.data);
+            console.log("[AION resp] get token name", nameRet.data);
+            console.log("[AION resp] get token decimals", decimalsRet.data);
             let symbol;
             let name;
             try {
@@ -113,7 +113,7 @@ export default config => {
                 tokenDecimal: decimals
             };
         }
-        throw new Error("get token detail failed");
+        throw new Error("[AION error] get token detail failed");
     };
 
     async function getAccountTokenTransferHistory(
@@ -125,7 +125,7 @@ export default config => {
         const url = `${
             config.explorer_api
         }/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
-        console.log(`get account token transactions: ${url}`);
+        console.log(`[AION req] get account token transactions: ${url}`);
         const res = await HttpClient.get(url);
         const { content = [] } = res.data;
         const txs = {};
@@ -146,15 +146,17 @@ export default config => {
 
     const getTopTokens = async (topN = 20) => {
         const url = `${config.remote_api}/token/aion?offset=0&size=${topN}`;
-        console.log(`get top aion tokens: ${url}`);
+        console.log(`[AION req] get top aion tokens: ${url}`);
         const res = await HttpClient.get(url, false);
+        console.log(`[AION resp] get top aion tokens:`, res.data);
         return res.data;
     };
 
     const searchTokens = async keyword => {
         const url = `${config.remote_api}/token/aion/search?keyword=${keyword}`;
-        console.log(`search aion token: ${url}`);
+        console.log(`[AION req] search aion token: ${url}`);
         const res = await HttpClient.get(url, false);
+        console.log(`[AION resp] search aion token:`, res.data);
         return res.data;
     };
 

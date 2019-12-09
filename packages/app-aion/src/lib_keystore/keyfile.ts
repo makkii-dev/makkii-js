@@ -90,8 +90,6 @@ function toV3(privateKey, password) {
     const r = 8;
     const dklen = 32;
 
-    console.log(`${r} ${p}`);
-
     const kdfparams = [];
 
     kdfparams[0] = 0;

@@ -25,19 +25,19 @@ exports.default = config => {
             },
             "latest"
         ]);
-        console.log("[ETH get token balance req]:", address);
+        console.log("[ETH req]  get token balance:", address);
         lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then(res => {
-            console.log("[ETH get token balance resp]:", res.data);
+            console.log("[ETH resp] get token balance:", res.data);
             if (res.data.result) {
                 resolve(new bignumber_js_1.default(AbiCoder.decodeParameter("uint256", res.data.result)));
             }
             else {
-                reject(new Error(`get account Balance failed:${res.data.error}`));
+                reject(new Error(`[ETH error] get account Balance failed:${res.data.error}`));
             }
         })
             .catch(e => {
-            reject(new Error(`get account Balance failed:${e}`));
+            reject(new Error(`[ETH error] get account Balance failed:${e}`));
         });
     });
     const getTokenDetail = (contractAddress) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,7 +64,7 @@ exports.default = config => {
         const promiseSymbol = lib_common_util_js_1.HttpClient.post(url, requestGetSymbol, true);
         const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
         const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
-        console.log("[ETH get token detail req]:", config.jsonrpc);
+        console.log("[ETH req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = yield Promise.all([
             promiseSymbol,
             promiseName,
@@ -73,9 +73,9 @@ exports.default = config => {
         if (symbolRet.data.result &&
             nameRet.data.result &&
             decimalsRet.data.result) {
-            console.log("[get token symobl resp]=>", symbolRet.data);
-            console.log("[get token name resp]=>", nameRet.data);
-            console.log("[get token decimals resp]=>", decimalsRet.data);
+            console.log("[ETH resp] get token symobl:", symbolRet.data);
+            console.log("[ETH resp] get token name:", nameRet.data);
+            console.log("[ETH resp] get token decimals", decimalsRet.data);
             let symbol;
             let name;
             try {
@@ -106,7 +106,7 @@ exports.default = config => {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
-            console.log(`[eth http req] get token history by address: ${url}`);
+            console.log(`[ETH req] get token history by address: ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url);
             const { data } = res;
             if (data.status === "1") {
@@ -132,7 +132,7 @@ exports.default = config => {
         const url = `${explorer_api.url}/getAddressHistory/${address}?apiKey=${explorer_api.key}&token=${symbolAddress}&type=transfer&limit=${size}&timestamp=${timestamp /
             1000 -
             1}`;
-        console.log(`[eth http req] get token history by address: ${url}`);
+        console.log(`[ETH req] get token history by address: ${url}`);
         const res = yield lib_common_util_js_1.HttpClient.get(url);
         const transfers = {};
         const { operations: txs = [] } = res.data;
@@ -154,7 +154,7 @@ exports.default = config => {
     function getTopTokens(topN = 20) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remote_api}/token/eth/popular`;
-            console.log(`get top eth tokens: ${url}`);
+            console.log(`[ETH req] get top eth tokens: ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
             return res.data;
         });
@@ -162,7 +162,7 @@ exports.default = config => {
     function searchTokens(keyword) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remote_api}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
-            console.log(`search eth token: ${url}`);
+            console.log(`[ETH req] search eth token: ${url}`);
             const res = yield lib_common_util_js_1.HttpClient.get(url, false);
             return res.data;
         });

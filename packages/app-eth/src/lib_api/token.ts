@@ -17,10 +17,10 @@ export default config => {
                 },
                 "latest"
             ]);
-            console.log("[ETH get token balance req]:", address);
+            console.log("[ETH req]  get token balance:", address);
             HttpClient.post(config.jsonrpc, requestData, true)
                 .then(res => {
-                    console.log("[ETH get token balance resp]:", res.data);
+                    console.log("[ETH resp] get token balance:", res.data);
                     if (res.data.result) {
                         resolve(
                             new BigNumber(
@@ -33,13 +33,15 @@ export default config => {
                     } else {
                         reject(
                             new Error(
-                                `get account Balance failed:${res.data.error}`
+                                `[ETH error] get account Balance failed:${res.data.error}`
                             )
                         );
                     }
                 })
                 .catch(e => {
-                    reject(new Error(`get account Balance failed:${e}`));
+                    reject(
+                        new Error(`[ETH error] get account Balance failed:${e}`)
+                    );
                 });
         });
 
@@ -67,7 +69,7 @@ export default config => {
         const promiseSymbol = HttpClient.post(url, requestGetSymbol, true);
         const promiseName = HttpClient.post(url, requestGetName, true);
         const promiseDecimals = HttpClient.post(url, requestGetDecimals, true);
-        console.log("[ETH get token detail req]:", config.jsonrpc);
+        console.log("[ETH req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = await Promise.all([
             promiseSymbol,
             promiseName,
@@ -78,9 +80,9 @@ export default config => {
             nameRet.data.result &&
             decimalsRet.data.result
         ) {
-            console.log("[get token symobl resp]=>", symbolRet.data);
-            console.log("[get token name resp]=>", nameRet.data);
-            console.log("[get token decimals resp]=>", decimalsRet.data);
+            console.log("[ETH resp] get token symobl:", symbolRet.data);
+            console.log("[ETH resp] get token name:", nameRet.data);
+            console.log("[ETH resp] get token decimals", decimalsRet.data);
             let symbol;
             let name;
             try {
@@ -122,7 +124,7 @@ export default config => {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
-            console.log(`[eth http req] get token history by address: ${url}`);
+            console.log(`[ETH req] get token history by address: ${url}`);
             const res = await HttpClient.get(url);
             const { data } = res;
             if (data.status === "1") {
@@ -150,7 +152,7 @@ export default config => {
         }&token=${symbolAddress}&type=transfer&limit=${size}&timestamp=${timestamp /
             1000 -
             1}`;
-        console.log(`[eth http req] get token history by address: ${url}`);
+        console.log(`[ETH req] get token history by address: ${url}`);
         const res = await HttpClient.get(url);
         const transfers = {};
         const { operations: txs = [] } = res.data;
@@ -173,14 +175,14 @@ export default config => {
 
     async function getTopTokens(topN = 20) {
         const url = `${config.remote_api}/token/eth/popular`;
-        console.log(`get top eth tokens: ${url}`);
+        console.log(`[ETH req] get top eth tokens: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;
     }
 
     async function searchTokens(keyword) {
         const url = `${config.remote_api}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
-        console.log(`search eth token: ${url}`);
+        console.log(`[ETH req] search eth token: ${url}`);
         const res = await HttpClient.get(url, false);
         return res.data;
     }

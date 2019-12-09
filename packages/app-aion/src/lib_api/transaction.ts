@@ -74,9 +74,9 @@ export default config => {
         const url = `${
             config.explorer_api
         }/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
-        console.log(`[aion req] get aion transactions by address: ${url}`);
+        console.log(`[AION req] get aion transactions by address: ${url}`);
         const res = await HttpClient.get(url, false);
-        console.log("[keystore resp] res:", res.data);
+        console.log("[AION resp] get aion transactions by address:", res.data);
         const { content } = res.data;
         const txs = {};
         content.forEach(t => {

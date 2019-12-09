@@ -73,9 +73,9 @@ export default config => {
             config.explorer_api
         }/transfer?sort=-timestamp&limit=${size}&start=${page *
             size}&address=${address}`;
-        console.log(`[tron getTransactionsByAddress req] ${url}`);
+        console.log(`[TRON req] getTransactionsByAddress: ${url}`);
         const res = await HttpClient.get(url, false);
-        console.log(`[tron getTransactionsByAddress resp]`, res.data);
+        console.log(`[TRON resp] getTransactionsByAddress:`, res.data);
         const { data } = res.data;
         const txs = {};
         data.forEach(t => {

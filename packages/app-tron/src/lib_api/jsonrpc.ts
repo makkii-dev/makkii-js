@@ -9,11 +9,11 @@ export default config => {
         const body = {
             address: hexAddress
         };
-        console.log(`[tron getBalance req] ${url}`);
+        console.log(`[TRON req] get balance: ${url}`);
         const res = await HttpClient.post(url, body, true, {
             "Content-Type": "application/json"
         });
-        console.log("[tron getBalance resp] ", res.data);
+        console.log("[TRON resp] get balance", res.data);
         if (res.data.Error !== undefined) {
             throw new Error(res.data.Error);
         } else if (res.data.balance !== undefined) {
@@ -25,24 +25,24 @@ export default config => {
 
     const getLatestBlock = async () => {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
-        console.log("[tron getLatestBlock req] ", url);
+        console.log("[TRON req] get latest block: ", url);
         const res = await HttpClient.post(url);
         return res.data;
     };
 
     const broadcastTransaction = async tx => {
         const url = `${config.trongrid_api}/wallet/broadcasttransaction`;
-        console.log(`[tron broadcastTransaction req] ${url}`);
+        console.log(`[TRON req] broadcast: ${url}`);
         const res = await HttpClient.post(url, tx, true, {
             "Content-Type": "application/json"
         });
-        console.log("[tron broadcastTransaction resp] ", res.data);
+        console.log("[TRON resp] broadcast: ", res.data);
         return res.data;
     };
 
     const getTransactionById = async hash => {
         const url = `${config.trongrid_api}/walletsolidity/gettransactionbyid`;
-        console.log(`[tron getTransactionById req] ${url}`);
+        console.log(`[TRON req] getTransactionById: ${url}`);
         const res = await HttpClient.post(
             url,
             {
@@ -51,13 +51,13 @@ export default config => {
             true,
             { "Content-Type": "application/json" }
         );
-        console.log("[tron getTransactionById resp]", res.data);
+        console.log("[TRON resp] getTransactionById:", res.data);
         return res.data;
     };
 
     const getTransactionInfoById = async hash => {
         const url = `${config.trongrid_api}/walletsolidity/gettransactioninfobyid`;
-        console.log(`[tron http req] ${url}`);
+        console.log(`[TRON req] getTransactionInfoById:  ${url}`);
         const res = await HttpClient.post(
             url,
             {
@@ -66,7 +66,7 @@ export default config => {
             true,
             { "Content-Type": "application/json" }
         );
-        console.log("[tron http resp]", res.data);
+        console.log("[TRON resp] getTransactionInfoById:", res.data);
         return res.data;
     };
 

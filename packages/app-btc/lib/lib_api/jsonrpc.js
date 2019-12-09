@@ -14,10 +14,10 @@ const lib_common_util_js_1 = require("lib-common-util-js");
 exports.default = config => {
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/addr/${address}`;
-        console.log(`[${config.network} getBalance req]: ${url}`);
+        console.log(`[${config.network} req] getBalance: ${url}`);
         try {
             const { data } = yield lib_common_util_js_1.HttpClient.get(url);
-            console.log(`[${config.network} getBalance resp]:`, data);
+            console.log(`[${config.network} resp] getBalance:`, data);
             const { balance } = data;
             return new bignumber_js_1.default(balance);
         }
@@ -27,10 +27,10 @@ exports.default = config => {
     });
     const getUnspentTx = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/addr/${address}/utxo`;
-        console.log(`[${config.network} getUnspentTx req]: ${url}`);
+        console.log(`[${config.network} req] getUnspentTx: ${url}`);
         try {
             const { data = [] } = yield lib_common_util_js_1.HttpClient.get(url);
-            console.log(`[${config.network} getUnspentTx resp]:`, data);
+            console.log(`[${config.network} resp] getUnspentTx:`, data);
             const utxos = [];
             for (let i = 0; i < data.length; i += 1) {
                 const tx = data[i];
@@ -46,47 +46,47 @@ exports.default = config => {
             return utxos;
         }
         catch (e) {
-            throw new Error(`[${config.network} getUnspentTx error]: ${e}`);
+            throw new Error(`[${config.network} error] getUnspentTx: ${e}`);
         }
     });
     const getRawTx = (txhash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/rawtx/${txhash}`;
-        console.log(`[${config.network} getRawTx req]: ${url}`);
+        console.log(`[${config.network} req] getRawTx: ${url}`);
         try {
             const { data = {} } = yield lib_common_util_js_1.HttpClient.get(url);
             return data.rawtx;
         }
         catch (e) {
-            throw new Error(`[${config.network} getRawTx error]: ${e}`);
+            throw new Error(`[${config.network} error] getRawTx: ${e}`);
         }
     });
     const broadcastTransaction = (encoded) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.broadcast}`;
-        console.log(`[${config.network} broadcastTransaction req]: ${url}`);
+        console.log(`[${config.network} req] broadcastTransaction: ${url}`);
         let resp;
         try {
             const payload = config.network.match("TEST")
                 ? { rawtx: encoded }
                 : { tx: encoded };
             resp = yield lib_common_util_js_1.HttpClient.post(url, payload, true);
-            console.log(`[${config.network} broadcastTransaction resp]:`, resp);
+            console.log(`[${config.network} resp] broadcastTransaction:`, resp);
         }
         catch (e) {
-            throw new Error(`[${config.network} broadcastTransaction error]: ${e}`);
+            throw new Error(`[${config.network} error] broadcastTransaction: ${e}`);
         }
         const { data = {} } = resp || {};
         const { txid, tx } = data;
         if (txid || tx) {
             return txid || tx.hash;
         }
-        throw new Error(`[${config.network} broadcastTransaction error]: ${resp.data}`);
+        throw new Error(`[${config.network}  error] broadcastTransaction: ${resp.data}`);
     });
     const getTransactionStatus = (txId) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/tx/${txId}`;
-        console.log(`[${config.network} getTransactionStatus req]: ${url}`);
+        console.log(`[${config.network} req] getTransactionStatus: ${url}`);
         try {
             const { data } = yield lib_common_util_js_1.HttpClient.get(url);
-            console.log(`[${config.network} getTransactionStatus resp]:`, data);
+            console.log(`[${config.network} resp] getTransactionStatus:`, data);
             const { blockheight, blocktime } = data;
             return {
                 status: true,
@@ -100,10 +100,10 @@ exports.default = config => {
     });
     const getTransactionsByAddress = (address, page, size) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/txs/?address=${address}&pageNum=${page}`;
-        console.log(`[${config.network} getTransactionsByAddress req]: ${url}`);
+        console.log(`[${config.network} req] getTransactionsByAddress: ${url}`);
         try {
             const { data } = yield lib_common_util_js_1.HttpClient.get(url);
-            console.log(`[${config.network} getTransactionsByAddress resp]:`, data);
+            console.log(`[${config.network} resp] getTransactionsByAddress:`, data);
             const { txs: getTxs = [] } = data;
             const txs = {};
             getTxs.forEach(t => {
@@ -123,7 +123,7 @@ exports.default = config => {
             return txs;
         }
         catch (e) {
-            throw new Error(`[${config.network} getTransactionsByAddress error]: ${e}`);
+            throw new Error(`[${config.network} error] getTransactionsByAddress: ${e}`);
         }
     });
     const COIN = 100000000;
