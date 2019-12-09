@@ -57,7 +57,7 @@ describe('AION Keystore Client function test', function () {
             value: 0,
             gasPrice:10**10,
             gasLimit:210000,
-            timestamp: 1567572012327000
+            timestamp: 1567572012327
         };
         const encodeTx = await client.signTransaction(unsignedTx, signer, {private_key: '0x900050df31286e102017a0ddceebac54de5fbb4a6a57026756fdd2bcd3cad1d1077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114'});
         const expected_rawTx = '0xf89c00a0a03c27530d83ad581bf73627a8aa65a698a3bf70d65152d13aed5afd26b119ef0080870591b2ccf46058830334508800000002540be40001b860077f311cd0a00867e8b8ddede69e9f543d13c3bde9416295c25fc0a0ac448114db019670396ed7dc4c27e5df4f3a8d3ba9841c0dd5ede015733ad3781644f0c99bedee17d37e9ffdc2475099c465c272914a0a87be5dbbf42f618933bbd35e0b'

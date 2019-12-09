@@ -55,7 +55,7 @@ exports.default = config => {
                 value: isTokenTransfer ? new bignumber_js_1.default(0) : new bignumber_js_1.default(value),
                 gasPrice,
                 gasLimit,
-                timestamp: new Date().getTime() * 1000,
+                timestamp: Date.now(),
                 data,
                 type: 1,
                 tknTo: isTokenTransfer ? to : "",
