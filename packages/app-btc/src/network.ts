@@ -19,6 +19,6 @@ export default {
     LTCTEST: {
         insight_api: "https://testnet.litecore.io/api",
         explorer: "https://testnet.litecore.io/tx",
-        broadcast: "https://insight.litecore.io/api/tx/send"
+        broadcast: "https://testnet.litecore.io/api/tx/send"
     }
 };

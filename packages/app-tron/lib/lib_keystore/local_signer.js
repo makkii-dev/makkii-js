@@ -19,9 +19,8 @@ class TronLocalSigner {
     constructor() {
         this.signTransaction = (unsignedTx, params) => __awaiter(this, void 0, void 0, function* () {
             const { expiration, timestamp, to, owner, amount, latest_block } = unsignedTx;
-            console.log("unsignedTx++++++++++=>", unsignedTx);
             const { private_key } = params;
-            const tx = buildTransferTransaction("_", owner, to, amount);
+            const tx = buildTransferTransaction("_", owner, to, amount * Math.pow(10, 6));
             const latestBlockHash = latest_block.hash;
             const latestBlockNum = latest_block.number;
             const numBytes = utils_1.longToByteArray(latestBlockNum);
@@ -52,7 +51,7 @@ class TronLocalSigner {
                         {
                             parameter: {
                                 value: {
-                                    amount: unsignedTx.amount,
+                                    amount: unsignedTx.amount * Math.pow(10, 6),
                                     owner_address: utils_1.base58check2HexString(unsignedTx.owner),
                                     to_address: utils_1.base58check2HexString(unsignedTx.to)
                                 },

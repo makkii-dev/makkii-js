@@ -31,9 +31,8 @@ export default class TronLocalSigner implements IkeystoreSigner {
             amount,
             latest_block
         } = unsignedTx;
-        console.log("unsignedTx++++++++++=>", unsignedTx);
         const { private_key } = params;
-        const tx = buildTransferTransaction("_", owner, to, amount);
+        const tx = buildTransferTransaction("_", owner, to, amount * 10 ** 6);
         const latestBlockHash = latest_block.hash;
         const latestBlockNum = latest_block.number;
         const numBytes = longToByteArray(latestBlockNum);
@@ -73,7 +72,7 @@ export default class TronLocalSigner implements IkeystoreSigner {
                     {
                         parameter: {
                             value: {
-                                amount: unsignedTx.amount,
+                                amount: unsignedTx.amount * 10 ** 6,
                                 owner_address: base58check2HexString(
                                     unsignedTx.owner
                                 ),

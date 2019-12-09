@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 export interface TronUnsignedTx {
     to: string;
     owner: string;
-    amount: BigNumber;
+    amount: number;
     timestamp: number;
     expiration: number;
     latest_block: {

@@ -10,7 +10,7 @@ export default class TronLocalSigner implements IkeystoreSigner {
             contract: {
                 parameter: {
                     value: {
-                        amount: import("bignumber.js").default;
+                        amount: number;
                         owner_address: any;
                         to_address: any;
                     };

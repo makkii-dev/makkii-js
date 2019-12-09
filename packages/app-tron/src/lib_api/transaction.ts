@@ -38,7 +38,7 @@ export default config => {
         const tx = {
             to,
             owner: from,
-            amount: value.shiftedBy(6).toNumber(),
+            amount: value.toNumber(),
             timestamp: now,
             expiration: expire,
             latest_block

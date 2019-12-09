@@ -25,9 +25,10 @@ exports.default = config => {
             },
             "latest"
         ]);
-        console.log("[ETH get token balance req]:", config.jsonrpc);
+        console.log("[ETH get token balance req]:", address);
         lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then(res => {
+            console.log("[ETH get token balance resp]:", res.data);
             if (res.data.result) {
                 resolve(new bignumber_js_1.default(AbiCoder.decodeParameter("uint256", res.data.result)));
             }
