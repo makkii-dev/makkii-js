@@ -13,8 +13,8 @@ exports.process_unsignedTx = transaction => {
     });
     let txParams = {
         nonce: lib_common_util_js_1.hexutil.toHex(nonce),
-        gasPrice: lib_common_util_js_1.hexutil.toHex(gasPrice),
-        gasLimit: lib_common_util_js_1.hexutil.toHex(gasLimit),
+        gasPrice: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(gasPrice)),
+        gasLimit: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(gasLimit)),
         to: lib_common_util_js_1.hexutil.toHex(to),
         value: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(amount).shiftedBy(18)),
         chainId: getChainId(network),

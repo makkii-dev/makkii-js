@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
 const bignumber_js_1 = require("bignumber.js");
 const network_1 = require("./network");
-exports.process_unsignedTx = transaction => {
-    const { utxos, value, to_address, change_address, byte_fee, network } = transaction;
+exports.process_unsignedTx = (transaction, network) => {
+    const { utxos, value, to_address, change_address, byte_fee } = transaction;
     const mainnet = network_1.networks[network];
     const amount = new bignumber_js_1.default(value).shiftedBy(8);
     const fee = network === "BTC" || network === "BTCTEST"

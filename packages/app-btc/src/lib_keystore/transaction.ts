@@ -6,15 +6,8 @@ import { networks } from "./network";
  * @hidden
  * @private
  */
-export const process_unsignedTx = transaction => {
-    const {
-        utxos,
-        value,
-        to_address,
-        change_address,
-        byte_fee,
-        network
-    } = transaction;
+export const process_unsignedTx = (transaction, network) => {
+    const { utxos, value, to_address, change_address, byte_fee } = transaction;
     const mainnet = networks[network];
     const amount = new BigNumber(value).shiftedBy(8);
     const fee =

@@ -29,8 +29,8 @@ export const process_unsignedTx = transaction => {
 
     let txParams: any = {
         nonce: hexutil.toHex(nonce),
-        gasPrice: hexutil.toHex(gasPrice),
-        gasLimit: hexutil.toHex(gasLimit),
+        gasPrice: hexutil.toHex(new BigNumber(gasPrice)),
+        gasLimit: hexutil.toHex(new BigNumber(gasLimit)),
         to: hexutil.toHex(to),
         value: hexutil.toHex(new BigNumber(amount).shiftedBy(18)),
         chainId: getChainId(network),

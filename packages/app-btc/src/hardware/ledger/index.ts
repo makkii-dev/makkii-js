@@ -68,7 +68,7 @@ export default class BtcLedger implements IHardware {
         params: { derivationIndex: number }
     ): Promise<string> => {
         const { utxos } = transaction;
-        const txb = process_unsignedTx(transaction);
+        const txb = process_unsignedTx(transaction, this.network);
         const { derivationIndex } = params;
         const tx = txb.buildIncomplete();
         const coinType = 0;

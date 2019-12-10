@@ -16,7 +16,7 @@ const network_1 = require("./network");
 class BtcLocalSigner {
     constructor(network) {
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
-            const txb = transaction_1.process_unsignedTx(transaction);
+            const txb = transaction_1.process_unsignedTx(transaction, this.network);
             const { utxos } = transaction;
             const { compressed, private_key } = params;
             const network_ = network_1.networks[this.network];

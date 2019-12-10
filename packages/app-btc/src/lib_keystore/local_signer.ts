@@ -29,7 +29,7 @@ export default class BtcLocalSigner implements IkeystoreSigner {
         transaction: BtcUnsignedTx,
         params: { private_key: string; compressed: boolean }
     ) => {
-        const txb = process_unsignedTx(transaction);
+        const txb = process_unsignedTx(transaction, this.network);
         const { utxos } = transaction;
         const { compressed, private_key } = params;
         const network_ = networks[this.network];
