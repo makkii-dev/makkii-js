@@ -88,10 +88,11 @@ export default class ApiClient implements IApiClient {
         coinType: string,
         address: string,
         page: number,
-        size: number
+        size: number,
+        timestamp?: number
     ): Promise<any> => {
         const coin = this.getCoin(coinType);
-        return coin.getTransactionsByAddress(address, page, size);
+        return coin.getTransactionsByAddress(address, page, size, timestamp);
     };
 
     buildTransaction = (

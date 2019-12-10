@@ -5,8 +5,8 @@ export default {
         remote_api: "https://www.chaion.net/makkii"
     },
     amity: {
-        explorer_api: "https://mastery-api.theoan.com",
-        explorer: "https://mastery.theoan.com/#/transaction",
+        explorer_api: "https://amity-api.theoan.com",
+        explorer: "https://amity.theoan.com/#/transaction",
         remote_api: "http://45.118.132.89:8080"
     }
 };

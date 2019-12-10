@@ -85,7 +85,8 @@ export interface IApiClient {
         coinType: string,
         address: string,
         page: number,
-        size: number
+        size: number,
+        timestamp?: number
     ): Promise<any>;
 
     /**
@@ -308,7 +309,8 @@ export interface IsingleApiClient {
     getTransactionsByAddress(
         address: string,
         page: number,
-        size: number
+        size: number,
+        timestamp?: number
     ): Promise<any>;
 
     /**

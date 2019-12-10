@@ -9,7 +9,7 @@ export interface IApiClient {
     getBalance(coinType: string, address: string): Promise<any>;
     getTransactionStatus(coinType: string, hash: string): Promise<any>;
     getTransactionExplorerUrl(coinType: string, hash: any): string;
-    getTransactionsByAddress(coinType: string, address: string, page: number, size: number): Promise<any>;
+    getTransactionsByAddress(coinType: string, address: string, page: number, size: number, timestamp?: number): Promise<any>;
     buildTransaction(coinType: string, from: string, to: string, value: BigNumber, options: any): Promise<any>;
     sendTransaction<T extends IkeystoreSigner>(coinType: string, unsignedTx: any, signer: T, signerParams: any): Promise<any>;
     sameAddress(coinType: string, address1: string, address2: string): boolean;
@@ -32,7 +32,7 @@ export interface IsingleApiClient {
     getTransactionStatus(hash: string): Promise<any>;
     getTransactionExplorerUrl(hash: any): string;
     getBalance(address: string): Promise<any>;
-    getTransactionsByAddress(address: string, page: number, size: number): Promise<any>;
+    getTransactionsByAddress(address: string, page: number, size: number, timestamp?: number): Promise<any>;
     buildTransaction(from: string, to: string, value: BigNumber, options: any): Promise<Transaction>;
     sendTransaction<T extends IkeystoreSigner>(unsignedTx: any, signer: T, signerParams: any): Promise<any>;
     sameAddress(address1: string, address2: string): boolean;

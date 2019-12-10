@@ -68,9 +68,9 @@ class ApiClient {
             const coin = this.getCoin(coinType);
             return coin.getBalance(address);
         };
-        this.getTransactionsByAddress = (coinType, address, page, size) => {
+        this.getTransactionsByAddress = (coinType, address, page, size, timestamp) => {
             const coin = this.getCoin(coinType);
-            return coin.getTransactionsByAddress(address, page, size);
+            return coin.getTransactionsByAddress(address, page, size, timestamp);
         };
         this.buildTransaction = (coinType, from, to, value, options) => {
             const coin = this.getCoin(coinType);
