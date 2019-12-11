@@ -1,5 +1,5 @@
 [![Makkii Telegram](https://img.shields.io/badge/Telegram-Makkii-yellow.svg?style=flat)](https://web.telegram.org/#/im?p=@AionChina)
-[![CircleCI](https://circleci.com/gh/chaion/makkiijs.svg?style=svg)](https://circleci.com/gh/chaion/makkiijs)
+[![CircleCI](https://circleci.com/gh/chaion/makkii-js.svg?style=svg)](https://circleci.com/gh/chaion/makkii-js)
 
 Welcome to Makkii's Javascript Libraries.
 
