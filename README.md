@@ -5,11 +5,11 @@ Welcome to Makkii's Javascript Libraries.
 
 Makkiijs is a javascript library which provides:
 
-* [![npm](https://img.shields.io/npm/v/@makkii/app-aion.svg)](https://www.npmjs.com/package/@makkii/app-aion) [@makkii/makkii-core](https://github.com/chaion/makkiijs/tree/master/packages/makkii-core) generic interfaces
-* [@makkii/app-aion](https://github.com/chaion/makkiijs/tree/master/packages/app-aion) aion application client
-* [@makkii/app-btc](https://github.com/chaion/makkiijs/tree/master/packages/app-btc) bitcoin application client
-* [@makkii/app-eth](https://github.com/chaion/makkiijs/tree/master/packages/app-eth) ethereum application client
-* [@makkii/app-tron](https://github.com/chaion/makkiijs/tree/master/packages/app-tron) tron application client
+* [![npm](https://img.shields.io/npm/v/@makkii/makkii-core.svg)](https://www.npmjs.com/package/@makkii/makkii-core)[@makkii/makkii-core](https://github.com/chaion/makkiijs/tree/master/packages/makkii-core) generic interfaces
+* [![npm](https://img.shields.io/npm/v/@makkii/app-aion.svg)](https://www.npmjs.com/package/@makkii/app-aion) [@makkii/app-aion](https://github.com/chaion/makkiijs/tree/master/packages/app-aion) aion application client
+* [![npm](https://img.shields.io/npm/v/@makkii/app-btc.svg)](https://www.npmjs.com/package/@makkii/app-btc) [@makkii/app-btc](https://github.com/chaion/makkiijs/tree/master/packages/app-btc) bitcoin application client
+* [![npm](https://img.shields.io/npm/v/@makkii/app-eth.svg)](https://www.npmjs.com/package/@makkii/app-eth) [@makkii/app-eth](https://github.com/chaion/makkiijs/tree/master/packages/app-eth) ethereum application client
+* [![npm](https://img.shields.io/npm/v/@makkii/app-tron.svg)](https://www.npmjs.com/package/@makkii/app-tron) [@makkii/app-tron](https://github.com/chaion/makkiijs/tree/master/packages/app-tron) tron application client
 
 # Support APIs
 For detailed Api documentation, please refer to [Makkiijs API References](http://45.118.132.89/makkiijs_apidoc/).
