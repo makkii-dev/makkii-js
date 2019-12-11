@@ -53,28 +53,29 @@ api_client.buildTransaction(
 #### Table of Contents
 
 -   [BtcLocalSigner](#btclocalsigner)
+    -   [Parameters](#parameters)
     -   [signTransaction](#signtransaction)
-        -   [Parameters](#parameters)
+        -   [Parameters](#parameters-1)
 -   [BtcKeystoreClient](#btckeystoreclient)
-    -   [Parameters](#parameters-1)
+    -   [Parameters](#parameters-2)
     -   [ledgerSupport](#ledgersupport)
     -   [getCurrentNetwork](#getcurrentnetwork)
     -   [checkLedgerSupport](#checkledgersupport)
     -   [signTransaction](#signtransaction-1)
-        -   [Parameters](#parameters-2)
+        -   [Parameters](#parameters-3)
     -   [generateMnemonic](#generatemnemonic)
     -   [recoverKeyPairByPrivateKey](#recoverkeypairbyprivatekey)
-        -   [Parameters](#parameters-3)
-    -   [recoverKeyPairByWIF](#recoverkeypairbywif)
         -   [Parameters](#parameters-4)
-    -   [validatePrivateKey](#validateprivatekey)
+    -   [recoverKeyPairByWIF](#recoverkeypairbywif)
         -   [Parameters](#parameters-5)
-    -   [validateAddress](#validateaddress)
+    -   [validatePrivateKey](#validateprivatekey)
         -   [Parameters](#parameters-6)
-    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
+    -   [validateAddress](#validateaddress)
         -   [Parameters](#parameters-7)
-    -   [getAccountFromHardware](#getaccountfromhardware)
+    -   [getAccountFromMnemonic](#getaccountfrommnemonic)
         -   [Parameters](#parameters-8)
+    -   [getAccountFromHardware](#getaccountfromhardware)
+        -   [Parameters](#parameters-9)
 -   [IBtcConfig](#ibtcconfig)
     -   [network](#network)
     -   [insight_api](#insight_api)
@@ -82,36 +83,40 @@ api_client.buildTransaction(
     -   [explorer](#explorer)
 -   [BtcUnsignedTx](#btcunsignedtx)
 -   [BtcApiClient](#btcapiclient)
-    -   [Parameters](#parameters-9)
+    -   [Parameters](#parameters-10)
     -   [config](#config)
     -   [getNetwork](#getnetwork)
     -   [updateConfiguration](#updateconfiguration)
-        -   [Parameters](#parameters-10)
-    -   [getBlockByNumber](#getblockbynumber)
         -   [Parameters](#parameters-11)
+    -   [getBlockByNumber](#getblockbynumber)
+        -   [Parameters](#parameters-12)
     -   [getBlockNumber](#getblocknumber)
     -   [getTransactionStatus](#gettransactionstatus)
-        -   [Parameters](#parameters-12)
-    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-13)
-    -   [getBalance](#getbalance)
+    -   [getTransactionExplorerUrl](#gettransactionexplorerurl)
         -   [Parameters](#parameters-14)
-    -   [getTransactionsByAddress](#gettransactionsbyaddress)
+    -   [getBalance](#getbalance)
         -   [Parameters](#parameters-15)
-    -   [sendTransaction](#sendtransaction)
+    -   [getTransactionsByAddress](#gettransactionsbyaddress)
         -   [Parameters](#parameters-16)
-    -   [sameAddress](#sameaddress)
+    -   [sendTransaction](#sendtransaction)
         -   [Parameters](#parameters-17)
-    -   [sendAll](#sendall)
+    -   [sameAddress](#sameaddress)
         -   [Parameters](#parameters-18)
-    -   [buildTransaction](#buildtransaction)
+    -   [sendAll](#sendall)
         -   [Parameters](#parameters-19)
+    -   [buildTransaction](#buildtransaction)
+        -   [Parameters](#parameters-20)
 -   [BtcTxStatus](#btctxstatus)
 -   [BtcTransaction](#btctransaction)
 -   [BtcPendingTransaction](#btcpendingtransaction)
 -   [BtcKeypair](#btckeypair)
 
 ### BtcLocalSigner
+
+#### Parameters
+
+-   `network`  
 
 #### signTransaction
 
@@ -120,7 +125,7 @@ Sign transaction of btc local signer
 ##### Parameters
 
 -   `transaction` **[BtcUnsignedTx](#btcunsignedtx)** 
--   `params` **{private_key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), compressed: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean), network: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)}** {private_key: string, compressed: boolean}
+-   `params` **{private_key: [string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), compressed: [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)}** {private_key: string, compressed: boolean}
 
 Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** btc signed tx
 

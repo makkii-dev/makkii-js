@@ -173,7 +173,7 @@ Tron unsigned transaction
 
 -   to: string;
 -   owner: string;
--   amount: BigNumber;
+-   amount: number;
 -   timestamp: number;
 -   expiration: number;
 -   latest_block: { hash: string; number: string; };
@@ -186,8 +186,9 @@ Sign transaction of tron local signer
 
 ##### Parameters
 
--   `transaction` **[TronUnsignedTx](#tronunsignedtx)** 
+-   `unsignedTx` **[TronUnsignedTx](#tronunsignedtx)** 
 -   `params` **{}** {private_key: string}
+-   `TronUnsignedTx`  
 
 Returns **any** signed tron tx
 
