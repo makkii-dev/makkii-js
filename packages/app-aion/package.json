@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-aion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Aion application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
