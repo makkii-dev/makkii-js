@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-tron",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "Tron application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
@@ -39,5 +39,7 @@
     "hdkey": "^1.1.1",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
   },
-  "gitHead": "11ea148c8eeb064c5736edc485ba962436ec81ff"
+  "publishConfig": {
+    "access": "public"
+  }
 }

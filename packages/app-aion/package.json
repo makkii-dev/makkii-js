@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-aion",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "Aion application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
@@ -43,5 +43,7 @@
     "scrypt.js": "^0.3.0",
     "tweetnacl": "^1.0.1"
   },
-  "gitHead": "11ea148c8eeb064c5736edc485ba962436ec81ff"
+  "publishConfig": {
+    "access": "public"
+  }
 }
