@@ -5,7 +5,7 @@ Welcome to Makkii's Javascript Libraries.
 
 Makkiijs is a javascript library which provides:
 
-* [@makkii/makkii-core](https://github.com/chaion/makkiijs/tree/master/packages/makkii-core) generic interfaces
+* [![npm](https://img.shields.io/npm/v/@makkii/app-aion.svg)]](https://www.npmjs.com/package/@makkii/app-aion)(https://www.npmjs.com/package/@ledgerhq/hw-transport-u2f)[@makkii/makkii-core](https://github.com/chaion/makkiijs/tree/master/packages/makkii-core) generic interfaces
 * [@makkii/app-aion](https://github.com/chaion/makkiijs/tree/master/packages/app-aion) aion application client
 * [@makkii/app-btc](https://github.com/chaion/makkiijs/tree/master/packages/app-btc) bitcoin application client
 * [@makkii/app-eth](https://github.com/chaion/makkiijs/tree/master/packages/app-eth) ethereum application client
