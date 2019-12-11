@@ -12,7 +12,7 @@ Makkiijs is a javascript library which provides:
 * [![npm](https://img.shields.io/npm/v/@makkii/app-tron.svg)](https://www.npmjs.com/package/@makkii/app-tron) [@makkii/app-tron](https://github.com/chaion/makkiijs/tree/master/packages/app-tron) tron application client
 
 # Support APIs
-For detailed Api documentation, please refer to [Makkiijs API References](http://45.118.132.89/makkiijs_apidoc/).
+For detailed Api documentation, please refer to [Makkiijs API References](http://makkii.dev/makkii-js/docs/).
 ### IApiClient
 | Method | Aion | BTC | ETH | LTC | TRON |
 |:---:|:---:|:---:|:---:|:---:|:---:|
