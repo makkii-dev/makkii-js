@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-btc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bitcoin-like application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@ledgerhq/hw-app-btc": "^4.73.7",
-    "@makkii/makkii-core": "^0.1.0",
+    "@makkii/makkii-core": "^0.1.1",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
     "bitcoinjs-lib": "^5.0.5",

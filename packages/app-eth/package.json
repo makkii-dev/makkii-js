@@ -1,6 +1,6 @@
 {
   "name": "@makkii/app-eth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ethereum application client implemented makkii-core.",
   "author": "Chengchcc <chen@aion.network>",
   "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^4.73.7",
-    "@makkii/makkii-core": "^0.1.0",
+    "@makkii/makkii-core": "^0.1.1",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
