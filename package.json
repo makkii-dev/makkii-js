@@ -12,9 +12,10 @@
     "compile": "lerna run tsc",
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
     "doc": "typedoc --options ./typedoc.js && lerna run doc",
-    "publish": "lerna bootstrap && lerna run clean && lerna run tsc && lerna publish",
+    "publish": "lerna bootstrap && lerna run clean && lerna run tsc && yarn doc && lerna publish",
     "deploy_apidoc": "cross-env RELEVANT_PATH=makkiijs_apidoc node ./scripts/deploy.js",
-    "test": "mocha --opts mocha.opts"
+    "test": "mocha --opts mocha.opts",
+    "postpublish": "yarn deploy_apidoc"
   },
   "husky": {
     "hooks": {
