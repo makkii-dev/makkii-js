@@ -16,7 +16,7 @@ export default config => {
                 balance
                     .minus(
                         config.network.match("LTC")
-                            ? estimateFeeLTC
+                            ? estimateFeeLTC(byte_fee || 10)
                             : estimateFeeBTC(utxos.length, 2, byte_fee || 10)
                     )
                     .shiftedBy(-8)

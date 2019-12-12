@@ -23,7 +23,7 @@ exports.default = config => {
             });
             return Math.max(balance
                 .minus(config.network.match("LTC")
-                ? transaction_1.estimateFeeLTC
+                ? transaction_1.estimateFeeLTC(byte_fee || 10)
                 : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10))
                 .shiftedBy(-8)
                 .toNumber(), 0);

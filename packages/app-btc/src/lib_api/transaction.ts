@@ -31,7 +31,7 @@ export default config => {
             new BigNumber(0)
         );
         const fee = config.network.match("LTC")
-            ? estimateFeeLTC
+            ? estimateFeeLTC(byte_fee || 10)
             : estimateFeeBTC(utxos.length, 2, byte_fee || 10);
         const vout = [{ addr: to, value: value.toNumber() }];
         if (

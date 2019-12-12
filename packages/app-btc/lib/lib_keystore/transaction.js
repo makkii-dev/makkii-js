@@ -9,7 +9,7 @@ exports.process_unsignedTx = (transaction, network) => {
     const amount = new bignumber_js_1.default(value).shiftedBy(8);
     const fee = network === "BTC" || network === "BTCTEST"
         ? exports.estimateFeeBTC(utxos.length, 2, byte_fee || 10)
-        : exports.estimateFeeLTC;
+        : exports.estimateFeeLTC(byte_fee || 10);
     let balance = new bignumber_js_1.default(0);
     for (let ip = 0; ip < utxos.length; ip += 1) {
         balance = balance.plus(new bignumber_js_1.default(utxos[ip].amount));
@@ -32,5 +32,5 @@ exports.process_unsignedTx = (transaction, network) => {
     return txb;
 };
 exports.estimateFeeBTC = (m, n, byte_fee) => new bignumber_js_1.default(148 * m + 34 * n + 10).times(byte_fee);
-exports.estimateFeeLTC = new bignumber_js_1.default(20000);
+exports.estimateFeeLTC = byte_fee => new bignumber_js_1.default(2000).times(byte_fee);
 //# sourceMappingURL=transaction.js.map

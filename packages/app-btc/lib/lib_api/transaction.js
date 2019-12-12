@@ -34,7 +34,7 @@ exports.default = config => {
         const utxos = yield getUnspentTx(from);
         const valueIn = utxos.reduce((valueIn_, el) => valueIn_.plus(new bignumber_js_1.default(el.amount)), new bignumber_js_1.default(0));
         const fee = config.network.match("LTC")
-            ? transaction_1.estimateFeeLTC
+            ? transaction_1.estimateFeeLTC(byte_fee || 10)
             : transaction_1.estimateFeeBTC(utxos.length, 2, byte_fee || 10);
         const vout = [{ addr: to, value: value.toNumber() }];
         if (valueIn.toNumber() >

@@ -13,7 +13,7 @@ export const process_unsignedTx = (transaction, network) => {
     const fee =
         network === "BTC" || network === "BTCTEST"
             ? estimateFeeBTC(utxos.length, 2, byte_fee || 10)
-            : estimateFeeLTC;
+            : estimateFeeLTC(byte_fee || 10);
     let balance = new BigNumber(0);
     for (let ip = 0; ip < utxos.length; ip += 1) {
         balance = balance.plus(new BigNumber(utxos[ip].amount));
@@ -54,4 +54,4 @@ export const estimateFeeBTC = (m, n, byte_fee) =>
  * @hidden
  * @private
  */
-export const estimateFeeLTC = new BigNumber(20000);
+export const estimateFeeLTC = byte_fee => new BigNumber(2000).times(byte_fee);
