@@ -1103,12 +1103,12 @@
   resolved "https://registry.npm.taobao.org/@ledgerhq/errors/download/@ledgerhq/errors-4.78.0.tgz#23daf3af54d03b1bda3e616002b555da1bdb705a"
   integrity sha1-I9rzr1TQOxvaPmFgArVV2hvbcFo=
 
-"@ledgerhq/hw-app-btc@^4.73.7":
-  version "4.78.0"
-  resolved "https://registry.npm.taobao.org/@ledgerhq/hw-app-btc/download/@ledgerhq/hw-app-btc-4.78.0.tgz#6e55c7a12283024548b3ae2df5df330d55ae6fbb"
-  integrity sha1-blXHoSKDAkVIs64t9d8zDVWub7s=
+"@ledgerhq/hw-app-btc@4.73.7":
+  version "4.73.7"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/hw-app-btc/download/@ledgerhq/hw-app-btc-4.73.7.tgz#647fce75c42959998190521dc8f3b2070b677226"
+  integrity sha1-ZH/OdcQpWZmBkFIdyPOyBwtnciY=
   dependencies:
-    "@ledgerhq/hw-transport" "^4.78.0"
+    "@ledgerhq/hw-transport" "^4.73.7"
     create-hash "^1.1.3"
 
 "@ledgerhq/hw-app-eth@^4.73.7":
@@ -1119,7 +1119,7 @@
     "@ledgerhq/errors" "^4.78.0"
     "@ledgerhq/hw-transport" "^4.78.0"
 
-"@ledgerhq/hw-transport@^4.68.2", "@ledgerhq/hw-transport@^4.78.0":
+"@ledgerhq/hw-transport@^4.68.2", "@ledgerhq/hw-transport@^4.73.7", "@ledgerhq/hw-transport@^4.78.0":
   version "4.78.0"
   resolved "https://registry.npm.taobao.org/@ledgerhq/hw-transport/download/@ledgerhq/hw-transport-4.78.0.tgz#714786658e1f2fbc0569e06e2abf8d15d310d931"
   integrity sha1-cUeGZY4fL7wFaeBuKr+NFdMQ2TE=
@@ -3150,7 +3150,7 @@ big-number@2.0.0:
   resolved "https://registry.npm.taobao.org/big-number/download/big-number-2.0.0.tgz#98548eda9393b445791670a213aed6f6dcd66ee3"
   integrity sha1-mFSO2pOTtEV5FnCiE67W9tzWbuM=
 
-bignumber.js@*, bignumber.js@^9.0.0:
+bignumber.js@*, bignumber.js@9.0.0, bignumber.js@^9.0.0:
   version "9.0.0"
   resolved "https://registry.npm.taobao.org/bignumber.js/download/bignumber.js-9.0.0.tgz#805880f84a329b5eac6e7cb6f8274b6d82bdf075"
   integrity sha1-gFiA+Eoym16sbny2+CdLbYK98HU=
@@ -3167,12 +3167,7 @@ bindings@^1.2.1, bindings@^1.3.0, bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bip174@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npm.taobao.org/bip174/download/bip174-1.0.1.tgz#858a587f9529e22ee9b0572fd884e5783696824d"
-  integrity sha1-hYpYf5Up4i7psFcv2ITleDaWgk0=
-
-bip32@^2.0.4:
+bip32@^2.0.3:
   version "2.0.4"
   resolved "https://registry.npm.taobao.org/bip32/download/bip32-2.0.4.tgz#b662bd28710d4676fb351ba8a13be45cb4d85d01"
   integrity sha1-tmK9KHENRnb7NRuooTvkXLTYXQE=
@@ -3185,7 +3180,7 @@ bip32@^2.0.4:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-bip39@^3.0.2:
+bip39@3.0.2, bip39@^3.0.2:
   version "3.0.2"
   resolved "https://registry.npm.taobao.org/bip39/download/bip39-3.0.2.tgz#2baf42ff3071fc9ddd5103de92e8f80d9257ee32"
   integrity sha1-K69C/zBx/J3dUQPekuj4DZJX7jI=
@@ -3207,15 +3202,14 @@ bitcoin-ops@^1.3.0, bitcoin-ops@^1.4.0:
   resolved "https://registry.npm.taobao.org/bitcoin-ops/download/bitcoin-ops-1.4.1.tgz#e45de620398e22fd4ca6023de43974ff42240278"
   integrity sha1-5F3mIDmOIv1MpgI95Dl0/0IkAng=
 
-bitcoinjs-lib@^5.0.5:
-  version "5.1.6"
-  resolved "https://registry.npm.taobao.org/bitcoinjs-lib/download/bitcoinjs-lib-5.1.6.tgz#0169890fd1e09e5eb335aadd62a61e1fbdf48b46"
-  integrity sha1-AWmJD9Hgnl6zNardYqYeH730i0Y=
+bitcoinjs-lib@5.0.5:
+  version "5.0.5"
+  resolved "https://registry.npm.taobao.org/bitcoinjs-lib/download/bitcoinjs-lib-5.0.5.tgz#1c76f82479913affac2b0b9821884a6f7373902b"
+  integrity sha1-HHb4JHmROv+sKwuYIYhKb3NzkCs=
   dependencies:
     "@types/node" "10.12.18"
     bech32 "^1.1.2"
-    bip174 "^1.0.1"
-    bip32 "^2.0.4"
+    bip32 "^2.0.3"
     bip66 "^1.1.0"
     bitcoin-ops "^1.4.0"
     bs58check "^2.0.0"
