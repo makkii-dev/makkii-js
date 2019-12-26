@@ -13,7 +13,7 @@
     "lint": "eslint packages/**/src/**/*.{js,ts} --fix",
     "doc": "typedoc --options ./typedoc.js && lerna run doc",
     "publish": "lerna bootstrap && lerna run clean && lerna run tsc && yarn doc && lerna publish",
-    "deploy_apidoc": "cross-env RELEVANT_PATH=docs node ./scripts/deploy.js",
+    "deploy_apidoc": "cross-env RELEVANT_PATH=makkii-js node ./scripts/deploy.js",
     "test": "mocha --opts mocha.opts",
     "postpublish": "yarn deploy_apidoc"
   },
