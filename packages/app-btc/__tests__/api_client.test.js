@@ -6,7 +6,7 @@ const { BtcApiClient, BtcLocalSigner } = require('../lib/index');
 
 const client = new BtcApiClient({
     network: 'BTCTEST',
-    insight_api: 'http://47.92.202.146/:3001/api'
+    insight_api: 'http://47.92.202.146:3001/api'
 });
 
 const testAddress = 'mn7bpjgaPdAs2i9GuT8i3bcyreiFZ2ZXmN';
