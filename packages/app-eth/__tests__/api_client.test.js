@@ -21,7 +21,7 @@ const client = new EthApiClient({
 
 const testAddress = '0x4A0987a5016d1D3b11A65166353D0075b3f23b03';
 const tokenAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7';
-const TIME_OUT = 20 * 1000;
+const TIME_OUT = 50 * 1000;
 describe('Eth Api Client function test', function () {
     it('Test get block by number', async function () {
         this.timeout(TIME_OUT);

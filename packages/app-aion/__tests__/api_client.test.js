@@ -6,7 +6,7 @@ const { AionApiClient } = require('../lib/index');
 
 const client = new AionApiClient({
     network: 'mainnet',
-    jsonrpc: 'https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780'
+    jsonrpc: 'http://makkii.dev/jsonrpc'
 });
 
 const testAddress = '0xa048630fff033d214b36879e62231cc77d81f45d348f6590d268b9b8cabb88a9';

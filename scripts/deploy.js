@@ -31,7 +31,7 @@ const schema = {
             description: 'remote Path',
             pattern: /^\/(.+\/?)+$/,
             message: 'Invalid path',
-            default: "/var/www/makkii-dev/makkii-js",
+            default: "/var/www/makkii-dev/",
             require: true
         },
         password: {
