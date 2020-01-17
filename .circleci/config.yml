@@ -35,9 +35,14 @@ jobs:
 
       # run tests!
       - run: yarn compile
-      - run: yarn test
+      - run:
+          commnad: yarn test
+          environment:
+            MOCHA_FILE: ~/test-results/test-results.xml
       - store_test_results:
-          path: test-results
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results
       - slack/status:
           channel: 'team-makkii'
           mentions: 'Leo Ren,Chen Cheng'

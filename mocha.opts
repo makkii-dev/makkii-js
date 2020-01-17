@@ -4,4 +4,3 @@ packages/app-eth/__tests__
 packages/app-tron/__tests__
 --require @babel/register
 --reporter mocha-circleci-reporter
---reporter-options mochaFile=./test-results/results.xml
