@@ -36,12 +36,12 @@ jobs:
       # run tests!
       - run: yarn compile
       - run: yarn test
-      - run: ehco $CIRCLE_TEST_REPORTS
+      - run: echo $CIRCLE_TEST_REPORTS
       - run: if [[ -e test-results.xml ]]; then cp test-results.xml $CIRCLE_TEST_REPORTS/test-results.xml; fi
       - slack/status:
           mentions: 'Leo Ren,Chen Cheng'
           only_for_branches: 'master'
-          webhook: 'https://hooks.slack.com/services/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'
+          webhook: 'https://hooks.slack.com/services/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'
 orbs:
   slack: circleci/slack@3.4.2
 
