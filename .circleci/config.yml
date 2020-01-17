@@ -35,11 +35,7 @@ jobs:
 
       # run tests!
       - run: yarn compile
-      - run:
-          commnad: |
-            yarn test
-          environment:
-            MOCHA_FILE: ~/test-results/test-results.xml
+      - run: yarn test
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
