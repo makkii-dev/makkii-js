@@ -42,4 +42,4 @@ html
 *.tar.gz
 
 #mocha
-test-results.xml
+test-results
