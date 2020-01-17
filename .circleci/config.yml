@@ -5,6 +5,9 @@
 version: 2
 jobs:
   build:
+    branches: 
+      only:
+        - master
     docker:
       # specify the version you desire here
       - image: circleci/node:10.16.0
@@ -41,3 +44,9 @@ jobs:
           destination: tests
       - store_test_results:
           path: test-results.xml
+      - slack/status:
+          mentions: 'Leo Ren,Chen Cheng'
+          only_for_branches: 'master'
+          webhook: 'https://hooks.slack.com/services/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'
+orbs:
+  slack: circleci/slack
