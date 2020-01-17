@@ -36,7 +36,7 @@ jobs:
       # run tests!
       - run: yarn compile
       - run: yarn test
-       - store_test_results:
+      - store_test_results:
           path: test-results
       - slack/status:
           mentions: 'Leo Ren,Chen Cheng'
