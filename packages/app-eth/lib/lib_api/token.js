@@ -139,7 +139,7 @@ exports.default = config => {
         txs.forEach(t => {
             const tx = {};
             tx.hash = t.transactionHash;
-            tx.timestamp = t.timeStamp * 1000;
+            tx.timestamp = t.timestamp * 1000;
             tx.from = t.from;
             tx.to = t.to;
             tx.value = new bignumber_js_1.default(t.value, 10)
