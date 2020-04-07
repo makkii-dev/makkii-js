@@ -6,15 +6,15 @@ const { BtcApiClient, BtcLocalSigner } = require('../lib/index');
 
 const client = new BtcApiClient({
     network: 'BTCTEST',
-    insight_api: 'http://47.92.202.146:3001/api'
+    insight_api: 'https://insight.bitpay.com/api'
 });
 
-const testAddress = 'mn7bpjgaPdAs2i9GuT8i3bcyreiFZ2ZXmN';
+const testAddress = '1MUz4VMYui5qY1mxUiG8BQ1Luv6tqkvaiL';
 const TIME_OUT = 50*1000;
 describe('BTC Api client function test', function(){
     it('Test get Transaction status', async function(){
         this.timeout(TIME_OUT);
-        const status = await client.getTransactionStatus('5500f541726202b8a0f802e74a2f4d97437603fdf08a5c959139dec0d3b0dd6c');
+        const status = await client.getTransactionStatus('dc0f213166b1e9a021da8be757d06a20545bbba31592b851a424b05e0964fb8e');
         expect(status).keys(['status','blockNumber','timestamp'])
     })
     it('Test get balance', async function(){
@@ -28,7 +28,7 @@ describe('BTC Api client function test', function(){
         expect(Object.keys(txs).length).greaterThan(0)
     })
     it('Test same address', function(){
-        const address = 'mn7bpjgaPdAs2i9GuT8i3bcyreiFZ2ZXmN'
+        const address = '1MUz4VMYui5qY1mxUiG8BQ1Luv6tqkvaiL'
         expect(client.sameAddress(address, testAddress)).equal(true)
         expect(client.sameAddress(address.toLowerCase(), testAddress)).equal(false)
     })
