@@ -30,10 +30,10 @@ class AionLedger {
             }
         });
         this.signTransaction = (tx, params) => __awaiter(this, void 0, void 0, function* () {
-            const { index } = params;
+            const { derivationIndex } = params;
             const rlpEncoded = transaction_1.process_unsignedTx(tx);
-            const account = yield this.hardware.getAccount(index);
-            const signature = yield this.hardware.sign(0 + index, rlpEncoded);
+            const account = yield this.hardware.getAccount(derivationIndex);
+            const signature = yield this.hardware.sign(derivationIndex, rlpEncoded);
             const fullSignature = Buffer.concat([
                 Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(account.pubKey), "hex"),
                 Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), "hex")

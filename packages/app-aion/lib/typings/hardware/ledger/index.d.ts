@@ -8,7 +8,7 @@ export default class AionLedger implements IHardware {
     }>;
     getHardwareStatus: () => Promise<boolean>;
     signTransaction: (tx: AionUnsignedTx, params: {
-        index: number;
+        derivationIndex: number;
     }) => Promise<string>;
     setLedgerTransport: (transport: any) => this;
 }

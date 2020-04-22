@@ -40,17 +40,17 @@ export default class AionLedger implements IHardware {
      * Sign transaction
      *
      * @param tx AionUnsignedTx transaction object to sign
-     * @param params parameters object, example: { index: 1 }
+     * @param params parameters object, example: { derivationIndex: 1 }
      * @return Promise of transaction hash string
      */
     signTransaction = async (
         tx: AionUnsignedTx,
-        params: { index: number }
+        params: { derivationIndex: number }
     ): Promise<string> => {
-        const { index } = params;
+        const { derivationIndex } = params;
         const rlpEncoded = process_unsignedTx(tx);
-        const account = await this.hardware.getAccount(index);
-        const signature = await this.hardware.sign(0 + index, rlpEncoded);
+        const account = await this.hardware.getAccount(derivationIndex);
+        const signature = await this.hardware.sign(derivationIndex, rlpEncoded);
         const fullSignature = Buffer.concat([
             Buffer.from(hexutil.stripZeroXHexString(account.pubKey), "hex"),
             Buffer.from(hexutil.stripZeroXHexString(signature), "hex")
