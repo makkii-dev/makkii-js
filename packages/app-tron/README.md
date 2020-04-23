@@ -60,10 +60,10 @@ api_client.buildTransaction(
         -   [Parameters](#parameters-4)
     -   [getAccountFromHardware](#getaccountfromhardware)
         -   [Parameters](#parameters-5)
+-   [TronUnsignedTx](#tronunsignedtx)
 -   [TronLocalSigner](#tronlocalsigner)
     -   [signTransaction](#signtransaction-1)
         -   [Parameters](#parameters-6)
--   [TronUnsignedTx](#tronunsignedtx)
 -   [ITronConfig](#itronconfig)
     -   [network](#network)
     -   [trongrid_api](#trongrid_api)
@@ -167,6 +167,17 @@ not implemented
 -   `_address_index` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 -   `hardware` **IHardware** 
 
+### TronUnsignedTx
+
+Tron unsigned transaction
+
+-   to: string;
+-   owner: string;
+-   amount: number;
+-   timestamp: number;
+-   expiration: number;
+-   latest_block: { hash: string; number: string; };
+
 ### TronLocalSigner
 
 #### signTransaction
@@ -180,17 +191,6 @@ Sign transaction of tron local signer
 -   `TronUnsignedTx`  
 
 Returns **any** signed tron tx
-
-### TronUnsignedTx
-
-Tron unsigned transaction
-
--   to: string;
--   owner: string;
--   amount: number;
--   timestamp: number;
--   expiration: number;
--   latest_block: { hash: string; number: string; };
 
 ### ITronConfig
 
