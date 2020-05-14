@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { HttpClient } from "lib-common-util-js";
+import { HttpClient } from "@makkii/makkii-utils";
 import {
     IApiClient,
     IsingleApiClient,

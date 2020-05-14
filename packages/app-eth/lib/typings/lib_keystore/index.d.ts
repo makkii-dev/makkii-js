@@ -3,7 +3,7 @@ declare const _default: {
     getAccountFromMnemonic: typeof getAccountFromMnemonic;
     keyPair: (priKey: any) => {
         privateKey: any;
-        publicKey: any;
+        publicKey: string;
         address: string;
         sign: (hash: any) => any;
     };

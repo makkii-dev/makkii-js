@@ -1,10 +1,8 @@
+/* eslint-disable prefer-destructuring */
 import BigNumber from "bignumber.js";
-import { HttpClient, hexutil } from "lib-common-util-js";
+import { HttpClient, hexutil } from "@makkii/makkii-utils";
 import { processRequest } from "./jsonrpc";
-import { CONTRACT_ABI } from "./constants";
-
-const Contract = require("aion-web3-eth-contract");
-const AbiCoder = require("aion-web3-eth-abi");
+import { aionfvmContract, AbiCoder } from "./contract";
 
 export default config => {
     async function getAccountTokens(address) {
@@ -28,42 +26,41 @@ export default config => {
     }
 
     const getAccountTokenBalance = async (contractAddress, address) => {
-        const contract = new Contract(CONTRACT_ABI);
         const requestData = processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.balanceOf(address).encodeABI()
+                data: aionfvmContract.balanceOf(address)
             },
             "latest"
         ]);
         console.log("[AION req] get token balance:", address);
 
         const res = await HttpClient.post(config.jsonrpc, requestData, true);
+        console.log("[AION resp] get token balance", res.data);
         if (res.data.result) {
             return new BigNumber(
-                AbiCoder.decodeParameter("uint128", res.data.result)
+                AbiCoder.decode(res.data.result, ["uint128"])[0]
             );
         }
         throw new Error(`[AION error] get token failed:${res.data.error}`);
     };
 
     const getTokenDetail = async contractAddress => {
-        const contract = new Contract(CONTRACT_ABI);
         const requestGetSymbol = processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.symbol().encodeABI()
+                data: aionfvmContract.symbol()
             },
             "latest"
         ]);
         const requestGetName = processRequest("eth_call", [
-            { to: contractAddress, data: contract.methods.name().encodeABI() },
+            { to: contractAddress, data: aionfvmContract.name() },
             "latest"
         ]);
         const requestGetDecimals = processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.decimals().encodeABI()
+                data: aionfvmContract.decimals()
             },
             "latest"
         ]);
@@ -88,29 +85,25 @@ export default config => {
             let symbol;
             let name;
             try {
-                symbol = AbiCoder.decodeParameter(
-                    "string",
-                    symbolRet.data.result
-                );
+                symbol = AbiCoder.decode(symbolRet.data.result, ["string"])[0];
             } catch (e) {
                 symbol = hexutil.hexToAscii(symbolRet.data.result);
                 symbol = symbol.slice(0, symbol.indexOf("\u0000"));
             }
             try {
-                name = AbiCoder.decodeParameter("string", nameRet.data.result);
+                name = AbiCoder.decode(nameRet.data.result, ["string"])[0];
             } catch (e) {
                 name = hexutil.hexToAscii(nameRet.data.result);
                 name = name.slice(0, name.indexOf("\u0000"));
             }
-            const decimals = AbiCoder.decodeParameter(
-                "uint8",
-                decimalsRet.data.result
-            );
+            const decimals = AbiCoder.decode(decimalsRet.data.result, [
+                "uint8"
+            ])[0];
             return {
                 contractAddr: contractAddress,
                 symbol,
                 name,
-                tokenDecimal: decimals
+                tokenDecimal: decimals.toNumber()
             };
         }
         throw new Error("[AION error] get token detail failed");

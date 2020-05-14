@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const utils_1 = require("../utils");
 const keyPair_1 = require("./keyPair");
 const RLP = require("aion-rlp");
@@ -14,7 +14,7 @@ const fromV3 = (input, password) => new Promise((resolve, reject) => {
         const KdfParams = RLP.decode(Crypto[5]);
         const Keystore = {};
         Keystore.id = utils_1.ab2str(KeystoreItem[0]);
-        Keystore.version = lib_common_util_js_1.hexutil.toHex(KeystoreItem[1]);
+        Keystore.version = makkii_utils_1.hexutil.toHex(KeystoreItem[1]);
         Keystore.address = utils_1.ab2str(KeystoreItem[2]);
         Keystore.crypto = {};
         Keystore.crypto.cipher = utils_1.ab2str(Crypto[0]);
@@ -26,18 +26,18 @@ const fromV3 = (input, password) => new Promise((resolve, reject) => {
         let derivedKey;
         if (Keystore.crypto.kdf === "scrypt") {
             Keystore.crypto.kdfParams = {};
-            Keystore.crypto.kdfParams.c = lib_common_util_js_1.hexutil.toHex(KdfParams[0]);
-            Keystore.crypto.kdfParams.dklen = lib_common_util_js_1.hexutil.toHex(KdfParams[1]);
-            Keystore.crypto.kdfParams.n = lib_common_util_js_1.hexutil.toHex(KdfParams[2]);
-            Keystore.crypto.kdfParams.p = lib_common_util_js_1.hexutil.toHex(KdfParams[3]);
-            Keystore.crypto.kdfParams.r = lib_common_util_js_1.hexutil.toHex(KdfParams[4]);
+            Keystore.crypto.kdfParams.c = makkii_utils_1.hexutil.toHex(KdfParams[0]);
+            Keystore.crypto.kdfParams.dklen = makkii_utils_1.hexutil.toHex(KdfParams[1]);
+            Keystore.crypto.kdfParams.n = makkii_utils_1.hexutil.toHex(KdfParams[2]);
+            Keystore.crypto.kdfParams.p = makkii_utils_1.hexutil.toHex(KdfParams[3]);
+            Keystore.crypto.kdfParams.r = makkii_utils_1.hexutil.toHex(KdfParams[4]);
             Keystore.crypto.kdfParams.salt = utils_1.ab2str(KdfParams[5]);
             derivedKey = scrypt(Buffer.from(password), Buffer.from(Keystore.crypto.kdfParams.salt, "hex"), parseInt(Keystore.crypto.kdfParams.n, 16), parseInt(Keystore.crypto.kdfParams.r, 16), parseInt(Keystore.crypto.kdfParams.p, 16), parseInt(Keystore.crypto.kdfParams.dklen, 16));
         }
         else if (Keystore.crypto.kdf === "pbkdf2") {
             Keystore.crypto.kdfParams = {};
-            Keystore.crypto.kdfParams.c = lib_common_util_js_1.hexutil.toHex(KdfParams[0]);
-            Keystore.crypto.kdfParams.dklen = lib_common_util_js_1.hexutil.toHex(KdfParams[1]);
+            Keystore.crypto.kdfParams.c = makkii_utils_1.hexutil.toHex(KdfParams[0]);
+            Keystore.crypto.kdfParams.dklen = makkii_utils_1.hexutil.toHex(KdfParams[1]);
             Keystore.crypto.kdfParams.prf = "hmac-sha256";
             Keystore.crypto.kdfParams.salt = utils_1.ab2str(KdfParams[5]);
             derivedKey = utils_1.crypto.pbkdf2Sync(Buffer.from(password), Buffer.from(Keystore.crypto.kdfParams.salt, "hex"), parseInt(Keystore.crypto.kdfParams.c, 16), parseInt(Keystore.crypto.kdfParams.dklen, 16), "sha256");

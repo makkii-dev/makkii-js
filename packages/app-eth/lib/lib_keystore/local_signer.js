@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const transaction_1 = require("./transaction");
 class EthLocalSinger {
     constructor() {
         this.signTransaction = (transaction, params) => __awaiter(this, void 0, void 0, function* () {
             const unsigned = transaction_1.process_unsignedTx(transaction);
             const { private_key } = params;
-            const privateKey = Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), "hex");
+            const privateKey = Buffer.from(makkii_utils_1.hexutil.removeLeadingZeroX(private_key), "hex");
             unsigned.sign(privateKey);
             return `0x${unsigned.serialize().toString("hex")}`;
         });

@@ -10,13 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 exports.default = config => {
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.insight_api}/addr/${address}`;
         console.log(`[${config.network} req] getBalance: ${url}`);
         try {
-            const { data } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data } = yield makkii_utils_1.HttpClient.get(url);
             console.log(`[${config.network} resp] getBalance:`, data);
             const { balance } = data;
             return new bignumber_js_1.default(balance);
@@ -29,7 +29,7 @@ exports.default = config => {
         const url = `${config.insight_api}/addr/${address}/utxo`;
         console.log(`[${config.network} req] getUnspentTx: ${url}`);
         try {
-            const { data = [] } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data = [] } = yield makkii_utils_1.HttpClient.get(url);
             console.log(`[${config.network} resp] getUnspentTx:`, data);
             const utxos = [];
             for (let i = 0; i < data.length; i += 1) {
@@ -53,7 +53,7 @@ exports.default = config => {
         const url = `${config.insight_api}/rawtx/${txhash}`;
         console.log(`[${config.network} req] getRawTx: ${url}`);
         try {
-            const { data = {} } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data = {} } = yield makkii_utils_1.HttpClient.get(url);
             return data.rawtx;
         }
         catch (e) {
@@ -68,7 +68,7 @@ exports.default = config => {
             const payload = config.network.match("TEST")
                 ? { rawtx: encoded }
                 : { tx: encoded };
-            resp = yield lib_common_util_js_1.HttpClient.post(url, payload, true);
+            resp = yield makkii_utils_1.HttpClient.post(url, payload, true);
             console.log(`[${config.network} resp] broadcastTransaction:`, resp);
         }
         catch (e) {
@@ -85,7 +85,7 @@ exports.default = config => {
         const url = `${config.insight_api}/tx/${txId}`;
         console.log(`[${config.network} req] getTransactionStatus: ${url}`);
         try {
-            const { data } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data } = yield makkii_utils_1.HttpClient.get(url);
             console.log(`[${config.network} resp] getTransactionStatus:`, data);
             const { blockheight, blocktime } = data;
             return {
@@ -102,7 +102,7 @@ exports.default = config => {
         const url = `${config.insight_api}/txs/?address=${address}&pageNum=${page}`;
         console.log(`[${config.network} req] getTransactionsByAddress: ${url}`);
         try {
-            const { data } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data } = yield makkii_utils_1.HttpClient.get(url);
             console.log(`[${config.network} resp] getTransactionsByAddress:`, data);
             const { txs: getTxs = [] } = data;
             const txs = {};

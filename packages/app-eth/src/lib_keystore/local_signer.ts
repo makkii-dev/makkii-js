@@ -1,5 +1,5 @@
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import { EthUnsignedTx } from "../type";
 import { process_unsignedTx } from "./transaction";
 

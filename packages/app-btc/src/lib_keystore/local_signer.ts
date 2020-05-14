@@ -1,6 +1,6 @@
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { ECPair } from "bitcoinjs-lib";
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import { BtcUnsignedTx } from "../type";
 import { process_unsignedTx } from "./transaction";
 import { networks } from "./network";

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const address_1 = require("./address");
 const rlp = require("aion-rlp");
 const BN = require("bn.js");
@@ -40,7 +40,7 @@ const txInputFormatter = options => {
         options.data = options.input;
         delete options.input;
     }
-    if (options.data && !lib_common_util_js_1.hexutil.isHex(options.data)) {
+    if (options.data && !makkii_utils_1.hexutil.isHex(options.data)) {
         throw new Error("The data field must be HEX encoded data.");
     }
     if (options.gas || options.gasLimit) {
@@ -59,8 +59,8 @@ const toAionLong = val => {
         return null;
     }
     if (typeof val === "string") {
-        if (lib_common_util_js_1.hexutil.isHex(val.toLowerCase())) {
-            num = new BN(lib_common_util_js_1.hexutil.removeLeadingZeroX(val.toLowerCase()), 16);
+        if (makkii_utils_1.hexutil.isHex(val.toLowerCase())) {
+            num = new BN(makkii_utils_1.hexutil.removeLeadingZeroX(val.toLowerCase()), 16);
         }
         else {
             num = new BN(val, 10);

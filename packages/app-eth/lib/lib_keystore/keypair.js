@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethereumjs_util_1 = require("ethereumjs-util");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const ec = require("elliptic").ec("secp256k1");
 const padTo32 = msg => {
     while (msg.length < 32) {
@@ -32,7 +32,7 @@ exports.keyPair = priKey => {
     address = ethereumjs_util_1.toChecksumAddress(address);
     return {
         privateKey: key.getPrivate("hex"),
-        publicKey: lib_common_util_js_1.hexutil.toHex(publicKey),
+        publicKey: makkii_utils_1.hexutil.toHex(publicKey),
         address,
         sign: hash => key.sign(hash)
     };

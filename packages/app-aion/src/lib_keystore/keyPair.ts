@@ -1,4 +1,4 @@
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 
 const nacl = require("tweetnacl");
 const blake2b = require("blake2b");

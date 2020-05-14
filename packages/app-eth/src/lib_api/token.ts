@@ -1,19 +1,16 @@
+/* eslint-disable prefer-destructuring */
 import BigNumber from "bignumber.js";
-import { HttpClient, hexutil } from "lib-common-util-js";
-import { ERC20ABI } from "./constants";
+import { HttpClient, hexutil } from "@makkii/makkii-utils";
 import { processRequest } from "./jsonrpc";
-
-const Contract = require("web3-eth-contract");
-const AbiCoder = require("web3-eth-abi");
+import { ethContract, AbiCoder } from "./contract";
 
 export default config => {
     const getAccountTokenBalance = (contractAddress, address) =>
         new Promise((resolve, reject) => {
-            const contract = new Contract(ERC20ABI);
             const requestData = processRequest("eth_call", [
                 {
                     to: contractAddress,
-                    data: contract.methods.balanceOf(address).encodeABI()
+                    data: ethContract.balanceOf(address)
                 },
                 "latest"
             ]);
@@ -24,10 +21,7 @@ export default config => {
                     if (res.data.result) {
                         resolve(
                             new BigNumber(
-                                AbiCoder.decodeParameter(
-                                    "uint256",
-                                    res.data.result
-                                )
+                                AbiCoder.decode(res.data.result, ["uint256"])[0]
                             )
                         );
                     } else {
@@ -46,22 +40,21 @@ export default config => {
         });
 
     const getTokenDetail = async contractAddress => {
-        const contract = new Contract(ERC20ABI);
         const requestGetSymbol = processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.symbol().encodeABI()
+                data: ethContract.symbol()
             },
             "latest"
         ]);
         const requestGetName = processRequest("eth_call", [
-            { to: contractAddress, data: contract.methods.name().encodeABI() },
+            { to: contractAddress, data: ethContract.name() },
             "latest"
         ]);
         const requestGetDecimals = processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.decimals().encodeABI()
+                data: ethContract.decimals()
             },
             "latest"
         ]);
@@ -86,29 +79,25 @@ export default config => {
             let symbol;
             let name;
             try {
-                symbol = AbiCoder.decodeParameter(
-                    "string",
-                    symbolRet.data.result
-                );
+                symbol = AbiCoder.decode(symbolRet.data.result, ["string"])[0];
             } catch (e) {
                 symbol = hexutil.hexToAscii(symbolRet.data.result);
                 symbol = symbol.slice(0, symbol.indexOf("\u0000"));
             }
             try {
-                name = AbiCoder.decodeParameter("string", nameRet.data.result);
+                name = AbiCoder.decode(nameRet.data.result, ["string"])[0];
             } catch (e) {
                 name = hexutil.hexToAscii(nameRet.data.result);
                 name = name.slice(0, name.indexOf("\u0000"));
             }
-            const decimals = AbiCoder.decodeParameter(
-                "uint8",
-                decimalsRet.data.result
-            );
+            const decimals = AbiCoder.decode(decimalsRet.data.result, [
+                "uint8"
+            ])[0];
             return {
                 contractAddr: contractAddress,
                 symbol,
                 name,
-                tokenDecimal: decimals
+                tokenDecimal: decimals.toNumber()
             };
         }
         throw new Error("get token detail failed");

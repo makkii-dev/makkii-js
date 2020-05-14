@@ -1,4 +1,4 @@
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import { ab2str, crypto } from "../utils";
 import { keyPair } from "./keyPair";
 

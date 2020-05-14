@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import BigNumber from "bignumber.js";
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import { inputAddressFormatter } from "./address";
 
 const rlp = require("aion-rlp");

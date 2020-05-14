@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const utils_1 = require("../utils");
 exports.default = config => {
     const getBalance = (address) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,7 +20,7 @@ exports.default = config => {
             address: hexAddress
         };
         console.log(`[TRON req] get balance: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, body, true, {
+        const res = yield makkii_utils_1.HttpClient.post(url, body, true, {
             "Content-Type": "application/json"
         });
         console.log("[TRON resp] get balance", res.data);
@@ -37,13 +37,13 @@ exports.default = config => {
     const getLatestBlock = () => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/wallet/getnowblock`;
         console.log("[TRON req] get latest block: ", url);
-        const res = yield lib_common_util_js_1.HttpClient.post(url);
+        const res = yield makkii_utils_1.HttpClient.post(url);
         return res.data;
     });
     const broadcastTransaction = (tx) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/wallet/broadcasttransaction`;
         console.log(`[TRON req] broadcast: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, tx, true, {
+        const res = yield makkii_utils_1.HttpClient.post(url, tx, true, {
             "Content-Type": "application/json"
         });
         console.log("[TRON resp] broadcast: ", res.data);
@@ -52,7 +52,7 @@ exports.default = config => {
     const getTransactionById = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/walletsolidity/gettransactionbyid`;
         console.log(`[TRON req] getTransactionById: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, {
+        const res = yield makkii_utils_1.HttpClient.post(url, {
             value: hash
         }, true, { "Content-Type": "application/json" });
         console.log("[TRON resp] getTransactionById:", res.data);
@@ -61,7 +61,7 @@ exports.default = config => {
     const getTransactionInfoById = (hash) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.trongrid_api}/walletsolidity/gettransactioninfobyid`;
         console.log(`[TRON req] getTransactionInfoById:  ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.post(url, {
+        const res = yield makkii_utils_1.HttpClient.post(url, {
             value: hash
         }, true, { "Content-Type": "application/json" });
         console.log("[TRON resp] getTransactionInfoById:", res.data);

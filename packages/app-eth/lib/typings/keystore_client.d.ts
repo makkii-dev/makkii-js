@@ -12,7 +12,7 @@ export default class EthKeystoreClient implements IsingleKeystoreClient {
     validateAddress: (address: string) => boolean;
     getAccountFromMnemonic: (address_index: number, mnemonic: string) => Promise<{
         private_key: any;
-        public_key: any;
+        public_key: string;
         address: string;
         index: any;
     }>;

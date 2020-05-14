@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethereumjs_util_1 = require("ethereumjs-util");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const utils_1 = require("../utils");
 const { buildTransferTransaction } = require("@tronscan/client/src/utils/transactionBuilder");
 const TronSignTransaction = require("@tronscan/client/src/utils/crypto")
@@ -25,7 +25,7 @@ class TronLocalSigner {
             const latestBlockNum = latest_block.number;
             const numBytes = utils_1.longToByteArray(latestBlockNum);
             numBytes.reverse();
-            const hashBytes = lib_common_util_js_1.hexutil.hexString2Array(latestBlockHash);
+            const hashBytes = makkii_utils_1.hexutil.hexString2Array(latestBlockHash);
             const generateBlockId = [
                 ...numBytes.slice(0, 8),
                 ...hashBytes.slice(8, hashBytes.length - 1)
@@ -36,7 +36,7 @@ class TronLocalSigner {
             rawData.setExpiration(expiration);
             rawData.setTimestamp(timestamp);
             tx.setRawData(rawData);
-            const signed = TronSignTransaction(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), tx);
+            const signed = TronSignTransaction(makkii_utils_1.hexutil.removeLeadingZeroX(private_key), tx);
             const txID = ethereumjs_util_1.sha256(Buffer.from(rawData.serializeBinary())).toString("hex");
             const signature = signed.transaction
                 .getSignatureList()

@@ -10,6 +10,7 @@ module.exports = {
         "packages/**/lib/**",
         "packages/**/src/lib_api/*.js",
         "packages/**/src/lib_keystore/*.js",
+        "packages/makkii-utils",
         "**/babel.config.js"
     ],
     toc: [

@@ -95,18 +95,18 @@ describe('Eth Api Client function test', function () {
             'value',
         ])
     })
-    // it('Test send token transfer', async function () { 
-    //     this.timeout(TIME_OUT); 
+    // it('Test send token transfer', async function () {
+    //     this.timeout(TIME_OUT);
     //     const client = new EthApiClient({
     //         network: 'ropsten',
     //         jsonrpc: 'https://ropsten.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5',
     //     });
-    //     const tx = await client.buildTransaction("0x4be78b8ba92567ab0889be896578be56b816d318", "0xe3eC00F6786f8c8809B90F84A42568a14Eb785aD", 1, { 
-    //         gasLimit: 50000, 
-    //         gasPrice: 10 ** 10, 
-    //         isTokenTransfer: true, 
-    //         contractAddr: "0x722dd3f80bac40c951b51bdd28dd19d435762180", 
-    //         tokenDecimal: 18 }); 
+    //     const tx = await client.buildTransaction("0x4be78b8ba92567ab0889be896578be56b816d318", "0xe3eC00F6786f8c8809B90F84A42568a14Eb785aD", 1, {
+    //         gasLimit: 50000,
+    //         gasPrice: 10 ** 10,
+    //         isTokenTransfer: true,
+    //         contractAddr: "0x722dd3f80bac40c951b51bdd28dd19d435762180",
+    //         tokenDecimal: 18 });
     //     const pendingtx = await client.sendTransaction(tx, new EthLocalSigner(), {private_key: 'AA686463F8673C446ADC65DAF7C2E8997EC403499AA0242479074A72186EAE63'})
     //     expect(pendingtx).keys(['hash']);
     // })

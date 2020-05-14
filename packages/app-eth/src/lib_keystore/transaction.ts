@@ -1,4 +1,4 @@
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import BigNumber from "bignumber.js";
 
 const EthereumTx = require("ethereumjs-tx");

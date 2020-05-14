@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const bignumber_js_1 = require("bignumber.js");
 const jsonrpc_1 = require("./jsonrpc");
 exports.default = config => {
@@ -79,7 +79,7 @@ exports.default = config => {
             const url = `${config.explorer_api}/transfer?sort=-timestamp&limit=${size}&start=${page *
                 size}&address=${address}`;
             console.log(`[TRON req] getTransactionsByAddress: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const res = yield makkii_utils_1.HttpClient.get(url, false);
             console.log(`[TRON resp] getTransactionsByAddress:`, res.data);
             const { data } = res.data;
             const txs = {};

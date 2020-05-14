@@ -1,6 +1,6 @@
 import { IkeystoreSigner } from "@makkii/makkii-core/src/interfaces/keystore_client";
 import { sha256 } from "ethereumjs-util";
-import { hexutil } from "lib-common-util-js";
+import { hexutil } from "@makkii/makkii-utils";
 import { TronUnsignedTx } from "../type";
 import { longToByteArray, base58check2HexString } from "../utils";
 

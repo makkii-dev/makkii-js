@@ -10,16 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const jsonrpc_1 = require("./jsonrpc");
-const constants_1 = require("./constants");
-const Contract = require("aion-web3-eth-contract");
-const AbiCoder = require("aion-web3-eth-abi");
+const contract_1 = require("./contract");
 exports.default = config => {
     function getAccountTokens(address) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.explorer_api}/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;
-            const { data } = yield lib_common_util_js_1.HttpClient.get(url);
+            const { data } = yield makkii_utils_1.HttpClient.get(url);
             const res = {};
             if (data.content.length > 0) {
                 const { tokens } = data.content[0];
@@ -36,45 +34,44 @@ exports.default = config => {
         });
     }
     const getAccountTokenBalance = (contractAddress, address) => __awaiter(void 0, void 0, void 0, function* () {
-        const contract = new Contract(constants_1.CONTRACT_ABI);
         const requestData = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.balanceOf(address).encodeABI()
+                data: contract_1.aionfvmContract.balanceOf(address)
             },
             "latest"
         ]);
         console.log("[AION req] get token balance:", address);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true);
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true);
+        console.log("[AION resp] get token balance", res.data);
         if (res.data.result) {
-            return new bignumber_js_1.default(AbiCoder.decodeParameter("uint128", res.data.result));
+            return new bignumber_js_1.default(contract_1.AbiCoder.decode(res.data.result, ["uint128"])[0]);
         }
         throw new Error(`[AION error] get token failed:${res.data.error}`);
     });
     const getTokenDetail = (contractAddress) => __awaiter(void 0, void 0, void 0, function* () {
-        const contract = new Contract(constants_1.CONTRACT_ABI);
         const requestGetSymbol = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.symbol().encodeABI()
+                data: contract_1.aionfvmContract.symbol()
             },
             "latest"
         ]);
         const requestGetName = jsonrpc_1.processRequest("eth_call", [
-            { to: contractAddress, data: contract.methods.name().encodeABI() },
+            { to: contractAddress, data: contract_1.aionfvmContract.name() },
             "latest"
         ]);
         const requestGetDecimals = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.decimals().encodeABI()
+                data: contract_1.aionfvmContract.decimals()
             },
             "latest"
         ]);
         const url = config.jsonrpc;
-        const promiseSymbol = lib_common_util_js_1.HttpClient.post(url, requestGetSymbol, true);
-        const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
-        const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
+        const promiseSymbol = makkii_utils_1.HttpClient.post(url, requestGetSymbol, true);
+        const promiseName = makkii_utils_1.HttpClient.post(url, requestGetName, true);
+        const promiseDecimals = makkii_utils_1.HttpClient.post(url, requestGetDecimals, true);
         console.log("[AION req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = yield Promise.all([
             promiseSymbol,
@@ -90,25 +87,27 @@ exports.default = config => {
             let symbol;
             let name;
             try {
-                symbol = AbiCoder.decodeParameter("string", symbolRet.data.result);
+                symbol = contract_1.AbiCoder.decode(symbolRet.data.result, ["string"])[0];
             }
             catch (e) {
-                symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
+                symbol = makkii_utils_1.hexutil.hexToAscii(symbolRet.data.result);
                 symbol = symbol.slice(0, symbol.indexOf("\u0000"));
             }
             try {
-                name = AbiCoder.decodeParameter("string", nameRet.data.result);
+                name = contract_1.AbiCoder.decode(nameRet.data.result, ["string"])[0];
             }
             catch (e) {
-                name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
+                name = makkii_utils_1.hexutil.hexToAscii(nameRet.data.result);
                 name = name.slice(0, name.indexOf("\u0000"));
             }
-            const decimals = AbiCoder.decodeParameter("uint8", decimalsRet.data.result);
+            const decimals = contract_1.AbiCoder.decode(decimalsRet.data.result, [
+                "uint8"
+            ])[0];
             return {
                 contractAddr: contractAddress,
                 symbol,
                 name,
-                tokenDecimal: decimals
+                tokenDecimal: decimals.toNumber()
             };
         }
         throw new Error("[AION error] get token detail failed");
@@ -117,7 +116,7 @@ exports.default = config => {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
             console.log(`[AION req] get account token transactions: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url);
+            const res = yield makkii_utils_1.HttpClient.get(url);
             const { content = [] } = res.data;
             const txs = {};
             content.forEach(t => {
@@ -138,14 +137,14 @@ exports.default = config => {
     const getTopTokens = (topN = 20) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.remote_api}/token/aion?offset=0&size=${topN}`;
         console.log(`[AION req] get top aion tokens: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+        const res = yield makkii_utils_1.HttpClient.get(url, false);
         console.log(`[AION resp] get top aion tokens:`, res.data);
         return res.data;
     });
     const searchTokens = (keyword) => __awaiter(void 0, void 0, void 0, function* () {
         const url = `${config.remote_api}/token/aion/search?keyword=${keyword}`;
         console.log(`[AION req] search aion token: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+        const res = yield makkii_utils_1.HttpClient.get(url, false);
         console.log(`[AION resp] search aion token:`, res.data);
         return res.data;
     });

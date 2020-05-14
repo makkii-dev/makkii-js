@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
-const constants_1 = require("./constants");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const jsonrpc_1 = require("./jsonrpc");
-const Contract = require("aion-web3-eth-contract");
+const contract_1 = require("./contract");
 exports.default = config => {
     const { getTransactionReceipt, getTransactionCount, sendSignedTransaction } = jsonrpc_1.default(config);
     function sendTransaction(unsignedTx, signer, signerParams) {
@@ -40,13 +39,10 @@ exports.default = config => {
             const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
             if (isTokenTransfer) {
-                const tokenContract = new Contract(constants_1.CONTRACT_ABI, contractAddr);
-                data = tokenContract.methods
-                    .send(to, value
+                data = contract_1.aionfvmContract.send(to, value
                     .shiftedBy(tokenDecimal - 0)
                     .toFixed(0)
-                    .toString(), "")
-                    .encodeABI();
+                    .toString(), "");
             }
             return {
                 to: isTokenTransfer ? contractAddr : to,
@@ -67,7 +63,7 @@ exports.default = config => {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.explorer_api}/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
             console.log(`[AION req] get aion transactions by address: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const res = yield makkii_utils_1.HttpClient.get(url, false);
             console.log("[AION resp] get aion transactions by address:", res.data);
             const { content } = res.data;
             const txs = {};

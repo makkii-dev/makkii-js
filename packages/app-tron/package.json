@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@makkii/makkii-core": "^0.1.2",
+    "@makkii/makkii-utils": "^0.1.2",
     "@tronscan/client": "^0.2.48",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
@@ -36,8 +37,7 @@
     "bs58check": "^2.1.2",
     "elliptic": "^6.4.1",
     "ethereumjs-util": "^6.1.0",
-    "hdkey": "^1.1.1",
-    "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
+    "hdkey": "^1.1.1"
   },
   "publishConfig": {
     "access": "public"

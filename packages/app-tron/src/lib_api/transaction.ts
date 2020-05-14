@@ -1,4 +1,4 @@
-import { HttpClient } from "lib-common-util-js";
+import { HttpClient } from "@makkii/makkii-utils";
 import BigNumber from "bignumber.js";
 import jsonrpcClient from "./jsonrpc";
 

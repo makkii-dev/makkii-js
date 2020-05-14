@@ -6,7 +6,7 @@ declare const _default: {
     keyPair: (priKey: any) => {
         privateKey: string;
         publicKey: string;
-        address: any;
+        address: string;
         sign: (digest: any) => Buffer;
     };
     validateAddress: (address: any) => boolean;

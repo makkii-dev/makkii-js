@@ -1,11 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable radix */
 import BigNumber from "bignumber.js";
-import { HttpClient } from "lib-common-util-js";
-import { CONTRACT_ABI } from "./constants";
+import { HttpClient } from "@makkii/makkii-utils";
 import jsonrpcClient from "./jsonrpc";
-
-const Contract = require("aion-web3-eth-contract");
+import { aionfvmContract } from "./contract";
 
 export default config => {
     const {
@@ -43,17 +41,14 @@ export default config => {
         const nonce = await getTransactionCount(from, "pending");
         let data = data_;
         if (isTokenTransfer) {
-            const tokenContract = new Contract(CONTRACT_ABI, contractAddr);
-            data = tokenContract.methods
-                .send(
-                    to,
-                    value
-                        .shiftedBy(tokenDecimal - 0)
-                        .toFixed(0)
-                        .toString(),
-                    ""
-                )
-                .encodeABI();
+            data = aionfvmContract.send(
+                to,
+                value
+                    .shiftedBy(tokenDecimal - 0)
+                    .toFixed(0)
+                    .toString(),
+                ""
+            );
         }
         return {
             to: isTokenTransfer ? contractAddr : to,

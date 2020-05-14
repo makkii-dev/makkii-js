@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const jsonrpc_1 = require("./jsonrpc");
-const constants_1 = require("./constants");
-const Contract = require("web3-eth-contract");
+const contract_1 = require("./contract");
 exports.default = config => {
     const { sendSignedTransaction, getTransactionCount, getTransactionReceipt } = jsonrpc_1.default(config);
     function sendTransaction(unsignedTx, signer, signerParams) {
@@ -41,13 +40,10 @@ exports.default = config => {
             const nonce = yield getTransactionCount(from, "pending");
             let data = data_;
             if (isTokenTransfer) {
-                const tokenContract = new Contract(constants_1.ERC20ABI, contractAddr);
-                data = tokenContract.methods
-                    .transfer(to, value
+                data = contract_1.ethContract.send(to, value
                     .shiftedBy(tokenDecimal - 0)
                     .toFixed(0)
-                    .toString())
-                    .encodeABI();
+                    .toString());
             }
             return {
                 to: isTokenTransfer ? contractAddr : to,
@@ -69,7 +65,7 @@ exports.default = config => {
             if (explorer_api.provider === "etherscan") {
                 const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
                 console.log(`[ETH req] get transaction By address : ${url}`);
-                const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+                const res = yield makkii_utils_1.HttpClient.get(url, false);
                 const { result } = res.data;
                 const txs = {};
                 result.forEach(t => {
@@ -88,7 +84,7 @@ exports.default = config => {
             }
             const url = `${explorer_api.url}/getAddressTransactions/${address}?apiKey=${explorer_api.key}&limit=${size}&timestamp=${timestamp / 1000 - 1}&showZeroValues=true`;
             console.log(`[ETH req] get transaction By address : ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const res = yield makkii_utils_1.HttpClient.get(url, false);
             if (res.data.error) {
                 throw res.data.error;
             }

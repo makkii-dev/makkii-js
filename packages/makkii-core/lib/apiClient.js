@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 function isInstanceOfApiClient(client) {
     const map = [
         "getBlockByNumber",
@@ -138,7 +138,7 @@ class ApiClient {
                 .map(c => this.coins[c].symbol)
                 .join(",");
             const url = `https://www.chaion.net/makkii/market/prices?cryptos=${cryptos}&fiat=${currency}`;
-            const { data } = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const { data } = yield makkii_utils_1.HttpClient.get(url, false);
             return data;
         });
     }

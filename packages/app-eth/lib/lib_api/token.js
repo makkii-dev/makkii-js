@@ -10,27 +10,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
-const constants_1 = require("./constants");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const jsonrpc_1 = require("./jsonrpc");
-const Contract = require("web3-eth-contract");
-const AbiCoder = require("web3-eth-abi");
+const contract_1 = require("./contract");
 exports.default = config => {
     const getAccountTokenBalance = (contractAddress, address) => new Promise((resolve, reject) => {
-        const contract = new Contract(constants_1.ERC20ABI);
         const requestData = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.balanceOf(address).encodeABI()
+                data: contract_1.ethContract.balanceOf(address)
             },
             "latest"
         ]);
         console.log("[ETH req]  get token balance:", address);
-        lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true)
+        makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true)
             .then(res => {
             console.log("[ETH resp] get token balance:", res.data);
             if (res.data.result) {
-                resolve(new bignumber_js_1.default(AbiCoder.decodeParameter("uint256", res.data.result)));
+                resolve(new bignumber_js_1.default(contract_1.AbiCoder.decode(res.data.result, ["uint256"])[0]));
             }
             else {
                 reject(new Error(`[ETH error] get account Balance failed:${res.data.error}`));
@@ -41,29 +38,28 @@ exports.default = config => {
         });
     });
     const getTokenDetail = (contractAddress) => __awaiter(void 0, void 0, void 0, function* () {
-        const contract = new Contract(constants_1.ERC20ABI);
         const requestGetSymbol = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.symbol().encodeABI()
+                data: contract_1.ethContract.symbol()
             },
             "latest"
         ]);
         const requestGetName = jsonrpc_1.processRequest("eth_call", [
-            { to: contractAddress, data: contract.methods.name().encodeABI() },
+            { to: contractAddress, data: contract_1.ethContract.name() },
             "latest"
         ]);
         const requestGetDecimals = jsonrpc_1.processRequest("eth_call", [
             {
                 to: contractAddress,
-                data: contract.methods.decimals().encodeABI()
+                data: contract_1.ethContract.decimals()
             },
             "latest"
         ]);
         const url = config.jsonrpc;
-        const promiseSymbol = lib_common_util_js_1.HttpClient.post(url, requestGetSymbol, true);
-        const promiseName = lib_common_util_js_1.HttpClient.post(url, requestGetName, true);
-        const promiseDecimals = lib_common_util_js_1.HttpClient.post(url, requestGetDecimals, true);
+        const promiseSymbol = makkii_utils_1.HttpClient.post(url, requestGetSymbol, true);
+        const promiseName = makkii_utils_1.HttpClient.post(url, requestGetName, true);
+        const promiseDecimals = makkii_utils_1.HttpClient.post(url, requestGetDecimals, true);
         console.log("[ETH req] get token detail:", config.jsonrpc);
         const [symbolRet, nameRet, decimalsRet] = yield Promise.all([
             promiseSymbol,
@@ -79,25 +75,27 @@ exports.default = config => {
             let symbol;
             let name;
             try {
-                symbol = AbiCoder.decodeParameter("string", symbolRet.data.result);
+                symbol = contract_1.AbiCoder.decode(symbolRet.data.result, ["string"])[0];
             }
             catch (e) {
-                symbol = lib_common_util_js_1.hexutil.hexToAscii(symbolRet.data.result);
+                symbol = makkii_utils_1.hexutil.hexToAscii(symbolRet.data.result);
                 symbol = symbol.slice(0, symbol.indexOf("\u0000"));
             }
             try {
-                name = AbiCoder.decodeParameter("string", nameRet.data.result);
+                name = contract_1.AbiCoder.decode(nameRet.data.result, ["string"])[0];
             }
             catch (e) {
-                name = lib_common_util_js_1.hexutil.hexToAscii(nameRet.data.result);
+                name = makkii_utils_1.hexutil.hexToAscii(nameRet.data.result);
                 name = name.slice(0, name.indexOf("\u0000"));
             }
-            const decimals = AbiCoder.decodeParameter("uint8", decimalsRet.data.result);
+            const decimals = contract_1.AbiCoder.decode(decimalsRet.data.result, [
+                "uint8"
+            ])[0];
             return {
                 contractAddr: contractAddress,
                 symbol,
                 name,
-                tokenDecimal: decimals
+                tokenDecimal: decimals.toNumber()
             };
         }
         throw new Error("get token detail failed");
@@ -107,7 +105,7 @@ exports.default = config => {
         if (explorer_api.provider === "etherscan") {
             const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
             console.log(`[ETH req] get token history by address: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url);
+            const res = yield makkii_utils_1.HttpClient.get(url);
             const { data } = res;
             if (data.status === "1") {
                 const transfers = {};
@@ -133,7 +131,7 @@ exports.default = config => {
             1000 -
             1}`;
         console.log(`[ETH req] get token history by address: ${url}`);
-        const res = yield lib_common_util_js_1.HttpClient.get(url);
+        const res = yield makkii_utils_1.HttpClient.get(url);
         const transfers = {};
         const { operations: txs = [] } = res.data;
         txs.forEach(t => {
@@ -155,7 +153,7 @@ exports.default = config => {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remote_api}/token/eth/popular`;
             console.log(`[ETH req] get top eth tokens: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const res = yield makkii_utils_1.HttpClient.get(url, false);
             return res.data;
         });
     }
@@ -163,7 +161,7 @@ exports.default = config => {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${config.remote_api}/token/eth/search?offset=0&size=20&keyword=${keyword}`;
             console.log(`[ETH req] search eth token: ${url}`);
-            const res = yield lib_common_util_js_1.HttpClient.get(url, false);
+            const res = yield makkii_utils_1.HttpClient.get(url, false);
             return res.data;
         });
     }

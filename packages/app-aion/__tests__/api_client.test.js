@@ -1,4 +1,3 @@
-const assert = require('assert');
 const describe = require('mocha').describe;
 const expect = require('expect.js');
 
@@ -19,7 +18,7 @@ describe('AION Api Client function test', function () {
         return expect(block).keys([
             'number',
             'nonce'
-        ])  
+        ])
     })
     it('Test get block number', async function(){
         this.timeout(TIME_OUT);

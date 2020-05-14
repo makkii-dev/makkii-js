@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bitcoinjs_lib_1 = require("bitcoinjs-lib");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const transaction_1 = require("./transaction");
 const network_1 = require("./network");
 class BtcLocalSigner {
@@ -20,7 +20,7 @@ class BtcLocalSigner {
             const { utxos } = transaction;
             const { compressed, private_key } = params;
             const network_ = network_1.networks[this.network];
-            const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(lib_common_util_js_1.hexutil.removeLeadingZeroX(private_key), "hex"), {
+            const keyPair = bitcoinjs_lib_1.ECPair.fromPrivateKey(Buffer.from(makkii_utils_1.hexutil.removeLeadingZeroX(private_key), "hex"), {
                 network: network_,
                 compressed
             });

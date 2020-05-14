@@ -1,0 +1,38 @@
+{
+  "name": "@makkii/makkii-utils",
+  "version": "0.1.2",
+  "description": "> TODO: description",
+  "author": "Chengchcc <chen@aion.network>",
+  "homepage": "https://github.com/chaion/react-native-makkii-core#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "typings": "lib/typings/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaion/react-native-makkii-core.git"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "pretsc": "npm run clean",
+    "tsc": "tsc --build tsconfig.json"
+  },
+  "bugs": {
+    "url": "https://github.com/chaion/react-native-makkii-core/issues"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bignumber.js": "^9.0.0",
+    "bip39": "^3.0.2",
+    "bn.js": "^5.1.1"
+  }
+}

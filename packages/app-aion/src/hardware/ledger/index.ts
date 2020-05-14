@@ -1,6 +1,6 @@
 import { IHardware } from "@makkii/makkii-core/src/interfaces/hardware";
-import { AionApp } from "lib-hw-ledger-js";
-import { hexutil } from "lib-common-util-js";
+import { AionApp } from "@makkii/hw-app-aion";
+import { hexutil } from "@makkii/makkii-utils";
 import { AionUnsignedTx } from "../../type";
 import { process_unsignedTx } from "../../lib_keystore/transaction";
 

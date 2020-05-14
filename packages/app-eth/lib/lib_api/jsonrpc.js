@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const checkBlockTag = blockTag => {
     if (blockTag == null) {
         return "latest";
@@ -42,7 +42,7 @@ exports.default = config => {
             fullTxs
         ]);
         console.log("[ETH req] get block by number req:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] get block by number resp:", res.data);
@@ -54,7 +54,7 @@ exports.default = config => {
     const blockNumber = () => __awaiter(void 0, void 0, void 0, function* () {
         const requestData = exports.processRequest("eth_blockNumber", []);
         console.log("[ETH req] get blockNumber:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] get blockNUmber:", res.data);
@@ -67,7 +67,7 @@ exports.default = config => {
         const params = [address.toLowerCase(), "latest"];
         const requestData = exports.processRequest("eth_getBalance", params);
         console.log("[ETH req] get balance:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] get blockNUmber:", res.data);
@@ -80,7 +80,7 @@ exports.default = config => {
         const params = [address.toLowerCase(), checkBlockTag(blockTag)];
         const requestData = exports.processRequest("eth_getTransactionCount", params);
         console.log("[ETH req] get nonce:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] get nonce", res.data);
@@ -93,7 +93,7 @@ exports.default = config => {
         const params = [signedTx];
         const requestData = exports.processRequest("eth_sendRawTransaction", params);
         console.log("[ETH req] broadcast:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] broadcast:", res.data);
@@ -106,7 +106,7 @@ exports.default = config => {
         const params = [hash];
         const requestData = exports.processRequest("eth_getTransactionReceipt", params);
         console.log("[ETH req] get transaction receipt:", requestData);
-        const res = yield lib_common_util_js_1.HttpClient.post(config.jsonrpc, requestData, true, {
+        const res = yield makkii_utils_1.HttpClient.post(config.jsonrpc, requestData, true, {
             "Content-Type": "application/json"
         });
         console.log("[ETH resp] get transaction receipt", res.data);

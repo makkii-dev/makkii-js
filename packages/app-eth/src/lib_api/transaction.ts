@@ -1,9 +1,7 @@
 import BigNumber from "bignumber.js";
-import { HttpClient } from "lib-common-util-js";
+import { HttpClient } from "@makkii/makkii-utils";
 import jsonrpcClient from "./jsonrpc";
-import { ERC20ABI } from "./constants";
-
-const Contract = require("web3-eth-contract");
+import { ethContract } from "./contract";
 
 export default config => {
     const {
@@ -42,16 +40,13 @@ export default config => {
         const nonce = await getTransactionCount(from, "pending");
         let data = data_;
         if (isTokenTransfer) {
-            const tokenContract = new Contract(ERC20ABI, contractAddr);
-            data = tokenContract.methods
-                .transfer(
-                    to,
-                    value
-                        .shiftedBy(tokenDecimal - 0)
-                        .toFixed(0)
-                        .toString()
-                )
-                .encodeABI();
+            data = ethContract.send(
+                to,
+                value
+                    .shiftedBy(tokenDecimal - 0)
+                    .toFixed(0)
+                    .toString()
+            );
         }
         return {
             to: isTokenTransfer ? contractAddr : to,

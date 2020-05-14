@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const transaction_1 = require("./transaction");
 const keyPair_1 = require("./keyPair");
 const blake2b = require("blake2b");
@@ -25,11 +25,11 @@ class AionLocalSigner {
                 .update(rlpEncoded)
                 .digest();
             const signature = ecKey.sign(rawHash);
-            if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(lib_common_util_js_1.hexutil.hexString2Array(ecKey.publicKey))) === false) {
+            if (nacl.sign.detached.verify(rawHash, signature, Buffer.from(makkii_utils_1.hexutil.hexString2Array(ecKey.publicKey))) === false) {
                 throw new Error("Could not verify signature.");
             }
             const fullSignature = Buffer.concat([
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(ecKey.publicKey), "hex"),
+                Buffer.from(makkii_utils_1.hexutil.stripZeroXHexString(ecKey.publicKey), "hex"),
                 signature
             ]);
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);

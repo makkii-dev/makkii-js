@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_common_util_js_1 = require("lib-common-util-js");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const bignumber_js_1 = require("bignumber.js");
 const EthereumTx = require("ethereumjs-tx");
 const KEY_MAP = ["value", "nonce", "gasLimit", "gasPrice", "to"];
@@ -12,11 +12,11 @@ exports.process_unsignedTx = transaction => {
         }
     });
     let txParams = {
-        nonce: lib_common_util_js_1.hexutil.toHex(nonce),
-        gasPrice: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(gasPrice)),
-        gasLimit: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(gasLimit)),
-        to: lib_common_util_js_1.hexutil.toHex(to),
-        value: lib_common_util_js_1.hexutil.toHex(new bignumber_js_1.default(amount).shiftedBy(18)),
+        nonce: makkii_utils_1.hexutil.toHex(nonce),
+        gasPrice: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(gasPrice)),
+        gasLimit: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(gasLimit)),
+        to: makkii_utils_1.hexutil.toHex(to),
+        value: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(amount).shiftedBy(18)),
         chainId: getChainId(network),
         v: getChainId(network),
         r: "0x00",

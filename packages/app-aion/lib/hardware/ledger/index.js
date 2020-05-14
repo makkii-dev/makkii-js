@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_hw_ledger_js_1 = require("lib-hw-ledger-js");
-const lib_common_util_js_1 = require("lib-common-util-js");
+const hw_app_aion_1 = require("@makkii/hw-app-aion");
+const makkii_utils_1 = require("@makkii/makkii-utils");
 const transaction_1 = require("../../lib_keystore/transaction");
 const rlp = require("aion-rlp");
 class AionLedger {
@@ -35,15 +35,15 @@ class AionLedger {
             const account = yield this.hardware.getAccount(derivationIndex);
             const signature = yield this.hardware.sign(derivationIndex, rlpEncoded);
             const fullSignature = Buffer.concat([
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(account.pubKey), "hex"),
-                Buffer.from(lib_common_util_js_1.hexutil.stripZeroXHexString(signature), "hex")
+                Buffer.from(makkii_utils_1.hexutil.stripZeroXHexString(account.pubKey), "hex"),
+                Buffer.from(makkii_utils_1.hexutil.stripZeroXHexString(signature), "hex")
             ]);
             const rawTx = rlp.decode(rlpEncoded).concat(fullSignature);
             const rawTransaction = rlp.encode(rawTx);
             return `0x${rawTransaction.toString("hex")}`;
         });
         this.setLedgerTransport = (transport) => {
-            this.hardware = new lib_hw_ledger_js_1.AionApp(transport);
+            this.hardware = new hw_app_aion_1.AionApp(transport);
             return this;
         };
     }
