@@ -45,3 +45,5 @@ html
 test-results.xml
 test-results
 
+# typescript
+lib
