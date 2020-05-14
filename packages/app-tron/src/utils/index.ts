@@ -1,4 +1,6 @@
 /* eslint-disable no-bitwise */
+import * as jsSha3 from "js-sha3";
+
 const bs58check = require("bs58check");
 
 const longToByteArray = long => {
@@ -31,5 +33,17 @@ function deepMergeObject(obj1, obj2) {
     });
     return obj1;
 }
+
+const createHash = require("create-hash");
+
+export const sha256 = (buffer: Buffer) => {
+    return createHash("sha256")
+        .update(buffer)
+        .digest();
+};
+
+export const keccak256 = (str: string) => {
+    return Buffer.from(jsSha3.keccak256(str), "hex");
+};
 
 export { longToByteArray, base58check2HexString, deepMergeObject, ab2str };

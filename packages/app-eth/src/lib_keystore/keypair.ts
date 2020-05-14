@@ -1,5 +1,5 @@
-import { pubToAddress, toChecksumAddress } from "ethereumjs-util";
 import { hexutil } from "@makkii/makkii-utils";
+import { pubToAddress, toChecksumAddress } from "../utils";
 
 const ec = require("elliptic").ec("secp256k1");
 
@@ -35,7 +35,7 @@ export const keyPair = priKey => {
         padTo32(Buffer.from(bip32pubKey[0].toArray())),
         padTo32(Buffer.from(bip32pubKey[1].toArray()))
     ]);
-    let address = `0x${pubToAddress(publicKey).toString("hex")}`;
+    let address = `0x${pubToAddress(publicKey)}`;
     address = toChecksumAddress(address);
     return {
         privateKey: key.getPrivate("hex"),
