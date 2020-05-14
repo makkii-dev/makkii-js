@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+exports.__esModule = true;
+exports["default"] = {
     mainnet: {
         trongrid_api: "https://api.trongrid.io",
         explorer_api: "https://apilist.tronscan.org/api",
@@ -12,4 +12,3 @@ exports.default = {
         explorer: "https://shasta.tronscan.org/#/transaction"
     }
 };
-//# sourceMappingURL=network.js.map

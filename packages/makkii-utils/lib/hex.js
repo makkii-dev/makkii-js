@@ -2,28 +2,28 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const bignumber_js_1 = __importDefault(require("bignumber.js"));
+exports.__esModule = true;
+var bignumber_js_1 = __importDefault(require("bignumber.js"));
 function appendHexStart(str) {
-    const str1 = str.startsWith("0x") ? str.substring(2) : str;
-    const str2 = str1.length % 2 ? `0${str1}` : str1;
-    return `0x${str2}`;
+    var str1 = str.startsWith("0x") ? str.substring(2) : str;
+    var str2 = str1.length % 2 ? "0" + str1 : str1;
+    return "0x" + str2;
 }
 exports.appendHexStart = appendHexStart;
 function hexStringToInt(str) {
-    const strNo0x = str.startsWith("0x") ? str.substring(2) : str;
+    var strNo0x = str.startsWith("0x") ? str.substring(2) : str;
     return parseInt(strNo0x, 16);
 }
 exports.hexStringToInt = hexStringToInt;
 function hexToAscii(hex) {
-    let str = "";
-    let i = 0;
-    const l = hex.length;
+    var str = "";
+    var i = 0;
+    var l = hex.length;
     if (hex.substring(0, 2) === "0x") {
         i = 2;
     }
     for (; i < l; i += 2) {
-        const code = parseInt(hex.substr(i, 2), 16);
+        var code = parseInt(hex.substr(i, 2), 16);
         str += String.fromCharCode(code);
     }
     return str;
@@ -50,7 +50,7 @@ function hexString2Array(str) {
     if (str.startsWith("0x")) {
         str = str.substring(2);
     }
-    const result = [];
+    var result = [];
     while (str.length >= 2) {
         result.push(parseInt(str.substring(0, 2), 16));
         str = str.substring(2, str.length);
@@ -59,11 +59,11 @@ function hexString2Array(str) {
 }
 exports.hexString2Array = hexString2Array;
 function padZeros(arr_, len) {
-    const arr = arrayify(arr_);
+    var arr = arrayify(arr_);
     if (arr.length > len) {
         throw new Error("cannot pad");
     }
-    const buffer = Buffer.alloc(len, 0);
+    var buffer = Buffer.alloc(len, 0);
     buffer.set(arr, len - arr.length);
     return buffer;
 }
@@ -78,7 +78,7 @@ function arrayify(arr) {
     arr = String(arr);
     if (arr.startsWith("0x") || isHex(arr)) {
         arr = stripZeroXHexString(arr);
-        arr = arr.length % 2 === 0 ? arr : `0${arr}`;
+        arr = arr.length % 2 === 0 ? arr : "0" + arr;
         return Buffer.from(stripZeroXHexString(arr), "hex");
     }
     return Buffer.from(arr);
@@ -100,10 +100,9 @@ function toHex(value) {
     if (value instanceof Uint8Array) {
         return appendHexStart(Buffer.from(value).toString("hex"));
     }
-    if (bignumber_js_1.default.isBigNumber(value)) {
+    if (bignumber_js_1["default"].isBigNumber(value)) {
         return appendHexStart(value.toString(16));
     }
     throw value;
 }
 exports.toHex = toHex;
-//# sourceMappingURL=hex.js.map

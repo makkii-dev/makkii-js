@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+exports.__esModule = true;
+exports["default"] = {
     mainnet: {
         jsonrpc: "https://mainnet.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
         explorer_api: {
@@ -26,4 +26,3 @@ exports.default = {
         }
     }
 };
-//# sourceMappingURL=network.js.map

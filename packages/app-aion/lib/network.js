@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+exports.__esModule = true;
+exports["default"] = {
     mainnet: {
         explorer_api: "https://mainnet-api.theoan.com",
         explorer: "https://mainnet.theoan.com/#/transaction",
@@ -12,4 +12,3 @@ exports.default = {
         remote_api: "http://45.118.132.89:8080"
     }
 };
-//# sourceMappingURL=network.js.map

@@ -9,14 +9,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const httpclient_1 = __importDefault(require("./httpclient"));
-exports.HttpClient = httpclient_1.default;
-const validator = __importStar(require("./validator"));
+exports.__esModule = true;
+var httpclient_1 = __importDefault(require("./httpclient"));
+exports.HttpClient = httpclient_1["default"];
+var validator = __importStar(require("./validator"));
 exports.validator = validator;
-const hexutil = __importStar(require("./hex"));
+var hexutil = __importStar(require("./hex"));
 exports.hexutil = hexutil;
 var abi_coder_1 = require("./abi-coder");
 exports.AbiCoderAION = abi_coder_1.AbiCoderAION;
 exports.AbiCoderETH = abi_coder_1.AbiCoderETH;
-//# sourceMappingURL=index.js.map

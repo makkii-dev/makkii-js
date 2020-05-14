@@ -3,9 +3,10 @@
     "compilerOptions": {
       "outDir": "./lib",
       "declarationDir": "./lib/typings",
+      "types": [
+      ]
     },
-    "include": [
-      "./src",
-      "src/lib_api/*.js"
+    "exclude": [
+      "node_modules"
     ]
    }

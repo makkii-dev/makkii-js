@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const hex_1 = require("./hex");
+exports.__esModule = true;
+var hex_1 = require("./hex");
 var UnicodeNormalizationForm;
 (function (UnicodeNormalizationForm) {
     UnicodeNormalizationForm["current"] = "";
@@ -9,14 +9,15 @@ var UnicodeNormalizationForm;
     UnicodeNormalizationForm["NFKC"] = "NFKC";
     UnicodeNormalizationForm["NFKD"] = "NFKD";
 })(UnicodeNormalizationForm = exports.UnicodeNormalizationForm || (exports.UnicodeNormalizationForm = {}));
-function toUtf8Bytes(str, form = UnicodeNormalizationForm.current) {
+function toUtf8Bytes(str, form) {
+    if (form === void 0) { form = UnicodeNormalizationForm.current; }
     if (form !== UnicodeNormalizationForm.current) {
         checkNormalize();
         str = str.normalize(form);
     }
-    const result = [];
-    for (let i = 0; i < str.length; i++) {
-        let c = str.charCodeAt(i);
+    var result = [];
+    for (var i = 0; i < str.length; i++) {
+        var c = str.charCodeAt(i);
         if (c < 0x80) {
             result.push(c);
         }
@@ -26,7 +27,7 @@ function toUtf8Bytes(str, form = UnicodeNormalizationForm.current) {
         }
         else if ((c & 0xfc00) === 0xd800) {
             i++;
-            const c2 = str.charCodeAt(i);
+            var c2 = str.charCodeAt(i);
             if (i >= str.length || (c2 & 0xfc00) !== 0xdc00) {
                 throw new Error("invalid utf-8 string");
             }
@@ -47,16 +48,16 @@ function toUtf8Bytes(str, form = UnicodeNormalizationForm.current) {
 exports.toUtf8Bytes = toUtf8Bytes;
 function toUtf8String(bytes, ignoreErrors) {
     bytes = hex_1.arrayify(bytes);
-    let result = "";
-    let i = 0;
+    var result = "";
+    var i = 0;
     while (i < bytes.length) {
-        const c = bytes[i++];
+        var c = bytes[i++];
         if (c >> 7 === 0) {
             result += String.fromCharCode(c);
             continue;
         }
-        let extraLength = null;
-        let overlongMask = null;
+        var extraLength = null;
+        var overlongMask = null;
         if ((c & 0xe0) === 0xc0) {
             extraLength = 1;
             overlongMask = 0x7f;
@@ -89,9 +90,9 @@ function toUtf8String(bytes, ignoreErrors) {
             }
             continue;
         }
-        let res = c & ((1 << (8 - extraLength - 1)) - 1);
-        for (let j = 0; j < extraLength; j++) {
-            const nextChar = bytes[i];
+        var res = c & ((1 << (8 - extraLength - 1)) - 1);
+        for (var j = 0; j < extraLength; j++) {
+            var nextChar = bytes[i];
             if ((nextChar & 0xc0) !== 0x80) {
                 res = null;
                 break;
@@ -140,7 +141,7 @@ function checkNormalize() {
                 "test".normalize(form);
             }
             catch (error) {
-                throw new Error(`missing ${form}`);
+                throw new Error("missing " + form);
             }
         });
         if (String.fromCharCode(0xe9).normalize("NFD") !==
@@ -152,4 +153,3 @@ function checkNormalize() {
         throw Error("platform missing String.prototype.normalize");
     }
 }
-//# sourceMappingURL=utf8.js.map

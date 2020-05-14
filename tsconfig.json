@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     // "allowJs": true,
     "declaration": true,
     "noImplicitAny": false,
@@ -9,8 +8,6 @@
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "target": "es6"
   },
   "exclude": [
     "packages/**/__tests__/*",

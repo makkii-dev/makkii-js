@@ -1,15 +1,15 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const hex_1 = require("./hex");
-const utf8_1 = require("./utf8");
-const BN = require("bn.js");
+exports.__esModule = true;
+var hex_1 = require("./hex");
+var utf8_1 = require("./utf8");
+var BN = require("bn.js");
 function AbiCoder(max_size) {
     function encode(types, values) {
         if (types.length !== values.length) {
             throw new Error("require types.length === values.length");
         }
-        let buffer = Buffer.from("");
-        types.forEach((type, idx) => {
+        var buffer = Buffer.from("");
+        types.forEach(function (type, idx) {
             if (type === "address") {
                 buffer = Buffer.concat([
                     buffer,
@@ -19,19 +19,19 @@ function AbiCoder(max_size) {
             else if (type === "uint8") {
                 buffer = Buffer.concat([
                     buffer,
-                    uint8Coder.encode(`${values[idx]}`)
+                    uint8Coder.encode("" + values[idx])
                 ]);
             }
             else if (type === "uint128") {
                 buffer = Buffer.concat([
                     buffer,
-                    uint128Coder.encode(`${values[idx]}`)
+                    uint128Coder.encode("" + values[idx])
                 ]);
             }
             else if (type === "uint256") {
                 buffer = Buffer.concat([
                     buffer,
-                    uint256Coder.encode(`${values[idx]}`)
+                    uint256Coder.encode("" + values[idx])
                 ]);
             }
             else if (type === "bytes") {
@@ -58,41 +58,41 @@ function AbiCoder(max_size) {
         return buffer;
     }
     function decode(buffer_, types) {
-        const buffer = hex_1.arrayify(buffer_);
-        let offset = 0;
-        const result = [];
-        types.forEach(type => {
+        var buffer = hex_1.arrayify(buffer_);
+        var offset = 0;
+        var result = [];
+        types.forEach(function (type) {
             if (type === "address") {
-                const ret = addressCoder.decode(buffer, offset);
+                var ret = addressCoder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
             else if (type === "uint8") {
-                const ret = uint8Coder.decode(buffer, offset);
+                var ret = uint8Coder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
             else if (type === "uint128") {
-                const ret = uint128Coder.decode(buffer, offset);
+                var ret = uint128Coder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
             else if (type === "uint256") {
-                const ret = uint256Coder.decode(buffer, offset);
+                var ret = uint256Coder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
             else if (type === "bytes") {
-                const new_offset = maxNumberCoder.decode(buffer, offset).value;
+                var new_offset = maxNumberCoder.decode(buffer, offset).value;
                 offset = new_offset.toNumber();
-                const ret = bytesCoder.decode(buffer, offset);
+                var ret = bytesCoder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
             else if (type === "string") {
-                const new_offset = maxNumberCoder.decode(buffer, offset).value;
+                var new_offset = maxNumberCoder.decode(buffer, offset).value;
                 offset = new_offset.toNumber();
-                const ret = stringCoder.decode(buffer, offset);
+                var ret = stringCoder.decode(buffer, offset);
                 offset += ret.consumed;
                 result.push(ret.value);
             }
@@ -102,7 +102,7 @@ function AbiCoder(max_size) {
     function NumberCoder(size) {
         function encode_(value) {
             if (size > max_size) {
-                throw new Error(`insufficient for uint${size * 8} Type`);
+                throw new Error("insufficient for uint" + size * 8 + " Type");
             }
             return hex_1.padZeros(new BN(value)
                 .toTwos(size * 8)
@@ -111,14 +111,14 @@ function AbiCoder(max_size) {
         }
         function decode_(data, offset) {
             if (size > max_size) {
-                throw new Error(`insufficient for uint${size * 8} Type`);
+                throw new Error("insufficient for uint" + size * 8 + " Type");
             }
             if (data.length < offset + max_size) {
-                throw new Error(`insufficient for uint${size * 8} Type`);
+                throw new Error("insufficient for uint" + size * 8 + " Type");
             }
-            const junkLength = max_size - size;
-            const sliced = data.slice(offset + junkLength, offset + max_size);
-            const bn = new BN(sliced);
+            var junkLength = max_size - size;
+            var sliced = data.slice(offset + junkLength, offset + max_size);
+            var bn = new BN(sliced);
             return {
                 value: bn,
                 consumed: max_size
@@ -130,15 +130,15 @@ function AbiCoder(max_size) {
         };
     }
     function AddressCoder() {
-        const size = 32;
+        var size = 32;
         function encode_(value) {
             return hex_1.padZeros(hex_1.arrayify(value), size);
         }
         function decode_(data, offset) {
             if (data.length < offset + size) {
-                throw new Error(`insufficient for address Type`);
+                throw new Error("insufficient for address Type");
             }
-            const buffer = data.slice(offset, offset + size);
+            var buffer = data.slice(offset, offset + size);
             return {
                 value: hex_1.toHex(buffer),
                 consumed: size
@@ -151,9 +151,9 @@ function AbiCoder(max_size) {
     }
     function BytesCoder() {
         function encode_(value_) {
-            const value = hex_1.arrayify(value_);
-            const dataLength = 32 * Math.ceil(value.length / 32);
-            const padding = Buffer.alloc(dataLength - value.length, 0);
+            var value = hex_1.arrayify(value_);
+            var dataLength = 32 * Math.ceil(value.length / 32);
+            var padding = Buffer.alloc(dataLength - value.length, 0);
             return Buffer.concat([
                 maxNumberCoder.encode(value.length),
                 value,
@@ -161,10 +161,10 @@ function AbiCoder(max_size) {
             ]);
         }
         function decode_(data, offset) {
-            const res = maxNumberCoder.decode(data, offset);
+            var res = maxNumberCoder.decode(data, offset);
             offset += res.consumed;
-            const valuelen = res.value.toNumber();
-            const buffer = data.slice(offset, offset + valuelen);
+            var valuelen = res.value.toNumber();
+            var buffer = data.slice(offset, offset + valuelen);
             return {
                 value: buffer,
                 consumed: 32 * Math.ceil(valuelen / 32)
@@ -177,9 +177,9 @@ function AbiCoder(max_size) {
     }
     function StringCoder() {
         function encode_(value_) {
-            const value = utf8_1.toUtf8Bytes(value_);
-            const dataLength = 32 * Math.ceil(value.length / 32);
-            const padding = Buffer.alloc(dataLength - value.length, 0);
+            var value = utf8_1.toUtf8Bytes(value_);
+            var dataLength = 32 * Math.ceil(value.length / 32);
+            var padding = Buffer.alloc(dataLength - value.length, 0);
             return Buffer.concat([
                 maxNumberCoder.encode(value.length),
                 value,
@@ -187,11 +187,11 @@ function AbiCoder(max_size) {
             ]);
         }
         function decode_(data, offset) {
-            const res = maxNumberCoder.decode(data, offset);
+            var res = maxNumberCoder.decode(data, offset);
             offset += res.consumed;
-            const valuelen = res.value.toNumber();
-            const buffer = data.slice(offset, offset + valuelen);
-            const str = utf8_1.toUtf8String(buffer);
+            var valuelen = res.value.toNumber();
+            var buffer = data.slice(offset, offset + valuelen);
+            var str = utf8_1.toUtf8String(buffer);
             return {
                 value: str,
                 consumed: 32 * Math.ceil(valuelen / 32)
@@ -202,17 +202,16 @@ function AbiCoder(max_size) {
             decode: decode_
         };
     }
-    const maxNumberCoder = NumberCoder(max_size);
-    const uint8Coder = NumberCoder(1);
-    const uint128Coder = NumberCoder(16);
-    const uint256Coder = NumberCoder(32);
-    const addressCoder = AddressCoder();
-    const bytesCoder = BytesCoder();
-    const stringCoder = StringCoder();
-    return { encode, decode };
+    var maxNumberCoder = NumberCoder(max_size);
+    var uint8Coder = NumberCoder(1);
+    var uint128Coder = NumberCoder(16);
+    var uint256Coder = NumberCoder(32);
+    var addressCoder = AddressCoder();
+    var bytesCoder = BytesCoder();
+    var stringCoder = StringCoder();
+    return { encode: encode, decode: decode };
 }
-const AbiCoderAION = AbiCoder(16);
+var AbiCoderAION = AbiCoder(16);
 exports.AbiCoderAION = AbiCoderAION;
-const AbiCoderETH = AbiCoder(32);
+var AbiCoderETH = AbiCoder(32);
 exports.AbiCoderETH = AbiCoderETH;
-//# sourceMappingURL=abi-coder.js.map

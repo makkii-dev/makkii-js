@@ -1,10 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const bs58check = require("bs58check");
-const longToByteArray = long => {
-    const byteArray = [0, 0, 0, 0, 0, 0, 0, 0];
-    for (let index = 0; index < byteArray.length; index++) {
-        const byte = long & 0xff;
+exports.__esModule = true;
+var bs58check = require("bs58check");
+var longToByteArray = function (long) {
+    var byteArray = [0, 0, 0, 0, 0, 0, 0, 0];
+    for (var index = 0; index < byteArray.length; index++) {
+        var byte = long & 0xff;
         byteArray[index] = byte;
         long = (long - byte) / 256;
     }
@@ -20,7 +20,7 @@ function ab2str(buf) {
 }
 exports.ab2str = ab2str;
 function deepMergeObject(obj1, obj2) {
-    Object.keys(obj2).forEach(key => {
+    Object.keys(obj2).forEach(function (key) {
         obj1[key] =
             obj1[key] && obj1[key].toString() === "[object Object]"
                 ? deepMergeObject(obj1[key], obj2[key])
@@ -29,4 +29,3 @@ function deepMergeObject(obj1, obj2) {
     return obj1;
 }
 exports.deepMergeObject = deepMergeObject;
-//# sourceMappingURL=index.js.map

@@ -1,23 +1,23 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const bignumber_js_1 = require("bignumber.js");
-const makkii_utils_1 = require("@makkii/makkii-utils");
-const address_1 = require("./address");
-const rlp = require("aion-rlp");
-const BN = require("bn.js");
-exports.process_unsignedTx = transaction => {
-    const tx = txInputFormatter(transaction);
-    const unsignedTransaction = {
+exports.__esModule = true;
+var bignumber_js_1 = require("bignumber.js");
+var makkii_utils_1 = require("@makkii/makkii-utils");
+var address_1 = require("./address");
+var rlp = require("aion-rlp");
+var BN = require("bn.js");
+exports.process_unsignedTx = function (transaction) {
+    var tx = txInputFormatter(transaction);
+    var unsignedTransaction = {
         nonce: tx.nonce,
         to: tx.to || "0x",
         data: tx.data,
-        amount: numberToHex(new bignumber_js_1.default(tx.value).shiftedBy(18)) || "0x",
+        amount: numberToHex(new bignumber_js_1["default"](tx.value).shiftedBy(18)) || "0x",
         timestamp: (tx.timestamp || Date.now()) * 1000,
         type: tx.type || 1,
         gasLimit: tx.gasLimit,
         gasPrice: tx.gasPrice
     };
-    const rlpEncoded = rlp.encode([
+    var rlpEncoded = rlp.encode([
         unsignedTransaction.nonce,
         unsignedTransaction.to.toLowerCase(),
         unsignedTransaction.amount,
@@ -29,7 +29,7 @@ exports.process_unsignedTx = transaction => {
     ]);
     return rlpEncoded;
 };
-const txInputFormatter = options => {
+var txInputFormatter = function (options) {
     if (options.to) {
         options.to = address_1.inputAddressFormatter(options.to);
     }
@@ -47,14 +47,14 @@ const txInputFormatter = options => {
         options.gasLimit = options.gas || options.gasLimit;
     }
     ["gasPrice", "gasLimit", "nonce"]
-        .filter(key => options[key] !== undefined)
-        .forEach(key => {
+        .filter(function (key) { return options[key] !== undefined; })
+        .forEach(function (key) {
         options[key] = numberToHex(options[key]);
     });
     return options;
 };
-const toAionLong = val => {
-    let num;
+var toAionLong = function (val) {
+    var num;
     if (val === undefined || val === null || val === "" || val === "0x") {
         return null;
     }
@@ -71,8 +71,7 @@ const toAionLong = val => {
     }
     return new rlp.AionLong(num);
 };
-const numberToHex = value => {
-    value = bignumber_js_1.default.isBigNumber(value) ? value : new bignumber_js_1.default(value);
-    return `0x${value.toString(16)}`;
+var numberToHex = function (value) {
+    value = bignumber_js_1["default"].isBigNumber(value) ? value : new bignumber_js_1["default"](value);
+    return "0x" + value.toString(16);
 };
-//# sourceMappingURL=transaction.js.map

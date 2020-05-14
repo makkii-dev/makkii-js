@@ -1,16 +1,15 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const bs58check = require("bs58check");
-exports.validateAddress = address => {
+exports.__esModule = true;
+var bs58check = require("bs58check");
+exports.validateAddress = function (address) {
     try {
-        const buffer = Buffer.from(address);
+        var buffer = Buffer.from(address);
         if (buffer.length !== 34)
             return false;
-        const res = bs58check.decode(address);
+        var res = bs58check.decode(address);
         return res.length === 21 && res[0] === 0x41;
     }
     catch (e) {
         return false;
     }
 };
-//# sourceMappingURL=address.js.map

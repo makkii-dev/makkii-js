@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.networks = {
     BTC: {
         messagePrefix: "\x18Bitcoin Signed Message:\n",
@@ -44,4 +44,3 @@ exports.networks = {
         wif: 0xef
     }
 };
-//# sourceMappingURL=network.js.map

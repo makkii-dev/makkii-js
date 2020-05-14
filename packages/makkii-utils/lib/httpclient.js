@@ -9,16 +9,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
-const qs = __importStar(require("querystring"));
-const METHOD_GET = "get";
-const METHOD_POST = "post";
-const METHOD_PUT = "put";
-const METHOD_DELETE = "delete";
-function requestAPI(method, url, _headers, _dataBody, isJSON = false) {
-    const headers = _headers;
-    let dataBody = _dataBody;
+exports.__esModule = true;
+var axios_1 = __importDefault(require("axios"));
+var qs = __importStar(require("querystring"));
+var METHOD_GET = "get";
+var METHOD_POST = "post";
+var METHOD_PUT = "put";
+var METHOD_DELETE = "delete";
+function requestAPI(method, url, _headers, _dataBody, isJSON) {
+    if (isJSON === void 0) { isJSON = false; }
+    var headers = _headers;
+    var dataBody = _dataBody;
     if (isJSON) {
         headers["Content-Type"] = "application/json";
     }
@@ -29,36 +30,47 @@ function requestAPI(method, url, _headers, _dataBody, isJSON = false) {
         headers["Content-Type"] = "application/x-www-form-urlencoded";
         dataBody = qs.stringify(dataBody);
     }
-    const config = {
-        url,
-        headers,
-        method,
-        validateStatus: () => true
+    var config = {
+        url: url,
+        headers: headers,
+        method: method,
+        validateStatus: function () { return true; }
     };
     if (method === METHOD_GET) {
         config.params = dataBody;
-        config.paramsSerializer = params => {
+        config.paramsSerializer = function (params) {
             return qs.stringify(params);
         };
     }
     else {
         config.data = dataBody;
     }
-    return axios_1.default(config);
+    return axios_1["default"](config);
 }
-const HttpClient = {
-    get(url, dataBody = {}, isJSON = false, headers = {}) {
+var HttpClient = {
+    get: function (url, dataBody, isJSON, headers) {
+        if (dataBody === void 0) { dataBody = {}; }
+        if (isJSON === void 0) { isJSON = false; }
+        if (headers === void 0) { headers = {}; }
         return requestAPI(METHOD_GET, url, headers, dataBody, isJSON);
     },
-    post(url, dataBody = {}, isJSON = false, headers = {}) {
+    post: function (url, dataBody, isJSON, headers) {
+        if (dataBody === void 0) { dataBody = {}; }
+        if (isJSON === void 0) { isJSON = false; }
+        if (headers === void 0) { headers = {}; }
         return requestAPI(METHOD_POST, url, headers, dataBody, isJSON);
     },
-    put(url, dataBody = {}, isJSON = false, headers = {}) {
+    put: function (url, dataBody, isJSON, headers) {
+        if (dataBody === void 0) { dataBody = {}; }
+        if (isJSON === void 0) { isJSON = false; }
+        if (headers === void 0) { headers = {}; }
         return requestAPI(METHOD_PUT, url, headers, dataBody, isJSON);
     },
-    delete(url, dataBody = {}, isJSON = false, headers = {}) {
+    "delete": function (url, dataBody, isJSON, headers) {
+        if (dataBody === void 0) { dataBody = {}; }
+        if (isJSON === void 0) { isJSON = false; }
+        if (headers === void 0) { headers = {}; }
         return requestAPI(METHOD_DELETE, url, headers, dataBody, isJSON);
     }
 };
-exports.default = HttpClient;
-//# sourceMappingURL=httpclient.js.map
+exports["default"] = HttpClient;

@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "pretsc": "npm run clean",
+    "pretsc": "npm run clean ; rm -rf node_modules/@types/node",
     "tsc": "tsc --build tsconfig.json",
     "doc": "../../scripts/doc.sh"
   },

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,50 +21,50 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const bip39 = require("bip39");
-const lib_keystore_1 = require("./lib_keystore");
-class AionKeystoreClient {
-    constructor() {
+exports.__esModule = true;
+var bip39 = require("bip39");
+var lib_keystore_1 = require("./lib_keystore");
+var AionKeystoreClient = (function () {
+    function AionKeystoreClient() {
         this.ledgerSupport = true;
-        this.signTransaction = (tx, signer, signerParams) => {
+        this.signTransaction = function (tx, signer, signerParams) {
             return signer.signTransaction(tx, signerParams);
         };
-        this.getAccountFromMnemonic = (address_index, mnemonic) => {
-            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index);
+        this.getAccountFromMnemonic = function (address_index, mnemonic) {
+            return lib_keystore_1["default"].getAccountFromMnemonic(mnemonic, address_index);
         };
-        this.getAccountFromHardware = (index, hardware) => {
+        this.getAccountFromHardware = function (index, hardware) {
             return hardware.getAccount(index);
         };
-        this.generateMnemonic = () => {
-            const mnemonic = bip39.generateMnemonic();
+        this.generateMnemonic = function () {
+            var mnemonic = bip39.generateMnemonic();
             return mnemonic;
         };
-        this.recoverKeyPairByPrivateKey = (priKey) => {
+        this.recoverKeyPairByPrivateKey = function (priKey) {
             try {
-                const keyPair = lib_keystore_1.default.keyPair(priKey);
-                const { privateKey, publicKey, address } = keyPair, rest = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-                return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, rest));
+                var keyPair = lib_keystore_1["default"].keyPair(priKey);
+                var privateKey = keyPair.privateKey, publicKey = keyPair.publicKey, address = keyPair.address, rest = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                return Promise.resolve(__assign({ private_key: privateKey, public_key: publicKey, address: address }, rest));
             }
             catch (e) {
-                return Promise.reject(new Error(`recover privKey failed: ${e}`));
+                return Promise.reject(new Error("recover privKey failed: " + e));
             }
         };
-        this.recoverKeyPairByKeyFile = (file, password) => {
-            return lib_keystore_1.default.fromV3(file, password);
+        this.recoverKeyPairByKeyFile = function (file, password) {
+            return lib_keystore_1["default"].fromV3(file, password);
         };
-        this.validatePrivateKey = (privateKey) => {
+        this.validatePrivateKey = function (privateKey) {
             try {
-                return lib_keystore_1.default.validatePrivateKey(privateKey);
+                return lib_keystore_1["default"].validatePrivateKey(privateKey);
             }
             catch (e) {
                 return false;
             }
         };
-        this.validateAddress = (address) => {
-            return lib_keystore_1.default.validateAddress(address);
+        this.validateAddress = function (address) {
+            return lib_keystore_1["default"].validateAddress(address);
         };
     }
-}
-exports.default = AionKeystoreClient;
-//# sourceMappingURL=keystore_client.js.map
+    return AionKeystoreClient;
+}());
+exports["default"] = AionKeystoreClient;

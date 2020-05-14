@@ -1,6 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+exports.__esModule = true;
+exports["default"] = {
     BTC: {
         insight_api: "https://insight.bitpay.com/api",
         explorer: "https://insight.bitpay.com/tx",
@@ -22,4 +22,3 @@ exports.default = {
         broadcast: "https://testnet.litecore.io/api/tx/send"
     }
 };
-//# sourceMappingURL=network.js.map

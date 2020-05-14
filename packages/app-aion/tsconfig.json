@@ -7,7 +7,7 @@
     "include": [
       "./src",
     ],
-    "exclude":[
-      "./src/**.*.js"
+    "exclude": [
+      "node_modules"
     ]
    }

@@ -1,19 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const transaction_1 = require("./transaction");
-const jsonrpc_1 = require("./jsonrpc");
-const tools_1 = require("./tools");
-exports.default = config => {
-    const { getBalance } = jsonrpc_1.default(config);
-    const { sendTransaction, getTransactionStatus, getTransactionUrlInExplorer, getTransactionsByAddress, buildTransaction } = transaction_1.default(config);
+exports.__esModule = true;
+var transaction_1 = require("./transaction");
+var jsonrpc_1 = require("./jsonrpc");
+var tools_1 = require("./tools");
+exports["default"] = (function (config) {
+    var getBalance = jsonrpc_1["default"](config).getBalance;
+    var _a = transaction_1["default"](config), sendTransaction = _a.sendTransaction, getTransactionStatus = _a.getTransactionStatus, getTransactionUrlInExplorer = _a.getTransactionUrlInExplorer, getTransactionsByAddress = _a.getTransactionsByAddress, buildTransaction = _a.buildTransaction;
     return {
-        getBalance,
-        buildTransaction,
+        getBalance: getBalance,
+        buildTransaction: buildTransaction,
         sameAddress: tools_1.sameAddress,
-        sendTransaction,
-        getTransactionStatus,
-        getTransactionUrlInExplorer,
-        getTransactionsByAddress
+        sendTransaction: sendTransaction,
+        getTransactionStatus: getTransactionStatus,
+        getTransactionUrlInExplorer: getTransactionUrlInExplorer,
+        getTransactionsByAddress: getTransactionsByAddress
     };
-};
-//# sourceMappingURL=index.js.map
+});

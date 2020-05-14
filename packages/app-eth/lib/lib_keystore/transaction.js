@@ -1,34 +1,45 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const makkii_utils_1 = require("@makkii/makkii-utils");
-const bignumber_js_1 = require("bignumber.js");
-const EthereumTx = require("ethereumjs-tx");
-const KEY_MAP = ["value", "nonce", "gasLimit", "gasPrice", "to"];
-exports.process_unsignedTx = transaction => {
-    const { network, value: amount, nonce, gasLimit, gasPrice, to, data } = transaction;
-    KEY_MAP.forEach(k => {
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+exports.__esModule = true;
+var makkii_utils_1 = require("@makkii/makkii-utils");
+var bignumber_js_1 = require("bignumber.js");
+var EthereumTx = require("ethereumjs-tx");
+var KEY_MAP = ["value", "nonce", "gasLimit", "gasPrice", "to"];
+exports.process_unsignedTx = function (transaction) {
+    var network = transaction.network, amount = transaction.value, nonce = transaction.nonce, gasLimit = transaction.gasLimit, gasPrice = transaction.gasPrice, to = transaction.to, data = transaction.data;
+    KEY_MAP.forEach(function (k) {
         if (!transaction.hasOwnProperty(k)) {
-            throw new Error(`${k} not found`);
+            throw new Error(k + " not found");
         }
     });
-    let txParams = {
+    var txParams = {
         nonce: makkii_utils_1.hexutil.toHex(nonce),
-        gasPrice: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(gasPrice)),
-        gasLimit: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(gasLimit)),
+        gasPrice: makkii_utils_1.hexutil.toHex(new bignumber_js_1["default"](gasPrice)),
+        gasLimit: makkii_utils_1.hexutil.toHex(new bignumber_js_1["default"](gasLimit)),
         to: makkii_utils_1.hexutil.toHex(to),
-        value: makkii_utils_1.hexutil.toHex(new bignumber_js_1.default(amount).shiftedBy(18)),
+        value: makkii_utils_1.hexutil.toHex(new bignumber_js_1["default"](amount).shiftedBy(18)),
         chainId: getChainId(network),
         v: getChainId(network),
         r: "0x00",
         s: "0x00"
     };
     if (data) {
-        txParams = Object.assign(Object.assign({}, txParams), { data });
+        txParams = __assign(__assign({}, txParams), { data: data });
     }
-    const tx = new EthereumTx(txParams);
+    var tx = new EthereumTx(txParams);
     return tx;
 };
-const getChainId = network => {
+var getChainId = function (network) {
     if (network.toLowerCase() === "morden") {
         return 2;
     }
@@ -46,4 +57,3 @@ const getChainId = network => {
     }
     return 1;
 };
-//# sourceMappingURL=transaction.js.map

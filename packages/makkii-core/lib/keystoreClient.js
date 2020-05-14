@@ -1,7 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 function isInstanceOfKeystoreClient(client) {
-    const map = [
+    var map = [
         "signTransaction",
         "generateMnemonic",
         "recoverKeyPairByPrivateKey",
@@ -10,60 +10,61 @@ function isInstanceOfKeystoreClient(client) {
         "getAccountFromMnemonic",
         "getAccountFromHardware"
     ];
-    return !map.some(i => !(i in client));
+    return !map.some(function (i) { return !(i in client); });
 }
-class KeystoreClient {
-    constructor() {
+var KeystoreClient = (function () {
+    function KeystoreClient() {
+        var _this = this;
         this.coins = {};
-        this.addCoin = (coinType, client) => {
+        this.addCoin = function (coinType, client) {
             if (!isInstanceOfKeystoreClient(client)) {
                 throw new Error("not a keystore client!");
             }
-            this.coins[coinType.toLowerCase()] = client;
+            _this.coins[coinType.toLowerCase()] = client;
         };
-        this.removeCoin = (coinType) => {
-            if (this.coins[coinType.toLowerCase()]) {
-                delete this.coins[coinType.toLowerCase()];
+        this.removeCoin = function (coinType) {
+            if (_this.coins[coinType.toLowerCase()]) {
+                delete _this.coins[coinType.toLowerCase()];
                 return true;
             }
             return false;
         };
-        this.getCoin = (coinType) => {
-            const coin = this.coins[coinType.toLowerCase()];
+        this.getCoin = function (coinType) {
+            var coin = _this.coins[coinType.toLowerCase()];
             if (!coin) {
-                throw new Error(`coin: [${coinType}] is not init or unsupported.`);
+                throw new Error("coin: [" + coinType + "] is not init or unsupported.");
             }
             return coin;
         };
-        this.signTransaction = (coinType, tx, signer, signerParams) => {
-            const coin = this.getCoin(coinType);
+        this.signTransaction = function (coinType, tx, signer, signerParams) {
+            var coin = _this.getCoin(coinType);
             return coin.signTransaction(tx, signer, signerParams);
         };
-        this.generateMnemonic = (coinType) => {
-            const coin = this.getCoin(coinType);
+        this.generateMnemonic = function (coinType) {
+            var coin = _this.getCoin(coinType);
             return coin.generateMnemonic();
         };
-        this.recoverKeyPairByPrivateKey = (coinType, priKey, options) => {
-            const coin = this.getCoin(coinType);
+        this.recoverKeyPairByPrivateKey = function (coinType, priKey, options) {
+            var coin = _this.getCoin(coinType);
             return coin.recoverKeyPairByPrivateKey(priKey, options);
         };
-        this.validatePrivateKey = (coinType, privateKey) => {
-            const coin = this.getCoin(coinType);
+        this.validatePrivateKey = function (coinType, privateKey) {
+            var coin = _this.getCoin(coinType);
             return coin.validatePrivateKey(privateKey);
         };
-        this.validateAddress = (coinType, address) => {
-            const coin = this.getCoin(coinType);
+        this.validateAddress = function (coinType, address) {
+            var coin = _this.getCoin(coinType);
             return coin.validateAddress(address);
         };
-        this.getAccountFromMnemonic = (coinType, ddress_index, mnemonic) => {
-            const coin = this.getCoin(coinType);
+        this.getAccountFromMnemonic = function (coinType, ddress_index, mnemonic) {
+            var coin = _this.getCoin(coinType);
             return coin.getAccountFromMnemonic(ddress_index, mnemonic);
         };
-        this.getAccountFromHardware = (coinType, index, hardware) => {
-            const coin = this.getCoin(coinType);
+        this.getAccountFromHardware = function (coinType, index, hardware) {
+            var coin = _this.getCoin(coinType);
             return coin.getAccountFromHardware(index, hardware);
         };
     }
-}
-exports.default = KeystoreClient;
-//# sourceMappingURL=keystoreClient.js.map
+    return KeystoreClient;
+}());
+exports["default"] = KeystoreClient;

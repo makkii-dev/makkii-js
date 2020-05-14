@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,83 +21,84 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const bip39 = require("bip39");
-const lib_keystore_1 = require("./lib_keystore");
-class BtcKeystoreClient {
-    constructor(network) {
+exports.__esModule = true;
+var bip39 = require("bip39");
+var lib_keystore_1 = require("./lib_keystore");
+var BtcKeystoreClient = (function () {
+    function BtcKeystoreClient(network) {
+        var _this = this;
         this.ledgerSupport = false;
-        this.getCurrentNetwork = () => {
-            return this.network;
+        this.getCurrentNetwork = function () {
+            return _this.network;
         };
-        this.checkLedgerSupport = () => {
-            return this.ledgerSupport;
+        this.checkLedgerSupport = function () {
+            return _this.ledgerSupport;
         };
-        this.signTransaction = (tx, signer, signerParam) => {
-            const network = this.getCurrentNetwork();
-            return signer.signTransaction(tx, Object.assign(Object.assign({}, signerParam), { network }));
+        this.signTransaction = function (tx, signer, signerParam) {
+            var network = _this.getCurrentNetwork();
+            return signer.signTransaction(tx, __assign(__assign({}, signerParam), { network: network }));
         };
-        this.generateMnemonic = () => {
-            const mnemonic = bip39.generateMnemonic();
+        this.generateMnemonic = function () {
+            var mnemonic = bip39.generateMnemonic();
             return mnemonic;
         };
-        this.recoverKeyPairByPrivateKey = (priKey, options) => {
-            const network = this.getCurrentNetwork();
+        this.recoverKeyPairByPrivateKey = function (priKey, options) {
+            var network = _this.getCurrentNetwork();
             try {
-                const keyPair = lib_keystore_1.default.keyPair(priKey, Object.assign({ network }, options));
+                var keyPair = lib_keystore_1["default"].keyPair(priKey, __assign({ network: network }, options));
                 if (keyPair) {
-                    const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-                    return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+                    var privateKey = keyPair.privateKey, publicKey = keyPair.publicKey, address = keyPair.address, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                    return Promise.resolve(__assign({ private_key: privateKey, public_key: publicKey, address: address }, reset));
                 }
-                return Promise.reject(new Error(`${this.network} recover privKey failed`));
+                return Promise.reject(new Error(_this.network + " recover privKey failed"));
             }
             catch (e) {
-                return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
+                return Promise.reject(new Error(_this.network + " recover privKey failed: " + e));
             }
         };
-        this.recoverKeyPairByWIF = (WIF) => {
-            const network = this.getCurrentNetwork();
+        this.recoverKeyPairByWIF = function (WIF) {
+            var network = _this.getCurrentNetwork();
             try {
-                const keyPair = lib_keystore_1.default.keyPairFromWIF(WIF, {
-                    network
+                var keyPair = lib_keystore_1["default"].keyPairFromWIF(WIF, {
+                    network: network
                 });
                 if (keyPair) {
-                    const { privateKey, publicKey, address } = keyPair, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
-                    return Promise.resolve(Object.assign({ private_key: privateKey, public_key: publicKey, address }, reset));
+                    var privateKey = keyPair.privateKey, publicKey = keyPair.publicKey, address = keyPair.address, reset = __rest(keyPair, ["privateKey", "publicKey", "address"]);
+                    return Promise.resolve(__assign({ private_key: privateKey, public_key: publicKey, address: address }, reset));
                 }
-                return Promise.reject(new Error(`${this.network} recover privKey failed`));
+                return Promise.reject(new Error(_this.network + " recover privKey failed"));
             }
             catch (e) {
-                return Promise.reject(new Error(`${this.network} recover privKey failed: ${e}`));
+                return Promise.reject(new Error(_this.network + " recover privKey failed: " + e));
             }
         };
-        this.validatePrivateKey = (privateKey) => {
-            throw new Error(`${this.network} validatePrivateKey not implemented.`);
+        this.validatePrivateKey = function (privateKey) {
+            throw new Error(_this.network + " validatePrivateKey not implemented.");
         };
-        this.validateAddress = (address) => {
-            const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.validateAddress(address, network);
+        this.validateAddress = function (address) {
+            var network = _this.getCurrentNetwork();
+            return lib_keystore_1["default"].validateAddress(address, network);
         };
-        this.getAccountFromMnemonic = (address_index, mnemonic) => {
-            const network = this.getCurrentNetwork();
-            return lib_keystore_1.default.getAccountFromMnemonic(mnemonic, address_index, {
-                network
+        this.getAccountFromMnemonic = function (address_index, mnemonic) {
+            var network = _this.getCurrentNetwork();
+            return lib_keystore_1["default"].getAccountFromMnemonic(mnemonic, address_index, {
+                network: network
             });
         };
-        this.getAccountFromHardware = (index, hardware) => {
-            if (!this.checkLedgerSupport()) {
-                throw new Error(`${this.network} getAccountFromHardware not implemented.`);
+        this.getAccountFromHardware = function (index, hardware) {
+            if (!_this.checkLedgerSupport()) {
+                throw new Error(_this.network + " getAccountFromHardware not implemented.");
             }
             return hardware.getAccount(index);
         };
         if (!["BTC", "BTCTEST", "LTC", "LTCTEST"].includes(network)) {
-            throw new Error(`BtcKeystoreClient Unsupport network: ${network}`);
+            throw new Error("BtcKeystoreClient Unsupport network: " + network);
         }
         this.network = network;
         if (network.match("BTC")) {
             this.ledgerSupport = true;
         }
     }
-}
-exports.default = BtcKeystoreClient;
-//# sourceMappingURL=keystore_client.js.map
+    return BtcKeystoreClient;
+}());
+exports["default"] = BtcKeystoreClient;
