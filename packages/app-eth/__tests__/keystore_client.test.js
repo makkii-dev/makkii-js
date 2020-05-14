@@ -1,5 +1,5 @@
 const assert = require("assert");
-const describe = require("mocha").describe;
+const describe = require("../../../node_modules/mocha").describe;
 const { EthKeystoreClient, EthLocalSigner } = require('../lib/index.js');
 
 const mnemonic = 'transfer exhibit feel document display chalk response whisper strong walk shock ivory';

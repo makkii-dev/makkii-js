@@ -1,4 +1,4 @@
-const describe = require('mocha').describe;
+const describe = require("../../../node_modules/mocha").describe;
 const expect = require('expect.js');
 
 const { AionApiClient } = require('../lib/index');

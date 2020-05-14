@@ -4,7 +4,9 @@ export const pubToAddress = (pub: Buffer) => {
     if (pub.length !== 64) {
         throw new Error(`invalid Pubkey length: ${pub.length}`);
     }
-    return jsSha3.keccak256(pub).slice(-20);
+    return Buffer.from(jsSha3.keccak256(pub), "hex")
+        .slice(-20)
+        .toString("hex");
 };
 
 export const toChecksumAddress = (address: string) => {

@@ -1,5 +1,5 @@
 const assert = require("assert");
-const describe = require("mocha").describe;
+const describe = require("../../../node_modules/mocha").describe;
 
 const { BtcKeystoreClient, BtcLocalSigner } = require('../lib/index');
 

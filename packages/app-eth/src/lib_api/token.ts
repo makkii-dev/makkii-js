@@ -112,7 +112,10 @@ export default config => {
     ) => {
         const { explorer_api } = config;
         if (explorer_api.provider === "etherscan") {
-            const url = `${explorer_api.url}?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
+            const url = `${
+                explorer_api.url
+            }?module=account&action=tokentx&contractaddress=${symbolAddress}&address=${address}&page=${page +
+                1}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
             console.log(`[ETH req] get token history by address: ${url}`);
             const res = await HttpClient.get(url);
             const { data } = res;

@@ -64,10 +64,15 @@ export default config => {
 
     async function getTransactionsByAddress(address, page, size, timestamp) {
         const { explorer_api } = config;
+        console.log("explorer_api", explorer_api);
         if (explorer_api.provider === "etherscan") {
-            const url = `${explorer_api.url}?module=account&action=txlist&address=${address}&page=${page}&offset=${size}&sort=asc&apikey=${config.etherscanApikey}`;
+            const url = `${
+                explorer_api.url
+            }?module=account&action=txlist&address=${address}&page=${page +
+                1}&offset=${size}&sort=asc&apikey=${explorer_api.key}`;
             console.log(`[ETH req] get transaction By address : ${url}`);
             const res = await HttpClient.get(url, false);
+            console.log(`[ETH resp] get transaction By address : ${res}`);
             const { result } = res.data;
             const txs = {};
             result.forEach(t => {

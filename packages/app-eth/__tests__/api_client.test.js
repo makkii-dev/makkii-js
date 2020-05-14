@@ -1,5 +1,5 @@
 const assert = require('assert');
-const describe = require('mocha').describe;
+const describe = require("../../../node_modules/mocha").describe;
 const expect = require('expect.js');
 
 const { EthApiClient, EthLocalSigner } = require('../lib/index');
@@ -8,9 +8,9 @@ const client = new EthApiClient({
     network: 'mainnet',
     jsonrpc: 'https://mainnet.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5',
     explorer_api: {
-        "provider": "ethplorer",
-        "url": "http://api.ethplorer.io",
-        "key": "vtg9572Mmkl26"
+        "provider": "etherscan",
+        "url": "http://api-cn.etherscan.com/api",
+        "key": "W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2"
     },
     explorer: {
         "provider": "etherchain",

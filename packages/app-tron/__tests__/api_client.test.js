@@ -1,5 +1,5 @@
 const assert = require('assert');
-const describe = require('mocha').describe;
+const describe = require('../../../node_modules/mocha').describe;
 const expect = require('expect.js');
 
 const { TronApiClient, TronLocalSigner } = require('../lib/index');
