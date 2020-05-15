@@ -1,5 +1,6 @@
 /* eslint-disable no-bitwise */
 import * as jsSha3 from "js-sha3";
+import * as crypto from "crypto";
 
 const bs58check = require("bs58check");
 
@@ -34,10 +35,9 @@ function deepMergeObject(obj1, obj2) {
     return obj1;
 }
 
-const createHash = require("create-hash");
-
 export const sha256 = (buffer: Buffer) => {
-    return createHash("sha256")
+    return crypto
+        .createHash("sha256")
         .update(buffer)
         .digest();
 };

@@ -109,7 +109,7 @@ function toV3(privateKey, password) {
 
     const derivedKey = scrypt(
         Buffer.from(password),
-        Buffer.from(salt, "hex"),
+        Buffer.from(salt),
         n,
         r,
         p,
