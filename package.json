@@ -55,7 +55,7 @@
     "assert": "^2.0.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^6.0.3",
-    "documentation": "^12.1.4",
+    "documentation": "^13.2.5",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
