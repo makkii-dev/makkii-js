@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_common_util_js_1 = require("lib-common-util-js");
+const scrypt_js_1 = require("scrypt-js");
 const utils_1 = require("../utils");
 const keyPair_1 = require("./keyPair");
 const RLP = require("aion-rlp");
-const scrypt = require("scrypt.js");
 const blake2b = require("blake2b");
 const fromV3 = (input, password) => new Promise((resolve, reject) => {
     try {
@@ -32,7 +32,7 @@ const fromV3 = (input, password) => new Promise((resolve, reject) => {
             Keystore.crypto.kdfParams.p = lib_common_util_js_1.hexutil.toHex(KdfParams[3]);
             Keystore.crypto.kdfParams.r = lib_common_util_js_1.hexutil.toHex(KdfParams[4]);
             Keystore.crypto.kdfParams.salt = utils_1.ab2str(KdfParams[5]);
-            derivedKey = scrypt(Buffer.from(password), Buffer.from(Keystore.crypto.kdfParams.salt, "hex"), parseInt(Keystore.crypto.kdfParams.n, 16), parseInt(Keystore.crypto.kdfParams.r, 16), parseInt(Keystore.crypto.kdfParams.p, 16), parseInt(Keystore.crypto.kdfParams.dklen, 16));
+            derivedKey = scrypt_js_1.syncScrypt(Buffer.from(password), Buffer.from(Keystore.crypto.kdfParams.salt, "hex"), parseInt(Keystore.crypto.kdfParams.n, 16), parseInt(Keystore.crypto.kdfParams.r, 16), parseInt(Keystore.crypto.kdfParams.p, 16), parseInt(Keystore.crypto.kdfParams.dklen, 16));
         }
         else if (Keystore.crypto.kdf === "pbkdf2") {
             Keystore.crypto.kdfParams = {};
@@ -79,7 +79,7 @@ function toV3(privateKey, password) {
     const cipherparams = [];
     cipherparams[0] = tempParams.toString("hex");
     const Cipherparams = RLP.encode(cipherparams);
-    const derivedKey = scrypt(Buffer.from(password), Buffer.from(salt, "hex"), n, r, p, dklen);
+    const derivedKey = scrypt_js_1.syncScrypt(Buffer.from(password), Buffer.from(salt, "hex"), n, r, p, dklen);
     const cipher = utils_1.crypto.createCipheriv("aes-128-ctr", derivedKey.slice(0, 16), tempParams);
     const ciphertext = Buffer.concat([
         cipher.update(privateKey),

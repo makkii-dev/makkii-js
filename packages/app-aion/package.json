@@ -40,8 +40,8 @@
     "crypto-browserify": "^3.12.0",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
     "lib-hw-ledger-js": "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a",
-    "scrypt.js": "^0.3.0",
-    "tweetnacl": "^1.0.1"
+    "tweetnacl": "^1.0.1",
+    "scrypt-js": "^3.0.1"
   },
   "publishConfig": {
     "access": "public"
