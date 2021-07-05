@@ -9,6 +9,8 @@ const client = new AionKeystoreClient();
 const signer = new AionLocalSigner();
 
 describe('AION Keystore Client function test', function () {
+    this.timeout(60000);
+
     it('Test generateMnemonic', function () {
         const mnemonic_ = client.generateMnemonic();
         assert.strictEqual(mnemonic_.split(' ').length, 12);
@@ -49,6 +51,14 @@ describe('AION Keystore Client function test', function () {
         const {address} = await client.recoverKeyPairByKeyFile(content, 'password');
         assert.strictEqual(address, '0xa05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf');
     })
+
+    it('Test recover recently generated keyfile', async () => {
+        this.timeout(20000);
+        const content = fs.readFileSync(path.resolve(__dirname, './UTC--2021-07-05T19_41_44.749Z--a02a36c79c6300b1ccac19bc5f1a60feb6f8510e657fac927b9ecadf0b0f3c3d'));
+        const {address} = await client.recoverKeyPairByKeyFile(content, 'password');
+        assert.strictEqual(address, '0xa02a36c79c6300b1ccac19bc5f1a60feb6f8510e657fac927b9ecadf0b0f3c3d');
+    });
+
     it('Test sign Transaction', async function(){
         const unsignedTx = {
             to:'0xa03c27530d83ad581bf73627a8aa65a698a3bf70d65152d13aed5afd26b119ef',

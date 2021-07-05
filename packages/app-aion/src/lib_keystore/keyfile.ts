@@ -1,9 +1,9 @@
 import { hexutil } from "lib-common-util-js";
+import { syncScrypt } from "scrypt-js";
 import { ab2str, crypto } from "../utils";
 import { keyPair } from "./keyPair";
 
 const RLP = require("aion-rlp");
-const scrypt = require("scrypt.js");
 const blake2b = require("blake2b");
 
 const fromV3 = (input, password) =>
@@ -37,7 +37,7 @@ const fromV3 = (input, password) =>
                 Keystore.crypto.kdfParams.p = hexutil.toHex(KdfParams[3]); // 14
                 Keystore.crypto.kdfParams.r = hexutil.toHex(KdfParams[4]); // 15
                 Keystore.crypto.kdfParams.salt = ab2str(KdfParams[5]); // 16
-                derivedKey = scrypt(
+                derivedKey = syncScrypt(
                     Buffer.from(password),
                     Buffer.from(Keystore.crypto.kdfParams.salt, "hex"),
                     parseInt(Keystore.crypto.kdfParams.n, 16),
@@ -107,7 +107,7 @@ function toV3(privateKey, password) {
     cipherparams[0] = tempParams.toString("hex");
     const Cipherparams = RLP.encode(cipherparams);
 
-    const derivedKey = scrypt(
+    const derivedKey = syncScrypt(
         Buffer.from(password),
         Buffer.from(salt, "hex"),
         n,
