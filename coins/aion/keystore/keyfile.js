@@ -1,7 +1,7 @@
 import {ab2str, crypto } from "../../../utils";
 import { hexutil } from "lib-common-util-js";
 import RLP from 'aion-rlp'
-import scrypt from 'scrypt.js'
+import { syncScrypt } from 'scrypt-js'
 import blake2b from 'blake2b';
 import {keyPair} from './keyPair';
 
@@ -36,7 +36,7 @@ const fromV3 = (input, password) => new Promise((resolve, reject) => {
             Keystore.crypto.kdfParams['p'] = hexutil.toHex(KdfParams[3]);//14
             Keystore.crypto.kdfParams['r'] = hexutil.toHex(KdfParams[4]);//15
             Keystore.crypto.kdfParams['salt'] = ab2str(KdfParams[5]);//16
-            derivedKey = scrypt(
+            derivedKey = syncScrypt(
                 Buffer.from(password),
                 Buffer.from(Keystore.crypto.kdfParams['salt'], 'hex'),
                 parseInt(Keystore.crypto.kdfParams['n'], 16),
@@ -107,7 +107,7 @@ function toV3(privateKey, password) {
     cipherparams[0] = tempParams.toString('hex');
     const Cipherparams = RLP.encode(cipherparams);
 
-    const derivedKey = scrypt(Buffer.from(password), Buffer.from(salt,'hex'), n, r, p, dklen);
+    const derivedKey = syncScrypt(Buffer.from(password), Buffer.from(salt,'hex'), n, r, p, dklen);
 
     const cipher = crypto.createCipheriv('aes-128-ctr', derivedKey.slice(0, 16), tempParams);
     const ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);

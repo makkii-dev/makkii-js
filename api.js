@@ -3,9 +3,6 @@ import {app_server_api, setCurrentServer} from "./remote_server";
 import { hexutil} from "lib-common-util-js";
 
 import aionApi from './coins/aion/api';
-import btcApi from './coins/btc+ltc/api';
-import ethApi from './coins/eth/api';
-import tronApi from './coins/tron/api';
 import {customConfig} from "./coins/serverConfig";
 
 function initApi(support_coin_lists, isTestNet, customServerConfig) {
@@ -21,42 +18,6 @@ function initApi(support_coin_lists, isTestNet, customServerConfig) {
                     AION: {
                         api: aionApi,
                         network: isTestNet ? 'mastery' : 'mainnet',
-                    }
-                };
-                break;
-            case 'BTC':
-                COINS = {
-                    ...COINS,
-                    BTC: {
-                        api: btcApi,
-                        network: isTestNet ? 'BTCTEST' : 'BTC',
-                    }
-                };
-                break;
-            case 'ETH':
-                COINS = {
-                    ...COINS,
-                    ETH: {
-                        api: ethApi,
-                        network: isTestNet ? 'ropsten' : 'mainnet',
-                    }
-                };
-                break;
-            case 'LTC':
-                COINS = {
-                    ...COINS,
-                    LTC: {
-                        api: btcApi,
-                        network: isTestNet ? 'LTCTEST' : 'LTC',
-                    }
-                };
-                break;
-            case 'TRX':
-                COINS = {
-                    ...COINS,
-                    TRX: {
-                        api: tronApi,
-                        network: isTestNet ? 'shasta' : 'mainnet',
                     }
                 };
                 break;

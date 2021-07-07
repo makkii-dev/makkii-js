@@ -1,7 +1,4 @@
 import aionkeystore from './coins/aion/keystore';
-import btckeystore from './coins/btc+ltc/keystore';
-import ethkeystore from './coins/eth/keystore';
-import tronkeystore from './coins/tron/keystore';
 import * as bip39 from "bip39";
 
 function initKeystore(support_coin_lists,isTestNet){
@@ -13,40 +10,6 @@ function initKeystore(support_coin_lists,isTestNet){
                     ...COINS,
                     AION: {
                         keystore: aionkeystore
-                    }
-                };
-                break;
-            case 'BTC':
-                COINS = {
-                    ...COINS,
-                    BTC: {
-                        keystore: btckeystore,
-                        network: isTestNet ? 'BTCTEST' : 'BTC',
-                    }
-                };
-                break;
-            case 'ETH':
-                COINS = {
-                    ...COINS,
-                    ETH: {
-                        keystore: ethkeystore,
-                    }
-                };
-                break;
-            case 'LTC':
-                COINS = {
-                    ...COINS,
-                    LTC: {
-                        keystore: btckeystore,
-                        network: isTestNet ? 'LTCTEST' : 'LTC',
-                    }
-                };
-                break;
-            case 'TRX':
-                COINS = {
-                    ...COINS,
-                    TRX: {
-                        keystore: tronkeystore,
                     }
                 };
                 break;
