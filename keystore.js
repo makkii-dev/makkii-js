@@ -1,5 +1,6 @@
 import aionkeystore from './coins/aion/keystore';
 import * as bip39 from "bip39";
+import {fromV3} from "./coins/aion/keystore/keyfile";
 
 function initKeystore(support_coin_lists,isTestNet){
     let COINS = {};
@@ -178,7 +179,7 @@ export function client (support_coin_lists, isTestNet) {
 
     const recoverFromKeystore = (coinType, input, password) =>{
         const coin = COINS[coinType.toUpperCase()];
-        if (coin.keystore.getKeyByLedger !== undefined) {
+        if (coin.keystore.fromV3 !== undefined) {
             try {
                 return coin.keystore.fromV3(input, password);
             }catch (e) {

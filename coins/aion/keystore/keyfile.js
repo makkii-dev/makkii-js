@@ -62,7 +62,8 @@ const fromV3 = (input, password) => new Promise((resolve, reject) => {
             reject('Unsupported key derivation scheme')
         }
         const ciphertext = Buffer.from(Keystore.crypto['cipherText'], 'hex');
-        const actual = blake2b(32).update(Buffer.concat([derivedKey.slice(16, 32), ciphertext])).digest('hex');
+        const actual = blake2b(32).update(
+          Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext])).digest('hex');
         if (actual !== Keystore.crypto['mac'].toString('hex')) {
             reject("Invalid Password!");
         }
@@ -107,7 +108,10 @@ function toV3(privateKey, password) {
     cipherparams[0] = tempParams.toString('hex');
     const Cipherparams = RLP.encode(cipherparams);
 
-    const derivedKey = syncScrypt(Buffer.from(password), Buffer.from(salt,'hex'), n, r, p, dklen);
+    let derivedKey = syncScrypt(Buffer.from(password), Buffer.from(salt,'hex'), n, r, p, dklen);
+    if (derivedKey) {
+        derivedKey = Buffer.from(derivedKey)
+    }
 
     const cipher = crypto.createCipheriv('aes-128-ctr', derivedKey.slice(0, 16), tempParams);
     const ciphertext = Buffer.concat([cipher.update(privateKey), cipher.final()]);

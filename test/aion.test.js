@@ -1,5 +1,6 @@
 import nacl from "tweetnacl";
 import {getKeyFromMnemonic} from "../coins/aion/keystore/hdkey";
+import {client} from "../keystore";
 
 const assert = require("assert");
 const describe = require("mocha").describe;
@@ -75,6 +76,18 @@ describe('test AION',function () {
             assert.strictEqual(key.address, '0xa05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf');
         });
     });
+
+    describe('test keystore', function () {
+        this.timeout(60000);
+
+        it('should use keystore to decrypt file', async () => {
+            const c = client(['AION'], false);
+            const content = fs.readFileSync(path.resolve(__dirname, './res/UTC--2018-11-08T02-57-21.335Z--a05ed4fcb3fd1c2b8d65f7a9cbff0e280e53b40e6399f9887c3e28b37b5d09bf'));
+            const k = await c.recoverFromKeystore('AION', content, 'password');
+            console.log(k);
+        });
+    });
+
     describe('test validateMnemonic', function() {
         it('empty mnemonic', async function() {
             let result = validator.validateMnemonic('');
